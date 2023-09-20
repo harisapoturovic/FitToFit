@@ -1,4 +1,5 @@
 ﻿using FitToFit.Model;
+using FitToFit.Services.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,16 +10,23 @@ namespace FitToFit.Services
 {
     public class TreninziService : ITreninziService
     {
-        List<Treninzi> treninzis = new List<Treninzi>()
+        Ib200048Context _context;
+        public TreninziService(Ib200048Context context)
         {
-            new Treninzi()
+                _context = context;
+        }
+
+        List<Model.Treninzi> treninzis = new List<Model.Treninzi>()
+        {
+            new Model.Treninzi()
             {
                 TreningID=1,
                 Naziv="Trening1"
             }
         };
-        public IList<Treninzi> Get()
+        public IList<Model.Treninzi> Get()
         {
+            var list = _context.Treninzis.ToList();
             return treninzis;
         }
     }
