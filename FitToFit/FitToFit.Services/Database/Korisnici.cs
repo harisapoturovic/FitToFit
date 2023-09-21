@@ -13,19 +13,19 @@ public partial class Korisnici
 
     public string Spol { get; set; } = null!;
 
-    public string Telefon { get; set; } = null!;
+    public string? Telefon { get; set; }
 
-    public string Email { get; set; } = null!;
+    public string? Email { get; set; }
 
-    public string Adresa { get; set; } = null!;
+    public string? Adresa { get; set; }
 
-    public DateTime DatumRodjenja { get; set; }
+    public DateTime? DatumRodjenja { get; set; }
 
-    public DateTime DatumPocetkaTreniranja { get; set; }
+    public DateTime? DatumPocetkaTreniranja { get; set; }
 
-    public string Visina { get; set; } = null!;
+    public string? Visina { get; set; }
 
-    public string Tezina { get; set; } = null!;
+    public string? Tezina { get; set; }
 
     public string KorisnickoIme { get; set; } = null!;
 

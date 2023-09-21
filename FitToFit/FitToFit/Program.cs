@@ -6,6 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddTransient<ITreninziService, TreninziService>();
 builder.Services.AddTransient<IKorisniciService, KorisniciService>();
+builder.Services.AddTransient<IVrsteTreningaService, VrsteTreningaService>();
+
 
 // Add services to the container.
 

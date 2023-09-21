@@ -1,4 +1,6 @@
 using FitToFit.Model;
+using FitToFit.Model.Requests;
+using FitToFit.Model.SearchObjects;
 using FitToFit.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,21 +8,13 @@ namespace FitToFit.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class KorisniciController : ControllerBase
+    public class KorisniciController : BaseCRUDController<Model.Korisnici, KorisniciSearchObject, KorisniciInsertRequest, KorisniciUpdateRequest>
     {
-        private readonly IKorisniciService _korisniciService;
-        private readonly ILogger<WeatherForecastController> _logger;
-
-        public KorisniciController(ILogger<WeatherForecastController> logger, IKorisniciService korisniciService)
+        public KorisniciController(ILogger<BaseController<Korisnici, KorisniciSearchObject>> logger, IKorisniciService service)
+            :base(logger, service)
         {
-            _logger = logger;
-            _korisniciService = korisniciService;   
+          
         }
 
-        [HttpGet()]
-        public IEnumerable<Model.Korisnici> Get()
-        {
-           return _korisniciService.Get();   
-        }
     }
 }

@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FitToFit.Model
+namespace FitToFit.Model.Requests
 {
-    public class Korisnici
+    public class KorisniciInsertRequest
     {
-        public int KorisnikId { get; set; }
-
         public string Ime { get; set; } = null!;
 
         public string Prezime { get; set; } = null!;
@@ -33,9 +32,7 @@ namespace FitToFit.Model
         public string KorisnickoIme { get; set; } = null!;
 
         public byte[]? Slika { get; set; }
-
-        public virtual ICollection<Ocjene> Ocjenes { get; set; } = new List<Ocjene>();
-
-        // public virtual ICollection<Rezervacije> Rezervacijes { get; set; } = new List<Rezervacije>();
+        public string Password { get; set; }
+        public string PasswordPotvrda { get; set; } //radi provjere na API-ju
     }
 }

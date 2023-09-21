@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FitToFit.Model.Requests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,10 @@ namespace FitToFit.Services
         public MappingProfile()
         {
             CreateMap<Database.Korisnici, Model.Korisnici>();
+            CreateMap<KorisniciInsertRequest, Database.Korisnici>();
+            CreateMap<KorisniciUpdateRequest, Database.Korisnici>();
+            CreateMap<Database.VrsteTreninga, Model.VrsteTreninga>();
+            CreateMap<Database.Ocjene, Model.Ocjene>();
         }
     }
 }

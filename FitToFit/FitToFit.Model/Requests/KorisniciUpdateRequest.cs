@@ -4,17 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FitToFit.Model
+namespace FitToFit.Model.Requests
 {
-    public class Korisnici
+    public class KorisniciUpdateRequest
     {
-        public int KorisnikId { get; set; }
-
         public string Ime { get; set; } = null!;
 
         public string Prezime { get; set; } = null!;
 
-        public string Spol { get; set; } = null!;
+        //public string Spol { get; set; } = null!;
 
         public string? Telefon { get; set; }
 
@@ -22,7 +20,7 @@ namespace FitToFit.Model
 
         public string? Adresa { get; set; }
 
-        public DateTime? DatumRodjenja { get; set; }
+        //public DateTime? DatumRodjenja { get; set; }
 
         public DateTime? DatumPocetkaTreniranja { get; set; }
 
@@ -30,12 +28,6 @@ namespace FitToFit.Model
 
         public string? Tezina { get; set; }
 
-        public string KorisnickoIme { get; set; } = null!;
-
         public byte[]? Slika { get; set; }
-
-        public virtual ICollection<Ocjene> Ocjenes { get; set; } = new List<Ocjene>();
-
-        // public virtual ICollection<Rezervacije> Rezervacijes { get; set; } = new List<Rezervacije>();
     }
 }
