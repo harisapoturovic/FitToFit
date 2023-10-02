@@ -79,6 +79,8 @@ public partial class Ib200048Context : DbContext
             entity.ToTable("Akcije");
 
             entity.Property(e => e.AkcijaId).HasColumnName("AkcijaID");
+            entity.Property(e => e.DatumPocetka).HasColumnType("datetime");
+            entity.Property(e => e.DatumZavrsetka).HasColumnType("datetime");
             entity.Property(e => e.Naziv).HasMaxLength(50);
         });
 
@@ -120,6 +122,8 @@ public partial class Ib200048Context : DbContext
             entity.ToTable("Korisnici");
 
             entity.Property(e => e.KorisnikId).HasColumnName("KorisnikID");
+            entity.Property(e => e.DatumPocetkaTreniranja).HasColumnType("datetime");
+            entity.Property(e => e.DatumRodjenja).HasColumnType("datetime");
             entity.Property(e => e.Email).HasMaxLength(50);
             entity.Property(e => e.Ime).HasMaxLength(50);
             entity.Property(e => e.KorisnickoIme).HasMaxLength(50);
@@ -140,6 +144,7 @@ public partial class Ib200048Context : DbContext
 
             entity.Property(e => e.NovostId).HasColumnName("NovostID");
             entity.Property(e => e.AdminId).HasColumnName("AdminID");
+            entity.Property(e => e.DatumObjave).HasColumnType("datetime");
             entity.Property(e => e.Naslov).HasMaxLength(50);
             entity.Property(e => e.Slika).HasMaxLength(50);
             entity.Property(e => e.VrstaTreningaId).HasColumnName("VrstaTreningaID");
@@ -268,12 +273,12 @@ public partial class Ib200048Context : DbContext
             entity.ToTable("Treneri");
 
             entity.Property(e => e.TrenerId).HasColumnName("TrenerID");
+            entity.Property(e => e.DatumZaposlenja).HasColumnType("datetime");
             entity.Property(e => e.Email).HasMaxLength(50);
             entity.Property(e => e.Ime).HasMaxLength(50);
             entity.Property(e => e.Prezime).HasMaxLength(50);
             entity.Property(e => e.Spol).HasMaxLength(50);
             entity.Property(e => e.Telefon).HasMaxLength(50);
-            entity.Property(e => e.Zvanje).HasMaxLength(50);
         });
 
         modelBuilder.Entity<Treninzi>(entity =>

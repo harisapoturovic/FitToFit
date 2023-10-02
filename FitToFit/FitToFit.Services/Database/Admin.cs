@@ -13,11 +13,11 @@ public partial class Admin
 
     public string Spol { get; set; } = null!;
 
-    public string Telefon { get; set; } = null!;
+    public string? Telefon { get; set; }
 
-    public string Email { get; set; } = null!;
+    public string? Email { get; set; }
 
-    public string Adresa { get; set; } = null!;
+    public string? Adresa { get; set; }
 
     public string KorisnickoIme { get; set; } = null!;
 

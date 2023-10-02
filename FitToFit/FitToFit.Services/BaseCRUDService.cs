@@ -45,5 +45,17 @@ namespace FitToFit.Services
             await _context.SaveChangesAsync();
             return _mapper.Map<T>(entity);
         }
+
+        public virtual async Task<T> Delete(int id)
+        {
+            var set = _context.Set<Tdb>();
+
+            var entity = await set.FindAsync(id);
+
+            set.Remove(entity);
+
+            await _context.SaveChangesAsync();
+            return _mapper.Map<T>(entity);
+        }
     }
 }

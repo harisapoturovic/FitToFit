@@ -1,5 +1,9 @@
-﻿using FitToFit.Model;
+﻿using AutoMapper;
+using FitToFit.Model;
+using FitToFit.Model.Requests;
+using FitToFit.Model.SearchObjects;
 using FitToFit.Services.Database;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,26 +12,34 @@ using System.Threading.Tasks;
 
 namespace FitToFit.Services
 {
-    public class TreninziService : ITreninziService
+    public class TreninziService : BaseCRUDService<Model.Treninzi, Database.Treninzi, TreninziSearchObject, TreninziInsertRequest, TreninziUpdateRequest>, ITreninziService
     {
-        Ib200048Context _context;
-        public TreninziService(Ib200048Context context)
+        public TreninziService(Ib200048Context context, IMapper mapper) : base(context, mapper)
         {
-                _context = context;
         }
 
-        List<Model.Treninzi> treninzis = new List<Model.Treninzi>()
+        public override IQueryable<Database.Treninzi> AddInclude(IQueryable<Database.Treninzi> query, TreninziSearchObject search = null)
         {
-            new Model.Treninzi()
+            if (search?.IsTerminiIncluded == true)
             {
-                TreningID=1,
-                Naziv="Trening1"
+                query = query.Include("Terminis");
             }
-        };
-        public IList<Model.Treninzi> Get()
+            if (search?.IsVjezbeIncluded == true)
+            {
+                query = query.Include("TreninziVjezbes.Vjezba");
+            }
+             
+            return base.AddInclude(query, search);
+        }
+
+        public override IQueryable<Database.Treninzi> AddFilter(IQueryable<Database.Treninzi> query, TreninziSearchObject? search = null)
         {
-            var list = _context.Treninzis.ToList();
-            return treninzis;
+            if (!string.IsNullOrWhiteSpace(search?.Naziv))
+            {
+                query = query.Where(x => x.Naziv.StartsWith(search.Naziv));
+            }
+
+            return base.AddFilter(query, search);
         }
     }
 }

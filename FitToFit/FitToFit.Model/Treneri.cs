@@ -16,16 +16,17 @@ namespace FitToFit.Model
 
         public string Spol { get; set; } = null!;
 
-        public string Telefon { get; set; } = null!;
+        public string? Telefon { get; set; } = null!;
 
-        public string Email { get; set; } = null!;
+        public string? Email { get; set; } = null!;
 
-        public string Adresa { get; set; } = null!;
+        public string? Adresa { get; set; } = null!;
 
         public DateTime DatumZaposlenja { get; set; }
 
-        public string Zvanje { get; set; } = null!;
+        public string? Zvanje { get; set; } = null!;
 
         public byte[]? Slika { get; set; }
+        public virtual ICollection<Ocjene> Ocjenes { get; set; } = new List<Ocjene>();
     }
 }

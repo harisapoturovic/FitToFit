@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FitToFit.Model;
 using FitToFit.Model.SearchObjects;
 using FitToFit.Services.Database;
 using Microsoft.EntityFrameworkCore;
@@ -19,39 +20,43 @@ namespace FitToFit.Services
             _context = context;
             _mapper = mapper;
         }
-
-        public virtual async Task<List<T>> Get(Tsearch? search=null)
+        
+        public virtual async Task<PagedResult<T>> Get(Tsearch? search=null)
         {
             var query = _context.Set<Tdb>().AsQueryable();
 
-            query = AddInclude(query, search);
+            PagedResult<T> result = new PagedResult<T>();
 
+            query = AddInclude(query, search);
+        
             query = AddFilter(query, search);
 
+            result.Count = await query.CountAsync();
 
-            //pagination
             if (search?.Page.HasValue == true && search?.PageSize.HasValue == true)
             {
                 query = query.Take(search.PageSize.Value).Skip(search.Page.Value * search.PageSize.Value);
             }
-
+        
             var list = await query.ToListAsync();
 
-            return _mapper.Map<List<T>>(list);
+            var tmp = _mapper.Map<List<T>>(list);
+            result.Result = tmp;
+            return result;
         }
-
+        
         public virtual async Task<T> GetById(int id)
         {
             var entity = await _context.Set<Tdb>().FindAsync(id);
-
+        
             return _mapper.Map<T>(entity);
         }
-
+        
         public virtual IQueryable<Tdb> AddFilter(IQueryable<Tdb> query, Tsearch? search = null)
         {
             return query;
         }
-
+        
         public virtual IQueryable<Tdb> AddInclude(IQueryable<Tdb> query, Tsearch search = null)
         {
             return query;

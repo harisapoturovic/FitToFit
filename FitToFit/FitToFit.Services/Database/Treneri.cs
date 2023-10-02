@@ -13,15 +13,15 @@ public partial class Treneri
 
     public string Spol { get; set; } = null!;
 
-    public string Telefon { get; set; } = null!;
+    public string? Telefon { get; set; }
 
-    public string Email { get; set; } = null!;
+    public string? Email { get; set; }
 
-    public string Adresa { get; set; } = null!;
+    public string? Adresa { get; set; }
 
     public DateTime DatumZaposlenja { get; set; }
 
-    public string Zvanje { get; set; } = null!;
+    public string? Zvanje { get; set; }
 
     public byte[]? Slika { get; set; }
 

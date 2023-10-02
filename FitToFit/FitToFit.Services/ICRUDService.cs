@@ -10,5 +10,6 @@ namespace FitToFit.Services
     {
         Task<T> Insert(Tinsert insert);
         Task<T> Update(int id, Tupdate update);
+        Task<T> Delete(int id);
     }
 }

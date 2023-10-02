@@ -2,15 +2,27 @@
 {
     public partial class Treninzi
     {
-        public int TreningID { get; set; }
-        public string Naziv { get; set; }
-        public string Opis { get; set; }
+        public int TreningId { get; set; }
+
+        public string Naziv { get; set; } = null!;
+
+        public string Opis { get; set; } = null!;
+
         public int MaxBrojClanova { get; set; }
+
         public int CijenaPoTerminu { get; set; }
-        public int Trajanje { get; set; }
-        public int ProsjecnaPotrosnjaKalorija { get; set; }
-        public string Namjena { get; set; }
-        public byte[] Slika { get; set; }
-        public int VrstaID { get; set; }
+
+        public string Trajanje { get; set; } = null!;
+
+        public decimal ProsjecnaPotrosnjaKalorija { get; set; }
+
+        public int VrstaId { get; set; }
+
+        public string Namjena { get; set; } = null!;
+
+        public byte[]? Slika { get; set; }
+        public virtual ICollection<Termini> Terminis { get; set; } = new List<Termini>();
+
+        public virtual ICollection<TreninziVjezbe> TreninziVjezbes { get; set; } = new List<TreninziVjezbe>();
     }
 }

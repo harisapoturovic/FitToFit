@@ -19,9 +19,9 @@ public partial class Korisnici
 
     public string? Adresa { get; set; }
 
-    public DateTime? DatumRodjenja { get; set; }
+    public DateTime DatumRodjenja { get; set; }
 
-    public DateTime? DatumPocetkaTreniranja { get; set; }
+    public DateTime DatumPocetkaTreniranja { get; set; }
 
     public string? Visina { get; set; }
 
