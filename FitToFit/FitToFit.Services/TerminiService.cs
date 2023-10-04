@@ -25,7 +25,7 @@ namespace FitToFit.Services
                 query = query.Where(x => x.Dan.Equals(search.Dan));
             }
 
-            if (!string.IsNullOrWhiteSpace(search?.Sat))
+            if (search?.Sat != null)
             {
                 query = query.Where(x => x.Sat.Equals(search.Sat));
             }

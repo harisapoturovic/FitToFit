@@ -12,10 +12,6 @@ namespace FitToFit.Model
 
         public string Naziv { get; set; } = null!;
 
-        public string Opis { get; set; } = null!;
-
-        public byte[]? SlikaRaspored { get; set; }
-
-        public byte[]? SlikaCjenovnik { get; set; }
+        public string? Opis { get; set; } = null!;
     }
 }

@@ -10,7 +10,7 @@ namespace FitToFit.Model
     {
         public int TreningVjezbaId { get; set; }
 
-        public decimal? Trajanje { get; set; }
+        public decimal Trajanje { get; set; }
 
         public int TreningId { get; set; }
 

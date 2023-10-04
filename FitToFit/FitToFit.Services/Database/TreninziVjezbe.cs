@@ -7,7 +7,7 @@ public partial class TreninziVjezbe
 {
     public int TreningVjezbaId { get; set; }
 
-    public decimal? Trajanje { get; set; }
+    public decimal Trajanje { get; set; }
 
     public int TreningId { get; set; }
 

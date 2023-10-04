@@ -82,6 +82,7 @@ public partial class Ib200048Context : DbContext
             entity.Property(e => e.DatumPocetka).HasColumnType("datetime");
             entity.Property(e => e.DatumZavrsetka).HasColumnType("datetime");
             entity.Property(e => e.Naziv).HasMaxLength(50);
+            entity.Property(e => e.StateMachine).HasMaxLength(50);
         });
 
         modelBuilder.Entity<AkcijeTreninzi>(entity =>
@@ -212,8 +213,9 @@ public partial class Ib200048Context : DbContext
             entity.Property(e => e.RezervacijaId).HasColumnName("RezervacijaID");
             entity.Property(e => e.ClanarinaId).HasColumnName("ClanarinaID");
             entity.Property(e => e.Datum).HasColumnType("datetime");
+            entity.Property(e => e.Iznos).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.KorisnikId).HasColumnName("KorisnikID");
-            entity.Property(e => e.Status).HasMaxLength(50);
+            entity.Property(e => e.StateMachine).HasMaxLength(50);
 
             entity.HasOne(d => d.Clanarina).WithMany(p => p.Rezervacijes)
                 .HasForeignKey(d => d.ClanarinaId)
@@ -246,7 +248,7 @@ public partial class Ib200048Context : DbContext
             entity.Property(e => e.TerminId).HasColumnName("TerminID");
             entity.Property(e => e.Dan).HasMaxLength(50);
             entity.Property(e => e.SalaId).HasColumnName("SalaID");
-            entity.Property(e => e.Sat).HasMaxLength(50);
+            entity.Property(e => e.Sat).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.TrenerId).HasColumnName("TrenerID");
             entity.Property(e => e.TreningId).HasColumnName("TreningID");
 
@@ -290,7 +292,7 @@ public partial class Ib200048Context : DbContext
             entity.Property(e => e.TreningId).HasColumnName("TreningID");
             entity.Property(e => e.Namjena).HasMaxLength(50);
             entity.Property(e => e.Naziv).HasMaxLength(50);
-            entity.Property(e => e.ProsjecnaPotrosnjaKalorija).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.ProsjecnaPotrosnjaKalorija).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Trajanje).HasMaxLength(50);
             entity.Property(e => e.VrstaId).HasColumnName("VrstaID");
 
@@ -328,7 +330,7 @@ public partial class Ib200048Context : DbContext
             entity.ToTable("TreninziVjezbe");
 
             entity.Property(e => e.TreningVjezbaId).HasColumnName("TreningVjezbaID");
-            entity.Property(e => e.Trajanje).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.Trajanje).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.TreningId).HasColumnName("TreningID");
             entity.Property(e => e.VjezbaId).HasColumnName("VjezbaID");
 

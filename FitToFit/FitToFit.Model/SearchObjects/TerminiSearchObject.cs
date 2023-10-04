@@ -9,7 +9,7 @@ namespace FitToFit.Model.SearchObjects
     public class TerminiSearchObject : BaseSearchObject
     {
         public string? Dan { get; set; }
-        public string? Sat { get; set; }
+        public decimal? Sat { get; set; }
         public int? TreningId { get; set; }
         public int? TrenerId { get; set; }
         public int? SalaId { get; set; }

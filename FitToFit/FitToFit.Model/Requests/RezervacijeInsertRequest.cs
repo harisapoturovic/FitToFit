@@ -15,8 +15,6 @@ namespace FitToFit.Model.Requests
 
         public int ClanarinaId { get; set; }
 
-        public string Status { get; set; } = null!;
-
         public List<RezervacijaStavkeInsertRequest>? Items { get; set; }
     }
 }

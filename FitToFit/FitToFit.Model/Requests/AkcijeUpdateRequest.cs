@@ -16,5 +16,6 @@ namespace FitToFit.Model.Requests
         public DateTime? DatumZavrsetka { get; set; }
 
         public int? Iznos { get; set; }
+        public string? StateMachine { get; set; }
     }
 }

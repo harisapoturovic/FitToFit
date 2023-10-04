@@ -1,5 +1,7 @@
 using FitToFit.Services;
 using FitToFit.Services.Database;
+using FitToFit.Services.RezervacijeStateMachine;
+using FitToFit.Services.AkcijeStateMachine;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +16,20 @@ builder.Services.AddTransient<IAdminService, AdminService>();
 builder.Services.AddTransient<ITerminiService, TerminiService>();
 builder.Services.AddTransient<ITreninziClanarine, TreninziClanarineService>();
 builder.Services.AddTransient<IRezervacijeService, RezervacijeService>();
+
+builder.Services.AddTransient<AkcijeBaseState>();
+builder.Services.AddTransient<InitialActionState>();
+builder.Services.AddTransient<DraftActionState>();
+builder.Services.AddTransient<ActiveActionState>();
+builder.Services.AddTransient<ArchivedActionState>();
+
+builder.Services.AddTransient<BaseState>();
+builder.Services.AddTransient<InitialReservationState>();
+builder.Services.AddTransient<DraftReservationState>();
+builder.Services.AddTransient<ActiveReservationState>();
+builder.Services.AddTransient<CanceledReservationState>();
+builder.Services.AddTransient<RefusedReservationState>();
+builder.Services.AddTransient<ArchivedReservationState>();
 
 // Add services to the container.
 

@@ -15,5 +15,23 @@ namespace FitToFit.Controllers
         {
 
         }
+
+        [HttpPut("{id}/activate")]
+        public virtual async Task<Model.Akcije> Activate(int id)
+        {
+            return await (_service as IAkcijeService).Activate(id);
+        }
+
+        [HttpPut("{id}/archive")]
+        public virtual async Task<Model.Akcije> Archive(int id)
+        {
+            return await (_service as IAkcijeService).Archive(id);
+        }
+
+        [HttpGet("{id}/allowedActions")]
+        public virtual async Task<List<string>> AllowedActions(int id)
+        {
+            return await (_service as IAkcijeService).AllowedActions(id);
+        }
     }
 }

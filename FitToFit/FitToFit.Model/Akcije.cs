@@ -17,6 +17,7 @@ namespace FitToFit.Model
         public DateTime DatumZavrsetka { get; set; }
 
         public int Iznos { get; set; }
+        public string? StateMachine { get; set; }
 
         public virtual ICollection<AkcijeTreninzi> AkcijeTreninzis { get; set; } = new List<AkcijeTreninzi>();
     }

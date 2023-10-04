@@ -11,14 +11,14 @@ namespace FitToFit.Model.Requests
     {
         public string Dan { get; set; } = null!;
 
-        public string Sat { get; set; } = null!;
-
-        public int BrojClanova { get; set; }
+        public int? BrojClanova { get; set; }
 
         public int TreningId { get; set; }
 
         public int TrenerId { get; set; }
 
         public int SalaId { get; set; }
+
+        public decimal? Sat { get; set; }
     }
 }

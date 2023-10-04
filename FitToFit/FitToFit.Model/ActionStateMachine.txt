@@ -1,0 +1,8 @@
+initial,
+draft,
+active,
+archived;
+
+initial -> draft: [insert];
+draft-> active: [activate];
+active -> archived: [archive];

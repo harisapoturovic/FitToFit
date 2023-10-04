@@ -9,7 +9,7 @@ public partial class Sale
 
     public string Naziv { get; set; } = null!;
 
-    public string Velicina { get; set; } = null!;
+    public string? Velicina { get; set; }
 
     public byte[]? Slika { get; set; }
 

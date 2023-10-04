@@ -9,11 +9,7 @@ public partial class VrsteTreninga
 
     public string Naziv { get; set; } = null!;
 
-    public string Opis { get; set; } = null!;
-
-    public byte[]? SlikaRaspored { get; set; }
-
-    public byte[]? SlikaCjenovnik { get; set; }
+    public string? Opis { get; set; }
 
     public virtual ICollection<Novosti> Novostis { get; set; } = new List<Novosti>();
 

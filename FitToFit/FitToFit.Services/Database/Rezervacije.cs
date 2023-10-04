@@ -13,7 +13,9 @@ public partial class Rezervacije
 
     public int ClanarinaId { get; set; }
 
-    public string Status { get; set; } = null!;
+    public string? StateMachine { get; set; }
+
+    public decimal? Iznos { get; set; }
 
     public virtual Clanarine Clanarina { get; set; } = null!;
 

@@ -11,6 +11,7 @@ namespace FitToFit.Model.Requests
     {
         public int? ClanarinaId { get; set; }
 
-        public string? Status { get; set; } = null!;
+        public string? StateMachine { get; set; } = null!;
+        public decimal? Iznos { get; set; } = null!;
     }
 }
