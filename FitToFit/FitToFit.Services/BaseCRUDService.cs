@@ -20,6 +20,11 @@ namespace FitToFit.Services
 
         }
 
+        public virtual async Task BeforeUpdate(Tdb db, Tupdate update)
+        {
+
+        }
+
         public virtual async Task<T> Insert(Tinsert insert)
         {
             var set = _context.Set<Tdb>();
@@ -41,6 +46,7 @@ namespace FitToFit.Services
             var entity = await set.FindAsync(id);
 
             _mapper.Map(update, entity);
+            await BeforeUpdate(entity, update);
 
             await _context.SaveChangesAsync();
             return _mapper.Map<T>(entity);

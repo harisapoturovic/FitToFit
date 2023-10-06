@@ -113,30 +113,18 @@ namespace FitToFit.Services
             return await state.AllowedActions();
         }
 
-        /*
         public override async Task<Model.Akcije> Delete(int id)
         {
-        
-           //var set = await _context.AkcijeTreninzis.Where(x => x.AkcijaId == id).ToListAsync();
-           //foreach (var item in set)
-           //{
-           //    set.Remove(item);
-           //}
-        
-        
-           var set = await _context.AkcijeTreninzis.ToListAsync();
-           for (int i = 0; i < set.Count; i++)
-           {
-               var item = set.FirstOrDefault(x=>x.AkcijaId==id);
-        
-               if(item!=null)
-               {
-                   set.Remove(item);
-                   continue;
-               }
-           }
-        
-           return await base.Delete(id);
-        }*/
+            var action = _context.Akcijes.Include(r => r.AkcijeTreninzis).FirstOrDefault(r => r.AkcijaId == id);
+
+            if (action != null)
+            {
+                _context.AkcijeTreninzis.RemoveRange(action.AkcijeTreninzis);
+                _context.Akcijes.Remove(action);
+
+                _context.SaveChanges();
+            }
+            return _mapper.Map<Model.Akcije>(action);
+        }
     }
 }

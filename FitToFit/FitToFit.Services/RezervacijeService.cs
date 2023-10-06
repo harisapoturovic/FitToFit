@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -137,6 +138,20 @@ namespace FitToFit.Services
             var entity = await _context.Rezervacijes.FindAsync(id);
             var state = _baseState.CreateState(entity?.StateMachine ?? "initial");
             return await state.AllowedActions();
+        }
+
+        public override async Task<Model.Rezervacije> Delete(int id)
+        {
+            var reservation = _context.Rezervacijes.Include(r => r.RezervacijaStavkes).FirstOrDefault(r => r.RezervacijaId == id);
+
+            if (reservation != null)
+            {
+                _context.RezervacijaStavkes.RemoveRange(reservation.RezervacijaStavkes);
+                _context.Rezervacijes.Remove(reservation);
+
+                _context.SaveChanges();
+            }
+            return _mapper.Map<Model.Rezervacije>(reservation);
         }
     }
 }
