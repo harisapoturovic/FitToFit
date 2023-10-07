@@ -9,12 +9,13 @@ namespace FitToFit.Model.Requests
 {
     public class TreninziClanarineInsertRequest
     {
+        [Required]
         public int Cijena { get; set; }
-
+        [Required]
         public int? Ucestalost { get; set; }
-
+        [Required]
         public int ClanarinaId { get; set; }
-
+        [Required]
         public int VrstaTreningaId { get; set; }
     }
 }

@@ -9,10 +9,13 @@ namespace FitToFit.Model.Requests
 {
     public class TreneriInsertRequest
     {
+        [Required(AllowEmptyStrings = false)]
         public string Ime { get; set; } = null!;
 
+        [Required(AllowEmptyStrings = false)]
         public string Prezime { get; set; } = null!;
 
+        [Required(AllowEmptyStrings = false)]
         public string Spol { get; set; } = null!;
 
         public string? Telefon { get; set; } = null!;

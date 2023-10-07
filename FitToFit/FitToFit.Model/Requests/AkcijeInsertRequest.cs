@@ -9,10 +9,11 @@ namespace FitToFit.Model.Requests
 {
     public class AkcijeInsertRequest
     {
+        [Required(AllowEmptyStrings = false)]
         public string Naziv { get; set; } = null!;
-
+        [Required]
         public DateTime DatumPocetka { get; set; }
-
+        [Required]
         public DateTime DatumZavrsetka { get; set; }
 
         public int Iznos { get; set; }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FitToFit.Model;
 using FitToFit.Model.Requests;
 using FitToFit.Services.Database;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,32 +27,32 @@ namespace FitToFit.Services.RezervacijeStateMachine
 
         public virtual Task<Model.Rezervacije> Insert(Database.Rezervacije entity)
         {
-            throw new Exception("Not allowed");
+            throw new UserException("Not allowed");
         }
 
         public virtual Task<Model.Rezervacije> Update(int id, RezervacijeUpdateRequest request)
         {
-            throw new Exception("Not allowed");
+            throw new UserException("Not allowed");
         }
 
         public virtual Task<Model.Rezervacije> Activate(int id)
         {
-            throw new Exception("Not allowed");
+            throw new UserException("Not allowed");
         }
 
         public virtual Task<Model.Rezervacije> Archive(int id)
         {
-            throw new Exception("Not allowed");
+            throw new UserException("Not allowed");
         }
 
         public virtual Task<Model.Rezervacije> Refuse(int id)
         {
-            throw new Exception("Not allowed");
+            throw new UserException("Not allowed");
         }
 
         public virtual Task<Model.Rezervacije> Cancel(int id)
         {
-            throw new Exception("Not allowed");
+            throw new UserException("Not allowed");
         }
 
         public BaseState CreateState(string stateName)
@@ -79,7 +80,7 @@ namespace FitToFit.Services.RezervacijeStateMachine
                     break;
             
                 default:
-                    throw new Exception("Not allowed");
+                    throw new UserException("Not allowed");
             }
         }
         public virtual async Task<List<string>> AllowedActions()

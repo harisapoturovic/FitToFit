@@ -10,9 +10,9 @@ namespace FitToFit.Model.Requests
     public class RezervacijeInsertRequest
     {
         public DateTime Datum { get; set; }
-
+        [Required]
         public int KorisnikId { get; set; }
-
+        [Required]
         public int ClanarinaId { get; set; }
 
         public List<RezervacijaStavkeInsertRequest>? Items { get; set; }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FitToFit.Model;
 using FitToFit.Model.Requests;
 using FitToFit.Services.Database;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,22 +27,22 @@ namespace FitToFit.Services.AkcijeStateMachine
 
         public virtual Task<Model.Akcije> Insert(Database.Akcije entity)
         {
-            throw new Exception("Not allowed");
+            throw new UserException("Not allowed");
         }
 
         public virtual Task<Model.Akcije> Update(int id, AkcijeUpdateRequest request)
         {
-            throw new Exception("Not allowed");
+            throw new UserException("Not allowed");
         }
 
         public virtual Task<Model.Akcije> Activate(int id)
         {
-            throw new Exception("Not allowed");
+            throw new UserException("Not allowed");
         }
 
         public virtual Task<Model.Akcije> Archive(int id)
         {
-            throw new Exception("Not allowed");
+            throw new UserException("Not allowed");
         }
 
         public AkcijeBaseState CreateState(string stateName)
@@ -63,7 +64,7 @@ namespace FitToFit.Services.AkcijeStateMachine
                     break;
             
                 default:
-                    throw new Exception("Not allowed");
+                    throw new UserException("Not allowed");
             }
         }
         public virtual async Task<List<string>> AllowedActions()

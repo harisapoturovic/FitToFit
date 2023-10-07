@@ -9,6 +9,7 @@ namespace FitToFit.Model.Requests
 {
     public class RezervacijeUpdateRequest
     {
+        [Required]
         public int? ClanarinaId { get; set; }
 
         public string? StateMachine { get; set; } = null!;

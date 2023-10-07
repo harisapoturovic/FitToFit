@@ -9,6 +9,7 @@ namespace FitToFit.Model.Requests
 {
     public class TreninziInsertRequest
     {
+        [Required(AllowEmptyStrings = false)]
         public string Naziv { get; set; } = null!;
 
         public string Opis { get; set; } = null!;

@@ -9,10 +9,13 @@ namespace FitToFit.Model.Requests
 {
     public class AdminInsertRequest
     {
+        [Required(AllowEmptyStrings = false)]
         public string Ime { get; set; } = null!;
 
+        [Required(AllowEmptyStrings = false)]
         public string Prezime { get; set; } = null!;
 
+        [Required(AllowEmptyStrings = false)]
         public string Spol { get; set; } = null!;
 
         public string? Telefon { get; set; }
@@ -21,8 +24,13 @@ namespace FitToFit.Model.Requests
 
         public string? Adresa { get; set; }
 
+        [Required(AllowEmptyStrings = false)]
         public string KorisnickoIme { get; set; } = null!;
+
+        [Compare("PasswordPotvrda", ErrorMessage = "Password do not match")]
         public string Password { get; set; }
+
+        [Compare("Password", ErrorMessage = "Password do not match")]
         public string PasswordPotvrda { get; set; } //radi provjere na API-ju
     }
 }

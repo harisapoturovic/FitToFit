@@ -9,16 +9,18 @@ namespace FitToFit.Model.Requests
 {
     public class TerminiInsertRequest
     {
+        [Required(AllowEmptyStrings = false)]
         public string Dan { get; set; } = null!;
 
         public int? BrojClanova { get; set; }
-
+        [Required]
         public int TreningId { get; set; }
-
+        [Required]
         public int TrenerId { get; set; }
-
+        [Required]
         public int SalaId { get; set; }
-
+        [Required(AllowEmptyStrings = false)]
+        [Range(8, 20)]
         public decimal? Sat { get; set; }
     }
 }

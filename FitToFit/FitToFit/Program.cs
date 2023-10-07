@@ -3,6 +3,7 @@ using FitToFit.Services.Database;
 using FitToFit.Services.RezervacijeStateMachine;
 using FitToFit.Services.AkcijeStateMachine;
 using Microsoft.EntityFrameworkCore;
+using FitToFit.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,12 @@ builder.Services.AddTransient<ArchivedReservationState>();
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+builder.Services.AddControllers(x =>
+{
+    x.Filters.Add<ErrorFilter>();
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

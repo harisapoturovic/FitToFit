@@ -24,6 +24,11 @@ namespace FitToFit.Services.AkcijeStateMachine
 
             _mapper.Map(request, entity);
 
+            if(entity.DatumZavrsetka<entity.DatumPocetka)
+            {
+                throw new UserException("Nedozvoljeno");
+            }
+
             await _context.SaveChangesAsync();
             return _mapper.Map<Model.Akcije>(entity);
         }
