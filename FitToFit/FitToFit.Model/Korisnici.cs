@@ -32,10 +32,18 @@ namespace FitToFit.Model
 
         public string KorisnickoIme { get; set; } = null!;
 
+        public string LozinkaHash { get; set; } = null!;
+
+        public string LozinkaSalt { get; set; } = null!;
+
         public byte[]? Slika { get; set; }
+
+        public int? UlogaId { get; set; }
 
         public virtual ICollection<Ocjene> Ocjenes { get; set; } = new List<Ocjene>();
 
-        // public virtual ICollection<Rezervacije> Rezervacijes { get; set; } = new List<Rezervacije>();
+        //public virtual ICollection<Rezervacije> Rezervacijes { get; set; } = new List<Rezervacije>();
+
+        public virtual Uloge? Uloga { get; set; }
     }
 }

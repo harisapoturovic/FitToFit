@@ -19,9 +19,9 @@ public partial class Korisnici
 
     public string? Adresa { get; set; }
 
-    public DateTime DatumRodjenja { get; set; }
+    public DateTime? DatumRodjenja { get; set; }
 
-    public DateTime DatumPocetkaTreniranja { get; set; }
+    public DateTime? DatumPocetkaTreniranja { get; set; }
 
     public string? Visina { get; set; }
 
@@ -35,7 +35,13 @@ public partial class Korisnici
 
     public byte[]? Slika { get; set; }
 
+    public int? UlogaId { get; set; }
+
+    public virtual ICollection<Novosti> Novostis { get; set; } = new List<Novosti>();
+
     public virtual ICollection<Ocjene> Ocjenes { get; set; } = new List<Ocjene>();
 
     public virtual ICollection<Rezervacije> Rezervacijes { get; set; } = new List<Rezervacije>();
+
+    public virtual Uloge? Uloga { get; set; }
 }

@@ -2,6 +2,7 @@ using FitToFit.Model;
 using FitToFit.Model.Requests;
 using FitToFit.Model.SearchObjects;
 using FitToFit.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FitToFit.Controllers
@@ -16,5 +17,10 @@ namespace FitToFit.Controllers
           
         }
 
+        [Authorize(Roles = "Administrator")] //[AllowAnonymous]
+        public override Task<Korisnici> Insert([FromBody] KorisniciInsertRequest insert)
+        {
+            return base.Insert(insert);
+        }
     }
 }

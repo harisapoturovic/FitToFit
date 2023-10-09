@@ -16,7 +16,7 @@ namespace FitToFit.Model.Requests
 
         public int MaxBrojClanova { get; set; }
 
-        public int CijenaPoTerminu { get; set; }
+        public decimal CijenaPoTerminu { get; set; }
 
         public string Trajanje { get; set; } = null!;
 

@@ -33,5 +33,6 @@ namespace FitToFit.Controllers
         {
             return await (_service as IAkcijeService).AllowedActions(id);
         }
+
     }
 }

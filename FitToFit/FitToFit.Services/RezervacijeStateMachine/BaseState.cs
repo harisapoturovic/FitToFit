@@ -87,6 +87,6 @@ namespace FitToFit.Services.RezervacijeStateMachine
         {
             return new List<string>();
         }
-
+        
     }
 }

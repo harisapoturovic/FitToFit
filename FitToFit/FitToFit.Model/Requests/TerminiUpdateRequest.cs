@@ -19,7 +19,7 @@ namespace FitToFit.Model.Requests
         [Required]
         public int? SalaId { get; set; }
         [Required(AllowEmptyStrings = false)]
-        [Range(8,20)]
-        public decimal? Sat { get; set; }
+        //[Range(8,20)]
+        public string? Sat { get; set; }
     }
 }

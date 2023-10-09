@@ -11,10 +11,10 @@ namespace FitToFit.Services.RezervacijeStateMachine
 {
     public class RefusedReservationState : BaseState
     {
-        public RefusedReservationState(IServiceProvider serviceProvider, Database.Ib200048Context context, IMapper mapper) 
-            : base(serviceProvider, context, mapper)
-        {
-        }
+       public RefusedReservationState(IServiceProvider serviceProvider, Database.Ib200048Context context, IMapper mapper) 
+           : base(serviceProvider, context, mapper)
+       {
+       }
 
         //public async override Task<Rezervacije> Reactivate(int id)
         //{

@@ -15,8 +15,6 @@ public partial class Ib200048Context : DbContext
     {
     }
 
-    public virtual DbSet<Admin> Admins { get; set; }
-
     public virtual DbSet<Akcije> Akcijes { get; set; }
 
     public virtual DbSet<AkcijeTreninzi> AkcijeTreninzis { get; set; }
@@ -45,6 +43,8 @@ public partial class Ib200048Context : DbContext
 
     public virtual DbSet<TreninziVjezbe> TreninziVjezbes { get; set; }
 
+    public virtual DbSet<Uloge> Uloges { get; set; }
+
     public virtual DbSet<Vjezbe> Vjezbes { get; set; }
 
     public virtual DbSet<VrsteTreninga> VrsteTreningas { get; set; }
@@ -55,23 +55,6 @@ public partial class Ib200048Context : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Admin>(entity =>
-        {
-            entity.HasKey(e => e.AdminId).HasName("PK__Admin__719FE4E85F648A54");
-
-            entity.ToTable("Admin");
-
-            entity.Property(e => e.AdminId).HasColumnName("AdminID");
-            entity.Property(e => e.Email).HasMaxLength(50);
-            entity.Property(e => e.Ime).HasMaxLength(50);
-            entity.Property(e => e.KorisnickoIme).HasMaxLength(50);
-            entity.Property(e => e.LozinkaHash).HasMaxLength(50);
-            entity.Property(e => e.LozinkaSalt).HasMaxLength(50);
-            entity.Property(e => e.Prezime).HasMaxLength(50);
-            entity.Property(e => e.Spol).HasMaxLength(50);
-            entity.Property(e => e.Telefon).HasMaxLength(50);
-        });
-
         modelBuilder.Entity<Akcije>(entity =>
         {
             entity.HasKey(e => e.AkcijaId).HasName("PK__Akcija__3499D633EFF61050");
@@ -134,31 +117,34 @@ public partial class Ib200048Context : DbContext
             entity.Property(e => e.Spol).HasMaxLength(50);
             entity.Property(e => e.Telefon).HasMaxLength(50);
             entity.Property(e => e.Tezina).HasMaxLength(50);
+            entity.Property(e => e.UlogaId).HasColumnName("UlogaID");
             entity.Property(e => e.Visina).HasMaxLength(50);
+
+            entity.HasOne(d => d.Uloga).WithMany(p => p.Korisnicis)
+                .HasForeignKey(d => d.UlogaId)
+                .HasConstraintName("FK__Korisnici__Uloga__4A8310C6");
         });
 
         modelBuilder.Entity<Novosti>(entity =>
         {
-            entity.HasKey(e => e.NovostId).HasName("PK__Novosti__967A351C30DA0BE7");
+            entity.HasKey(e => e.NovostId).HasName("PK__Novosti__967A351C04B2801A");
 
             entity.ToTable("Novosti");
 
             entity.Property(e => e.NovostId).HasColumnName("NovostID");
-            entity.Property(e => e.AdminId).HasColumnName("AdminID");
             entity.Property(e => e.DatumObjave).HasColumnType("datetime");
-            entity.Property(e => e.Naslov).HasMaxLength(50);
-            entity.Property(e => e.Slika).HasMaxLength(50);
+            entity.Property(e => e.KorisnikId).HasColumnName("KorisnikID");
+            entity.Property(e => e.Naslov).HasMaxLength(100);
             entity.Property(e => e.VrstaTreningaId).HasColumnName("VrstaTreningaID");
 
-            entity.HasOne(d => d.Admin).WithMany(p => p.Novostis)
-                .HasForeignKey(d => d.AdminId)
+            entity.HasOne(d => d.Korisnik).WithMany(p => p.Novostis)
+                .HasForeignKey(d => d.KorisnikId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Novosti__AdminID__29221CFB");
+                .HasConstraintName("FK__Novosti__Korisni__46B27FE2");
 
             entity.HasOne(d => d.VrstaTreninga).WithMany(p => p.Novostis)
                 .HasForeignKey(d => d.VrstaTreningaId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Novosti__VrstaTr__2A164134");
+                .HasConstraintName("FK__Novosti__VrstaTr__47A6A41B");
         });
 
         modelBuilder.Entity<Ocjene>(entity =>
@@ -248,7 +234,7 @@ public partial class Ib200048Context : DbContext
             entity.Property(e => e.TerminId).HasColumnName("TerminID");
             entity.Property(e => e.Dan).HasMaxLength(50);
             entity.Property(e => e.SalaId).HasColumnName("SalaID");
-            entity.Property(e => e.Sat).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.Sat).HasMaxLength(50);
             entity.Property(e => e.TrenerId).HasColumnName("TrenerID");
             entity.Property(e => e.TreningId).HasColumnName("TreningID");
 
@@ -290,6 +276,7 @@ public partial class Ib200048Context : DbContext
             entity.ToTable("Treninzi");
 
             entity.Property(e => e.TreningId).HasColumnName("TreningID");
+            entity.Property(e => e.CijenaPoTerminu).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Namjena).HasMaxLength(50);
             entity.Property(e => e.Naziv).HasMaxLength(50);
             entity.Property(e => e.ProsjecnaPotrosnjaKalorija).HasColumnType("decimal(18, 2)");
@@ -343,6 +330,16 @@ public partial class Ib200048Context : DbContext
                 .HasForeignKey(d => d.VjezbaId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__TreninziV__Vjezb__0E6E26BF");
+        });
+
+        modelBuilder.Entity<Uloge>(entity =>
+        {
+            entity.HasKey(e => e.UlogaId).HasName("PK__Uloge__DCAB23EB26526ADC");
+
+            entity.ToTable("Uloge");
+
+            entity.Property(e => e.UlogaId).HasColumnName("UlogaID");
+            entity.Property(e => e.Naziv).HasMaxLength(50);
         });
 
         modelBuilder.Entity<Vjezbe>(entity =>

@@ -1,11 +1,13 @@
 using FitToFit.Model;
 using FitToFit.Model.Requests;
 using FitToFit.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FitToFit.Controllers
 {
     [Route("[controller]")]
+    [Authorize]
     public class BaseController<T, Tsearch> : ControllerBase where T : class where Tsearch : class
     {
         protected readonly IService<T, Tsearch> _service;

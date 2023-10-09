@@ -4,6 +4,9 @@ using FitToFit.Services.RezervacijeStateMachine;
 using FitToFit.Services.AkcijeStateMachine;
 using Microsoft.EntityFrameworkCore;
 using FitToFit.Filters;
+using FitToFit;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +16,6 @@ builder.Services.AddTransient<INovostiService, NovostiService>();
 builder.Services.AddTransient<ITreneriService, TreneriService>();
 builder.Services.AddTransient<ITreninziService, TreninziService>();
 builder.Services.AddTransient<IAkcijeService, AkcijeService>();
-builder.Services.AddTransient<IAdminService, AdminService>();
 builder.Services.AddTransient<ITerminiService, TerminiService>();
 builder.Services.AddTransient<ITreninziClanarine, TreninziClanarineService>();
 builder.Services.AddTransient<IRezervacijeService, RezervacijeService>();
@@ -43,14 +45,32 @@ builder.Services.AddControllers(x =>
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
+builder.Services.AddSwaggerGen(c =>
+{
+    c.AddSecurityDefinition("basicAuth", new Microsoft.OpenApi.Models.OpenApiSecurityScheme()
+    {
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        Scheme = "basic"
+    });
+    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement()
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference{Type = ReferenceType.SecurityScheme, Id = "basicAuth"}
+            },
+            new string[]{}
+    } });
+});
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<Ib200048Context>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddAutoMapper(typeof(IKorisniciService));
+
+builder.Services.AddAuthentication("BasicAuthentication")
+    .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
 
 var app = builder.Build();
 
@@ -63,6 +83,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();    
 app.UseAuthorization();
 
 app.MapControllers();

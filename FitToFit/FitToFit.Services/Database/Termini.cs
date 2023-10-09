@@ -17,7 +17,7 @@ public partial class Termini
 
     public int SalaId { get; set; }
 
-    public decimal? Sat { get; set; }
+    public string? Sat { get; set; }
 
     public virtual ICollection<RezervacijaStavke> RezervacijaStavkes { get; set; } = new List<RezervacijaStavke>();
 

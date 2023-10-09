@@ -20,6 +20,6 @@ namespace FitToFit.Model
 
         public int SalaId { get; set; }
 
-        public decimal? Sat { get; set; }
+        public string? Sat { get; set; }
     }
 }
