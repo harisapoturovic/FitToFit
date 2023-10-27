@@ -28,6 +28,10 @@ namespace FitToFit.Services
             {
                 query = query.Where(x => x.Naslov.Contains(search.FTS));
             }
+            if (search.VrstaTreningaId != null)
+            {
+                query = query.Where(x => x.VrstaTreningaId.Equals(search.VrstaTreningaId));
+            }
 
             return base.AddFilter(query, search);
         }
