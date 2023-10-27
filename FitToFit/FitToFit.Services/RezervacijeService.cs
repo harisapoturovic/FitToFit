@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EasyNetQ;
 using FitToFit.Model;
 using FitToFit.Model.Requests;
 using FitToFit.Model.SearchObjects;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,9 +20,11 @@ namespace FitToFit.Services
     public class RezervacijeService : BaseCRUDService<Model.Rezervacije, Database.Rezervacije, RezervacijeSearchObject, RezervacijeInsertRequest, RezervacijeUpdateRequest>, IRezervacijeService
     {
         public BaseState _baseState { get; set; }
-        public RezervacijeService(BaseState baseState, Ib200048Context context, IMapper mapper) : base(context, mapper)
+        private readonly IMessageProducer _messageProducer;
+        public RezervacijeService(BaseState baseState, Ib200048Context context, IMapper mapper, IMessageProducer messageProducer) : base(context, mapper)
         {
-            _baseState = baseState; 
+            _baseState = baseState;
+            _messageProducer = messageProducer;
         }
 
         public override IQueryable<Database.Rezervacije> AddInclude(IQueryable<Database.Rezervacije> query, RezervacijeSearchObject search = null)
@@ -74,6 +78,31 @@ namespace FitToFit.Services
             await BeforeInsert(entity, insert);
 
             await _context.SaveChangesAsync();
+
+            var korisnik = await _context.Korisnicis.Where(x => insert.KorisnikId == x.KorisnikId).FirstAsync();
+            _messageProducer.SendingMessage("\nUspješna rezervacija :: " + "\nID: " + entity.RezervacijaId + "\nDatum: " + entity.Datum + "\nKorisnik: " + korisnik.Ime + " " + korisnik.Prezime);
+
+            //rabbitmq - stari            
+            //var rez = base.Insert(insert);
+            //var user = _context.Korisnicis.FirstOrDefault(x => x.KorisnikId == insert.KorisnikId);
+            //
+            //if (user != null && rez != null)
+            //{
+            //    RezervacijaObavijest ro = new RezervacijaObavijest
+            //    {
+            //        Id = rez.Id,
+            //        Email = user.Email
+            //    };
+            //    _messageProducer.SendingObject(ro);
+            //}
+
+            //rabbitmq - novi
+            //var rez = base.Insert(insert);
+            //if (rez != null)
+            //{
+            //    _messageProducer.SendingMessage("Uspješna rezervacija");
+            //}
+            
 
             var state = _baseState.CreateState("initial");
             return await state.Insert(entity);
