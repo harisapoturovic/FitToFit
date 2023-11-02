@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FitToFit.Model", "FitToFit.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FitToFit.Services", "FitToFit.Services\FitToFit.Services.csproj", "{45B59997-57EC-4FFD-9752-70191C502A62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitToFit.Subscriber", "FitToFit.Subscriber\FitToFit.Subscriber.csproj", "{243CAB42-31DD-4D9C-BC4A-A81788273F39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FitToFit.Auxiliary", "FitToFit.Auxiliary\FitToFit.Auxiliary.csproj", "{915F497B-64DD-46CD-AE46-975EFAED0377}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{45B59997-57EC-4FFD-9752-70191C502A62}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45B59997-57EC-4FFD-9752-70191C502A62}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45B59997-57EC-4FFD-9752-70191C502A62}.Release|Any CPU.Build.0 = Release|Any CPU
-		{243CAB42-31DD-4D9C-BC4A-A81788273F39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{243CAB42-31DD-4D9C-BC4A-A81788273F39}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{243CAB42-31DD-4D9C-BC4A-A81788273F39}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{243CAB42-31DD-4D9C-BC4A-A81788273F39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{915F497B-64DD-46CD-AE46-975EFAED0377}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{915F497B-64DD-46CD-AE46-975EFAED0377}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{915F497B-64DD-46CD-AE46-975EFAED0377}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{915F497B-64DD-46CD-AE46-975EFAED0377}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

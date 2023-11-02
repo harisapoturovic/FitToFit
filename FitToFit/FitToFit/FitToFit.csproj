@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FitToFit.Auxiliary\FitToFit.Auxiliary.csproj" />
     <ProjectReference Include="..\FitToFit.Model\FitToFit.Model.csproj" />
     <ProjectReference Include="..\FitToFit.Services\FitToFit.Services.csproj" />
   </ItemGroup>

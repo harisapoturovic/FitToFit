@@ -30,7 +30,7 @@ namespace FitToFit.Services
                 using var connection = factory.CreateConnection();
                 using var channel = connection.CreateModel();
 
-                channel.QueueDeclare(queue: "reservation_added",
+                channel.QueueDeclare(queue: "training_added",
                                      durable: false,
                                      exclusive: false,
                                      autoDelete: false,
@@ -41,7 +41,7 @@ namespace FitToFit.Services
                 var body = Encoding.UTF8.GetBytes(message);
 
                 channel.BasicPublish(exchange: string.Empty,
-                                     routingKey: "reservation_added",
+                                     routingKey: "training_added",
                                      basicProperties: null,
                                      body: body);
             }
@@ -50,16 +50,16 @@ namespace FitToFit.Services
                 Console.WriteLine($"An error occurred while sending message to RabbitMQ: {ex.Message}");
             }
         }
-        //public void SendingObject<T>(T obj)
-        //{
-        //    var host = _host;
-        //    var username = _username;
-        //    var password = _password;
-        //    var virtualhost = _virtualhost;
-        //
-        //    using var bus = RabbitHutch.CreateBus($"host={host};virtualHost={virtualhost};username={username};password={password}");
-        //
-        //    bus.PubSub.Publish(obj);
-        //}
+        public void SendingObject<T>(T obj)
+        {
+            var host = _host;
+            var username = _username;
+            var password = _password;
+            var virtualhost = _virtualhost;
+        
+            using var bus = RabbitHutch.CreateBus($"host={host};virtualHost={virtualhost};username={username};password={password}");
+        
+            bus.PubSub.Publish(obj);
+        }
     }
 }

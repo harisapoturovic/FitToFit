@@ -79,30 +79,20 @@ namespace FitToFit.Services
 
             await _context.SaveChangesAsync();
 
-            var korisnik = await _context.Korisnicis.Where(x => insert.KorisnikId == x.KorisnikId).FirstAsync();
-            _messageProducer.SendingMessage("\nUspješna rezervacija :: " + "\nID: " + entity.RezervacijaId + "\nDatum: " + entity.Datum + "\nKorisnik: " + korisnik.Ime + " " + korisnik.Prezime);
+            //RabbitMQ: API - objekat - Auxiliary
 
-            //rabbitmq - stari            
-            //var rez = base.Insert(insert);
-            //var user = _context.Korisnicis.FirstOrDefault(x => x.KorisnikId == insert.KorisnikId);
-            //
-            //if (user != null && rez != null)
-            //{
-            //    RezervacijaObavijest ro = new RezervacijaObavijest
-            //    {
-            //        Id = rez.Id,
-            //        Email = user.Email
-            //    };
-            //    _messageProducer.SendingObject(ro);
-            //}
-
-            //rabbitmq - novi
-            //var rez = base.Insert(insert);
-            //if (rez != null)
-            //{
-            //    _messageProducer.SendingMessage("Uspješna rezervacija");
-            //}
-            
+            var korisnik = entity.Korisnik;
+            string clanarina = _context.Clanarines.First(x => x.ClanarinaId == entity.ClanarinaId).Naziv;
+            if(korisnik != null && clanarina != null)
+            {
+                ReservationNotifier reservation = new ReservationNotifier
+                {
+                    Id = entity.RezervacijaId,
+                    Email = korisnik.Email,
+                    Clanarina = clanarina
+                };
+                _messageProducer.SendingObject(reservation);
+            }
 
             var state = _baseState.CreateState("initial");
             return await state.Insert(entity);

@@ -7,6 +7,12 @@ using FitToFit.Filters;
 using FitToFit;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.OpenApi.Models;
+using RabbitMQ.Client.Events;
+using RabbitMQ.Client;
+using System.Text;
+using System.Text.Json;
+using AutoMapper;
+using FitToFit.Model.Requests;
 
 var builder = WebApplication.CreateBuilder(args);
 
