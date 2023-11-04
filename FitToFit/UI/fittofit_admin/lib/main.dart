@@ -1,7 +1,15 @@
+import 'package:fittofit_admin/providers/novosti_provider';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'pages/login.dart';
 
 void main() {
-  runApp(const MyApp());
+   runApp(
+  MultiProvider(
+    providers: [ChangeNotifierProvider(create: (_) => NovostiProvider())],
+    child: const MyApp(),
+  ),
+);
 }
 
 class MyApp extends StatelessWidget {
@@ -45,49 +53,3 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text("Login"),
-      ),
-      body: Center(
-        child: Container(
-           constraints: BoxConstraints(maxHeight: 400, maxWidth: 400),
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Column(children: [
-                Image.network("https://www.fit.ba/content/public/images/og-image.jpg", height: 150, width: 150,),
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: "Username",
-                    prefixIcon: Icon(Icons.email)
-                    ),
-                  ),
-                  SizedBox(height: 8,),
-                  TextField(
-                  decoration: InputDecoration(
-                    labelText: "Password",
-                    prefixIcon: Icon(Icons.password)
-                    ),
-                  ),
-                  SizedBox(height: 8,),
-                  ElevatedButton(onPressed: (){
-                    print("login proceed");
-                  }, child: Text("Login"))
-              ],
-              ),
-            ),
-          ),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(onPressed: () {},
-      child: Icon(Icons.add),
-      ),
-    );
-  }
-}
