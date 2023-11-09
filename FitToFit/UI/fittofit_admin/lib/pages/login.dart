@@ -1,24 +1,25 @@
-import 'package:fittofit_admin/pages/home.dart';
-import 'package:fittofit_admin/providers/novosti_provider';
 import 'package:flutter/material.dart';
+import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/novosti_provider';
 import '../utils/util.dart';
+import 'home.dart';
 
 class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
+  LoginPage({Key? key}) : super(key: key);
 
   TextEditingController _usernameController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
 
   late NovostiProvider _novostiProvider;
 
+
   @override
   Widget build(BuildContext context) {
-     _novostiProvider = context.read<NovostiProvider>();
-    return Scaffold(
+    _novostiProvider = context.read<NovostiProvider>();
+      return Scaffold(
       appBar: AppBar(
         title: const Text("Login"),
         backgroundColor: Colors.lightBlue,

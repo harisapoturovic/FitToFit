@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
-import '../pages/login.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/widgets/framework.dart';
 
 class MasterScreenWidget extends StatefulWidget {
   Widget? child;
@@ -57,7 +57,10 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
         
       ),
     );
-  }}
+  }
+}
+
+
     /*Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightBlue,
