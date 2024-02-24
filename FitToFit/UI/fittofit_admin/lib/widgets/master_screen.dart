@@ -17,18 +17,19 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
     return  Scaffold(
       appBar: AppBar(
         title: Text(widget.title ?? ""),
-        backgroundColor: Colors.lightBlue
+        backgroundColor: Color.fromRGBO(0, 154, 231, 1),
+        elevation: 0,
       ),
       body: Row(
         children: [
           NavigationRail(
             selectedIndex: 0,
-            backgroundColor: Colors.lightBlue,
+            backgroundColor: Color.fromRGBO(0, 154, 231, 1),
             unselectedIconTheme: IconThemeData(
-              color: Colors.white
+              color: Colors.white,
             ),
             selectedIconTheme: IconThemeData(
-              color: Colors.grey
+              color: Colors.white
             ),
             destinations: [
               NavigationRailDestination(
