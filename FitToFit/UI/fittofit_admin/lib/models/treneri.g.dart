@@ -19,6 +19,9 @@ Treneri _$TreneriFromJson(Map<String, dynamic> json) => Treneri(
           : DateTime.parse(json['datumZaposlenja'] as String),
       json['zvanje'] as String?,
       json['slika'] as String?,
+      (json['ocjene'] as List<dynamic>?)
+          ?.map((e) => Ocjene.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$TreneriToJson(Treneri instance) => <String, dynamic>{
@@ -32,4 +35,5 @@ Map<String, dynamic> _$TreneriToJson(Treneri instance) => <String, dynamic>{
       'datumZaposlenja': instance.datumZaposlenja?.toIso8601String(),
       'zvanje': instance.zvanje,
       'slika': instance.slika,
+      'ocjene': instance.ocjene,
     };

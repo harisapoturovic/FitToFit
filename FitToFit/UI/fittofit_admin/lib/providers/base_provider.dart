@@ -47,6 +47,21 @@ abstract class BaseProvider<T> with ChangeNotifier {
     // print("response: ${response.request} ${response.statusCode}, ${response.body}");
   }
 
+  Future getById(int id) async {
+    var url = "$_baseUrl$_endpoint/$id";
+    var uri = Uri.parse(url);
+    var headers = createHeaders();
+
+    Response response = await http.get(uri, headers: headers);
+    if (isValidResponse(response)) {
+      var data = jsonDecode(response.body);
+
+      return fromJson(data);
+    } else {
+      throw Exception("Unknown error");
+    }
+  }
+
   Future<T> insert(dynamic request) async {
     var url = "$_baseUrl$_endpoint";
     var uri = Uri.parse(url);
@@ -76,6 +91,22 @@ abstract class BaseProvider<T> with ChangeNotifier {
       return fromJson(data);
     } else {
       throw new Exception("Unknown error");
+    }
+  }
+
+  Future<T> delete(int id) async {
+    var url = "$_baseUrl$_endpoint/$id";
+    var uri = Uri.parse(url);
+    var headers = createHeaders();
+
+    Response response = await http.delete(uri, headers: headers);
+
+    if (isValidResponse(response)) {
+      var data = jsonDecode(response.body);
+      notifyListeners();
+      return fromJson(data);
+    } else {
+      throw Exception("Unknown error");
     }
   }
 

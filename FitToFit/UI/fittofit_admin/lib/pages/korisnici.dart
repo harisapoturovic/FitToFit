@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:fittofit_admin/models/korisnici.dart';
 import 'package:fittofit_admin/models/search_result.dart';
+import 'package:fittofit_admin/pages/treneri_detalji.dart';
 import 'package:fittofit_admin/providers/korisnici_provider.dart';
 import 'package:fittofit_admin/providers/treneri_provider.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,8 @@ import 'package:provider/provider.dart';
 import '../models/treneri.dart';
 import '../widgets/master_screen.dart';
 import 'package:file_picker/file_picker.dart';
+
+import 'korisnici_detalji.dart';
 
 class KorisniciPage extends StatefulWidget {
   const KorisniciPage({Key? key}) : super(key: key);
@@ -209,25 +212,37 @@ class _KorisniciPageState extends State<KorisniciPage> {
           itemCount: korisnici.length,
           itemBuilder: (context, index) {
             Korisnici korisnik = korisnici[index];
-            return Container(
-              margin: EdgeInsets.symmetric(vertical: 8.0),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: ListTile(
-                contentPadding: EdgeInsets.symmetric(horizontal: 50.0),
-                leading: Icon(
-                  Icons.person,
-                  color: Color.fromRGBO(0, 135, 202, 1),
-                  size: 30.0,
+            return InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => KorisniciDetaljiPage(
+                      korisnik: korisnik,
+                    ),
+                  ),
+                );
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(vertical: 8.0),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-                title: Text(
-                  '${korisnik.ime ?? ''} ${korisnik.prezime ?? ''}',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.0,
-                    color: Color.fromRGBO(0, 135, 202, 1),
+                child: ListTile(
+                  contentPadding: EdgeInsets.symmetric(horizontal: 50.0),
+                  leading: Icon(
+                    Icons.person,
+                    color: Color.fromARGB(255, 116, 116, 116),
+                    size: 30.0,
+                  ),
+                  title: Text(
+                    '${korisnik.ime ?? ''} ${korisnik.prezime ?? ''}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18.0,
+                      color: Color.fromRGBO(0, 135, 202, 1),
+                    ),
                   ),
                 ),
               ),
@@ -257,25 +272,37 @@ class _KorisniciPageState extends State<KorisniciPage> {
             itemCount: treneri.length,
             itemBuilder: (context, index) {
               Treneri trener = treneri[index];
-              return Container(
-                margin: EdgeInsets.symmetric(vertical: 8.0),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: ListTile(
-                  contentPadding: EdgeInsets.symmetric(horizontal: 50.0),
-                  leading: Icon(
-                    Icons.person,
-                    color: Color.fromRGBO(0, 135, 202, 1),
-                    size: 30.0,
+              return InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TreneriDetaljiPage(
+                        trener: trener,
+                      ),
+                    ),
+                  );
+                },
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 8.0),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
-                  title: Text(
-                    '${trener.ime ?? ''} ${trener.prezime ?? ''}',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.0,
-                      color: Color.fromRGBO(0, 135, 202, 1),
+                  child: ListTile(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 50.0),
+                    leading: Icon(
+                      Icons.person,
+                      color: Color.fromARGB(255, 116, 116, 116),
+                      size: 30.0,
+                    ),
+                    title: Text(
+                      '${trener.ime ?? ''} ${trener.prezime ?? ''}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.0,
+                        color: Color.fromRGBO(0, 135, 202, 1),
+                      ),
                     ),
                   ),
                 ),
@@ -480,10 +507,10 @@ class _KorisniciPageState extends State<KorisniciPage> {
                 Navigator.of(context).pop();
               },
               child: Text('Odustani'),
-               style: ElevatedButton.styleFrom(
+              style: ElevatedButton.styleFrom(
                 textStyle: TextStyle(
-                fontSize: 14.0,
-              ),
+                  fontSize: 14.0,
+                ),
               ),
             ),
             ElevatedButton(
@@ -495,8 +522,8 @@ class _KorisniciPageState extends State<KorisniciPage> {
                 primary: Color.fromRGBO(0, 154, 231, 1),
                 padding: EdgeInsets.symmetric(horizontal: 18, vertical: 15),
                 textStyle: TextStyle(
-                fontSize: 14.0,
-              ),
+                  fontSize: 14.0,
+                ),
               ),
             ),
           ],

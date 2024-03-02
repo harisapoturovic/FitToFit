@@ -1,5 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import 'ocjene.dart';
+
 part 'treneri.g.dart';
 
 @JsonSerializable()
@@ -14,9 +16,10 @@ class Treneri{
   DateTime? datumZaposlenja;
   String? zvanje;
   String? slika;
+  List<Ocjene>? ocjene;
 
   Treneri(this.trenerId, this.ime, this.prezime, this.spol, this.telefon, this.email, this.adresa, this.datumZaposlenja, 
-  this.zvanje, this.slika);
+  this.zvanje, this.slika, this.ocjene);
 
   factory Treneri.fromJson(Map<String, dynamic> json) => _$TreneriFromJson(json);
 
