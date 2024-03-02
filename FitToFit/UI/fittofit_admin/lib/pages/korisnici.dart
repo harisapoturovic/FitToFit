@@ -323,21 +323,51 @@ class _KorisniciPageState extends State<KorisniciPage> {
           title: Text('Dodaj novog trenera'),
           content: Container(
             width: 500.0,
-            height: 700.0,
-            padding: EdgeInsets.all(16.0),
+            height: 900.0,
+            padding: EdgeInsets.all(5.0),
+            margin: EdgeInsets.only(left: 50, right: 50),
             child: SingleChildScrollView(
               child: FormBuilder(
                 key: _formKey,
+                autovalidateMode: AutovalidateMode.always,
                 child: Column(
                   children: [
                     FormBuilderTextField(
                       name: 'ime',
                       decoration: InputDecoration(labelText: 'Ime'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Ovo polje je obavezno!';
+                        }
+                        if (!RegExp(r'^[A-Z]').hasMatch(value)) {
+                          return 'Ime mora početi velikim slovom.';
+                        }
+
+                        if (!RegExp(r'^[A-Za-z]*$').hasMatch(value)) {
+                          return 'Ime može sadržavati samo slova.';
+                        }
+
+                        return null;
+                      },
                     ),
                     SizedBox(height: 10.0),
                     FormBuilderTextField(
                       name: 'prezime',
                       decoration: InputDecoration(labelText: 'Prezime'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Ovo polje je obavezno!';
+                        }
+                        if (!RegExp(r'^[A-Z]').hasMatch(value)) {
+                          return 'Prezime mora početi velikim slovom.';
+                        }
+
+                        if (!RegExp(r'^[A-Za-z]*$').hasMatch(value)) {
+                          return 'Prezime može sadržavati samo slova.';
+                        }
+
+                        return null;
+                      },
                     ),
                     SizedBox(height: 10.0),
                     FormBuilderDropdown(
@@ -355,16 +385,44 @@ class _KorisniciPageState extends State<KorisniciPage> {
                     FormBuilderTextField(
                       name: 'telefon',
                       decoration: InputDecoration(labelText: 'Telefon'),
+                      validator: (value) {
+                        if (value != null &&
+                            !RegExp(r'^[0-9]+$').hasMatch(value)) {
+                          return 'Ovo polje može sadržavati samo brojeve.';
+                        }
+                        if (value != null && value.length > 10) {
+                          return 'Broj telefona može imati maksimalno 10 cifara.';
+                        }
+                        return null;
+                      },
                     ),
                     SizedBox(height: 10.0),
                     FormBuilderTextField(
                       name: 'email',
                       decoration: InputDecoration(labelText: 'Email'),
+                      validator: (value) {
+                        if (value != null && value.isNotEmpty) {
+                          if (!RegExp(
+                                  r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                              .hasMatch(value)) {
+                            return 'Unesite validnu e-mail adresu.';
+                          }
+                        }
+                        return null;
+                      },
                     ),
                     SizedBox(height: 10.0),
                     FormBuilderTextField(
                       name: 'adresa',
                       decoration: InputDecoration(labelText: 'Adresa'),
+                      validator: (value) {
+                        if (value != null &&
+                            !value.isEmpty &&
+                            !RegExp(r'^[A-Z]').hasMatch(value)) {
+                          return 'Adresa mora početi velikim slovom.';
+                        }
+                        return null;
+                      },
                     ),
                     SizedBox(height: 10.0),
                     FormBuilderDateTimePicker(
@@ -379,6 +437,14 @@ class _KorisniciPageState extends State<KorisniciPage> {
                           _selectedDate = value;
                         });
                       },
+                      validator: FormBuilderValidators.compose([
+                        (value) {
+                          if (value == null) {
+                            return 'Ovo polje je obavezno!';
+                          }
+                          return null;
+                        },
+                      ]),
                     ),
                     SizedBox(height: 10.0),
                     FormBuilderTextField(
@@ -414,12 +480,24 @@ class _KorisniciPageState extends State<KorisniciPage> {
                 Navigator.of(context).pop();
               },
               child: Text('Odustani'),
+               style: ElevatedButton.styleFrom(
+                textStyle: TextStyle(
+                fontSize: 14.0,
+              ),
+              ),
             ),
             ElevatedButton(
               onPressed: () {
                 _dodajTrenera();
               },
               child: Text('Spremi'),
+              style: ElevatedButton.styleFrom(
+                primary: Color.fromRGBO(0, 154, 231, 1),
+                padding: EdgeInsets.symmetric(horizontal: 18, vertical: 15),
+                textStyle: TextStyle(
+                fontSize: 14.0,
+              ),
+              ),
             ),
           ],
           contentPadding: EdgeInsets.symmetric(horizontal: 40.0),
@@ -433,12 +511,84 @@ class _KorisniciPageState extends State<KorisniciPage> {
   }
 
   void _dodajTrenera() {
-    if (_formKey.currentState?.saveAndValidate() ?? false) {
-      var request = Map.from(_formKey.currentState!.value);
-      request['datumZaposlenja'] = formatDateForJson(request['datumZaposlenja']);
-       request['slika'] = _base64Image;
-      _treneriProvider.insert(request);
-      print(request);
+    _formKey.currentState?.saveAndValidate();
+    final currentFormState = _formKey.currentState;
+    if (!_areAllFieldsFilled(currentFormState)) {
+      _showAlertDialog(
+          "Upozorenje", "Popunite sva obavezna polja.", Colors.orange);
+      return;
     }
+    if (currentFormState != null) {
+      if (!currentFormState.validate()) {
+        _showAlertDialog(
+            "Upozorenje",
+            "Molimo vas da ispravno popunite sva obavezna polja.",
+            Colors.orange);
+        return;
+      }
+    }
+    var request = Map.from(_formKey.currentState!.value);
+    request['datumZaposlenja'] = formatDateForJson(request['datumZaposlenja']);
+    request['slika'] = _base64Image;
+    try {
+      _treneriProvider.insert(request);
+      _showAlertDialog("Uspješan unos", "Trener uspješno dodat.", Colors.green);
+    } on Exception catch (e) {
+      _showAlertDialog("Greška", e.toString(), Colors.red);
+    }
+  }
+
+  bool _areAllFieldsFilled(FormBuilderState? formState) {
+    if (formState == null) {
+      return false;
+    }
+
+    List<String> requiredFields = ['ime', 'prezime', 'spol', 'datumZaposlenja'];
+
+    for (String fieldName in requiredFields) {
+      if (formState.fields[fieldName]?.value == null ||
+          formState.fields[fieldName]!.value.toString().isEmpty) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  void _showAlertDialog(String naslov, String poruka, Color boja) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        backgroundColor: Color.fromARGB(255, 238, 247, 255),
+        title: Text(
+          naslov,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: boja,
+          ),
+        ),
+        content: Text(
+          poruka,
+          style: TextStyle(
+            fontSize: 16.0,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            style: TextButton.styleFrom(
+              primary: Colors.blue,
+              textStyle: TextStyle(
+                fontSize: 16.0,
+              ),
+            ),
+            child: Text("OK"),
+          ),
+        ],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+      ),
+    );
   }
 }
