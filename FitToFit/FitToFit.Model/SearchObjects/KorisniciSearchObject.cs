@@ -10,5 +10,8 @@ namespace FitToFit.Model.SearchObjects
     {
         public bool? IsOcjeneIncluded { get; set; }
         public bool? IsUlogeIncluded { get; set; }
+        public string? Ime { get; set; }
+        public string? Prezime { get; set; }
+        public bool? IsAdmin { get; set; }
     }
 }

@@ -63,6 +63,31 @@ namespace FitToFit.Services
             return base.AddInclude(query, search);
         }
 
+        public override IQueryable<Korisnici> AddFilter(IQueryable<Korisnici> query, KorisniciSearchObject? search = null)
+        {
+            var filteredQuery = base.AddFilter(query, search);
+
+            if (!string.IsNullOrWhiteSpace(search.Ime))
+            {
+                filteredQuery = filteredQuery.Where(x => x.Ime.Contains(search.Ime));
+            }
+            if (!string.IsNullOrWhiteSpace(search.Prezime))
+            {
+                filteredQuery = filteredQuery.Where(x => x.Prezime.Contains(search.Prezime));
+            }
+            if (search.IsAdmin==true)
+            {
+                filteredQuery = filteredQuery.Where(x => x.UlogaId.Equals(2));
+            }
+            else
+            {
+                filteredQuery = filteredQuery.Where(x => x.UlogaId.Equals(1));
+            }
+
+
+            return filteredQuery;
+        }
+
         //prije generalizacije
         //public Model.Korisnici Insert(KorisniciInsertRequest request)
         //{
