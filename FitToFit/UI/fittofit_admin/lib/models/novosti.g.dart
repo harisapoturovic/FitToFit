@@ -7,16 +7,14 @@ part of 'novosti.dart';
 // **************************************************************************
 
 Novosti _$NovostiFromJson(Map<String, dynamic> json) => Novosti(
-      json['novostId'] as int?,
-      json['naslov'] as String?,
-      json['sadrzaj'] as String?,
-      json['isLiked'] as bool?,
-      json['brojLajkova'] as int?,
-      json['datumObjave'] == null
-          ? null
-          : DateTime.parse(json['datumObjave'] as String),
-      json['korisnikId'] as int,
-      json['vrstaTreningaId'] as int?,
+      novostId: json['novostId'] as int,
+      naslov: json['naslov'] as String,
+      sadrzaj: json['sadrzaj'] as String?,
+      isLiked: json['isLiked'] as bool?,
+      brojLajkova: json['brojLajkova'] as int,
+      datumObjave: DateTime.parse(json['datumObjave'] as String),
+      korisnikId: json['korisnikId'] as int,
+      vrstaTreningaId: json['vrstaTreningaId'] as int?,
     );
 
 Map<String, dynamic> _$NovostiToJson(Novosti instance) => <String, dynamic>{
@@ -25,7 +23,7 @@ Map<String, dynamic> _$NovostiToJson(Novosti instance) => <String, dynamic>{
       'sadrzaj': instance.sadrzaj,
       'isLiked': instance.isLiked,
       'brojLajkova': instance.brojLajkova,
-      'datumObjave': instance.datumObjave?.toIso8601String(),
+      'datumObjave': instance.datumObjave.toIso8601String(),
       'korisnikId': instance.korisnikId,
       'vrstaTreningaId': instance.vrstaTreningaId,
     };

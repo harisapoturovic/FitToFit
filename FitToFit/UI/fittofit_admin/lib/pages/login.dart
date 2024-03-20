@@ -130,7 +130,7 @@ class LoginPage extends StatelessWidget {
 
                             print("login proceed $username $password");
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const HomePage()));
+                                builder: (context) => HomePage(username:username)));
                           } on Exception catch (e) {
                             showDialog(
                                 context: context,

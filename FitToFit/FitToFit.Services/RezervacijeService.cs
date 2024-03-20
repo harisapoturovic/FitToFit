@@ -54,6 +54,11 @@ namespace FitToFit.Services
                 query = query.Where(x => x.Datum.Equals(search.Datum));
             }
 
+            if (search.StateMachine != null)
+            {
+                query = query.Where(x => x.StateMachine.Equals(search.StateMachine) && x.StateMachine == "active");
+            }
+
             return base.AddFilter(query, search);
         }
 

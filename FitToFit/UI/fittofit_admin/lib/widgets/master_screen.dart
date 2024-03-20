@@ -8,8 +8,13 @@ class MasterScreenWidget extends StatefulWidget {
   Widget? child;
   String? title;
   final Widget? floatingActionButton;
+  String? username;
   MasterScreenWidget(
-      {this.child, this.title, super.key, this.floatingActionButton});
+      {this.child,
+      this.title,
+      super.key,
+      this.floatingActionButton,
+      this.username});
 
   @override
   State<MasterScreenWidget> createState() => _MasterScreenWidgetState();
@@ -18,6 +23,14 @@ class MasterScreenWidget extends StatefulWidget {
 class _MasterScreenWidgetState extends State<MasterScreenWidget> {
   int selectedIndex = 0;
   int hoverIndex = -1;
+  String korisnickoIme = '';
+
+  @override
+  void initState() {
+    super.initState();
+    korisnickoIme = widget.username??'';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +46,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                 Icon(Icons.person, color: Colors.white),
                 SizedBox(width: 8.0),
                 Text(
-                  'Username',
+                  korisnickoIme,
                   style: TextStyle(
                       fontStyle: FontStyle.italic,
                       color: Colors.white,

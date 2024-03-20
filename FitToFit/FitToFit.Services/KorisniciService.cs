@@ -75,6 +75,10 @@ namespace FitToFit.Services
             {
                 filteredQuery = filteredQuery.Where(x => x.Prezime.Contains(search.Prezime));
             }
+            if (!string.IsNullOrWhiteSpace(search.KorisnickoIme))
+            {
+                filteredQuery = filteredQuery.Where(x => x.KorisnickoIme.Contains(search.KorisnickoIme));
+            }
             if (search.IsAdmin==true)
             {
                 filteredQuery = filteredQuery.Where(x => x.UlogaId.Equals(2));

@@ -13,5 +13,6 @@ namespace FitToFit.Model.SearchObjects
         public string? Ime { get; set; }
         public string? Prezime { get; set; }
         public bool? IsAdmin { get; set; }
+        public string? KorisnickoIme { get; set; }
     }
 }

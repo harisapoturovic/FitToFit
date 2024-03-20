@@ -13,6 +13,7 @@ namespace FitToFit.Model.SearchObjects
         public int? KorisnikId { get; set; }
 
         public int? ClanarinaId { get; set; }
+        public String? StateMachine { get; set; }
         public bool? IsTerminiIncluded { get; set; }
     }
 }
