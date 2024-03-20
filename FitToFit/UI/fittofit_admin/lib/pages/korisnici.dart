@@ -90,15 +90,15 @@ class _KorisniciPageState extends State<KorisniciPage> {
           Expanded(
             child: Column(
               children: [
-                SizedBox(height: 50.0),
+                const SizedBox(height: 50.0),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 130.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 130.0),
                   child: Row(
                     children: [
                       Expanded(
                         child: TextField(
                           controller: _imeKorisnikaController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: 'Ime',
                             prefixIcon: Icon(Icons.search),
                           ),
@@ -107,11 +107,11 @@ class _KorisniciPageState extends State<KorisniciPage> {
                           },
                         ),
                       ),
-                      SizedBox(width: 16.0),
+                      const SizedBox(width: 16.0),
                       Expanded(
                         child: TextField(
                           controller: _prezimeKorisnikaController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: 'Prezime',
                             prefixIcon: Icon(Icons.search),
                           ),
@@ -123,14 +123,14 @@ class _KorisniciPageState extends State<KorisniciPage> {
                     ],
                   ),
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 Expanded(
                   child: userList(),
                 ),
               ],
             ),
           ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.symmetric(vertical: 40.0),
             child: VerticalDivider(
               color: Colors.grey,
@@ -140,15 +140,15 @@ class _KorisniciPageState extends State<KorisniciPage> {
           Expanded(
             child: Column(
               children: [
-                SizedBox(height: 50.0),
+                const SizedBox(height: 50.0),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 130.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 130.0),
                   child: Row(
                     children: [
                       Expanded(
                         child: TextField(
                           controller: _imeTreneraController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: 'Ime',
                             prefixIcon: Icon(Icons.search),
                           ),
@@ -157,11 +157,11 @@ class _KorisniciPageState extends State<KorisniciPage> {
                           },
                         ),
                       ),
-                      SizedBox(width: 16.0),
+                      const SizedBox(width: 16.0),
                       Expanded(
                         child: TextField(
                           controller: _prezimeTreneraController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: 'Prezime',
                             prefixIcon: Icon(Icons.search),
                           ),
@@ -173,7 +173,7 @@ class _KorisniciPageState extends State<KorisniciPage> {
                     ],
                   ),
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 Expanded(
                   child: trainerList(),
                 ),
@@ -187,7 +187,7 @@ class _KorisniciPageState extends State<KorisniciPage> {
         onPressed: () {
           _showAddTrainerDialog();
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
         backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
       ),
     );
@@ -198,13 +198,13 @@ class _KorisniciPageState extends State<KorisniciPage> {
 
     return Container(
       decoration: BoxDecoration(
-        color: Color.fromRGBO(242, 245, 251, 1),
+        color: const Color.fromRGBO(242, 245, 251, 1),
         border: Border.all(color: Colors.blue),
         borderRadius: BorderRadius.circular(10.0),
       ),
-      margin:
-          EdgeInsets.only(left: 130.0, right: 130.0, top: 50.0, bottom: 50.0),
-      padding: EdgeInsets.all(50.0),
+      margin: const EdgeInsets.only(
+          left: 130.0, right: 130.0, top: 50.0, bottom: 50.0),
+      padding: const EdgeInsets.all(50.0),
       child: Scrollbar(
         controller: _userListController,
         child: ListView.builder(
@@ -224,21 +224,21 @@ class _KorisniciPageState extends State<KorisniciPage> {
                 );
               },
               child: Container(
-                margin: EdgeInsets.symmetric(vertical: 8.0),
+                margin: const EdgeInsets.symmetric(vertical: 8.0),
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: ListTile(
-                  contentPadding: EdgeInsets.symmetric(horizontal: 50.0),
-                  leading: Icon(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 50.0),
+                  leading: const Icon(
                     Icons.person,
                     color: Color.fromARGB(255, 116, 116, 116),
                     size: 30.0,
                   ),
                   title: Text(
-                    '${korisnik.ime ?? ''} ${korisnik.prezime ?? ''}',
-                    style: TextStyle(
+                    '${korisnik.ime} ${korisnik.prezime}',
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18.0,
                       color: Color.fromRGBO(0, 135, 202, 1),
@@ -258,13 +258,13 @@ class _KorisniciPageState extends State<KorisniciPage> {
 
     return Container(
         decoration: BoxDecoration(
-          color: Color.fromRGBO(242, 245, 251, 1),
+          color: const Color.fromRGBO(242, 245, 251, 1),
           border: Border.all(color: Colors.blue),
           borderRadius: BorderRadius.circular(10.0),
         ),
-        margin:
-            EdgeInsets.only(left: 130.0, right: 130.0, top: 50.0, bottom: 50.0),
-        padding: EdgeInsets.all(50.0),
+        margin: const EdgeInsets.only(
+            left: 130.0, right: 130.0, top: 50.0, bottom: 50.0),
+        padding: const EdgeInsets.all(50.0),
         child: Scrollbar(
           controller: _trainerListController,
           child: ListView.builder(
@@ -284,21 +284,22 @@ class _KorisniciPageState extends State<KorisniciPage> {
                   );
                 },
                 child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 8.0),
+                  margin: const EdgeInsets.symmetric(vertical: 8.0),
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: ListTile(
-                    contentPadding: EdgeInsets.symmetric(horizontal: 50.0),
-                    leading: Icon(
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 50.0),
+                    leading: const Icon(
                       Icons.person,
                       color: Color.fromARGB(255, 116, 116, 116),
                       size: 30.0,
                     ),
                     title: Text(
-                      '${trener.ime ?? ''} ${trener.prezime ?? ''}',
-                      style: TextStyle(
+                      '${trener.ime} ${trener.prezime}',
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18.0,
                         color: Color.fromRGBO(0, 135, 202, 1),
@@ -347,12 +348,12 @@ class _KorisniciPageState extends State<KorisniciPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Dodaj novog trenera'),
+          title: const Text('Dodaj novog trenera'),
           content: Container(
             width: 500.0,
             height: 900.0,
-            padding: EdgeInsets.all(5.0),
-            margin: EdgeInsets.only(left: 50, right: 50),
+            padding: const EdgeInsets.all(5.0),
+            margin: const EdgeInsets.only(left: 50, right: 50),
             child: SingleChildScrollView(
               child: FormBuilder(
                 key: _formKey,
@@ -361,7 +362,7 @@ class _KorisniciPageState extends State<KorisniciPage> {
                   children: [
                     FormBuilderTextField(
                       name: 'ime',
-                      decoration: InputDecoration(labelText: 'Ime'),
+                      decoration: const InputDecoration(labelText: 'Ime'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
@@ -377,10 +378,10 @@ class _KorisniciPageState extends State<KorisniciPage> {
                         return null;
                       },
                     ),
-                    SizedBox(height: 10.0),
+                    const SizedBox(height: 10.0),
                     FormBuilderTextField(
                       name: 'prezime',
-                      decoration: InputDecoration(labelText: 'Prezime'),
+                      decoration: const InputDecoration(labelText: 'Prezime'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
@@ -396,10 +397,10 @@ class _KorisniciPageState extends State<KorisniciPage> {
                         return null;
                       },
                     ),
-                    SizedBox(height: 10.0),
+                    const SizedBox(height: 10.0),
                     FormBuilderDropdown(
                       name: 'spol',
-                      decoration: InputDecoration(labelText: 'Spol'),
+                      decoration: const InputDecoration(labelText: 'Spol'),
                       initialValue: 'Muški',
                       items: ['Muški', 'Ženski'].map((spol) {
                         return DropdownMenuItem(
@@ -408,10 +409,10 @@ class _KorisniciPageState extends State<KorisniciPage> {
                         );
                       }).toList(),
                     ),
-                    SizedBox(height: 10.0),
+                    const SizedBox(height: 10.0),
                     FormBuilderTextField(
                       name: 'telefon',
-                      decoration: InputDecoration(labelText: 'Telefon'),
+                      decoration: const InputDecoration(labelText: 'Telefon'),
                       validator: (value) {
                         if (value != null &&
                             !RegExp(r'^[0-9]+$').hasMatch(value)) {
@@ -423,10 +424,10 @@ class _KorisniciPageState extends State<KorisniciPage> {
                         return null;
                       },
                     ),
-                    SizedBox(height: 10.0),
+                    const SizedBox(height: 10.0),
                     FormBuilderTextField(
                       name: 'email',
-                      decoration: InputDecoration(labelText: 'Email'),
+                      decoration: const InputDecoration(labelText: 'Email'),
                       validator: (value) {
                         if (value != null && value.isNotEmpty) {
                           if (!RegExp(
@@ -438,10 +439,10 @@ class _KorisniciPageState extends State<KorisniciPage> {
                         return null;
                       },
                     ),
-                    SizedBox(height: 10.0),
+                    const SizedBox(height: 10.0),
                     FormBuilderTextField(
                       name: 'adresa',
-                      decoration: InputDecoration(labelText: 'Adresa'),
+                      decoration: const InputDecoration(labelText: 'Adresa'),
                       validator: (value) {
                         if (value != null &&
                             !value.isEmpty &&
@@ -451,12 +452,12 @@ class _KorisniciPageState extends State<KorisniciPage> {
                         return null;
                       },
                     ),
-                    SizedBox(height: 10.0),
+                    const SizedBox(height: 10.0),
                     FormBuilderDateTimePicker(
                       name: 'datumZaposlenja',
                       inputType: InputType.date,
                       decoration:
-                          InputDecoration(labelText: 'Datum zaposlenja'),
+                          const InputDecoration(labelText: 'Datum zaposlenja'),
                       format: DateFormat("yyyy-MM-dd"),
                       initialDate: _selectedDate ?? DateTime.now(),
                       onChanged: (value) {
@@ -473,12 +474,20 @@ class _KorisniciPageState extends State<KorisniciPage> {
                         },
                       ]),
                     ),
-                    SizedBox(height: 10.0),
+                    const SizedBox(height: 10.0),
                     FormBuilderTextField(
                       name: 'zvanje',
-                      decoration: InputDecoration(labelText: 'Zvanje'),
+                      decoration: const InputDecoration(labelText: 'Zvanje'),
+                      validator: (value) {
+                        if (value != null &&
+                            !value.isEmpty &&
+                            !RegExp(r'^[A-Z]').hasMatch(value)) {
+                          return 'Zvanje mora početi velikim slovom.';
+                        }
+                        return null;
+                      },
                     ),
-                    SizedBox(height: 10.0),
+                    const SizedBox(height: 10.0),
                     FormBuilderField(
                       name: 'slika',
                       builder: (field) {
@@ -488,9 +497,9 @@ class _KorisniciPageState extends State<KorisniciPage> {
                             errorText: field.errorText,
                           ),
                           child: ListTile(
-                            leading: Icon(Icons.photo),
-                            title: Text("Select image"),
-                            trailing: Icon(Icons.file_upload),
+                            leading: const Icon(Icons.photo),
+                            title: const Text("Select image"),
+                            trailing: const Icon(Icons.file_upload),
                             onTap: getImage,
                           ),
                         );
@@ -506,9 +515,9 @@ class _KorisniciPageState extends State<KorisniciPage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Odustani'),
+              child: const Text('Odustani'),
               style: ElevatedButton.styleFrom(
-                textStyle: TextStyle(
+                textStyle: const TextStyle(
                   fontSize: 14.0,
                 ),
               ),
@@ -517,17 +526,18 @@ class _KorisniciPageState extends State<KorisniciPage> {
               onPressed: () {
                 _dodajTrenera();
               },
-              child: Text('Spremi'),
+              child: const Text('Spremi'),
               style: ElevatedButton.styleFrom(
-                primary: Color.fromRGBO(0, 154, 231, 1),
-                padding: EdgeInsets.symmetric(horizontal: 18, vertical: 15),
-                textStyle: TextStyle(
+                primary: const Color.fromRGBO(0, 154, 231, 1),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
+                textStyle: const TextStyle(
                   fontSize: 14.0,
                 ),
               ),
             ),
           ],
-          contentPadding: EdgeInsets.symmetric(horizontal: 40.0),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 40.0),
         );
       },
     );
@@ -586,7 +596,7 @@ class _KorisniciPageState extends State<KorisniciPage> {
     showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        backgroundColor: Color.fromARGB(255, 238, 247, 255),
+        backgroundColor: const Color.fromARGB(255, 238, 247, 255),
         title: Text(
           naslov,
           style: TextStyle(
@@ -596,7 +606,7 @@ class _KorisniciPageState extends State<KorisniciPage> {
         ),
         content: Text(
           poruka,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16.0,
           ),
         ),
@@ -605,11 +615,11 @@ class _KorisniciPageState extends State<KorisniciPage> {
             onPressed: () => Navigator.pop(context),
             style: TextButton.styleFrom(
               primary: Colors.blue,
-              textStyle: TextStyle(
+              textStyle: const TextStyle(
                 fontSize: 16.0,
               ),
             ),
-            child: Text("OK"),
+            child: const Text("OK"),
           ),
         ],
         shape: RoundedRectangleBorder(

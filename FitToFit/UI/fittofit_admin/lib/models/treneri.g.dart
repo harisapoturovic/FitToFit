@@ -7,19 +7,17 @@ part of 'treneri.dart';
 // **************************************************************************
 
 Treneri _$TreneriFromJson(Map<String, dynamic> json) => Treneri(
-      json['trenerId'] as int?,
-      json['ime'] as String?,
-      json['prezime'] as String?,
-      json['spol'] as String?,
-      json['telefon'] as String?,
-      json['email'] as String?,
-      json['adresa'] as String?,
-      json['datumZaposlenja'] == null
-          ? null
-          : DateTime.parse(json['datumZaposlenja'] as String),
-      json['zvanje'] as String?,
-      json['slika'] as String?,
-      (json['ocjene'] as List<dynamic>?)
+      trenerId: json['trenerId'] as int,
+      ime: json['ime'] as String,
+      prezime: json['prezime'] as String,
+      spol: json['spol'] as String,
+      telefon: json['telefon'] as String?,
+      email: json['email'] as String?,
+      adresa: json['adresa'] as String?,
+      datumZaposlenja: DateTime.parse(json['datumZaposlenja'] as String),
+      zvanje: json['zvanje'] as String?,
+      slika: json['slika'] as String?,
+      ocjene: (json['ocjene'] as List<dynamic>?)
           ?.map((e) => Ocjene.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
@@ -32,7 +30,7 @@ Map<String, dynamic> _$TreneriToJson(Treneri instance) => <String, dynamic>{
       'telefon': instance.telefon,
       'email': instance.email,
       'adresa': instance.adresa,
-      'datumZaposlenja': instance.datumZaposlenja?.toIso8601String(),
+      'datumZaposlenja': instance.datumZaposlenja.toIso8601String(),
       'zvanje': instance.zvanje,
       'slika': instance.slika,
       'ocjene': instance.ocjene,

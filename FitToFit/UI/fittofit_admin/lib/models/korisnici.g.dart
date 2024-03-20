@@ -7,24 +7,24 @@ part of 'korisnici.dart';
 // **************************************************************************
 
 Korisnici _$KorisniciFromJson(Map<String, dynamic> json) => Korisnici(
-      json['korisnikId'] as int?,
-      json['ime'] as String?,
-      json['prezime'] as String?,
-      json['spol'] as String?,
-      json['telefon'] as String?,
-      json['email'] as String?,
-      json['adresa'] as String?,
-      json['datumRodjenja'] == null
+      korisnikId: json['korisnikId'] as int,
+      ime: json['ime'] as String,
+      prezime: json['prezime'] as String,
+      spol: json['spol'] as String,
+      telefon: json['telefon'] as String?,
+      email: json['email'] as String?,
+      adresa: json['adresa'] as String?,
+      datumRodjenja: json['datumRodjenja'] == null
           ? null
           : DateTime.parse(json['datumRodjenja'] as String),
-      json['datumPocetkaTreniranja'] == null
+      datumPocetkaTreniranja: json['datumPocetkaTreniranja'] == null
           ? null
           : DateTime.parse(json['datumPocetkaTreniranja'] as String),
-      json['visina'] as String?,
-      json['tezina'] as String?,
-      json['korisnickoIme'] as String?,
-      json['slika'] as String?,
-      json['ulogaId'] as int?,
+      visina: json['visina'] as String?,
+      tezina: json['tezina'] as String?,
+      korisnickoIme: json['korisnickoIme'] as String,
+      slika: json['slika'] as String?,
+      ulogaId: json['ulogaId'] as int?,
     );
 
 Map<String, dynamic> _$KorisniciToJson(Korisnici instance) => <String, dynamic>{

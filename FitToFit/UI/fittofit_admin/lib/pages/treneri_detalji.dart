@@ -1,6 +1,10 @@
-import 'package:fittofit_admin/models/korisnici.dart';
-import 'package:fittofit_admin/pages/treneri_edit.dart';
-import 'package:fittofit_admin/providers/korisnici_provider.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+// ignore: depend_on_referenced_packages
+import 'package:image/image.dart' as img;
+
+import 'package:file_picker/file_picker.dart';
 import 'package:fittofit_admin/providers/treneri_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -36,7 +40,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
         "id": widget.trener.trenerId,
         'ime': widget.trener.ime,
         'prezime': widget.trener.prezime,
-        'datumZaposlenja': dateFormat.format(widget.trener.datumZaposlenja!),
+        'datumZaposlenja': dateFormat.format(widget.trener.datumZaposlenja),
         "spol": widget.trener.spol,
         "adresa": widget.trener.adresa,
         "telefon": widget.trener.telefon,
@@ -51,7 +55,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
         "id": widget.trener.trenerId,
         'ime': widget.trener.ime,
         'prezime': widget.trener.prezime,
-        'datumZaposlenja': dateFormat.format(widget.trener.datumZaposlenja!),
+        'datumZaposlenja': dateFormat.format(widget.trener.datumZaposlenja),
         "spol": widget.trener.spol,
         "adresa": widget.trener.adresa,
         "telefon": widget.trener.telefon,
@@ -74,7 +78,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
 
   void _loadData() async {
     final trenerId = widget.trener.trenerId;
-    var data = await _treneriProvider.getById(trenerId!);
+    var data = await _treneriProvider.getById(trenerId);
     setState(() {
       odabraniTrener = data;
     });
@@ -400,22 +404,14 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Row(
                 children: [
                   ElevatedButton(
-                    onPressed: () {/*
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => EditUserScreen(
-                            userId: odabraniTrener!.trenerId!,
-                            refreshDataCallback: null,
-                          ),
-                        ),
-                      );*/
+                    onPressed: () {
+                      showEditTrainer(odabraniTrener!);
                     },
                     child: Text('Uredi trenera'),
                     style: ElevatedButton.styleFrom(
@@ -509,7 +505,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
   void _deleteTrainer() async {
     try {
       if (odabraniTrener?.trenerId != null) {
-        await _treneriProvider.delete(odabraniTrener!.trenerId!);
+        await _treneriProvider.delete(odabraniTrener!.trenerId);
         _showAlertDialog(
             "Uspješno brisanje", "Trener uspješno izbrisan.", Colors.green);
       }
@@ -522,7 +518,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
     showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        backgroundColor: Color.fromARGB(255, 238, 247, 255),
+        backgroundColor: const Color.fromARGB(255, 238, 247, 255),
         title: Text(
           naslov,
           style: TextStyle(
@@ -532,7 +528,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
         ),
         content: Text(
           poruka,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16.0,
           ),
         ),
@@ -541,7 +537,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
             onPressed: () => Navigator.pop(context),
             style: TextButton.styleFrom(
               primary: Colors.blue,
-              textStyle: TextStyle(
+              textStyle: const TextStyle(
                 fontSize: 16.0,
               ),
             ),
@@ -553,5 +549,315 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
         ),
       ),
     );
+  }
+
+  showEditTrainer(Treneri trener) async {
+    String? trainerImage = trener.slika;
+
+    final TextEditingController imeController =
+        TextEditingController(text: trener.ime);
+    final TextEditingController prezimeController =
+        TextEditingController(text: trener.prezime);
+    final TextEditingController telefonController =
+        TextEditingController(text: trener.telefon);
+    final TextEditingController emailController =
+        TextEditingController(text: trener.email);
+    final TextEditingController adresaController =
+        TextEditingController(text: trener.adresa);
+    final TextEditingController zvanjeController =
+        TextEditingController(text: trener.zvanje);
+
+    final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+                title: const Text('Ažuriraj trenera'),
+                content: SingleChildScrollView(
+                    child: Container(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: Column(children: [
+                    FormBuilder(
+                      key: _formKey,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                  constraints:
+                                      const BoxConstraints(maxWidth: 800),
+                                  child: Card(
+                                    color: Colors.white,
+                                    elevation: 50,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(12)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          const SizedBox(
+                                            height: 16,
+                                          ),
+                                          FormBuilderTextField(
+                                              name: 'ime',
+                                              controller: imeController,
+                                              decoration: const InputDecoration(
+                                                labelText: 'Ime',
+                                                border: OutlineInputBorder(),
+                                              ),
+                                              validator: (value) {
+                                                if (value == null ||
+                                                    value.isEmpty) {
+                                                  return 'Ovo polje je obavezno!';
+                                                }
+                                                if (!RegExp(r'^[A-Z]')
+                                                    .hasMatch(value)) {
+                                                  return 'Ime mora početi velikim slovom.';
+                                                }
+
+                                                if (!RegExp(r'^[A-Za-z]*$')
+                                                    .hasMatch(value)) {
+                                                  return 'Ime može sadržavati samo slova.';
+                                                }
+
+                                                return null;
+                                              }),
+                                          const SizedBox(height: 16),
+                                          FormBuilderTextField(
+                                            name: 'prezime',
+                                            controller: prezimeController,
+                                            decoration: const InputDecoration(
+                                              labelText: 'Prezime',
+                                              border: OutlineInputBorder(),
+                                            ),
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return 'Ovo polje je obavezno!';
+                                              }
+                                              if (!RegExp(r'^[A-Z]')
+                                                  .hasMatch(value)) {
+                                                return 'Prezime mora početi velikim slovom.';
+                                              }
+
+                                              if (!RegExp(r'^[A-Za-z]*$')
+                                                  .hasMatch(value)) {
+                                                return 'Prezime može sadržavati samo slova.';
+                                              }
+
+                                              return null;
+                                            },
+                                          ),
+                                          const SizedBox(height: 16),
+                                          TextFormField(
+                                            controller: telefonController,
+                                            decoration: const InputDecoration(
+                                              labelText: 'Telefon',
+                                              border: OutlineInputBorder(),
+                                            ),
+                                            validator: (value) {
+                                              if (value != null &&
+                                                  !RegExp(r'^[0-9]+$')
+                                                      .hasMatch(value)) {
+                                                return 'Ovo polje može sadržavati samo brojeve.';
+                                              }
+                                              if (value != null &&
+                                                  value.length > 10) {
+                                                return 'Broj telefona može imati maksimalno 10 cifara.';
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                          const SizedBox(height: 16),
+                                          FormBuilderTextField(
+                                            name: 'email',
+                                            controller: emailController,
+                                            decoration: const InputDecoration(
+                                              labelText: 'E-mail',
+                                              border: OutlineInputBorder(),
+                                            ),
+                                            validator: (value) {
+                                              if (value != null &&
+                                                  value.isNotEmpty) {
+                                                if (!RegExp(
+                                                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                                    .hasMatch(value)) {
+                                                  return 'Unesite validnu e-mail adresu.';
+                                                }
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                          const SizedBox(height: 16),
+                                          FormBuilderTextField(
+                                            name: 'adresa',
+                                            controller: adresaController,
+                                            decoration: const InputDecoration(
+                                              labelText: 'Adresa',
+                                              border: OutlineInputBorder(),
+                                            ),
+                                            validator: (value) {
+                                              if (value != null &&
+                                                  !value.isEmpty &&
+                                                  !RegExp(r'^[A-Z]')
+                                                      .hasMatch(value)) {
+                                                return 'Adresa mora početi velikim slovom.';
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                          const SizedBox(height: 16),
+                                          FormBuilderTextField(
+                                            name: 'zvanje',
+                                            controller: zvanjeController,
+                                            decoration: const InputDecoration(
+                                              labelText: 'Zvanje',
+                                              border: OutlineInputBorder(),
+                                            ),
+                                            validator: (value) {
+                                              if (value != null &&
+                                                  !value.isEmpty &&
+                                                  !RegExp(r'^[A-Z]')
+                                                      .hasMatch(value)) {
+                                                return 'Zvanje mora početi velikim slovom.';
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                          const SizedBox(
+                                            height: 16,
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: () async {
+                                              FilePickerResult? result =
+                                                  await FilePicker.platform
+                                                      .pickFiles(
+                                                type: FileType.image,
+                                              );
+
+                                              if (result != null &&
+                                                  result.files.isNotEmpty) {
+                                                PlatformFile file =
+                                                    result.files.first;
+                                                File imageFile =
+                                                    File(file.path!);
+                                                Uint8List imageBytes =
+                                                    await imageFile
+                                                        .readAsBytes();
+                                                img.Image resizedImage = img
+                                                    .decodeImage(imageBytes)!;
+                                                int maxWidth = 800;
+                                                img.Image smallerImage =
+                                                    img.copyResize(resizedImage,
+                                                        width: maxWidth);
+
+                                                List<int> smallerImageBytes =
+                                                    img.encodeJpg(smallerImage);
+
+                                                String base64Image =
+                                                    base64Encode(
+                                                        smallerImageBytes);
+                                                setState(() {
+                                                  trainerImage = base64Image;
+                                                });
+                                              }
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 20,
+                                                      vertical: 10),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(4),
+                                                side: const BorderSide(
+                                                    color: const Color.fromRGBO(
+                                                        0, 154, 231, 1)),
+                                              ),
+                                              textStyle: const TextStyle(
+                                                fontSize: 14.0,
+                                              ),
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Icon(Icons.upload_file),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Text(
+                                                  'Izaberite novu sliku trenera',
+                                                  textAlign: TextAlign.center,
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          const SizedBox(height: 32),
+                                          ElevatedButton(
+                                            onPressed: () async {
+                                              if (_formKey.currentState!
+                                                  .validate()) {
+                                                if (odabraniTrener != null) {
+                                                  Treneri trener = Treneri(
+                                                    ime: imeController.text,
+                                                    prezime:
+                                                        prezimeController.text,
+                                                    spol: odabraniTrener!.spol,
+                                                    trenerId: odabraniTrener!
+                                                        .trenerId,
+                                                    telefon:
+                                                        telefonController.text,
+                                                    email: emailController.text,
+                                                    adresa:
+                                                        adresaController.text,
+                                                    zvanje:
+                                                        zvanjeController.text,
+                                                    slika: trainerImage,
+                                                    datumZaposlenja:
+                                                        odabraniTrener!
+                                                            .datumZaposlenja,
+                                                  );
+
+                                                  _treneriProvider.update(
+                                                      odabraniTrener!.trenerId,
+                                                      trener);
+                                                  _showAlertDialog(
+                                                      "Uspješan edit",
+                                                      "Podaci trenera uspješno ažurirani.",
+                                                      Colors.green);
+                                                }
+                                              }
+                                            },
+                                            child: const Text('Sačuvaj'),
+                                            style: ElevatedButton.styleFrom(
+                                              primary: const Color.fromRGBO(
+                                                  0, 154, 231, 1),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 18,
+                                                      vertical: 15),
+                                              textStyle: const TextStyle(
+                                                fontSize: 14.0,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ))
+                            ]),
+                      ),
+                    )
+                  ]),
+                )));
+          });
+        });
   }
 }
