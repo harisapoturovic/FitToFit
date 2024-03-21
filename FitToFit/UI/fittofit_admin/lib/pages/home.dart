@@ -2,6 +2,7 @@ import 'package:fittofit_admin/models/korisnici.dart';
 import 'package:fittofit_admin/models/novosti.dart';
 import 'package:fittofit_admin/models/search_result.dart';
 import 'package:fittofit_admin/models/vrste_treninga.dart';
+import 'package:fittofit_admin/pages/novosti_detalji.dart';
 import 'package:fittofit_admin/providers/korisnici_provider.dart';
 import 'package:fittofit_admin/providers/novosti_provider.dart';
 import 'package:fittofit_admin/providers/rezervacije_provider.dart';
@@ -151,11 +152,7 @@ class _HomePageState extends State<HomePage> {
         ),
         ElevatedButton(
           onPressed: () async {
-            print("login proceed");
-            //Navigator.of(context).pop();
-
             var data = await _novostiProvider.get(filter: {
-              //dinamički objekat, umjesto da pravimo novu klasu kao što smo imali za proizvod
               'naslov': _naslovController.text,
               'vrstaTreningaId': _selectedVrstaTreninga
             });
@@ -236,14 +233,14 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                                 onTap: () {
-                                  // Handle the tap event
-                                  /*
-                          Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => ProductDetailScreen(product: e),
-                              ),
-                          );
-                          */
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => NovostiDetaljiPage(
+                                        novost: e,
+                                      ),
+                                    ),
+                                  );
                                 },
                               ),
                             ),
@@ -360,8 +357,8 @@ class _HomePageState extends State<HomePage> {
                       name: 'sadrzaj',
                       decoration: const InputDecoration(labelText: 'Sadrzaj'),
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Ovo polje je obavezno!';
+                        if (value != null && value.length < 5) {
+                          return 'Morate unijeti najmanje 5 karaktera.';
                         }
 
                         return null;

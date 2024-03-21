@@ -1,0 +1,668 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:fittofit_admin/models/korisnici.dart';
+import 'package:fittofit_admin/models/novosti.dart';
+import 'package:fittofit_admin/models/vrste_treninga.dart';
+import 'package:fittofit_admin/providers/korisnici_provider.dart';
+import 'package:fittofit_admin/providers/novosti_provider.dart';
+import 'package:fittofit_admin/providers/vrste_treninga_provider.dart';
+import 'package:image/image.dart' as img;
+
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import '../utils/util.dart';
+import '../widgets/master_screen.dart';
+
+class NovostiDetaljiPage extends StatefulWidget {
+  final Novosti novost;
+  const NovostiDetaljiPage({Key? key, required this.novost}) : super(key: key);
+
+  @override
+  State<NovostiDetaljiPage> createState() => _NovostiDetaljiPageState();
+}
+
+class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
+  late NovostiProvider _novostiProvider;
+  late KorisniciProvider _korisniciProvider;
+  late VrsteTreningaProvider _vrsteTreningaProvider;
+  Novosti? odabranaNovost;
+  String admin = '';
+  String vrstaTr = '';
+  bool isLoading = true;
+   List<VrsteTreninga> _vrsteTreningaList = [];
+  final _formKey = GlobalKey<FormBuilderState>();
+  Map<String, dynamic> _initialValue = {};
+
+  @override
+  void initState() {
+    DateFormat dateFormat = DateFormat('yyyy-MM-dd');
+    super.initState();
+    _initialValue = {
+      "id": widget.novost.novostId,
+      'naslov': widget.novost.naslov,
+      'sadrzaj': widget.novost.sadrzaj,
+      'isLiked': widget.novost.isLiked,
+      'datumObjave': dateFormat.format(widget.novost.datumObjave),
+      "brojLajkova": widget.novost.brojLajkova.toString(),
+      "korisnikId": widget.novost.korisnikId.toString(),
+      "vrstaTreningaId": widget.novost.vrstaTreningaId.toString()
+    };
+
+    _novostiProvider = context.read<NovostiProvider>();
+    _korisniciProvider = context.read<KorisniciProvider>();
+    _vrsteTreningaProvider = context.read<VrsteTreningaProvider>();
+    initForm();
+    _loadData();
+  }
+
+  Future initForm() async {
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  void _loadData() async {
+    final novostid = widget.novost.novostId;
+    var data = await _novostiProvider.getById(novostid);
+     var vrsteTreninga = await _vrsteTreningaProvider.get(filter: {});
+    VrsteTreninga vrstaTreninga =
+        await _vrsteTreningaProvider.getById(widget.novost.vrstaTreningaId!);
+    setState(() {
+      odabranaNovost = data;
+      _vrsteTreningaList = vrsteTreninga.result;
+      vrstaTr = vrstaTreninga.naziv ?? 'aa';
+      print(admin + '.....' + vrstaTr);
+    });
+  }
+
+  Future<Korisnici?> getUserFromUserId(int userId) async {
+    final user = await _korisniciProvider.getById(userId);
+    return user;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MasterScreenWidget(
+      child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Container(
+            child: Column(
+              children: [
+                isLoading ? Container() : _buildForm(),
+              ],
+            ),
+          ),
+        ),
+      ),
+      title: ("Detalji o objavi"),
+    );
+  }
+
+  FormBuilder _buildForm() {
+    return FormBuilder(
+      key: _formKey,
+      initialValue: _initialValue,
+      child: Row(
+        children: [
+          Column(
+            children: [
+              Card(
+                elevation: 6,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                child: SizedBox(
+                  width: 900,
+                  height: 520,
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(left: 40, right: 40, top: 80),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: FormBuilderTextField(
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.black,
+                                ),
+                                decoration: InputDecoration(
+                                  labelText: "Naslov",
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color:
+                                          const Color.fromRGBO(0, 154, 231, 1),
+                                      width: 2.0,
+                                    ),
+                                  ),
+                                  labelStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 25,
+                                  ),
+                                ),
+                                name: "naslov",
+                                enabled: false,
+                              ),
+                            )
+                          ],
+                        ),
+                        SizedBox(height: 20),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: FormBuilderTextField(
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                    height: 3),
+                                decoration: InputDecoration(
+                                  labelText: "Sadržaj",
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color:
+                                          const Color.fromRGBO(0, 154, 231, 1),
+                                      width: 2.0,
+                                    ),
+                                  ),
+                                  labelStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 25,
+                                  ),
+                                ),
+                                name: "sadrzaj",
+                                enabled: false,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 20),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: FormBuilderTextField(
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.black),
+                                decoration: InputDecoration(
+                                  labelText: "Broj lajkova",
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color:
+                                          const Color.fromRGBO(0, 154, 231, 1),
+                                      width: 2.0,
+                                    ),
+                                  ),
+                                  labelStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 25,
+                                  ),
+                                ),
+                                name: "brojLajkova",
+                                enabled: false,
+                              ),
+                            ),
+                            SizedBox(width: 30),
+                            Expanded(
+                              child: FormBuilderTextField(
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.black,
+                                ),
+                                decoration: InputDecoration(
+                                  labelText: "Datum objave",
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color:
+                                          const Color.fromRGBO(0, 154, 231, 1),
+                                      width: 2.0,
+                                    ),
+                                  ),
+                                  labelStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 25,
+                                  ),
+                                ),
+                                name: "datumObjave",
+                                enabled: false,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 20),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: FutureBuilder<Korisnici?>(
+                                future: getUserFromUserId(odabranaNovost?.korisnikId??0),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.done) {
+                                    if (snapshot.hasError) {
+                                      // Handle error case
+                                      return Text("Error: ${snapshot.error}");
+                                    }
+
+                                    final author = snapshot.data;
+                                    if (author != null) {
+                                      // If author data is available, display it
+                                      return FormBuilderTextField(
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.black,
+                                        ),
+                                        decoration: InputDecoration(
+                                          labelText: "Objavio",
+                                          border: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: const Color.fromRGBO(
+                                                  0, 154, 231, 1),
+                                              width: 2.0,
+                                            ),
+                                          ),
+                                          labelStyle: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 25,
+                                          ),
+                                        ),
+                                        name: 'Objavio',
+                                        initialValue:
+                                            "${author.ime} ${author.prezime}",
+                                        enabled: false,
+                                      );
+                                    } else {
+                                      return FormBuilderTextField(
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.black,
+                                        ),
+                                        decoration: InputDecoration(
+                                          labelText: "Objavio",
+                                          border: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: const Color.fromRGBO(
+                                                  0, 154, 231, 1),
+                                              width: 2.0,
+                                            ),
+                                          ),
+                                          labelStyle: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 25,
+                                          ),
+                                        ),
+                                        name: 'Objavio',
+                                        initialValue: "Nepoznat autor",
+                                        enabled: false,
+                                      );
+                                    }
+                                  } else {
+                                    // While data is being fetched, display a loading indicator
+                                    return FormBuilderTextField(
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        color: Colors.black,
+                                      ),
+                                      decoration: InputDecoration(
+                                        labelText: "Objavio",
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: const Color.fromRGBO(
+                                                0, 154, 231, 1),
+                                            width: 2.0,
+                                          ),
+                                        ),
+                                        labelStyle: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 25,
+                                        ),
+                                      ),
+                                      name: 'Objavio',
+                                      initialValue: "Učitavanje...",
+                                      enabled: false,
+                                    );
+                                  }
+                                },
+                              ),
+                            ),
+                            SizedBox(width: 30),
+                            Expanded(
+                              child: FormBuilderTextField(
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.black,
+                                ),
+                                decoration: InputDecoration(
+                                  labelText: "Namjenjeno za",
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color:
+                                          const Color.fromRGBO(0, 154, 231, 1),
+                                      width: 2.0,
+                                    ),
+                                  ),
+                                  labelStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 25,
+                                  ),
+                                ),
+                                name: 'vrstaTreningaId',
+                                initialValue: vrstaTr,
+                                enabled: false,
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      //showEditNews(odabranaNovost!);
+                    },
+                    child: Text('Uredi objavu'),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.green,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 17),
+                      side: BorderSide(color: Colors.white),
+                      textStyle: TextStyle(
+                        fontSize: 15.0,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      try {
+                        _confirmDeleteNews(context);
+                      } on Exception catch (e) {
+                        _showAlertDialog("Greška", e.toString(), Colors.red);
+                      }
+                    },
+                    child: Text('Obriši objavu'),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.red,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 17),
+                      side: BorderSide(color: Colors.white),
+                      textStyle: TextStyle(
+                        fontSize: 15.0,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _confirmDeleteNews(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Color.fromARGB(255, 238, 247, 255),
+          title: Text(
+            'Potvrda brisanja',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+            ),
+          ),
+          content: Text('Da li ste sigurni da želite izbrisati ovu objavu?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                'Odustani',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                _deleteNews();
+                Navigator.pop(context);
+              },
+              child: Text(
+                'Izbriši',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+            ),
+          ],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        );
+      },
+    );
+  }
+
+  void _deleteNews() async {
+    try {
+      if (odabranaNovost?.novostId != null) {
+        await _novostiProvider.delete(odabranaNovost!.novostId);
+        _showAlertDialog(
+            "Uspješno brisanje", "Objava uspješno izbrisana.", Colors.green);
+      }
+    } catch (e) {
+      _showAlertDialog("Greška", e.toString(), Colors.red);
+    }
+  }
+
+  void _showAlertDialog(String naslov, String poruka, Color boja) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        backgroundColor: Color.fromARGB(255, 238, 247, 255),
+        title: Text(
+          naslov,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: boja,
+          ),
+        ),
+        content: Text(
+          poruka,
+          style: TextStyle(
+            fontSize: 16.0,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            style: TextButton.styleFrom(
+              primary: Colors.blue,
+              textStyle: TextStyle(
+                fontSize: 16.0,
+              ),
+            ),
+            child: Text("OK"),
+          ),
+        ],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+      ),
+    );
+  }
+/*
+  showEditNews(Novosti novost) async {
+    final TextEditingController naslovController =
+        TextEditingController(text: novost.naslov);
+    final TextEditingController sadrzajController =
+        TextEditingController(text: novost.sadrzaj);
+    final TextEditingController korisnikController =
+        TextEditingController(text: novost.korisnikId.toString());
+    final TextEditingController vrstaTreningaController =
+        TextEditingController(text: novost.vrstaTreningaId.toString());
+
+    final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+                title: const Text('Ažuriraj objavu'),
+                content: SingleChildScrollView(
+                    child: Container(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: Column(children: [
+                    FormBuilder(
+                      key: _formKey,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                  constraints:
+                                      const BoxConstraints(maxWidth: 800),
+                                  child: Card(
+                                    color: Colors.white,
+                                    elevation: 50,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(12)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          const SizedBox(
+                                            height: 16,
+                                          ),
+                                          FormBuilderTextField(
+                                              name: 'naslov',
+                                              controller: naslovController,
+                                              decoration: const InputDecoration(
+                                                labelText: 'Naslov',
+                                                border: OutlineInputBorder(),
+                                              ),
+                                              validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Ovo polje je obavezno!';
+                        }
+
+                        return null;
+                      },),
+                                          const SizedBox(height: 16),
+                                          FormBuilderTextField(
+                                            name: 'sadrzaj',
+                                            controller: sadrzajController,
+                                            decoration: const InputDecoration(
+                                              labelText: 'Sadrzaj',
+                                              border: OutlineInputBorder(),
+                                            ),
+                                            validator: (value) {
+                                              if (value != null && value.length < 5) {
+                          return 'Morate unijeti najmanje 5 karaktera.';
+                        }
+
+                                              return null;
+                                            },
+                                          ),
+                                          const SizedBox(height: 16),
+                                          FormBuilderDropdown(
+                      name: 'vrstaTreningaId',
+                      decoration:
+                          const InputDecoration(labelText: 'Vrsta treninga'),
+                      items: _vrsteTreningaList.map((vrstaTreninga) {
+                        return DropdownMenuItem(
+                          value: vrstaTreninga.vrstaTreningaId,
+                          child: Text(vrstaTreninga.naziv!),
+                        );
+                      }).toList(),
+                    ),
+                                          
+                                          const SizedBox(height: 32),
+                                          ElevatedButton(
+                                            onPressed: () async {
+                                              if (_formKey.currentState!
+                                                  .validate()) {
+                                                if (odabranaNovost != null) {
+                                                  Novosti novost =
+                                                      Novosti(
+                                                    naslov: naslovController.text,
+                                                    sadrzaj:
+                                                        sadrzajController.text,
+                                                    datumObjave:
+                                                        odabranaNovost!.datumObjave,
+                                                    isLiked:
+                                                        odabranaNovost!
+                                                            .isLiked,
+                                                    brojLajkova:
+                                                         odabranaNovost!
+                                                            .brojLajkova,
+                                                    korisnikId:  odabranaNovost!
+                                                            .korisnikId,
+                                                    vrstaTreningaId:
+                                                        vrstaTreningaController.text
+                                                  );
+
+                                                  _korisniciProvider.update(
+                                                      odabranaNovost!.novostId,
+                                                      novost);
+                                                  _showAlertDialog(
+                                                      "Uspješan edit",
+                                                      "Podaci o objavi uspješno ažurirani.",
+                                                      Colors.green);
+                                                }
+                                              }
+                                            },
+                                            child: const Text('Sačuvaj'),
+                                            style: ElevatedButton.styleFrom(
+                                              primary: const Color.fromRGBO(
+                                                  0, 154, 231, 1),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 18,
+                                                      vertical: 15),
+                                              textStyle: const TextStyle(
+                                                fontSize: 14.0,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ))
+                            ]),
+                      ),
+                    )
+                  ]),
+                )));
+          });
+        });
+  }*/
+}
