@@ -37,6 +37,7 @@ class _HomePageState extends State<HomePage> {
   TextEditingController _vrstaTrController = new TextEditingController();
   TextEditingController _treneriController = new TextEditingController();
   List<VrsteTreninga> _vrsteTreningaList = [];
+  List<Novosti> _novostiList = [];
   int? _selectedVrstaTreninga;
   int brojKorisnika = 0;
   int brojTrenera = 0;
@@ -66,6 +67,7 @@ class _HomePageState extends State<HomePage> {
     var vrsteTreninga = await _vrsteTreningaProvider.get(filter: {});
     var korisnik = await _korisniciProvider
         .get(filter: {'isAdmin': true, 'KorisnickoIme': korisnickoIme});
+    var novosti = await _novostiProvider.get(filter: {});
 
     setState(() {
       brojKorisnika = korisnici.count;
@@ -73,6 +75,7 @@ class _HomePageState extends State<HomePage> {
       brojRezervacija = rezervacije.count;
       _vrsteTreningaList = vrsteTreninga.result;
       logiraniKorisnik = korisnik.result[0];
+      _novostiList = novosti.result;
     });
   }
 
@@ -158,10 +161,8 @@ class _HomePageState extends State<HomePage> {
             });
 
             setState(() {
-              result = data;
+              _novostiList = data.result;
             });
-
-            //print("data: ${data.result[0].naziv}");
           },
           child: Text("Pretraži"),
           style: ElevatedButton.styleFrom(
@@ -181,74 +182,74 @@ class _HomePageState extends State<HomePage> {
         child: Container(
           margin: EdgeInsets.symmetric(vertical: 30.0),
           child: Column(
-            children: result?.result
-                    .map((Novosti e) => Column(
-                          children: [
-                            Container(
-                              margin: EdgeInsets.symmetric(horizontal: 60.0),
-                              child: ListTile(
-                                contentPadding: EdgeInsets.only(left: 20),
-                                tileColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  side: BorderSide(color: Colors.grey),
-                                ),
-                                title: Row(
-                                  children: [
-                                    Text(
-                                      '${e.naslov}',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18.0,
-                                        color: Color.fromRGBO(0, 154, 231, 1),
-                                      ),
-                                    ),
-                                    Text('   |   '),
-                                    Text(
-                                      '${formatDate(e.datumObjave)}',
-                                      style: TextStyle(
-                                        fontSize: 15.0,
-                                        color: Color.fromRGBO(0, 154, 231, 1),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                subtitle: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(height: 5.0),
-                                    Text(
-                                      '${e.sadrzaj != null && e.sadrzaj!.length > 80 ? e.sadrzaj!.substring(0, 80) + '...' : e.sadrzaj ?? ''}',
-                                    ),
-                                  ],
-                                ),
-                                trailing: Container(
-                                  margin: EdgeInsets.only(right: 30.0),
-                                  child: Text(
-                                    '>',
-                                    style: TextStyle(
-                                      fontSize: 30.0,
-                                      color: Color.fromRGBO(0, 154, 231, 1),
-                                    ),
+            children: _novostiList
+                .map((Novosti e) => Column(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 60.0),
+                          child: ListTile(
+                            contentPadding: EdgeInsets.only(left: 20),
+                            tileColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              side: BorderSide(color: Colors.grey),
+                            ),
+                            title: Row(
+                              children: [
+                                Text(
+                                  '${e.naslov}',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18.0,
+                                    color: Color.fromRGBO(0, 154, 231, 1),
                                   ),
                                 ),
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => NovostiDetaljiPage(
-                                        novost: e,
-                                      ),
-                                    ),
-                                  );
-                                },
+                                Text('   |   '),
+                                Text(
+                                  '${formatDate(e.datumObjave)}',
+                                  style: TextStyle(
+                                    fontSize: 15.0,
+                                    color: Color.fromRGBO(0, 154, 231, 1),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: 5.0),
+                                Text(
+                                  '${e.sadrzaj != null && e.sadrzaj!.length > 80 ? e.sadrzaj!.substring(0, 80) + '...' : e.sadrzaj ?? ''}',
+                                ),
+                              ],
+                            ),
+                            trailing: Container(
+                              margin: EdgeInsets.only(right: 30.0),
+                              child: Text(
+                                '>',
+                                style: TextStyle(
+                                  fontSize: 30.0,
+                                  color: Color.fromRGBO(0, 154, 231, 1),
+                                ),
                               ),
                             ),
-                            SizedBox(height: 8.0)
-                          ],
-                        ))
-                    .toList() ??
-                [],
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => NovostiDetaljiPage(
+                                    novost: e,
+                                    adminId: logiraniKorisnik.korisnikId,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        SizedBox(height: 8.0)
+                      ],
+                    ))
+                .toList(),
           ),
         ),
       ),

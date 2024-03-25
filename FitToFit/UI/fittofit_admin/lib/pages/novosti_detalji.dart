@@ -7,19 +7,19 @@ import 'package:fittofit_admin/models/vrste_treninga.dart';
 import 'package:fittofit_admin/providers/korisnici_provider.dart';
 import 'package:fittofit_admin/providers/novosti_provider.dart';
 import 'package:fittofit_admin/providers/vrste_treninga_provider.dart';
-import 'package:image/image.dart' as img;
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import '../utils/util.dart';
 import '../widgets/master_screen.dart';
 
 class NovostiDetaljiPage extends StatefulWidget {
   final Novosti novost;
-  const NovostiDetaljiPage({Key? key, required this.novost}) : super(key: key);
+  final int adminId;
+  const NovostiDetaljiPage(
+      {Key? key, required this.novost, required this.adminId})
+      : super(key: key);
 
   @override
   State<NovostiDetaljiPage> createState() => _NovostiDetaljiPageState();
@@ -30,12 +30,12 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
   late KorisniciProvider _korisniciProvider;
   late VrsteTreningaProvider _vrsteTreningaProvider;
   Novosti? odabranaNovost;
-  String admin = '';
-  String vrstaTr = '';
   bool isLoading = true;
-   List<VrsteTreninga> _vrsteTreningaList = [];
+  int? _selectedVrstaTreninga;
+  List<VrsteTreninga> _vrsteTreningaList = [];
   final _formKey = GlobalKey<FormBuilderState>();
   Map<String, dynamic> _initialValue = {};
+  bool isAuthor = false;
 
   @override
   void initState() {
@@ -68,20 +68,23 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
   void _loadData() async {
     final novostid = widget.novost.novostId;
     var data = await _novostiProvider.getById(novostid);
-     var vrsteTreninga = await _vrsteTreningaProvider.get(filter: {});
-    VrsteTreninga vrstaTreninga =
-        await _vrsteTreningaProvider.getById(widget.novost.vrstaTreningaId!);
+    var vrsteTreninga = await _vrsteTreningaProvider.get(filter: {});
     setState(() {
       odabranaNovost = data;
       _vrsteTreningaList = vrsteTreninga.result;
-      vrstaTr = vrstaTreninga.naziv ?? 'aa';
-      print(admin + '.....' + vrstaTr);
+      isAuthor = odabranaNovost!.korisnikId == widget.adminId;
     });
   }
 
-  Future<Korisnici?> getUserFromUserId(int userId) async {
+  Future<Korisnici?> getKorisnikFromNovostiId(int userId) async {
     final user = await _korisniciProvider.getById(userId);
     return user;
+  }
+
+  Future<VrsteTreninga?> getVrstaTreningaFromNovostiId(
+      int vrstaTreningaId) async {
+    final vrstaTr = await _vrsteTreningaProvider.getById(vrstaTreningaId);
+    return vrstaTr;
   }
 
   @override
@@ -181,7 +184,11 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                                     color: Colors.black,
                                     fontSize: 25,
                                   ),
+                                  contentPadding:
+                                      EdgeInsets.symmetric(vertical: 1),
                                 ),
+                                minLines: 1,
+                                maxLines: 3,
                                 name: "sadrzaj",
                                 enabled: false,
                               ),
@@ -245,18 +252,13 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                           children: [
                             Expanded(
                               child: FutureBuilder<Korisnici?>(
-                                future: getUserFromUserId(odabranaNovost?.korisnikId??0),
+                                future: getKorisnikFromNovostiId(
+                                    odabranaNovost!.korisnikId),
                                 builder: (context, snapshot) {
                                   if (snapshot.connectionState ==
                                       ConnectionState.done) {
-                                    if (snapshot.hasError) {
-                                      // Handle error case
-                                      return Text("Error: ${snapshot.error}");
-                                    }
-
                                     final author = snapshot.data;
                                     if (author != null) {
-                                      // If author data is available, display it
                                       return FormBuilderTextField(
                                         style: TextStyle(
                                           fontSize: 20,
@@ -276,89 +278,60 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                                             fontSize: 25,
                                           ),
                                         ),
-                                        name: 'Objavio',
+                                        name: 'korisnik',
                                         initialValue:
                                             "${author.ime} ${author.prezime}",
                                         enabled: false,
                                       );
                                     } else {
-                                      return FormBuilderTextField(
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.black,
-                                        ),
-                                        decoration: InputDecoration(
-                                          labelText: "Objavio",
-                                          border: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: const Color.fromRGBO(
-                                                  0, 154, 231, 1),
-                                              width: 2.0,
-                                            ),
-                                          ),
-                                          labelStyle: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 25,
-                                          ),
-                                        ),
-                                        name: 'Objavio',
-                                        initialValue: "Nepoznat autor",
-                                        enabled: false,
-                                      );
+                                      return Text("Objavio: Nepoznat autor");
                                     }
                                   } else {
-                                    // While data is being fetched, display a loading indicator
-                                    return FormBuilderTextField(
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: Colors.black,
-                                      ),
-                                      decoration: InputDecoration(
-                                        labelText: "Objavio",
-                                        border: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: const Color.fromRGBO(
-                                                0, 154, 231, 1),
-                                            width: 2.0,
-                                          ),
-                                        ),
-                                        labelStyle: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 25,
-                                        ),
-                                      ),
-                                      name: 'Objavio',
-                                      initialValue: "Učitavanje...",
-                                      enabled: false,
-                                    );
+                                    return Text("Objavio: Učitavanje...");
                                   }
                                 },
                               ),
                             ),
                             SizedBox(width: 30),
                             Expanded(
-                              child: FormBuilderTextField(
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.black,
-                                ),
-                                decoration: InputDecoration(
-                                  labelText: "Namjenjeno za",
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color:
-                                          const Color.fromRGBO(0, 154, 231, 1),
-                                      width: 2.0,
-                                    ),
-                                  ),
-                                  labelStyle: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 25,
-                                  ),
-                                ),
-                                name: 'vrstaTreningaId',
-                                initialValue: vrstaTr,
-                                enabled: false,
+                              child: FutureBuilder<VrsteTreninga?>(
+                                future: getVrstaTreningaFromNovostiId(
+                                    odabranaNovost!.vrstaTreningaId!),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.done) {
+                                    final vrsta = snapshot.data;
+                                    if (vrsta != null) {
+                                      return FormBuilderTextField(
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.black,
+                                        ),
+                                        decoration: InputDecoration(
+                                          labelText: "Namjenjeno za ",
+                                          border: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: const Color.fromRGBO(
+                                                  0, 154, 231, 1),
+                                              width: 2.0,
+                                            ),
+                                          ),
+                                          labelStyle: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 25,
+                                          ),
+                                        ),
+                                        name: 'vrstaTreninga',
+                                        initialValue: "${vrsta.naziv} trening",
+                                        enabled: false,
+                                      );
+                                    } else {
+                                      return Text("Namjenjeno za: Nepoznato");
+                                    }
+                                  } else {
+                                    return Text("Namjenjeno za: Učitavanje...");
+                                  }
+                                },
                               ),
                             ),
                           ],
@@ -373,21 +346,23 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
               ),
               Row(
                 children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      //showEditNews(odabranaNovost!);
-                    },
-                    child: Text('Uredi objavu'),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.green,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 17),
-                      side: BorderSide(color: Colors.white),
-                      textStyle: TextStyle(
-                        fontSize: 15.0,
-                      ),
-                    ),
-                  ),
+                  isAuthor
+                      ? ElevatedButton(
+                          onPressed: () {
+                            showEditNews(odabranaNovost!);
+                          },
+                          child: Text('Uredi objavu'),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.green,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 17),
+                            side: BorderSide(color: Colors.white),
+                            textStyle: TextStyle(
+                              fontSize: 15.0,
+                            ),
+                          ),
+                        )
+                      : Container(),
                   SizedBox(
                     width: 10,
                   ),
@@ -514,14 +489,12 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
       ),
     );
   }
-/*
+
   showEditNews(Novosti novost) async {
     final TextEditingController naslovController =
         TextEditingController(text: novost.naslov);
     final TextEditingController sadrzajController =
         TextEditingController(text: novost.sadrzaj);
-    final TextEditingController korisnikController =
-        TextEditingController(text: novost.korisnikId.toString());
     final TextEditingController vrstaTreningaController =
         TextEditingController(text: novost.vrstaTreningaId.toString());
 
@@ -563,19 +536,21 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                                             height: 16,
                                           ),
                                           FormBuilderTextField(
-                                              name: 'naslov',
-                                              controller: naslovController,
-                                              decoration: const InputDecoration(
-                                                labelText: 'Naslov',
-                                                border: OutlineInputBorder(),
-                                              ),
-                                              validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Ovo polje je obavezno!';
-                        }
+                                            name: 'naslov',
+                                            controller: naslovController,
+                                            decoration: const InputDecoration(
+                                              labelText: 'Naslov',
+                                              border: OutlineInputBorder(),
+                                            ),
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return 'Ovo polje je obavezno!';
+                                              }
 
-                        return null;
-                      },),
+                                              return null;
+                                            },
+                                          ),
                                           const SizedBox(height: 16),
                                           FormBuilderTextField(
                                             name: 'sadrzaj',
@@ -585,52 +560,61 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                                               border: OutlineInputBorder(),
                                             ),
                                             validator: (value) {
-                                              if (value != null && value.length < 5) {
-                          return 'Morate unijeti najmanje 5 karaktera.';
-                        }
+                                              if (value != null &&
+                                                  value.length < 5) {
+                                                return 'Morate unijeti najmanje 5 karaktera.';
+                                              }
 
                                               return null;
                                             },
                                           ),
                                           const SizedBox(height: 16),
-                                          FormBuilderDropdown(
-                      name: 'vrstaTreningaId',
-                      decoration:
-                          const InputDecoration(labelText: 'Vrsta treninga'),
-                      items: _vrsteTreningaList.map((vrstaTreninga) {
-                        return DropdownMenuItem(
-                          value: vrstaTreninga.vrstaTreningaId,
-                          child: Text(vrstaTreninga.naziv!),
-                        );
-                      }).toList(),
-                    ),
-                                          
+                                          DropdownButtonFormField(
+                                            decoration: InputDecoration(
+                                                labelText: "Vrsta treninga"),
+                                            value: odabranaNovost!
+                                                .vrstaTreningaId,
+                                            items: _vrsteTreningaList
+                                                .map((VrsteTreninga vrsta) {
+                                              return DropdownMenuItem(
+                                                value: vrsta.vrstaTreningaId,
+                                                child: Text(vrsta.naziv!),
+                                              );
+                                            }).toList(),
+                                            onChanged: (value) {
+                                              setState(() {
+                                                _selectedVrstaTreninga =
+                                                    value as int?;
+                                              });
+                                            },
+                                          ),                                          
                                           const SizedBox(height: 32),
                                           ElevatedButton(
                                             onPressed: () async {
                                               if (_formKey.currentState!
                                                   .validate()) {
                                                 if (odabranaNovost != null) {
-                                                  Novosti novost =
-                                                      Novosti(
-                                                    naslov: naslovController.text,
-                                                    sadrzaj:
-                                                        sadrzajController.text,
-                                                    datumObjave:
-                                                        odabranaNovost!.datumObjave,
-                                                    isLiked:
-                                                        odabranaNovost!
-                                                            .isLiked,
-                                                    brojLajkova:
-                                                         odabranaNovost!
-                                                            .brojLajkova,
-                                                    korisnikId:  odabranaNovost!
-                                                            .korisnikId,
-                                                    vrstaTreningaId:
-                                                        vrstaTreningaController.text
-                                                  );
+                                                  Novosti novost = Novosti(
+                                                      novostId: odabranaNovost!
+                                                          .novostId,
+                                                      naslov:
+                                                          naslovController.text,
+                                                      sadrzaj: sadrzajController
+                                                          .text,
+                                                      datumObjave:
+                                                          DateTime.now(),
+                                                      isLiked: odabranaNovost!
+                                                          .isLiked,
+                                                      brojLajkova:
+                                                          odabranaNovost!
+                                                              .brojLajkova,
+                                                      korisnikId:
+                                                          odabranaNovost!
+                                                              .korisnikId,
+                                                      vrstaTreningaId:
+                                                          _selectedVrstaTreninga);
 
-                                                  _korisniciProvider.update(
+                                                  _novostiProvider.update(
                                                       odabranaNovost!.novostId,
                                                       novost);
                                                   _showAlertDialog(
@@ -664,5 +648,5 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                 )));
           });
         });
-  }*/
+  }
 }
