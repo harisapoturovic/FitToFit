@@ -1,4 +1,5 @@
 import 'package:fittofit_admin/pages/treninzi.dart';
+import 'package:fittofit_admin/utils/util.dart';
 import 'package:flutter/material.dart';
 
 import '../pages/korisnici.dart';
@@ -7,13 +8,11 @@ class MasterScreenWidget extends StatefulWidget {
   Widget? child;
   String? title;
   final Widget? floatingActionButton;
-  String? username;
   MasterScreenWidget(
       {this.child,
       this.title,
       super.key,
-      this.floatingActionButton,
-      this.username});
+      this.floatingActionButton});
 
   @override
   State<MasterScreenWidget> createState() => _MasterScreenWidgetState();
@@ -27,7 +26,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
   @override
   void initState() {
     super.initState();
-    korisnickoIme = widget.username??'';
+    korisnickoIme = "${Authorization.username}";
   }
 
   @override

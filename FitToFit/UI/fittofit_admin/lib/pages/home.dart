@@ -115,8 +115,7 @@ class _HomePageState extends State<HomePage> {
         },
         child: Icon(Icons.add),
         backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
-      ),
-      username: logiraniKorisnik.korisnickoIme,
+      )
     );
   }
 

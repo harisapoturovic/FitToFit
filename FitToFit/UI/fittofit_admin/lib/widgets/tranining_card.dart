@@ -21,10 +21,10 @@ class TrainingCard extends StatelessWidget {
             child: training.slika != null && training.slika != ''
                 ? Padding(
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 35, vertical: 2),
+                        const EdgeInsets.symmetric(horizontal: 35, vertical: 10),
                     child: Container(
-                      width: 200.0,
-                      height: 150.0,
+                      width: 300.0,
+                      height: 200.0,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15.0),
                         image: DecorationImage(
@@ -36,19 +36,19 @@ class TrainingCard extends StatelessWidget {
                     ),
                   )
                 : Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 2),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 35, vertical: 10),
                     child: Container(
-                        width: 200.0,
-                        height: 150.0,
+                        width: 300.0,
+                        height: 200.0,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15.0),
                         ),
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(
-                              10.0),
+                          borderRadius: BorderRadius.circular(10.0),
                           child: Image.asset(
                             'assets/images/training.jpg',
-                            fit: BoxFit.cover, 
+                            fit: BoxFit.cover,
                           ),
                         )),
                   ),
@@ -59,9 +59,9 @@ class TrainingCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${training.naziv != null && training.naziv.length > 25 ? training.naziv.substring(0, 25) + '...' : training.naziv}',
+                  '${training.naziv != null && training.naziv.length > 20 ? training.naziv.substring(0, 20) + '...' : training.naziv}',
                   style: TextStyle(
-                      fontSize: 18.0,
+                      fontSize: 20.0,
                       fontWeight: FontWeight.bold,
                       color: Color.fromARGB(255, 0, 99, 181)),
                 ),
@@ -71,7 +71,7 @@ class TrainingCard extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 16.0, color: Color.fromARGB(255, 0, 99, 181)),
                 ),
-                SizedBox(height: 8),
+                SizedBox(height: 30),
                 ElevatedButton(
                   onPressed: () {},
                   child: Text('Detalji'),
