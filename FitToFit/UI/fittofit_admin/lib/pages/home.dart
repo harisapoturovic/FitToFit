@@ -136,7 +136,7 @@ class _HomePageState extends State<HomePage> {
         Expanded(
           child: DropdownButtonFormField(
             decoration: InputDecoration(labelText: "Vrsta treninga"),
-            value: _vrsteTreningaList[0].vrstaTreningaId,
+            //value: _vrsteTreningaList[0].vrstaTreningaId,
             items: _vrsteTreningaList.map((VrsteTreninga vrsta) {
               return DropdownMenuItem(
                 value: vrsta.vrstaTreningaId,

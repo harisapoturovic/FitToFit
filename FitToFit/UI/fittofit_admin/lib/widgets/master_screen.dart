@@ -1,6 +1,5 @@
+import 'package:fittofit_admin/pages/treninzi.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 import '../pages/korisnici.dart';
 
@@ -89,6 +88,16 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                   );
                 }),
                 label: Text('Search'),
+              ),
+              NavigationRailDestination(
+                icon: buildIcon(Icons.fitness_center, 2, 'Training', () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => TreninziPage(),
+                    ),
+                  );
+                }),
+                label: Text('Training'),
               ),
             ],
             onDestinationSelected: (int index) {

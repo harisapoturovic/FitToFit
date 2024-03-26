@@ -42,6 +42,11 @@ namespace FitToFit.Services
                 query = query.Where(x => x.Naziv.StartsWith(search.Naziv));
             }
 
+            if (!string.IsNullOrWhiteSpace(search?.VrstaTreninga))
+            {
+                query = query.Where(x => x.Vrsta.Naziv.StartsWith(search.VrstaTreninga));
+            }
+
             return base.AddFilter(query, search);
         }
 

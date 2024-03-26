@@ -9,6 +9,7 @@ namespace FitToFit.Model.SearchObjects
     public class TreninziSearchObject : BaseSearchObject
     {
         public string? Naziv { get; set; }
+        public string? VrstaTreninga { get; set; }
         public bool? IsVjezbeIncluded { get; set; }
         public bool? IsTerminiIncluded { get; set; }
     }
