@@ -1,4 +1,5 @@
 import 'package:fittofit_admin/models/treninzi.dart';
+import 'package:fittofit_admin/pages/treninzi_detalji.dart';
 import 'package:fittofit_admin/utils/util.dart';
 import 'package:flutter/material.dart';
 
@@ -20,8 +21,8 @@ class TrainingCard extends StatelessWidget {
           ClipRect(
             child: training.slika != null && training.slika != ''
                 ? Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 35, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 35, vertical: 10),
                     child: Container(
                       width: 300.0,
                       height: 200.0,
@@ -36,8 +37,8 @@ class TrainingCard extends StatelessWidget {
                     ),
                   )
                 : Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 35, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 35, vertical: 10),
                     child: Container(
                         width: 300.0,
                         height: 200.0,
@@ -73,7 +74,15 @@ class TrainingCard extends StatelessWidget {
                 ),
                 SizedBox(height: 30),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            TreninziDetaljiPage(trening: training),
+                      ),
+                    );
+                  },
                   child: Text('Detalji'),
                   style: ElevatedButton.styleFrom(
                     primary: Color.fromARGB(255, 33, 65, 243),

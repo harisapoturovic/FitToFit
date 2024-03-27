@@ -1,3 +1,4 @@
+import 'package:fittofit_admin/models/termini.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'treninzi.g.dart';
@@ -14,6 +15,7 @@ class Treninzi {
   int vrstaId;
   String namjena;
   String? slika;
+  List<Termini> terminis=[];
 
   Treninzi(
       {required this.treningId,
@@ -25,7 +27,8 @@ class Treninzi {
       required this.prosjecnaPotrosnjaKalorija,
       required this.vrstaId,
       required this.namjena,
-      this.slika});
+      this.slika,
+      required this.terminis});
 
   factory Treninzi.fromJson(Map<String, dynamic> json) =>
       _$TreninziFromJson(json);

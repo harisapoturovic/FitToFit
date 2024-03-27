@@ -18,6 +18,9 @@ Treninzi _$TreninziFromJson(Map<String, dynamic> json) => Treninzi(
       vrstaId: json['vrstaId'] as int,
       namjena: json['namjena'] as String,
       slika: json['slika'] as String?,
+      terminis: (json['terminis'] as List<dynamic>)
+          .map((e) => Termini.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$TreninziToJson(Treninzi instance) => <String, dynamic>{
@@ -31,4 +34,5 @@ Map<String, dynamic> _$TreninziToJson(Treninzi instance) => <String, dynamic>{
       'vrstaId': instance.vrstaId,
       'namjena': instance.namjena,
       'slika': instance.slika,
+      'terminis': instance.terminis,
     };

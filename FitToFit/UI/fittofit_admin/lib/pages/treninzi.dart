@@ -39,7 +39,7 @@ class _TreninziPageState extends State<TreninziPage> {
   }
 
   void _loadData() async {
-    var vrsteTreninga = await _vrsteTreningaProvider.get(filter: {});
+    var vrsteTreninga = await _vrsteTreningaProvider.get(filter: {'IsTerminiIncluded':true});
     var treninzi = await _treninziProvider.get(filter: {});
     setState(() {
       _vrsteTreningaList = vrsteTreninga.result;
