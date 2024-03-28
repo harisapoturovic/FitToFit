@@ -1,17 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-// ignore: depend_on_referenced_packages
 import 'package:fittofit_admin/models/termini.dart';
+import 'package:fittofit_admin/providers/termini_provider.dart';
 import 'package:image/image.dart' as img;
 
 import 'package:file_picker/file_picker.dart';
-import 'package:fittofit_admin/models/korisnici.dart';
-import 'package:fittofit_admin/models/novosti.dart';
 import 'package:fittofit_admin/models/treninzi.dart';
 import 'package:fittofit_admin/models/vrste_treninga.dart';
-import 'package:fittofit_admin/providers/korisnici_provider.dart';
-import 'package:fittofit_admin/providers/novosti_provider.dart';
 import 'package:fittofit_admin/providers/treninzi_provider.dart';
 import 'package:fittofit_admin/providers/vrste_treninga_provider.dart';
 import 'package:fittofit_admin/utils/util.dart';
@@ -33,14 +29,15 @@ class TreninziDetaljiPage extends StatefulWidget {
 class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
   late VrsteTreningaProvider _vrsteTreningaProvider;
   late TreninziProvider _treninziProvider;
+  late TerminiProvider _terminiProvider;
   Treninzi? odabraniTrening;
   bool isLoading = true;
   Image? trainingImage;
   int? _selectedVrstaTreninga;
   List<VrsteTreninga> _vrsteTreningaList = [];
+  List<Termini> _terminiResult = [];
   final _formKey = GlobalKey<FormBuilderState>();
   Map<String, dynamic> _initialValue = {};
-  List<Termini> termini = [];
 
   @override
   void initState() {
@@ -81,6 +78,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
 
     _treninziProvider = context.read<TreninziProvider>();
     _vrsteTreningaProvider = context.read<VrsteTreningaProvider>();
+    _terminiProvider = context.read<TerminiProvider>();
     initForm();
     _loadData();
   }
@@ -95,10 +93,12 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
     final treningid = widget.trening.treningId;
     var data = await _treninziProvider.getById(treningid);
     var vrsteTreninga = await _vrsteTreningaProvider.get(filter: {});
-    
+    var termini = await _terminiProvider
+        .get(filter: {"TreningId": "${widget.trening.treningId}"});
     setState(() {
       odabraniTrening = data;
       _vrsteTreningaList = vrsteTreninga.result;
+      _terminiResult = termini.result;
     });
   }
 
@@ -139,61 +139,54 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
       initialValue: _initialValue,
       child: Row(
         children: [
-          Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(bottom: 50, left: 40, right: 40),
-                child: Container(
-                  decoration: BoxDecoration(),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          maxWidth: 400.0,
-                          maxHeight: 520.0,
-                        ),
-                        child: ClipRect(
-                          child: trainingImage != null
-                              ? Container(
-                                  width: 400.0,
-                                  height: 500.0,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color:
-                                          const Color.fromRGBO(0, 154, 231, 1),
-                                      width: 4.0,
-                                    ),
-                                    borderRadius: BorderRadius.circular(15.0),
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(12.0),
-                                    child: Image(
-                                      image: trainingImage!.image,
-                                      width: 400.0,
-                                      height: 400.0,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                )
-                              : Container(
+          Padding(
+            padding: EdgeInsets.only(bottom: 50, left: 40, right: 40),
+            child: Container(
+              decoration: BoxDecoration(),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: 400.0,
+                      maxHeight: 520.0,
+                    ),
+                    child: ClipRect(
+                      child: trainingImage != null
+                          ? Container(
+                              width: 400.0,
+                              height: 520.0,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: const Color.fromRGBO(0, 154, 231, 1),
+                                  width: 4.0,
+                                ),
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(12.0),
+                                child: Image(
+                                  image: trainingImage!.image,
                                   width: 400.0,
                                   height: 400.0,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color:
-                                          const Color.fromRGBO(0, 154, 231, 1),
-                                      width: 2.0,
-                                    ),
-                                    borderRadius: BorderRadius.circular(12.0),
-                                  ),
-                                  child:
-                                      Image.asset('assets/images/training.jpg'),
+                                  fit: BoxFit.cover,
                                 ),
-                        )),
-                  ),
-                ),
-              )
-            ],
+                              ),
+                            )
+                          : Container(
+                              width: 400.0,
+                              height: 400.0,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: const Color.fromRGBO(0, 154, 231, 1),
+                                  width: 2.0,
+                                ),
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              child: Image.asset('assets/images/training.jpg'),
+                            ),
+                    )),
+              ),
+            ),
           ),
           SizedBox(
             height: 30,
@@ -207,10 +200,10 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                 ),
                 child: SizedBox(
                   width: 900,
-                  height: 550,
+                  height: 600,
                   child: Padding(
                     padding:
-                        const EdgeInsets.only(left: 40, right: 40, top: 40),
+                        const EdgeInsets.only(left: 40, right: 40, top: 30),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -450,7 +443,37 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                               ),
                             ),
                           ],
-                        )
+                        ),
+                        SizedBox(height: 20),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: FormBuilderTextField(
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.black),
+                                decoration: InputDecoration(
+                                  labelText: "Termini",
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color:
+                                          const Color.fromRGBO(0, 154, 231, 1),
+                                      width: 2.0,
+                                    ),
+                                  ),
+                                  labelStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 25,
+                                  ),
+                                ),
+                                name: "termini",
+                                initialValue: _terminiResult.map((termini) {
+                                  return '${termini.dan}${termini.sat != null ? ' u ${termini.sat}' : ''}';
+                                }).join(", "),
+                                enabled: false,
+                              ),
+                            )
+                          ],
+                        ),
                       ],
                     ),
                   ),

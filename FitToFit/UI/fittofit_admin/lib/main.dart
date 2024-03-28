@@ -2,6 +2,7 @@ import 'package:fittofit_admin/pages/login.dart';
 import 'package:fittofit_admin/providers/korisnici_provider.dart';
 import 'package:fittofit_admin/providers/novosti_provider.dart';
 import 'package:fittofit_admin/providers/rezervacije_provider.dart';
+import 'package:fittofit_admin/providers/termini_provider.dart';
 import 'package:fittofit_admin/providers/treneri_provider.dart';
 import 'package:fittofit_admin/providers/treninzi_provider.dart';
 import 'package:fittofit_admin/providers/vrste_treninga_provider.dart';
@@ -16,7 +17,8 @@ void main() {
     ChangeNotifierProvider(create: (_) => VrsteTreningaProvider()),
     ChangeNotifierProvider(create: (_) => TreneriProvider()),
     ChangeNotifierProvider(create: (_) => RezervacijeProvider()),
-    ChangeNotifierProvider(create: (_) => TreninziProvider())
+    ChangeNotifierProvider(create: (_) => TreninziProvider()),
+    ChangeNotifierProvider(create: (_) => TerminiProvider())
     ],
     child: const MyApp(),
   ),);
