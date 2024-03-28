@@ -1,3 +1,4 @@
+import 'package:fittofit_admin/pages/akcije.dart';
 import 'package:fittofit_admin/pages/treninzi.dart';
 import 'package:fittofit_admin/utils/util.dart';
 import 'package:flutter/material.dart';
@@ -97,6 +98,16 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                   );
                 }),
                 label: Text('Training'),
+              ),
+              NavigationRailDestination(
+                icon: buildIcon(Icons.local_offer, 3, 'Actions', () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => AkcijePage(),
+                    ),
+                  );
+                }),
+                label: Text('Actions'),
               ),
             ],
             onDestinationSelected: (int index) {

@@ -43,6 +43,12 @@ namespace FitToFit.Services
                 query = query.Where(x => x.DatumPocetka.Equals(search.DatumPocetka));
             }
 
+            if (!string.IsNullOrWhiteSpace(search?.StateMachine))
+            {
+                query = query.Where(x => x.StateMachine.Contains(search.StateMachine));
+            }
+
+
             //foreach (var i in query)
             //{
             //    if(i.DatumZavrsetka.CompareTo(DateTime.Now)>0)

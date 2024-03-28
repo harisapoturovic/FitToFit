@@ -11,5 +11,6 @@ namespace FitToFit.Model.SearchObjects
         public string? Naziv { get; set; }
         public DateTime? DatumPocetka { get; set; }
         public bool? IsTreninziIncluded { get; set; }
+        public string? StateMachine { get; set; }
     }
 }
