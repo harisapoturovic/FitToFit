@@ -40,7 +40,7 @@ namespace FitToFit.Services
 
             if (search?.DatumPocetka != null)
             {
-                query = query.Where(x => x.DatumPocetka.Equals(search.DatumPocetka));
+                query = query.Where(x => x.DatumPocetka.Date.Equals(search.DatumPocetka));
             }
 
             if (!string.IsNullOrWhiteSpace(search?.StateMachine))

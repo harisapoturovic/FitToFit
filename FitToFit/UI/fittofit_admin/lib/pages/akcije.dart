@@ -1,7 +1,10 @@
 import 'package:fittofit_admin/models/akcije.dart';
+import 'package:fittofit_admin/models/treninzi.dart';
 import 'package:fittofit_admin/providers/akcije_provider.dart';
+import 'package:fittofit_admin/providers/treninzi_provider.dart';
 import 'package:fittofit_admin/widgets/action_card.dart';
 import 'package:fittofit_admin/widgets/master_screen.dart';
+import 'package:fittofit_admin/widgets/multiselect_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
@@ -16,15 +19,24 @@ class AkcijePage extends StatefulWidget {
 
 class _AkcijePageState extends State<AkcijePage> {
   late AkcijeProvider _akcijeProvider;
+  late TreninziProvider _treninziProvider;
   TextEditingController _nazivController = new TextEditingController();
   List<Akcije> _aktivneAkcijeList = [];
   List<Akcije> _arhiviraneAkcijeList = [];
+  List<Treninzi> _treninziList = [];
   DateTime? _selectedDate;
+  DateTime? _pocetakAkcije;
+  DateTime? _zavrsetakAkcije;
+  List<String> _selectedItems = [];
+  List<String> nazivList = [];
+  List<int>? items;
+  final _formKey = GlobalKey<FormBuilderState>();
 
   @override
   void initState() {
     super.initState();
     _akcijeProvider = context.read<AkcijeProvider>();
+    _treninziProvider = context.read<TreninziProvider>();
     _loadData();
   }
 
@@ -34,9 +46,13 @@ class _AkcijePageState extends State<AkcijePage> {
 
     var arhiviraneAkcije = await _akcijeProvider
         .get(filter: {'IsTreninziIncluded': true, 'StateMachine': "archived"});
+
+    var treninzi = await _treninziProvider.get();
+
     setState(() {
       _aktivneAkcijeList = aktivneAkcije.result;
       _arhiviraneAkcijeList = arhiviraneAkcije.result;
+      _treninziList = treninzi.result;
     });
   }
 
@@ -66,7 +82,7 @@ class _AkcijePageState extends State<AkcijePage> {
       title: "Akcije",
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          //_showAddTrainingsDialog();
+          _showAddActionDialog();
         },
         child: const Icon(Icons.add),
         backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
@@ -79,12 +95,12 @@ class _AkcijePageState extends State<AkcijePage> {
   }
 
   Widget _searchWidgets() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 20, left: 300, right: 50),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 300, vertical: 20),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
             child: TextField(
               decoration: InputDecoration(
                 labelText: "Naziv akcije",
@@ -101,25 +117,57 @@ class _AkcijePageState extends State<AkcijePage> {
               controller: _nazivController,
             ),
           ),
-        ),
-        SizedBox(width: 10),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 20, right: 500),
-            child: FormBuilderDateTimePicker(
-                name: 'datumPocetka',
-                inputType: InputType.date,
-                decoration: const InputDecoration(labelText: 'Datum početka'),
-                format: DateFormat("yyyy-MM-dd"),
-                initialDate: _selectedDate ?? DateTime.now(),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedDate = value;
-                  });
-                }),
+          SizedBox(width: 10),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 50),
+              child: FormBuilderDateTimePicker(
+                  name: 'datumPocetka',
+                  inputType: InputType.date,
+                  decoration: const InputDecoration(labelText: 'Datum početka'),
+                  format: DateFormat("yyyy-MM-dd"),
+                  initialDate: _selectedDate ?? DateTime.now(),
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedDate = value;
+                    });
+                  }),
+            ),
           ),
-        )
-      ],
+          SizedBox(width: 10),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 50, right: 130),
+              child: ElevatedButton(
+                onPressed: () async {
+                  var data1 = await _akcijeProvider.get(filter: {
+                    'naziv': _nazivController.text,
+                    'datumPocetka': _selectedDate,
+                    'stateMachine': "active"
+                  });
+
+                  var data2 = await _akcijeProvider.get(filter: {
+                    'naziv': _nazivController.text,
+                    'datumPocetka': _selectedDate,
+                    'stateMachine': "archived"
+                  });
+
+                  setState(() {
+                    _aktivneAkcijeList = data1.result;
+                    _arhiviraneAkcijeList = data2.result;
+                  });
+                },
+                child: Text("Pretraži"),
+                style: ElevatedButton.styleFrom(
+                  primary: Color.fromRGBO(0, 154, 231, 1),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 17),
+                  side: BorderSide(color: Colors.white),
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -224,16 +272,42 @@ class _AkcijePageState extends State<AkcijePage> {
       ),
     );
   }
-/*
-  void _showAddTrainingsDialog() {
+
+  List<String> extractNazivFromList() {
+    for (var treninzi in _treninziList) {
+      nazivList.add(treninzi.naziv);
+    }
+    print(nazivList);
+    return nazivList;
+  }
+
+  void _showMultiSelect() async {
+    extractNazivFromList();
+    final List<String>? results = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return MultiSelect(items: nazivList);
+      },
+    );
+
+    // Update UI
+    if (results != null) {
+      print(results);
+      setState(() {
+        _selectedItems = results;
+      });
+    }
+  }
+
+  void _showAddActionDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Dodaj trening'),
+          title: const Text('Dodaj akciju'),
           content: Container(
-            width: 500.0,
-            height: 900.0,
+            width: 400.0,
+            height: 600.0,
             padding: const EdgeInsets.all(5.0),
             margin: const EdgeInsets.only(left: 50, right: 50, top: 20),
             child: SingleChildScrollView(
@@ -258,24 +332,8 @@ class _AkcijePageState extends State<AkcijePage> {
                     ),
                     const SizedBox(height: 10.0),
                     FormBuilderTextField(
-                      name: 'opis',
-                      decoration: const InputDecoration(labelText: 'Opis'),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Ovo polje je obavezno!';
-                        }
-                        if (!RegExp(r'^[A-Z]').hasMatch(value)) {
-                          return 'Opis mora početi velikim slovom.';
-                        }
-
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 10.0),
-                    FormBuilderTextField(
-                      name: 'maxBrojClanova',
-                      decoration: const InputDecoration(
-                          labelText: 'Maksimalan broj članova'),
+                      name: 'iznos',
+                      decoration: const InputDecoration(labelText: 'Iznos (%)'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
@@ -289,99 +347,83 @@ class _AkcijePageState extends State<AkcijePage> {
                       },
                     ),
                     const SizedBox(height: 10.0),
-                    FormBuilderTextField(
-                      name: 'cijenaPoTerminu',
+                    FormBuilderDateTimePicker(
+                      name: 'datumPocetka',
+                      inputType: InputType.date,
                       decoration: const InputDecoration(
-                          labelText: 'Cijena po terminu (KM)'),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Ovo polje je obavezno!';
-                        }
-                        if (value != null &&
-                            !RegExp(r'^[0-9]+(?:[.,][0-9]+)*$')
-                                .hasMatch(value)) {
-                          return 'Ovo polje ne može sadržavati slova.';
-                        }
-
-                        return null;
+                          labelText: 'Datum početka akcije'),
+                      format: DateFormat("yyyy-MM-dd"),
+                      initialDate: _pocetakAkcije ?? DateTime.now(),
+                      onChanged: (value) {
+                        setState(() {
+                          _pocetakAkcije = value;
+                        });
                       },
+                      validator: FormBuilderValidators.compose([
+                        (value) {
+                          if (value == null) {
+                            return 'Ovo polje je obavezno!';
+                          }
+                          return null;
+                        },
+                      ]),
                     ),
-                    const SizedBox(height: 10.0),
-                    FormBuilderTextField(
-                      name: 'trajanje',
-                      decoration:
-                          const InputDecoration(labelText: 'Trajanje (min/h)'),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Ovo polje je obavezno!';
-                        }
-
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 10.0),
-                    FormBuilderTextField(
-                      name: 'prosjecnaPotrosnjaKalorija',
+                    FormBuilderDateTimePicker(
+                      name: 'datumZavrsetka',
+                      inputType: InputType.date,
                       decoration: const InputDecoration(
-                          labelText: 'Prosječna potrošnja kalorija (kcal)'),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Ovo polje je obavezno!';
-                        }
-                        if (value != null &&
-                            !RegExp(r'^[0-9]+(?:[.,][0-9]+)*$')
-                                .hasMatch(value)) {
-                          return 'Ovo polje ne može sadržavati slova.';
-                        }
-
-                        return null;
+                          labelText: 'Datum završetka akcije'),
+                      format: DateFormat("yyyy-MM-dd"),
+                      initialDate: _zavrsetakAkcije ?? DateTime.now(),
+                      onChanged: (value) {
+                        setState(() {
+                          _zavrsetakAkcije = value;
+                        });
                       },
+                      validator: FormBuilderValidators.compose([
+                        (value) {
+                          if (value == null) {
+                            return 'Ovo polje je obavezno!';
+                          }
+                          return null;
+                        },
+                      ]),
                     ),
-                    const SizedBox(height: 10.0),
-                    FormBuilderTextField(
-                      name: 'namjena',
-                      decoration: const InputDecoration(labelText: 'Namjena'),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Ovo polje je obavezno!';
-                        }
-                        if (!RegExp(r'^[A-Z]').hasMatch(value)) {
-                          return 'Namjena mora početi velikim slovom.';
-                        }
-
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 10.0),
-                    FormBuilderDropdown(
-                      name: 'vrstaId',
+                     const SizedBox(height: 10.0),
+                    /*FormBuilderDropdown(
+                      name: 'items',
                       decoration:
                           const InputDecoration(labelText: 'Vrsta treninga'),
-                      initialValue: _vrsteTreningaList[0].vrstaTreningaId,
-                      items: _vrsteTreningaList.map((vrstaTreninga) {
+                      initialValue: _treninziList[0].treningId,
+                      items: _treninziList.map((vrstaTreninga) {
                         return DropdownMenuItem(
-                          value: vrstaTreninga.vrstaTreningaId,
-                          child: Text(vrstaTreninga.naziv!),
+                          value: vrstaTreninga.treningId,
+                          child: Text(vrstaTreninga.naziv),
                         );
                       }).toList(),
                     ),
-                    FormBuilderField(
-                      name: 'slika',
-                      builder: (field) {
-                        return InputDecorator(
-                          decoration: InputDecoration(
-                            labelText: 'Odaberite sliku',
-                            errorText: field.errorText,
-                          ),
-                          child: ListTile(
-                            leading: const Icon(Icons.photo),
-                            title: const Text("Select image"),
-                            trailing: const Icon(Icons.file_upload),
-                            onTap: getImage,
-                          ),
-                        );
-                      },
-                    ),
+                    const SizedBox(height: 10.0),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // use this button to open the multi-select dialog
+                        ElevatedButton(
+                          onPressed: _showMultiSelect,
+                          child: const Text('Select Your Favorite Topics'),
+                        ),
+                        const Divider(
+                          height: 30,
+                        ),
+                        // display selected items
+                        Wrap(
+                          children: _selectedItems
+                              .map((e) => Chip(
+                                    label: Text(e),
+                                  ))
+                              .toList(),
+                        )
+                      ],
+                    ),*/
                   ],
                 ),
               ),
@@ -401,7 +443,7 @@ class _AkcijePageState extends State<AkcijePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                _dodajTrening();
+                _dodajAkciju();
               },
               child: const Text('Spremi'),
               style: ElevatedButton.styleFrom(
@@ -420,7 +462,7 @@ class _AkcijePageState extends State<AkcijePage> {
     );
   }
 
-  void _dodajTrening() {
+  void _dodajAkciju() {
     _formKey.currentState?.saveAndValidate();
     final currentFormState = _formKey.currentState;
     if (!_areAllFieldsFilled(currentFormState)) {
@@ -438,11 +480,16 @@ class _AkcijePageState extends State<AkcijePage> {
       }
     }
     var request = Map.from(_formKey.currentState!.value);
-    request['slika'] = _base64Image;
+    request['datumPocetka'] = formatDateForJson(request['datumPocetka']);
+    request['datumZavrsetka'] = formatDateForJson(request['datumZavrsetka']);
     try {
-      _treninziProvider.insert(request);
+      _akcijeProvider.insert(request);
+      print('Request: ');
+      request.forEach((key, value) {
+        print('$key: $value');
+      });
       _showAlertDialog(
-          "Uspješan unos", "Trening uspješno dodat.", Colors.green);
+          "Uspješan unos", "Akcija uspješno dodana.", Colors.green);
     } on Exception catch (e) {
       _showAlertDialog("Greška", e.toString(), Colors.red);
     }
@@ -455,13 +502,9 @@ class _AkcijePageState extends State<AkcijePage> {
 
     List<String> requiredFields = [
       'naziv',
-      'opis',
-      'maxBrojClanova',
-      'cijenaPoTerminu',
-      'trajanje',
-      'prosjecnaPotrosnjaKalorija',
-      'vrstaId',
-      'namjena'
+      'iznos',
+      'datumPocetka',
+      'datumZavrsetka'
     ];
 
     for (String fieldName in requiredFields) {
@@ -472,6 +515,10 @@ class _AkcijePageState extends State<AkcijePage> {
     }
 
     return true;
+  }
+
+  String formatDateForJson(DateTime dateTime) {
+    return dateTime.toIso8601String();
   }
 
   void _showAlertDialog(String naslov, String poruka, Color boja) {
@@ -509,5 +556,5 @@ class _AkcijePageState extends State<AkcijePage> {
         ),
       ),
     );
-  }*/
+  }
 }

@@ -23,25 +23,30 @@ class AkcijeCard extends StatelessWidget {
         children: [
           ClipRect(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-              child: Container(
-                  width: 250.0,
-                  height: 150.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: SizedBox(
-                      width: 130.0, 
-                      height: 130.0, 
-                      child: Image.asset(
-                        'assets/images/popust.png',
-                        fit: BoxFit.cover,
-                      ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                child: Container(
+                    width: 250.0,
+                    height: 150.0,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15.0),
                     ),
-                  )),
-            ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: SizedBox(
+                        width: 130.0,
+                        height: 130.0,
+                        child: akcija.stateMachine == 'active'
+                            ? Image.asset(
+                                'assets/images/activeAction.png',
+                                fit: BoxFit.cover,
+                              )
+                            : Image.asset(
+                                'assets/images/archivedAction.png',
+                                fit: BoxFit.cover,
+                              ),
+                      ),
+                    ))),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,

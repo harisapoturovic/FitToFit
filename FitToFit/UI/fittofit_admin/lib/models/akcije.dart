@@ -11,7 +11,7 @@ class Akcije {
   DateTime datumZavrsetka;
   int iznos;
   String? stateMachine;
-  List<AkcijeTreninzi> akcijeTreninzis = [];
+  List<AkcijeTreninzi>? items = [];
 
   Akcije(
       {required this.akcijaId,
@@ -20,7 +20,7 @@ class Akcije {
       required this.datumZavrsetka,
       required this.iznos,
       this.stateMachine,
-      required this.akcijeTreninzis});
+      this.items});
 
   factory Akcije.fromJson(Map<String, dynamic> json) => _$AkcijeFromJson(json);
 
