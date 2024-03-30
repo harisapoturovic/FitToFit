@@ -22,6 +22,8 @@ class _AkcijePageState extends State<AkcijePage> {
   TextEditingController _nazivController = new TextEditingController();
   List<Akcije> _aktivneAkcijeList = [];
   List<Akcije> _arhiviraneAkcijeList = [];
+  List<Akcije> _draftAkcijeList = [];
+  List<Akcije> _selectedAkcije = [];
   List<Treninzi> _treninziList = [];
   DateTime? _selectedDate;
   DateTime? _pocetakAkcije;
@@ -29,6 +31,7 @@ class _AkcijePageState extends State<AkcijePage> {
   List<int> _selectedItems = [];
   List<String> nazivList = [];
   List<int>? items;
+  bool isActive = true;
   final _formKey = GlobalKey<FormBuilderState>();
 
   @override
@@ -46,12 +49,17 @@ class _AkcijePageState extends State<AkcijePage> {
     var arhiviraneAkcije = await _akcijeProvider
         .get(filter: {'IsTreninziIncluded': true, 'StateMachine': "archived"});
 
+    var draftAkcije = await _akcijeProvider
+        .get(filter: {'IsTreninziIncluded': true, 'StateMachine': "draft"});
+
     var treninzi = await _treninziProvider.get();
 
     setState(() {
       _aktivneAkcijeList = aktivneAkcije.result;
       _arhiviraneAkcijeList = arhiviraneAkcije.result;
+      _draftAkcijeList = draftAkcije.result;
       _treninziList = treninzi.result;
+      _selectedAkcije = _aktivneAkcijeList;
     });
   }
 
@@ -80,9 +88,7 @@ class _AkcijePageState extends State<AkcijePage> {
       ),
       title: "Akcije",
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          
-        },
+        onPressed: () {},
         child: const Icon(Icons.add),
         backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
       ),
@@ -151,9 +157,21 @@ class _AkcijePageState extends State<AkcijePage> {
                     'stateMachine': "archived"
                   });
 
+                  var data3 = await _akcijeProvider.get(filter: {
+                    'naziv': _nazivController.text,
+                    'datumPocetka': _selectedDate,
+                    'stateMachine': "draft"
+                  });
+
                   setState(() {
                     _aktivneAkcijeList = data1.result;
                     _arhiviraneAkcijeList = data2.result;
+                    _draftAkcijeList = data3.result;
+                    if (isActive) {
+                      _selectedAkcije = _aktivneAkcijeList;
+                    } else {
+                      _selectedAkcije = _draftAkcijeList;
+                    }
                   });
                 },
                 child: Text("Pretraži"),
@@ -178,12 +196,44 @@ class _AkcijePageState extends State<AkcijePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Aktivne akcije',
-            style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 94, 94, 94)),
+          Row(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isActive = true;
+                    _selectedAkcije = _aktivneAkcijeList;
+                  });
+                },
+                child: Text(
+                  'Aktivne akcije',
+                  style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                      color: isActive
+                          ? Color.fromARGB(255, 46, 142, 50)
+                          : Colors.grey),
+                ),
+              ),
+              SizedBox(width: 10),
+              Text('/'),
+              SizedBox(width: 10),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isActive = false;
+                    _selectedAkcije = _draftAkcijeList;
+                  });
+                },
+                child: Text(
+                  'Draft akcije',
+                  style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                      color: isActive ? Colors.grey : Colors.blue),
+                ),
+              ),
+            ],
           ),
           SizedBox(height: 10),
           Expanded(
@@ -191,29 +241,28 @@ class _AkcijePageState extends State<AkcijePage> {
               isAlwaysShown: true,
               controller: _scrollController,
               child: ListView(
-                controller: _scrollController,
-                scrollDirection: Axis.horizontal,
-                physics: AlwaysScrollableScrollPhysics(),
-                children: _aktivneAkcijeList.map((akcija) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Container(
-                      width: 300,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Color.fromARGB(255, 225, 225, 225),
-                          width: 1.0,
+                  controller: _scrollController,
+                  scrollDirection: Axis.horizontal,
+                  physics: AlwaysScrollableScrollPhysics(),
+                  children: _selectedAkcije.map((akcija) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Container(
+                        width: 300,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Color.fromARGB(255, 225, 225, 225),
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(10.0),
                         ),
-                        borderRadius: BorderRadius.circular(10.0),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: AkcijeCard(akcija: akcija),
+                        ),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: AkcijeCard(akcija: akcija),
-                      ),
-                    ),
-                  );
-                }).toList(),
-              ),
+                    );
+                  }).toList()),
             ),
           ),
         ],
@@ -258,9 +307,8 @@ class _AkcijePageState extends State<AkcijePage> {
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: AkcijeCard(akcija: akcija)                        
-                      ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: AkcijeCard(akcija: akcija)),
                     ),
                   );
                 }).toList(),
@@ -270,5 +318,5 @@ class _AkcijePageState extends State<AkcijePage> {
         ],
       ),
     );
-  }  
+  }
 }

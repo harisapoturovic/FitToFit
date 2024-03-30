@@ -77,18 +77,16 @@ class _AkcijeCardState extends State<AkcijeCard> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
                         child: SizedBox(
-                          width: 130.0,
-                          height: 130.0,
-                          child: widget.akcija.stateMachine == 'active'
-                              ? Image.asset(
-                                  'assets/images/activeAction.png',
-                                  fit: BoxFit.cover,
-                                )
-                              : Image.asset(
-                                  'assets/images/archivedAction.png',
-                                  fit: BoxFit.cover,
-                                ),
-                        ),
+                            width: 130.0,
+                            height: 130.0,
+                            child: Image.asset(
+                              widget.akcija.stateMachine == 'active'
+                                  ? 'assets/images/activeAction.png'
+                                  : widget.akcija.stateMachine == 'archived'
+                                      ? 'assets/images/archivedAction.png'
+                                      : 'assets/images/draftAction.png',
+                              fit: BoxFit.cover,
+                            )),
                       ))),
             ),
             Column(
@@ -253,9 +251,95 @@ class _AkcijeCardState extends State<AkcijeCard> {
                             ),
                           ],
                         )
-                      : Container(),
+                      : widget.akcija.stateMachine == 'draft'
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    _dodajTrening(context);
+                                  },
+                                  style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Colors.transparent),
+                                    elevation:
+                                        MaterialStateProperty.all<double>(0),
+                                    overlayColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Colors.transparent),
+                                    foregroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Color.fromARGB(255, 96, 96, 96)),
+                                    textStyle:
+                                        MaterialStateProperty.all<TextStyle>(
+                                      TextStyle(
+                                        decoration: TextDecoration.underline,
+                                      ),
+                                    ),
+                                    padding: MaterialStateProperty.all<
+                                        EdgeInsetsGeometry>(EdgeInsets.zero),
+                                    tapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
+                                    minimumSize:
+                                        MaterialStateProperty.all<Size>(
+                                            Size.zero),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Text('Dodaj trening na akciju'),
+                                      SizedBox(width: 5),
+                                      Icon(Icons.add)
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    _confirmActivateAction(context);
+                                  },
+                                  style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Colors.transparent),
+                                    elevation:
+                                        MaterialStateProperty.all<double>(0),
+                                    overlayColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Colors.transparent),
+                                    foregroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Color.fromARGB(255, 96, 96, 96)),
+                                    textStyle:
+                                        MaterialStateProperty.all<TextStyle>(
+                                      TextStyle(
+                                        decoration: TextDecoration.underline,
+                                      ),
+                                    ),
+                                    padding: MaterialStateProperty.all<
+                                        EdgeInsetsGeometry>(EdgeInsets.zero),
+                                    tapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
+                                    minimumSize:
+                                        MaterialStateProperty.all<Size>(
+                                            Size.zero),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Text('Aktiviraj akciju'),
+                                      SizedBox(width: 5),
+                                      Icon(Icons.open_in_new)
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Container(),
                   SizedBox(height: 30),
-                  widget.akcija.stateMachine == 'active'
+                  widget.akcija.stateMachine == 'active' ||
+                          widget.akcija.stateMachine == 'draft'
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -559,6 +643,53 @@ class _AkcijeCardState extends State<AkcijeCard> {
     );
   }
 
+  void _confirmActivateAction(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Color.fromARGB(255, 238, 247, 255),
+          title: Text(
+            'Potvrda aktiviranja',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+            ),
+          ),
+          content: Text('Da li ste sigurni da želite aktivirati akciju?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                'Odustani',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                _aktivirajAkciju();
+                Navigator.pop(context);
+              },
+              child: Text(
+                'Aktiviraj',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+            ),
+          ],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        );
+      },
+    );
+  }
+
   void _ukloniTrening(int? akcijaTreningId) async {
     try {
       if (akcijaTreningId != null) {
@@ -573,10 +704,19 @@ class _AkcijeCardState extends State<AkcijeCard> {
 
   void _arhivirajAkciju() async {
     try {
-      print(widget.akcija.akcijaId);
       await _akcijeProvider.archive(widget.akcija.akcijaId);
       _showAlertDialog(
           "Uspješno arhiviranje", "Akcija uspješno arhvirana.", Colors.green);
+    } catch (e) {
+      _showAlertDialog("Greška", e.toString(), Colors.red);
+    }
+  }
+
+  void _aktivirajAkciju() async {
+    try {
+      await _akcijeProvider.activate(widget.akcija.akcijaId);
+      _showAlertDialog(
+          "Uspješno aktiviranje", "Akcija uspješno aktivirana.", Colors.green);
     } catch (e) {
       _showAlertDialog("Greška", e.toString(), Colors.red);
     }
