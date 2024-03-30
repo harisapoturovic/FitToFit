@@ -1,6 +1,7 @@
 import 'package:fittofit_admin/models/akcije.dart';
 import 'package:fittofit_admin/models/akcijeTreninzi.dart';
 import 'package:fittofit_admin/models/treninzi.dart';
+import 'package:fittofit_admin/providers/akcije_provider.dart';
 import 'package:fittofit_admin/providers/akcije_treninzi_provider.dart';
 import 'package:fittofit_admin/providers/treninzi_provider.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ class AkcijeCard extends StatefulWidget {
 
 class _AkcijeCardState extends State<AkcijeCard> {
   late TreninziProvider _treninziProvider;
+  late AkcijeProvider _akcijeProvider;
   late AkcijeTreninziProvider _akcijeTreninziProvider;
   List<Treninzi> _treninziList = [];
   final _formKey = GlobalKey<FormBuilderState>();
@@ -28,6 +30,7 @@ class _AkcijeCardState extends State<AkcijeCard> {
 
     _treninziProvider = context.read<TreninziProvider>();
     _akcijeTreninziProvider = context.read<AkcijeTreninziProvider>();
+    _akcijeProvider = context.read<AkcijeProvider>();
     _loadData();
   }
 
@@ -207,14 +210,47 @@ class _AkcijeCardState extends State<AkcijeCard> {
                               child: Row(
                                 children: [
                                   Text('Dodaj trening na akciju'),
-                                  SizedBox(width: 8),
+                                  SizedBox(width: 5),
                                   Icon(Icons.add)
                                 ],
                               ),
                             ),
                             SizedBox(
                               width: 20,
-                            )
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                _confirmArchiveAction(context);
+                              },
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.transparent),
+                                elevation: MaterialStateProperty.all<double>(0),
+                                overlayColor: MaterialStateProperty.all<Color>(
+                                    Colors.transparent),
+                                foregroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Color.fromARGB(255, 96, 96, 96)),
+                                textStyle: MaterialStateProperty.all<TextStyle>(
+                                  TextStyle(
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                                padding: MaterialStateProperty.all<
+                                    EdgeInsetsGeometry>(EdgeInsets.zero),
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                minimumSize:
+                                    MaterialStateProperty.all<Size>(Size.zero),
+                              ),
+                              child: Row(
+                                children: [
+                                  Text('Arhiviraj akciju'),
+                                  SizedBox(width: 5),
+                                  Icon(Icons.history)
+                                ],
+                              ),
+                            ),
                           ],
                         )
                       : Container(),
@@ -476,6 +512,53 @@ class _AkcijeCardState extends State<AkcijeCard> {
     );
   }
 
+  void _confirmArchiveAction(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Color.fromARGB(255, 238, 247, 255),
+          title: Text(
+            'Potvrda arhiviranja',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+            ),
+          ),
+          content: Text('Da li ste sigurni da želite arhivirati akciju?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                'Odustani',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                _arhivirajAkciju();
+                Navigator.pop(context);
+              },
+              child: Text(
+                'Arhiviraj',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+            ),
+          ],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        );
+      },
+    );
+  }
+
   void _ukloniTrening(int? akcijaTreningId) async {
     try {
       if (akcijaTreningId != null) {
@@ -483,6 +566,17 @@ class _AkcijeCardState extends State<AkcijeCard> {
         _showAlertDialog("Uspješno brisanje",
             "Trening uspješno uklonjen sa akcije.", Colors.green);
       }
+    } catch (e) {
+      _showAlertDialog("Greška", e.toString(), Colors.red);
+    }
+  }
+
+  void _arhivirajAkciju() async {
+    try {
+      print(widget.akcija.akcijaId);
+      await _akcijeProvider.archive(widget.akcija.akcijaId);
+      _showAlertDialog(
+          "Uspješno arhiviranje", "Akcija uspješno arhvirana.", Colors.green);
     } catch (e) {
       _showAlertDialog("Greška", e.toString(), Colors.red);
     }

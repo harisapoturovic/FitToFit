@@ -10,6 +10,8 @@ abstract class BaseProvider<T> with ChangeNotifier {
   static String? _baseUrl;
   String _endpoint = "";
 
+  static String? get baseUrl => _baseUrl;
+
   BaseProvider(String endpoint) {
     _endpoint = endpoint;
     _baseUrl = const String.fromEnvironment("baseUrl",
@@ -36,7 +38,8 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
       result.count = data['count'];
 
-      for (var item in data['result']) { // =foreach
+      for (var item in data['result']) {
+        // =foreach
         result.result.add(fromJson(item));
       }
 
