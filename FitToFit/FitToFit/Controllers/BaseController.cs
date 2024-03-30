@@ -11,7 +11,7 @@ namespace FitToFit.Controllers
     public class BaseController<T, Tsearch> : ControllerBase where T : class where Tsearch : class
     {
         protected readonly IService<T, Tsearch> _service;
-        protected readonly ILogger<BaseController<T, Tsearch>> _logger; //ako ga ne budem koristila samo izb
+        protected readonly ILogger<BaseController<T, Tsearch>> _logger; 
 
         public BaseController(ILogger<BaseController<T, Tsearch>> logger, IService<T, Tsearch> service)
         {

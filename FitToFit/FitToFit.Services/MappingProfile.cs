@@ -44,6 +44,8 @@ namespace FitToFit.Services
             CreateMap<RezervacijeUpdateRequest, Database.Rezervacije>();
             CreateMap<Database.RezervacijaStavke, Model.RezervacijaStavke>();
             CreateMap<Database.Uloge, Model.Uloge>();
+            CreateMap<Database.AkcijeTreninzi, Model.AkcijeTreninzi>();
+            CreateMap<AkcijeTreninziInsertRequest, Database.AkcijeTreninzi>();
         }
     }
 }

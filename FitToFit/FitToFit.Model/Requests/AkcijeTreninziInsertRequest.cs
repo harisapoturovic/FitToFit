@@ -9,5 +9,6 @@ namespace FitToFit.Model.Requests
     public class AkcijeTreninziInsertRequest
     {
         public int TreningId { get; set; }
+        public int? AkcijaId { get; set; }
     }
 }

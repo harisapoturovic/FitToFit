@@ -26,6 +26,7 @@ builder.Services.AddTransient<ITerminiService, TerminiService>();
 builder.Services.AddTransient<ITreninziClanarine, TreninziClanarineService>();
 builder.Services.AddTransient<IRezervacijeService, RezervacijeService>();
 builder.Services.AddTransient<IMessageProducer, MessageProducer>();
+builder.Services.AddTransient<IAkcijeTreninziService, AkcijeTreninziService>();
 
 builder.Services.AddTransient<AkcijeBaseState>();
 builder.Services.AddTransient<InitialActionState>();

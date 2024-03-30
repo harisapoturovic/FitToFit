@@ -9,7 +9,7 @@ namespace FitToFit.Controllers
     public class BaseCRUDController<T, Tsearch, Tinsert, Tupdate> : BaseController<T, Tsearch> where T : class where Tsearch : class
     {
         protected new readonly ICRUDService<T, Tsearch, Tinsert, Tupdate> _service;
-        protected readonly ILogger<BaseController<T, Tsearch>> _logger; //ako ga ne budem koristila samo izb
+        protected readonly ILogger<BaseController<T, Tsearch>> _logger; 
 
         public BaseCRUDController(ILogger<BaseController<T, Tsearch>> logger, ICRUDService<T, Tsearch, Tinsert, Tupdate> service)
             :base(logger, service)
