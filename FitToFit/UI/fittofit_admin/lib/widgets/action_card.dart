@@ -22,6 +22,8 @@ class _AkcijeCardState extends State<AkcijeCard> {
   late AkcijeProvider _akcijeProvider;
   late AkcijeTreninziProvider _akcijeTreninziProvider;
   List<Treninzi> _treninziList = [];
+  DateTime? _pocetakAkcije;
+  DateTime? _zavrsetakAkcije;
   final _formKey = GlobalKey<FormBuilderState>();
 
   @override
@@ -338,13 +340,14 @@ class _AkcijeCardState extends State<AkcijeCard> {
                             )
                           : Container(),
                   SizedBox(height: 30),
-                  widget.akcija.stateMachine == 'active' ||
-                          widget.akcija.stateMachine == 'draft'
+                  widget.akcija.stateMachine == 'draft'
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                _urediAkciju();
+                              },
                               child: Text('Uredi akciju'),
                               style: ElevatedButton.styleFrom(
                                 primary: Colors.green,
@@ -360,7 +363,9 @@ class _AkcijeCardState extends State<AkcijeCard> {
                               width: 10,
                             ),
                             ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                _confirmDeleteAction(context);
+                              },
                               child: Text('Obriši akciju'),
                               style: ElevatedButton.styleFrom(
                                 primary: Colors.red,
@@ -374,7 +379,28 @@ class _AkcijeCardState extends State<AkcijeCard> {
                             ),
                           ],
                         )
-                      : Container(),
+                      : widget.akcija.stateMachine == 'archived'
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    _confirmDeleteAction(context);
+                                  },
+                                  child: Text('Obriši akciju'),
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.red,
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 17),
+                                    side: BorderSide(color: Colors.white),
+                                    textStyle: TextStyle(
+                                      fontSize: 15.0,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Container(),
                 ],
               ),
             )),
@@ -596,6 +622,53 @@ class _AkcijeCardState extends State<AkcijeCard> {
     );
   }
 
+  void _confirmDeleteAction(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Color.fromARGB(255, 238, 247, 255),
+          title: Text(
+            'Potvrda brisanja',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+            ),
+          ),
+          content: Text('Da li ste sigurni da želite izbrisati ovu akciju?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                'Odustani',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                _obrisiAkciju();
+                Navigator.pop(context);
+              },
+              child: Text(
+                'Izbriši',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+            ),
+          ],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        );
+      },
+    );
+  }
+
   void _confirmArchiveAction(BuildContext context) {
     showDialog(
       context: context,
@@ -717,6 +790,211 @@ class _AkcijeCardState extends State<AkcijeCard> {
       await _akcijeProvider.activate(widget.akcija.akcijaId);
       _showAlertDialog(
           "Uspješno aktiviranje", "Akcija uspješno aktivirana.", Colors.green);
+    } catch (e) {
+      _showAlertDialog("Greška", e.toString(), Colors.red);
+    }
+  }
+
+  _urediAkciju() async {
+    var odabranaAkcija = widget.akcija;
+    final TextEditingController nazivController =
+        TextEditingController(text: odabranaAkcija.naziv);
+    final TextEditingController iznosController =
+        TextEditingController(text: odabranaAkcija.iznos.toString());
+
+    final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+                title: const Text('Ažuriraj akciju'),
+                content: SingleChildScrollView(
+                    child: Container(
+                  height: 500,
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: Column(children: [
+                    FormBuilder(
+                      key: _formKey,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                  constraints:
+                                      const BoxConstraints(maxWidth: 800),
+                                  child: Card(
+                                    color: Colors.white,
+                                    elevation: 50,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(12)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          const SizedBox(
+                                            height: 16,
+                                          ),
+                                          FormBuilderTextField(
+                                            name: 'naziv',
+                                            controller: nazivController,
+                                            decoration: const InputDecoration(
+                                              labelText: 'Naziv',
+                                              border: OutlineInputBorder(),
+                                            ),
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return 'Ovo polje je obavezno!';
+                                              }
+                                              if (!RegExp(r'^[A-Z]')
+                                                  .hasMatch(value)) {
+                                                return 'Naziv mora početi velikim slovom.';
+                                              }
+
+                                              return null;
+                                            },
+                                          ),
+                                          const SizedBox(height: 16),
+                                          FormBuilderTextField(
+                                            name: 'iznos',
+                                            controller: iznosController,
+                                            decoration: const InputDecoration(
+                                              labelText: 'Iznos',
+                                              border: OutlineInputBorder(),
+                                            ),
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return 'Ovo polje je obavezno!';
+                                              }
+                                              if (value != null &&
+                                                  !RegExp(r'^[0-9]+$')
+                                                      .hasMatch(value)) {
+                                                return 'Ovo polje može sadržavati samo brojeve.';
+                                              }
+
+                                              return null;
+                                            },
+                                          ),
+                                          const SizedBox(height: 16),
+                                          FormBuilderDateTimePicker(
+                                            name: 'datumPocetka',
+                                            inputType: InputType.date,
+                                            decoration: const InputDecoration(
+                                                labelText: 'Datum početka'),
+                                            format: DateFormat("yyyy-MM-dd"),
+                                            initialDate:
+                                                odabranaAkcija.datumPocetka,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                _pocetakAkcije = value;
+                                              });
+                                            },
+                                            validator:
+                                                FormBuilderValidators.compose([
+                                              (value) {
+                                                if (value == null) {
+                                                  return 'Ovo polje je obavezno!';
+                                                }
+                                                return null;
+                                              },
+                                            ]),
+                                          ),
+                                          const SizedBox(height: 16),
+                                          FormBuilderDateTimePicker(
+                                            name: 'datumZavrsetka',
+                                            inputType: InputType.date,
+                                            decoration: const InputDecoration(
+                                                labelText: 'Datum završetka'),
+                                            format: DateFormat("yyyy-MM-dd"),
+                                            initialDate:
+                                                odabranaAkcija.datumZavrsetka,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                _zavrsetakAkcije = value;
+                                              });
+                                            },
+                                            validator:
+                                                FormBuilderValidators.compose([
+                                              (value) {
+                                                if (value == null) {
+                                                  return 'Ovo polje je obavezno!';
+                                                }
+                                                return null;
+                                              },
+                                            ]),
+                                          ),
+                                          const SizedBox(height: 32),
+                                          ElevatedButton(
+                                            onPressed: () async {
+                                              if (_formKey.currentState!
+                                                  .validate()) {
+                                                if (odabranaAkcija != null) {
+                                                  Akcije akcija = Akcije(
+                                                      akcijaId: odabranaAkcija
+                                                          .akcijaId,
+                                                      naziv:
+                                                          nazivController.text,
+                                                      iznos: int.tryParse(
+                                                              iznosController
+                                                                  .text) ??
+                                                          0,
+                                                      datumPocetka:
+                                                          _pocetakAkcije ??
+                                                              odabranaAkcija
+                                                                  .datumPocetka,
+                                                      datumZavrsetka:
+                                                          _zavrsetakAkcije ??
+                                                              odabranaAkcija
+                                                                  .datumZavrsetka);
+
+                                                  _akcijeProvider.update(
+                                                      odabranaAkcija.akcijaId,
+                                                      akcija);
+                                                  _showAlertDialog(
+                                                      "Uspješan edit",
+                                                      "Podaci o akciji uspješno ažurirani.",
+                                                      Colors.green);
+                                                }
+                                              }
+                                            },
+                                            child: const Text('Sačuvaj'),
+                                            style: ElevatedButton.styleFrom(
+                                              primary: const Color.fromRGBO(
+                                                  0, 154, 231, 1),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 18,
+                                                      vertical: 15),
+                                              textStyle: const TextStyle(
+                                                fontSize: 14.0,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ))
+                            ]),
+                      ),
+                    )
+                  ]),
+                )));
+          });
+        });
+  }
+
+  void _obrisiAkciju() async {
+    try {
+      await _akcijeProvider.delete(widget.akcija.akcijaId);
+      _showAlertDialog(
+          "Uspješno brisanje", "Akcija uspješno izbrisana.", Colors.green);
     } catch (e) {
       _showAlertDialog("Greška", e.toString(), Colors.red);
     }

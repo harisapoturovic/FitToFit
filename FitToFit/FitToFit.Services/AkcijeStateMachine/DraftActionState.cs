@@ -24,7 +24,9 @@ namespace FitToFit.Services.AkcijeStateMachine
 
             _mapper.Map(request, entity);
 
-            if(entity.DatumZavrsetka<entity.DatumPocetka)
+            entity.StateMachine = "draft";
+
+            if (entity.DatumZavrsetka<entity.DatumPocetka)
             {
                 throw new UserException("Nedozvoljeno");
             }

@@ -1,5 +1,7 @@
+import 'package:fittofit_admin/models/acTrening.dart';
 import 'package:fittofit_admin/models/akcije.dart';
 import 'package:fittofit_admin/models/treninzi.dart';
+import 'package:fittofit_admin/providers/acTrening_provider.dart';
 import 'package:fittofit_admin/providers/akcije_provider.dart';
 import 'package:fittofit_admin/providers/treninzi_provider.dart';
 import 'package:fittofit_admin/widgets/action_card.dart';
@@ -19,6 +21,7 @@ class AkcijePage extends StatefulWidget {
 class _AkcijePageState extends State<AkcijePage> {
   late AkcijeProvider _akcijeProvider;
   late TreninziProvider _treninziProvider;
+  late AcTreningProvider _acTreningProvider = AcTreningProvider();
   TextEditingController _nazivController = new TextEditingController();
   List<Akcije> _aktivneAkcijeList = [];
   List<Akcije> _arhiviraneAkcijeList = [];
@@ -28,8 +31,9 @@ class _AkcijePageState extends State<AkcijePage> {
   DateTime? _selectedDate;
   DateTime? _pocetakAkcije;
   DateTime? _zavrsetakAkcije;
-  List<int> _selectedItems = [];
   List<String> nazivList = [];
+  Treninzi? _selectedTraining;
+  late AcTrening acTrening;
   List<int>? items;
   bool isActive = true;
   final _formKey = GlobalKey<FormBuilderState>();
@@ -66,6 +70,7 @@ class _AkcijePageState extends State<AkcijePage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    _acTreningProvider = context.watch<AcTreningProvider>();
   }
 
   @override
@@ -88,7 +93,9 @@ class _AkcijePageState extends State<AkcijePage> {
       ),
       title: "Akcije",
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          _showAddActionDialog();
+        },
         child: const Icon(Icons.add),
         backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
       ),
@@ -316,6 +323,282 @@ class _AkcijePageState extends State<AkcijePage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showAddActionDialog() {
+    acTrening = AcTrening();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Dodaj akciju'),
+          content: Container(
+            width: 400.0,
+            height: 600.0,
+            padding: const EdgeInsets.all(5.0),
+            margin: const EdgeInsets.only(left: 50, right: 50, top: 20),
+            child: SingleChildScrollView(
+              child: FormBuilder(
+                key: _formKey,
+                autovalidateMode: AutovalidateMode.always,
+                child: Column(
+                  children: [
+                    FormBuilderTextField(
+                      name: 'naziv',
+                      decoration: const InputDecoration(labelText: 'Naziv'),
+                      onChanged: (value) {
+                        setState(() {
+                          acTrening.naziv = value ?? '';
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Ovo polje je obavezno!';
+                        }
+                        if (!RegExp(r'^[A-Z]').hasMatch(value)) {
+                          return 'Naziv mora početi velikim slovom.';
+                        }
+
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 10.0),
+                    FormBuilderTextField(
+                      name: 'iznos',
+                      decoration: const InputDecoration(labelText: 'Iznos (%)'),
+                      keyboardType: TextInputType.number,
+                      onChanged: (value) {
+                        print('Input value: $value');
+                        if (value != null && value.isNotEmpty) {
+                          setState(() {
+                            try {
+                              acTrening.iznos = int.parse(value);
+                            } catch (e) {
+                              print('Error parsing integer: $e');
+                            }
+                          });
+                        } else {
+                          print('Input value is empty or null');
+                        }
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Ovo polje je obavezno!';
+                        }
+                        if (value != null &&
+                            !RegExp(r'^[0-9]+$').hasMatch(value)) {
+                          return 'Ovo polje može sadržavati samo brojeve.';
+                        }
+
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 10.0),
+                    FormBuilderDateTimePicker(
+                      name: 'datumPocetka',
+                      inputType: InputType.date,
+                      decoration: const InputDecoration(
+                          labelText: 'Datum početka akcije'),
+                      format: DateFormat("yyyy-MM-dd"),
+                      initialDate: _pocetakAkcije ?? DateTime.now(),
+                      onChanged: (value) {
+                        setState(() {
+                          acTrening.datumPocetka = value ?? DateTime.now();
+                        });
+                      },
+                      validator: FormBuilderValidators.compose([
+                        (value) {
+                          if (value == null) {
+                            return 'Ovo polje je obavezno!';
+                          }
+                          return null;
+                        },
+                      ]),
+                    ),
+                    FormBuilderDateTimePicker(
+                      name: 'datumZavrsetka',
+                      inputType: InputType.date,
+                      decoration: const InputDecoration(
+                          labelText: 'Datum završetka akcije'),
+                      format: DateFormat("yyyy-MM-dd"),
+                      initialDate: _zavrsetakAkcije ?? DateTime.now(),
+                      onChanged: (value) {
+                        setState(() {
+                          acTrening.datumZavrsetka = value ?? DateTime.now();
+                        });
+                      },
+                      validator: FormBuilderValidators.compose([
+                        (value) {
+                          if (value == null) {
+                            return 'Ovo polje je obavezno!';
+                          }
+                          return null;
+                        },
+                      ]),
+                    ),
+                    const SizedBox(height: 10.0),
+                    FormBuilderDropdown(
+                      name: 'items',
+                      decoration: const InputDecoration(labelText: 'Treninzi'),
+                      initialValue: _selectedTraining,
+                      items: _treninziList.map((trening) {
+                        return DropdownMenuItem(
+                          value: trening,
+                          child: Text(trening.naziv),
+                        );
+                      }).toList(),
+                      onChanged: (newValue) {
+                        setState(() {
+                          _selectedTraining = newValue as Treninzi;
+                        });
+
+                        if (_selectedTraining != null) {
+                          _acTreningProvider
+                              .addToAc(_selectedTraining as Treninzi);
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 10.0)
+                  ],
+                ),
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Odustani'),
+              style: ElevatedButton.styleFrom(
+                textStyle: const TextStyle(
+                  fontSize: 14.0,
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                List<Map<String, dynamic>> items = [];
+
+                _acTreningProvider.acTrening.items.forEach((item) {
+                  items.add(
+                    {"treningId": item.trening.treningId},
+                  );
+                  print("Dodani " + item.trening.naziv);
+                });
+
+                Map<String, dynamic> action = {
+                  "items": items,
+                  'naziv': acTrening.naziv,
+                  'datumPocetka': formatDateForJson(acTrening.datumPocetka),
+                  'datumZavrsetka': formatDateForJson(acTrening.datumZavrsetka),
+                  'iznos': acTrening.iznos
+                };
+
+                _formKey.currentState?.saveAndValidate();
+                final currentFormState = _formKey.currentState;
+                if (!_areAllFieldsFilled(currentFormState)) {
+                  _showAlertDialog("Upozorenje", "Popunite sva obavezna polja.",
+                      Colors.orange);
+                  return;
+                }
+                if (currentFormState != null) {
+                  if (!currentFormState.validate()) {
+                    _showAlertDialog(
+                        "Upozorenje",
+                        "Molimo vas da ispravno popunite sva obavezna polja.",
+                        Colors.orange);
+                    return;
+                  }
+                }
+
+                try {
+                  var response = await _akcijeProvider.insert(action);
+                  setState(() {});
+                  _showAlertDialog(
+                      "Uspješan unos", "Akcija uspješno dodana.", Colors.green);
+                } on Exception catch (e) {
+                  _showAlertDialog("Greška", e.toString(), Colors.red);
+                }
+              },
+              child: const Text('Spremi'),
+              style: ElevatedButton.styleFrom(
+                primary: const Color.fromRGBO(0, 154, 231, 1),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
+                textStyle: const TextStyle(
+                  fontSize: 14.0,
+                ),
+              ),
+            ),
+          ],
+          contentPadding: const EdgeInsets.symmetric(horizontal: 40.0),
+        );
+      },
+    );
+  }
+
+  bool _areAllFieldsFilled(FormBuilderState? formState) {
+    if (formState == null) {
+      return false;
+    }
+
+    List<String> requiredFields = [
+      'naziv',
+      'iznos',
+      'datumPocetka',
+      'datumZavrsetka'
+    ];
+
+    for (String fieldName in requiredFields) {
+      if (formState.fields[fieldName]?.value == null ||
+          formState.fields[fieldName]!.value.toString().isEmpty) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  String formatDateForJson(DateTime dateTime) {
+    return dateTime.toIso8601String();
+  }
+
+  void _showAlertDialog(String naslov, String poruka, Color boja) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        backgroundColor: const Color.fromARGB(255, 238, 247, 255),
+        title: Text(
+          naslov,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: boja,
+          ),
+        ),
+        content: Text(
+          poruka,
+          style: const TextStyle(
+            fontSize: 16.0,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            style: TextButton.styleFrom(
+              primary: Colors.blue,
+              textStyle: const TextStyle(
+                fontSize: 16.0,
+              ),
+            ),
+            child: const Text("OK"),
+          ),
+        ],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
       ),
     );
   }

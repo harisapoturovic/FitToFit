@@ -90,11 +90,15 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
   }
 
   void _loadData() async {
+    if (!mounted) return;
+    
     final treningid = widget.trening.treningId;
     var data = await _treninziProvider.getById(treningid);
     var vrsteTreninga = await _vrsteTreningaProvider.get(filter: {});
     var termini = await _terminiProvider
         .get(filter: {"TreningId": "${widget.trening.treningId}"});
+
+    if (!mounted) return;
     setState(() {
       odabraniTrening = data;
       _vrsteTreningaList = vrsteTreninga.result;

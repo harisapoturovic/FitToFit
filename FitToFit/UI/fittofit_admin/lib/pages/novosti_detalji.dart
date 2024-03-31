@@ -495,8 +495,6 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
         TextEditingController(text: novost.naslov);
     final TextEditingController sadrzajController =
         TextEditingController(text: novost.sadrzaj);
-    final TextEditingController vrstaTreningaController =
-        TextEditingController(text: novost.vrstaTreningaId.toString());
 
     final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
     await showDialog(
