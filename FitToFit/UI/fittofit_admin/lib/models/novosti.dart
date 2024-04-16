@@ -3,6 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'novosti.g.dart';
 
 @JsonSerializable()
+// ignore: invalid_annotation_target
 @JsonKey(name: 'isLiked')
 class Novosti {
   int novostId;

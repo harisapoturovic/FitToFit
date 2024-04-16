@@ -1,5 +1,4 @@
 import 'package:fittofit_admin/models/akcije.dart';
-import 'package:fittofit_admin/models/akcijeTreninzi.dart';
 import 'package:fittofit_admin/models/treninzi.dart';
 import 'package:fittofit_admin/providers/akcije_provider.dart';
 import 'package:fittofit_admin/providers/akcije_treninzi_provider.dart';
@@ -95,16 +94,18 @@ class _AkcijeCardState extends State<AkcijeCard> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  '${widget.akcija.naziv != null && widget.akcija.naziv.length > 20 ? widget.akcija.naziv.substring(0, 20) + '...' : widget.akcija.naziv}',
-                  style: TextStyle(
+                  widget.akcija.naziv.length > 20
+                      ? '${widget.akcija.naziv.substring(0, 20)}...'
+                      : widget.akcija.naziv,
+                  style: const TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
                       color: Color.fromARGB(255, 90, 90, 90)),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
-                  '${formatDate(widget.akcija.datumPocetka) + ' - ' + formatDate(widget.akcija.datumZavrsetka)}',
-                  style: TextStyle(fontSize: 16.0, color: Colors.grey),
+                  '${formatDate(widget.akcija.datumPocetka)} - ${formatDate(widget.akcija.datumZavrsetka)}',
+                  style: const TextStyle(fontSize: 16.0, color: Colors.grey),
                 )
               ],
             ),
@@ -127,10 +128,10 @@ class _AkcijeCardState extends State<AkcijeCard> {
             margin: const EdgeInsets.only(left: 50, right: 50, top: 30),
             child: SingleChildScrollView(
                 child: Card(
-              margin: EdgeInsets.all(10.0),
+              margin: const EdgeInsets.all(10.0),
               child: Column(
                 children: [
-                  ListTile(
+                  const ListTile(
                     title: Text(
                       'Treninzi koji su na akciji:',
                       style: TextStyle(
@@ -140,17 +141,17 @@ class _AkcijeCardState extends State<AkcijeCard> {
                       ),
                     ),
                   ),
-                  Divider(),
+                  const Divider(),
                   widget.akcija.akcijeTreninzis?.length != 0
                       ? ListView.builder(
                           itemCount: widget.akcija.akcijeTreninzis?.length ?? 0,
                           shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
                             return ListTile(
                               title: Text(
                                 '- ${widget.akcija.akcijeTreninzis?[index].trening?.naziv ?? 'empty'}',
-                                style: TextStyle(),
+                                style: const TextStyle(),
                               ),
                               trailing: GestureDetector(
                                 onTap: () {
@@ -164,18 +165,18 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                         "Greška", e.toString(), Colors.red);
                                   }
                                 },
-                                child: Icon(Icons.delete),
+                                child: const Icon(Icons.delete),
                               ),
                             );
                           },
                         )
-                      : Text("Nema treninga na akciji!",
+                      : const Text("Nema treninga na akciji!",
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: Color.fromARGB(255, 86, 86, 86),
                           )),
-                  SizedBox(
+                  const SizedBox(
                     height: 50,
                   ),
                   widget.akcija.stateMachine == 'active'
@@ -195,9 +196,9 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                     Colors.transparent),
                                 foregroundColor:
                                     MaterialStateProperty.all<Color>(
-                                        Color.fromARGB(255, 96, 96, 96)),
+                                        const Color.fromARGB(255, 96, 96, 96)),
                                 textStyle: MaterialStateProperty.all<TextStyle>(
-                                  TextStyle(
+                                  const TextStyle(
                                     decoration: TextDecoration.underline,
                                   ),
                                 ),
@@ -208,14 +209,14 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                     MaterialStateProperty.all<Size>(Size.zero),
                               ),
                               child: Row(
-                                children: [
+                                children: const [
                                   Text('Dodaj trening na akciju'),
                                   SizedBox(width: 5),
                                   Icon(Icons.add)
                                 ],
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 20,
                             ),
                             ElevatedButton(
@@ -231,9 +232,9 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                     Colors.transparent),
                                 foregroundColor:
                                     MaterialStateProperty.all<Color>(
-                                        Color.fromARGB(255, 96, 96, 96)),
+                                        const Color.fromARGB(255, 96, 96, 96)),
                                 textStyle: MaterialStateProperty.all<TextStyle>(
-                                  TextStyle(
+                                  const TextStyle(
                                     decoration: TextDecoration.underline,
                                   ),
                                 ),
@@ -244,7 +245,7 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                     MaterialStateProperty.all<Size>(Size.zero),
                               ),
                               child: Row(
-                                children: [
+                                children: const [
                                   Text('Arhiviraj akciju'),
                                   SizedBox(width: 5),
                                   Icon(Icons.history)
@@ -270,12 +271,12 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                     overlayColor:
                                         MaterialStateProperty.all<Color>(
                                             Colors.transparent),
-                                    foregroundColor:
-                                        MaterialStateProperty.all<Color>(
-                                            Color.fromARGB(255, 96, 96, 96)),
+                                    foregroundColor: MaterialStateProperty.all<
+                                            Color>(
+                                        const Color.fromARGB(255, 96, 96, 96)),
                                     textStyle:
                                         MaterialStateProperty.all<TextStyle>(
-                                      TextStyle(
+                                      const TextStyle(
                                         decoration: TextDecoration.underline,
                                       ),
                                     ),
@@ -288,14 +289,14 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                             Size.zero),
                                   ),
                                   child: Row(
-                                    children: [
+                                    children: const [
                                       Text('Dodaj trening na akciju'),
                                       SizedBox(width: 5),
                                       Icon(Icons.add)
                                     ],
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 20,
                                 ),
                                 ElevatedButton(
@@ -311,12 +312,12 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                     overlayColor:
                                         MaterialStateProperty.all<Color>(
                                             Colors.transparent),
-                                    foregroundColor:
-                                        MaterialStateProperty.all<Color>(
-                                            Color.fromARGB(255, 96, 96, 96)),
+                                    foregroundColor: MaterialStateProperty.all<
+                                            Color>(
+                                        const Color.fromARGB(255, 96, 96, 96)),
                                     textStyle:
                                         MaterialStateProperty.all<TextStyle>(
-                                      TextStyle(
+                                      const TextStyle(
                                         decoration: TextDecoration.underline,
                                       ),
                                     ),
@@ -329,7 +330,7 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                             Size.zero),
                                   ),
                                   child: Row(
-                                    children: [
+                                    children: const [
                                       Text('Aktiviraj akciju'),
                                       SizedBox(width: 5),
                                       Icon(Icons.open_in_new)
@@ -339,7 +340,7 @@ class _AkcijeCardState extends State<AkcijeCard> {
                               ],
                             )
                           : Container(),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   widget.akcija.stateMachine == 'draft'
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -348,34 +349,34 @@ class _AkcijeCardState extends State<AkcijeCard> {
                               onPressed: () {
                                 _urediAkciju();
                               },
-                              child: Text('Uredi akciju'),
                               style: ElevatedButton.styleFrom(
                                 primary: Colors.green,
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 17),
-                                side: BorderSide(color: Colors.white),
-                                textStyle: TextStyle(
+                                side: const BorderSide(color: Colors.white),
+                                textStyle: const TextStyle(
                                   fontSize: 15.0,
                                 ),
                               ),
+                              child: const Text('Uredi akciju'),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
                             ElevatedButton(
                               onPressed: () {
                                 _confirmDeleteAction(context);
                               },
-                              child: Text('Obriši akciju'),
                               style: ElevatedButton.styleFrom(
                                 primary: Colors.red,
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 17),
-                                side: BorderSide(color: Colors.white),
-                                textStyle: TextStyle(
+                                side: const BorderSide(color: Colors.white),
+                                textStyle: const TextStyle(
                                   fontSize: 15.0,
                                 ),
                               ),
+                              child: const Text('Obriši akciju'),
                             ),
                           ],
                         )
@@ -387,16 +388,16 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                   onPressed: () {
                                     _confirmDeleteAction(context);
                                   },
-                                  child: Text('Obriši akciju'),
                                   style: ElevatedButton.styleFrom(
                                     primary: Colors.red,
-                                    padding: EdgeInsets.symmetric(
+                                    padding: const EdgeInsets.symmetric(
                                         horizontal: 20, vertical: 17),
-                                    side: BorderSide(color: Colors.white),
-                                    textStyle: TextStyle(
+                                    side: const BorderSide(color: Colors.white),
+                                    textStyle: const TextStyle(
                                       fontSize: 15.0,
                                     ),
                                   ),
+                                  child: const Text('Obriši akciju'),
                                 ),
                               ],
                             )
@@ -424,7 +425,7 @@ class _AkcijeCardState extends State<AkcijeCard> {
             margin: const EdgeInsets.only(left: 50, right: 50, top: 20),
             child: SingleChildScrollView(
                 child: Card(
-              margin: EdgeInsets.all(10.0),
+              margin: const EdgeInsets.all(10.0),
               child: FormBuilder(
                 key: _formKey,
                 autovalidateMode: AutovalidateMode.always,
@@ -451,18 +452,17 @@ class _AkcijeCardState extends State<AkcijeCard> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Odustani'),
               style: ElevatedButton.styleFrom(
                 textStyle: const TextStyle(
                   fontSize: 14.0,
                 ),
               ),
+              child: const Text('Odustani'),
             ),
             ElevatedButton(
               onPressed: () {
                 _dodajTreningNaAkciju();
               },
-              child: const Text('Spremi'),
               style: ElevatedButton.styleFrom(
                 primary: const Color.fromRGBO(0, 154, 231, 1),
                 padding:
@@ -471,6 +471,7 @@ class _AkcijeCardState extends State<AkcijeCard> {
                   fontSize: 14.0,
                 ),
               ),
+              child: const Text('Spremi'),
             ),
           ],
           contentPadding: const EdgeInsets.symmetric(horizontal: 40.0),
@@ -579,22 +580,22 @@ class _AkcijeCardState extends State<AkcijeCard> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Color.fromARGB(255, 238, 247, 255),
-          title: Text(
+          backgroundColor: const Color.fromARGB(255, 238, 247, 255),
+          title: const Text(
             'Potvrda brisanja',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.red,
             ),
           ),
-          content:
-              Text('Da li ste sigurni da želite ukloniti trening sa akcije?'),
+          content: const Text(
+              'Da li ste sigurni da želite ukloniti trening sa akcije?'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text(
+              child: const Text(
                 'Odustani',
                 style: TextStyle(
                   fontSize: 16.0,
@@ -606,7 +607,7 @@ class _AkcijeCardState extends State<AkcijeCard> {
                 _ukloniTrening(akcijaTreningId);
                 Navigator.pop(context);
               },
-              child: Text(
+              child: const Text(
                 'Ukoni',
                 style: TextStyle(
                   fontSize: 16.0,
@@ -627,21 +628,22 @@ class _AkcijeCardState extends State<AkcijeCard> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Color.fromARGB(255, 238, 247, 255),
-          title: Text(
+          backgroundColor: const Color.fromARGB(255, 238, 247, 255),
+          title: const Text(
             'Potvrda brisanja',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.red,
             ),
           ),
-          content: Text('Da li ste sigurni da želite izbrisati ovu akciju?'),
+          content:
+              const Text('Da li ste sigurni da želite izbrisati ovu akciju?'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text(
+              child: const Text(
                 'Odustani',
                 style: TextStyle(
                   fontSize: 16.0,
@@ -653,7 +655,7 @@ class _AkcijeCardState extends State<AkcijeCard> {
                 _obrisiAkciju();
                 Navigator.pop(context);
               },
-              child: Text(
+              child: const Text(
                 'Izbriši',
                 style: TextStyle(
                   fontSize: 16.0,
@@ -674,21 +676,21 @@ class _AkcijeCardState extends State<AkcijeCard> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Color.fromARGB(255, 238, 247, 255),
-          title: Text(
+          backgroundColor: const Color.fromARGB(255, 238, 247, 255),
+          title: const Text(
             'Potvrda arhiviranja',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.red,
             ),
           ),
-          content: Text('Da li ste sigurni da želite arhivirati akciju?'),
+          content: const Text('Da li ste sigurni da želite arhivirati akciju?'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text(
+              child: const Text(
                 'Odustani',
                 style: TextStyle(
                   fontSize: 16.0,
@@ -700,7 +702,7 @@ class _AkcijeCardState extends State<AkcijeCard> {
                 _arhivirajAkciju();
                 Navigator.pop(context);
               },
-              child: Text(
+              child: const Text(
                 'Arhiviraj',
                 style: TextStyle(
                   fontSize: 16.0,
@@ -721,21 +723,21 @@ class _AkcijeCardState extends State<AkcijeCard> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Color.fromARGB(255, 238, 247, 255),
-          title: Text(
+          backgroundColor: const Color.fromARGB(255, 238, 247, 255),
+          title: const Text(
             'Potvrda aktiviranja',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.red,
             ),
           ),
-          content: Text('Da li ste sigurni da želite aktivirati akciju?'),
+          content: const Text('Da li ste sigurni da želite aktivirati akciju?'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text(
+              child: const Text(
                 'Odustani',
                 style: TextStyle(
                   fontSize: 16.0,
@@ -747,7 +749,7 @@ class _AkcijeCardState extends State<AkcijeCard> {
                 _aktivirajAkciju();
                 Navigator.pop(context);
               },
-              child: Text(
+              child: const Text(
                 'Aktiviraj',
                 style: TextStyle(
                   fontSize: 16.0,
@@ -802,7 +804,7 @@ class _AkcijeCardState extends State<AkcijeCard> {
     final TextEditingController iznosController =
         TextEditingController(text: odabranaAkcija.iznos.toString());
 
-    final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+    final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
     await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -815,7 +817,7 @@ class _AkcijeCardState extends State<AkcijeCard> {
                   width: MediaQuery.of(context).size.width * 0.3,
                   child: Column(children: [
                     FormBuilder(
-                      key: _formKey,
+                      key: formKey,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
@@ -873,9 +875,8 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                                   value.isEmpty) {
                                                 return 'Ovo polje je obavezno!';
                                               }
-                                              if (value != null &&
-                                                  !RegExp(r'^[0-9]+$')
-                                                      .hasMatch(value)) {
+                                              if (!RegExp(r'^[0-9]+$')
+                                                  .hasMatch(value)) {
                                                 return 'Ovo polje može sadržavati samo brojeve.';
                                               }
 
@@ -933,38 +934,34 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                           const SizedBox(height: 32),
                                           ElevatedButton(
                                             onPressed: () async {
-                                              if (_formKey.currentState!
+                                              if (formKey.currentState!
                                                   .validate()) {
-                                                if (odabranaAkcija != null) {
-                                                  Akcije akcija = Akcije(
-                                                      akcijaId: odabranaAkcija
-                                                          .akcijaId,
-                                                      naziv:
-                                                          nazivController.text,
-                                                      iznos: int.tryParse(
-                                                              iznosController
-                                                                  .text) ??
-                                                          0,
-                                                      datumPocetka:
-                                                          _pocetakAkcije ??
-                                                              odabranaAkcija
-                                                                  .datumPocetka,
-                                                      datumZavrsetka:
-                                                          _zavrsetakAkcije ??
-                                                              odabranaAkcija
-                                                                  .datumZavrsetka);
+                                                Akcije akcija = Akcije(
+                                                    akcijaId:
+                                                        odabranaAkcija.akcijaId,
+                                                    naziv: nazivController.text,
+                                                    iznos: int.tryParse(
+                                                            iznosController
+                                                                .text) ??
+                                                        0,
+                                                    datumPocetka:
+                                                        _pocetakAkcije ??
+                                                            odabranaAkcija
+                                                                .datumPocetka,
+                                                    datumZavrsetka:
+                                                        _zavrsetakAkcije ??
+                                                            odabranaAkcija
+                                                                .datumZavrsetka);
 
-                                                  _akcijeProvider.update(
-                                                      odabranaAkcija.akcijaId,
-                                                      akcija);
-                                                  _showAlertDialog(
-                                                      "Uspješan edit",
-                                                      "Podaci o akciji uspješno ažurirani.",
-                                                      Colors.green);
-                                                }
+                                                _akcijeProvider.update(
+                                                    odabranaAkcija.akcijaId,
+                                                    akcija);
+                                                _showAlertDialog(
+                                                    "Uspješan edit",
+                                                    "Podaci o akciji uspješno ažurirani.",
+                                                    Colors.green);
                                               }
                                             },
-                                            child: const Text('Sačuvaj'),
                                             style: ElevatedButton.styleFrom(
                                               primary: const Color.fromRGBO(
                                                   0, 154, 231, 1),
@@ -976,6 +973,7 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                                 fontSize: 14.0,
                                               ),
                                             ),
+                                            child: const Text('Sačuvaj'),
                                           ),
                                         ],
                                       ),

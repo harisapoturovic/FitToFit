@@ -22,7 +22,7 @@ class TreninziPage extends StatefulWidget {
 class _TreninziPageState extends State<TreninziPage> {
   late VrsteTreningaProvider _vrsteTreningaProvider;
   late TreninziProvider _treninziProvider;
-  TextEditingController _nazivController = new TextEditingController();
+  final TextEditingController _nazivController = TextEditingController();
   List<VrsteTreninga> _vrsteTreningaList = [];
   List<Treninzi> _treninziList = [];
   String? _selectedType;
@@ -39,7 +39,8 @@ class _TreninziPageState extends State<TreninziPage> {
   }
 
   void _loadData() async {
-    var vrsteTreninga = await _vrsteTreningaProvider.get(filter: {'IsTerminiIncluded':true});
+    var vrsteTreninga =
+        await _vrsteTreningaProvider.get(filter: {'IsTerminiIncluded': true});
     var treninzi = await _treninziProvider.get(filter: {});
     setState(() {
       _vrsteTreningaList = vrsteTreninga.result;
@@ -64,22 +65,22 @@ class _TreninziPageState extends State<TreninziPage> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-      child: Column(
-        children: [
-          Container(child: _searchWidgets()),
-          SizedBox(height: 10),
-          Expanded(
-            child: _listOfTrainings(),
-          ),
-        ],
-      ),
       title: "Treninzi",
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _showAddTrainingsDialog();
         },
-        child: const Icon(Icons.add),
         backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
+        child: const Icon(Icons.add),
+      ),
+      child: Column(
+        children: [
+          Container(child: _searchWidgets()),
+          const SizedBox(height: 10),
+          Expanded(
+            child: _listOfTrainings(),
+          ),
+        ],
       ),
     );
   }
@@ -89,12 +90,13 @@ class _TreninziPageState extends State<TreninziPage> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 500.0, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 500.0, vertical: 20),
           child: Row(
             children: [
               Expanded(
                 child: TextField(
-                  decoration: InputDecoration(labelText: "Naziv treninga"),
+                  decoration:
+                      const InputDecoration(labelText: "Naziv treninga"),
                   controller: _nazivController,
                 ),
               ),
@@ -109,19 +111,19 @@ class _TreninziPageState extends State<TreninziPage> {
                     _treninziList = data.result;
                   });
                 },
-                child: Text("Pretraži"),
+                child: const Text("Pretraži"),
               ),
             ],
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 520.0),
+          padding: const EdgeInsets.symmetric(horizontal: 520.0),
           child: Row(
             children: _vrsteTreningaList.map((vrsta) {
               bool isSelected = vrsta.naziv == _selectedType;
               return Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: TextButton(
                   onPressed: () {
                     setState(() {
@@ -132,13 +134,13 @@ class _TreninziPageState extends State<TreninziPage> {
                     textStyle:
                         MaterialStateProperty.resolveWith<TextStyle>((states) {
                       if (isSelected) {
-                        return TextStyle(
+                        return const TextStyle(
                           fontWeight: FontWeight.bold,
                           decoration: TextDecoration.underline,
                           fontSize: 18,
                         );
                       } else {
-                        return TextStyle(
+                        return const TextStyle(
                           fontWeight: FontWeight.normal,
                           fontSize: 16,
                         );
@@ -156,13 +158,13 @@ class _TreninziPageState extends State<TreninziPage> {
   }
 
   Widget _listOfTrainings() {
-    ScrollController _scrollController = ScrollController();
+    ScrollController scrollController = ScrollController();
 
     return Container(
-      margin: EdgeInsets.only(bottom: 80, left: 50, right: 50, top: 100),
+      margin: const EdgeInsets.only(bottom: 80, left: 50, right: 50, top: 100),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 238, 245, 248),
+        color: const Color.fromARGB(255, 238, 245, 248),
         border: Border.all(
           color: Colors.grey,
           width: 1.0,
@@ -172,12 +174,11 @@ class _TreninziPageState extends State<TreninziPage> {
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Scrollbar(
-          isAlwaysShown: true,
-          controller: _scrollController,
+          controller: scrollController,
           child: ListView(
-            controller: _scrollController,
+            controller: scrollController,
             scrollDirection: Axis.horizontal,
-            physics: AlwaysScrollableScrollPhysics(),
+            physics: const AlwaysScrollableScrollPhysics(),
             children: _treninziList.map((training) {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -185,7 +186,7 @@ class _TreninziPageState extends State<TreninziPage> {
                   width: 300,
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: Color.fromARGB(255, 225, 225, 225),
+                      color: const Color.fromARGB(255, 225, 225, 225),
                       width: 1.0,
                     ),
                     borderRadius: BorderRadius.circular(10.0),
@@ -258,8 +259,7 @@ class _TreninziPageState extends State<TreninziPage> {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
                         }
-                        if (value != null &&
-                            !RegExp(r'^[0-9]+$').hasMatch(value)) {
+                        if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
                           return 'Ovo polje može sadržavati samo brojeve.';
                         }
 
@@ -269,14 +269,14 @@ class _TreninziPageState extends State<TreninziPage> {
                     const SizedBox(height: 10.0),
                     FormBuilderTextField(
                       name: 'cijenaPoTerminu',
-                      decoration:
-                          const InputDecoration(labelText: 'Cijena po terminu (KM)'),
+                      decoration: const InputDecoration(
+                          labelText: 'Cijena po terminu (KM)'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
                         }
-                        if (value != null &&
-                            !RegExp(r'^[0-9]+(?:[.,][0-9]+)*$').hasMatch(value)) {
+                        if (!RegExp(r'^[0-9]+(?:[.,][0-9]+)*$')
+                            .hasMatch(value)) {
                           return 'Ovo polje ne može sadržavati slova.';
                         }
 
@@ -286,7 +286,8 @@ class _TreninziPageState extends State<TreninziPage> {
                     const SizedBox(height: 10.0),
                     FormBuilderTextField(
                       name: 'trajanje',
-                      decoration: const InputDecoration(labelText: 'Trajanje (min/h)'),
+                      decoration:
+                          const InputDecoration(labelText: 'Trajanje (min/h)'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
@@ -304,8 +305,8 @@ class _TreninziPageState extends State<TreninziPage> {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
                         }
-                        if (value != null &&
-                            !RegExp(r'^[0-9]+(?:[.,][0-9]+)*$').hasMatch(value)) {
+                        if (!RegExp(r'^[0-9]+(?:[.,][0-9]+)*$')
+                            .hasMatch(value)) {
                           return 'Ovo polje ne može sadržavati slova.';
                         }
 
@@ -367,18 +368,17 @@ class _TreninziPageState extends State<TreninziPage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Odustani'),
               style: ElevatedButton.styleFrom(
                 textStyle: const TextStyle(
                   fontSize: 14.0,
                 ),
               ),
+              child: const Text('Odustani'),
             ),
             ElevatedButton(
               onPressed: () {
                 _dodajTrening();
               },
-              child: const Text('Spremi'),
               style: ElevatedButton.styleFrom(
                 primary: const Color.fromRGBO(0, 154, 231, 1),
                 padding:
@@ -387,6 +387,7 @@ class _TreninziPageState extends State<TreninziPage> {
                   fontSize: 14.0,
                 ),
               ),
+              child: const Text('Spremi'),
             ),
           ],
           contentPadding: const EdgeInsets.symmetric(horizontal: 40.0),

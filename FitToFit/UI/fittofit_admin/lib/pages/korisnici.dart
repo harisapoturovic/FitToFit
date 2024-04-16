@@ -30,13 +30,14 @@ class _KorisniciPageState extends State<KorisniciPage> {
   SearchResult<Treneri>? treneriResult;
   late final Treneri? trener;
   bool isLoading = true;
-  ScrollController _userListController = ScrollController();
-  ScrollController _trainerListController = ScrollController();
-  TextEditingController _imeKorisnikaController = new TextEditingController();
-  TextEditingController _prezimeKorisnikaController =
-      new TextEditingController();
-  TextEditingController _imeTreneraController = new TextEditingController();
-  TextEditingController _prezimeTreneraController = new TextEditingController();
+  final ScrollController _userListController = ScrollController();
+  final ScrollController _trainerListController = ScrollController();
+  final TextEditingController _imeKorisnikaController = TextEditingController();
+  final TextEditingController _prezimeKorisnikaController =
+      TextEditingController();
+  final TextEditingController _imeTreneraController = TextEditingController();
+  final TextEditingController _prezimeTreneraController =
+      TextEditingController();
   DateTime? _selectedDate;
   final _formKey = GlobalKey<FormBuilderState>();
 
@@ -85,6 +86,14 @@ class _KorisniciPageState extends State<KorisniciPage> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
+      title: "Korisnici & treneri",
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _showAddTrainerDialog();
+        },
+        backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
+        child: const Icon(Icons.add),
+      ),
       child: Row(
         children: [
           Expanded(
@@ -181,14 +190,6 @@ class _KorisniciPageState extends State<KorisniciPage> {
             ),
           ),
         ],
-      ),
-      title: "Korisnici & treneri",
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showAddTrainerDialog();
-        },
-        child: const Icon(Icons.add),
-        backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
       ),
     );
   }
@@ -445,7 +446,7 @@ class _KorisniciPageState extends State<KorisniciPage> {
                       decoration: const InputDecoration(labelText: 'Adresa'),
                       validator: (value) {
                         if (value != null &&
-                            !value.isEmpty &&
+                            value.isNotEmpty &&
                             !RegExp(r'^[A-Z]').hasMatch(value)) {
                           return 'Adresa mora početi velikim slovom.';
                         }
@@ -480,7 +481,7 @@ class _KorisniciPageState extends State<KorisniciPage> {
                       decoration: const InputDecoration(labelText: 'Zvanje'),
                       validator: (value) {
                         if (value != null &&
-                            !value.isEmpty &&
+                            value.isNotEmpty &&
                             !RegExp(r'^[A-Z]').hasMatch(value)) {
                           return 'Zvanje mora početi velikim slovom.';
                         }
@@ -515,18 +516,17 @@ class _KorisniciPageState extends State<KorisniciPage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Odustani'),
               style: ElevatedButton.styleFrom(
                 textStyle: const TextStyle(
                   fontSize: 14.0,
                 ),
               ),
+              child: const Text('Odustani'),
             ),
             ElevatedButton(
               onPressed: () {
                 _dodajTrenera();
               },
-              child: const Text('Spremi'),
               style: ElevatedButton.styleFrom(
                 primary: const Color.fromRGBO(0, 154, 231, 1),
                 padding:
@@ -535,6 +535,7 @@ class _KorisniciPageState extends State<KorisniciPage> {
                   fontSize: 14.0,
                 ),
               ),
+              child: const Text('Spremi'),
             ),
           ],
           contentPadding: const EdgeInsets.symmetric(horizontal: 40.0),

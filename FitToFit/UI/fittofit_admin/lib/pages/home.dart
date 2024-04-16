@@ -33,9 +33,7 @@ class _HomePageState extends State<HomePage> {
   SearchResult<Korisnici>? korisniciResult;
   SearchResult<VrsteTreninga>? vrsteTreningaResult;
   SearchResult<Treneri>? treneriResult;
-  TextEditingController _naslovController = new TextEditingController();
-  TextEditingController _vrstaTrController = new TextEditingController();
-  TextEditingController _treneriController = new TextEditingController();
+  final TextEditingController _naslovController = TextEditingController();
   List<VrsteTreninga> _vrsteTreningaList = [];
   List<Novosti> _novostiList = [];
   int? _selectedVrstaTreninga;
@@ -87,54 +85,53 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              children: [Dashboard()],
+        title: "Početna",
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            _showAddNewsDialog();
+          },
+          backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
+          child: const Icon(Icons.add),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                children: [Dashboard()],
+              ),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 50.0),
-            child: VerticalDivider(
-              color: Colors.grey,
-              thickness: 1.0,
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 50.0),
+              child: VerticalDivider(
+                color: Colors.grey,
+                thickness: 1.0,
+              ),
             ),
-          ),
-          Expanded(
-            child: Column(
-              children: [_buildSearch(), _buildDataListView()],
+            Expanded(
+              child: Column(
+                children: [_buildSearch(), _buildDataListView()],
+              ),
             ),
-          ),
-        ],
-      ),
-      title: "Početna",
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showAddNewsDialog();
-        },
-        child: Icon(Icons.add),
-        backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
-      )
-    );
+          ],
+        ));
   }
 
   Widget _buildSearch() {
     return Padding(
-      padding: EdgeInsets.only(top: 80, left: 30, right: 30),
+      padding: const EdgeInsets.only(top: 80, left: 30, right: 30),
       child: Row(children: [
         Expanded(
           child: TextField(
-            decoration: InputDecoration(labelText: "Naslov"),
+            decoration: const InputDecoration(labelText: "Naslov"),
             controller: _naslovController,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 10,
         ),
         Expanded(
           child: DropdownButtonFormField(
-            decoration: InputDecoration(labelText: "Vrsta treninga"),
+            decoration: const InputDecoration(labelText: "Vrsta treninga"),
             //value: _vrsteTreningaList[0].vrstaTreningaId,
             items: _vrsteTreningaList.map((VrsteTreninga vrsta) {
               return DropdownMenuItem(
@@ -149,7 +146,7 @@ class _HomePageState extends State<HomePage> {
             },
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 8,
         ),
         ElevatedButton(
@@ -163,12 +160,12 @@ class _HomePageState extends State<HomePage> {
               _novostiList = data.result;
             });
           },
-          child: Text("Pretraži"),
           style: ElevatedButton.styleFrom(
-            primary: Color.fromRGBO(0, 154, 231, 1),
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 17),
-            side: BorderSide(color: Colors.white),
+            primary: const Color.fromRGBO(0, 154, 231, 1),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 17),
+            side: const BorderSide(color: Colors.white),
           ),
+          child: const Text("Pretraži"),
         )
       ]),
     );
@@ -179,34 +176,34 @@ class _HomePageState extends State<HomePage> {
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Container(
-          margin: EdgeInsets.symmetric(vertical: 30.0),
+          margin: const EdgeInsets.symmetric(vertical: 30.0),
           child: Column(
             children: _novostiList
                 .map((Novosti e) => Column(
                       children: [
                         Container(
-                          margin: EdgeInsets.symmetric(horizontal: 60.0),
+                          margin: const EdgeInsets.symmetric(horizontal: 60.0),
                           child: ListTile(
-                            contentPadding: EdgeInsets.only(left: 20),
+                            contentPadding: const EdgeInsets.only(left: 20),
                             tileColor: Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
-                              side: BorderSide(color: Colors.grey),
+                              side: const BorderSide(color: Colors.grey),
                             ),
                             title: Row(
                               children: [
                                 Text(
-                                  '${e.naslov}',
-                                  style: TextStyle(
+                                  e.naslov,
+                                  style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18.0,
                                     color: Color.fromRGBO(0, 154, 231, 1),
                                   ),
                                 ),
-                                Text('   |   '),
+                                const Text('   |   '),
                                 Text(
-                                  '${formatDate(e.datumObjave)}',
-                                  style: TextStyle(
+                                  formatDate(e.datumObjave),
+                                  style: const TextStyle(
                                     fontSize: 15.0,
                                     color: Color.fromRGBO(0, 154, 231, 1),
                                   ),
@@ -216,15 +213,17 @@ class _HomePageState extends State<HomePage> {
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SizedBox(height: 5.0),
+                                const SizedBox(height: 5.0),
                                 Text(
-                                  '${e.sadrzaj != null && e.sadrzaj!.length > 80 ? e.sadrzaj!.substring(0, 80) + '...' : e.sadrzaj ?? ''}',
+                                  e.sadrzaj != null && e.sadrzaj!.length > 80
+                                      ? '${e.sadrzaj!.substring(0, 80)}...'
+                                      : e.sadrzaj ?? '',
                                 ),
                               ],
                             ),
                             trailing: Container(
-                              margin: EdgeInsets.only(right: 30.0),
-                              child: Text(
+                              margin: const EdgeInsets.only(right: 30.0),
+                              child: const Text(
                                 '>',
                                 style: TextStyle(
                                   fontSize: 30.0,
@@ -245,7 +244,7 @@ class _HomePageState extends State<HomePage> {
                             },
                           ),
                         ),
-                        SizedBox(height: 8.0)
+                        const SizedBox(height: 8.0)
                       ],
                     ))
                 .toList(),
@@ -261,7 +260,7 @@ class _HomePageState extends State<HomePage> {
 
   Dashboard() {
     return Container(
-      padding: EdgeInsets.only(top: 100),
+      padding: const EdgeInsets.only(top: 100),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -277,17 +276,17 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.black54.withBlue(70)),
             ),
           ),
-          SizedBox(height: 24),
+          const SizedBox(height: 24),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // First block
               Container(
-                margin: EdgeInsets.only(right: 8),
+                margin: const EdgeInsets.only(right: 8),
                 width: MediaQuery.of(context).size.width * 0.22,
                 height: 200,
                 child: DashboardBlock(
-                    color: Color.fromARGB(255, 160, 203, 255),
+                    color: const Color.fromARGB(255, 160, 203, 255),
                     title: 'BROJ KORISNIKA',
                     content: brojKorisnika.toString()),
               ),
@@ -296,12 +295,12 @@ class _HomePageState extends State<HomePage> {
                   width: MediaQuery.of(context).size.width * 0.22,
                   height: 200,
                   child: DashboardBlock(
-                      color: Color.fromARGB(255, 242, 239, 152),
+                      color: const Color.fromARGB(255, 242, 239, 152),
                       title: 'BROJ TRENERA',
                       content: brojTrenera.toString())),
             ],
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.only(top: 50),
             child: Row(
@@ -312,7 +311,7 @@ class _HomePageState extends State<HomePage> {
                   width: MediaQuery.of(context).size.width * 0.45,
                   height: 140,
                   child: DashboardBlock(
-                      color: Color.fromARGB(255, 248, 166, 133),
+                      color: const Color.fromARGB(255, 248, 166, 133),
                       title: 'TRENUTNO AKTIVNIH REZERVACIJA',
                       content: brojRezervacija.toString()),
                 ),
@@ -409,18 +408,17 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Odustani'),
               style: ElevatedButton.styleFrom(
                 textStyle: const TextStyle(
                   fontSize: 14.0,
                 ),
               ),
+              child: const Text('Odustani'),
             ),
             ElevatedButton(
               onPressed: () {
                 _dodajNovost();
               },
-              child: const Text('Spremi'),
               style: ElevatedButton.styleFrom(
                 primary: const Color.fromRGBO(0, 154, 231, 1),
                 padding:
@@ -429,6 +427,7 @@ class _HomePageState extends State<HomePage> {
                   fontSize: 14.0,
                 ),
               ),
+              child: const Text('Spremi'),
             ),
           ],
           contentPadding: const EdgeInsets.symmetric(horizontal: 40.0),
@@ -546,7 +545,7 @@ class DashboardBlock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 7),
+      margin: const EdgeInsets.symmetric(horizontal: 7),
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(12),
@@ -555,7 +554,7 @@ class DashboardBlock extends StatelessWidget {
             color: color.withOpacity(0.5),
             spreadRadius: 3,
             blurRadius: 7,
-            offset: Offset(0, 3),
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -569,7 +568,7 @@ class DashboardBlock extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   color: textColor,
                   fontStyle: FontStyle.italic)),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           Text(
             content,
             style: TextStyle(

@@ -22,7 +22,7 @@ class _AkcijePageState extends State<AkcijePage> {
   late AkcijeProvider _akcijeProvider;
   late TreninziProvider _treninziProvider;
   late AcTreningProvider _acTreningProvider = AcTreningProvider();
-  TextEditingController _nazivController = new TextEditingController();
+  final TextEditingController _nazivController = TextEditingController();
   List<Akcije> _aktivneAkcijeList = [];
   List<Akcije> _arhiviraneAkcijeList = [];
   List<Akcije> _draftAkcijeList = [];
@@ -76,11 +76,19 @@ class _AkcijePageState extends State<AkcijePage> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
+      title: "Akcije",
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _showAddActionDialog();
+        },
+        backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
+        child: const Icon(Icons.add),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(child: _searchWidgets()),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Expanded(
             flex: 4,
             child: _listOfActiveActions(),
@@ -90,14 +98,6 @@ class _AkcijePageState extends State<AkcijePage> {
             child: _listOfArchivedActions(),
           ),
         ],
-      ),
-      title: "Akcije",
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showAddActionDialog();
-        },
-        child: const Icon(Icons.add),
-        backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
       ),
     );
   }
@@ -121,15 +121,15 @@ class _AkcijePageState extends State<AkcijePage> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(
-                    color: const Color.fromRGBO(0, 154, 231, 1),
+                  borderSide: const BorderSide(
+                    color: Color.fromRGBO(0, 154, 231, 1),
                   ),
                 ),
               ),
               controller: _nazivController,
             ),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(left: 50),
@@ -146,7 +146,7 @@ class _AkcijePageState extends State<AkcijePage> {
                   }),
             ),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(left: 50, right: 130),
@@ -181,12 +181,13 @@ class _AkcijePageState extends State<AkcijePage> {
                     }
                   });
                 },
-                child: Text("Pretraži"),
                 style: ElevatedButton.styleFrom(
-                  primary: Color.fromRGBO(0, 154, 231, 1),
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 17),
-                  side: BorderSide(color: Colors.white),
+                  primary: const Color.fromRGBO(0, 154, 231, 1),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 17),
+                  side: const BorderSide(color: Colors.white),
                 ),
+                child: const Text("Pretraži"),
               ),
             ),
           )
@@ -196,7 +197,7 @@ class _AkcijePageState extends State<AkcijePage> {
   }
 
   Widget _listOfActiveActions() {
-    ScrollController _scrollController = ScrollController();
+    ScrollController scrollController = ScrollController();
 
     return Padding(
       padding: const EdgeInsets.all(10.0),
@@ -218,13 +219,13 @@ class _AkcijePageState extends State<AkcijePage> {
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
                       color: isActive
-                          ? Color.fromARGB(255, 46, 142, 50)
+                          ? const Color.fromARGB(255, 46, 142, 50)
                           : Colors.grey),
                 ),
               ),
-              SizedBox(width: 10),
-              Text('/'),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
+              const Text('/'),
+              const SizedBox(width: 10),
               GestureDetector(
                 onTap: () {
                   setState(() {
@@ -242,15 +243,14 @@ class _AkcijePageState extends State<AkcijePage> {
               ),
             ],
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Expanded(
             child: Scrollbar(
-              isAlwaysShown: true,
-              controller: _scrollController,
+              controller: scrollController,
               child: ListView(
-                  controller: _scrollController,
+                  controller: scrollController,
                   scrollDirection: Axis.horizontal,
-                  physics: AlwaysScrollableScrollPhysics(),
+                  physics: const AlwaysScrollableScrollPhysics(),
                   children: _selectedAkcije.map((akcija) {
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -258,7 +258,7 @@ class _AkcijePageState extends State<AkcijePage> {
                         width: 300,
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: Color.fromARGB(255, 225, 225, 225),
+                            color: const Color.fromARGB(255, 225, 225, 225),
                             width: 1.0,
                           ),
                           borderRadius: BorderRadius.circular(10.0),
@@ -278,29 +278,28 @@ class _AkcijePageState extends State<AkcijePage> {
   }
 
   Widget _listOfArchivedActions() {
-    ScrollController _scrollController = ScrollController();
+    ScrollController scrollController = ScrollController();
 
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Arhiva',
             style: TextStyle(
                 fontSize: 20.0,
                 fontWeight: FontWeight.bold,
                 color: Color.fromARGB(255, 94, 94, 94)),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Expanded(
             child: Scrollbar(
-              isAlwaysShown: true,
-              controller: _scrollController,
+              controller: scrollController,
               child: ListView(
-                controller: _scrollController,
+                controller: scrollController,
                 scrollDirection: Axis.horizontal,
-                physics: AlwaysScrollableScrollPhysics(),
+                physics: const AlwaysScrollableScrollPhysics(),
                 children: _arhiviraneAkcijeList.map((akcija) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -308,7 +307,7 @@ class _AkcijePageState extends State<AkcijePage> {
                       width: 300,
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: Color.fromARGB(255, 225, 225, 225),
+                          color: const Color.fromARGB(255, 225, 225, 225),
                           width: 1.0,
                         ),
                         borderRadius: BorderRadius.circular(10.0),
@@ -370,7 +369,6 @@ class _AkcijePageState extends State<AkcijePage> {
                       decoration: const InputDecoration(labelText: 'Iznos (%)'),
                       keyboardType: TextInputType.number,
                       onChanged: (value) {
-                        print('Input value: $value');
                         if (value != null && value.isNotEmpty) {
                           setState(() {
                             try {
@@ -387,8 +385,7 @@ class _AkcijePageState extends State<AkcijePage> {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
                         }
-                        if (value != null &&
-                            !RegExp(r'^[0-9]+$').hasMatch(value)) {
+                        if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
                           return 'Ovo polje može sadržavati samo brojeve.';
                         }
 
@@ -471,12 +468,12 @@ class _AkcijePageState extends State<AkcijePage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Odustani'),
               style: ElevatedButton.styleFrom(
                 textStyle: const TextStyle(
                   fontSize: 14.0,
                 ),
               ),
+              child: const Text('Odustani'),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -486,7 +483,6 @@ class _AkcijePageState extends State<AkcijePage> {
                   items.add(
                     {"treningId": item.trening.treningId},
                   );
-                  print("Dodani " + item.trening.naziv);
                 });
 
                 Map<String, dynamic> action = {
@@ -515,7 +511,7 @@ class _AkcijePageState extends State<AkcijePage> {
                 }
 
                 try {
-                  var response = await _akcijeProvider.insert(action);
+                  await _akcijeProvider.insert(action);
                   setState(() {});
                   _showAlertDialog(
                       "Uspješan unos", "Akcija uspješno dodana.", Colors.green);
@@ -523,7 +519,6 @@ class _AkcijePageState extends State<AkcijePage> {
                   _showAlertDialog("Greška", e.toString(), Colors.red);
                 }
               },
-              child: const Text('Spremi'),
               style: ElevatedButton.styleFrom(
                 primary: const Color.fromRGBO(0, 154, 231, 1),
                 padding:
@@ -532,6 +527,7 @@ class _AkcijePageState extends State<AkcijePage> {
                   fontSize: 14.0,
                 ),
               ),
+              child: const Text('Spremi'),
             ),
           ],
           contentPadding: const EdgeInsets.symmetric(horizontal: 40.0),

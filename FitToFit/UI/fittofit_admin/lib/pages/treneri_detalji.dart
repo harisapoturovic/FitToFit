@@ -91,22 +91,19 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
 
   @override
   Widget build(BuildContext context) {
-    DateFormat dateFormat = DateFormat('yyyy-MM-dd');
     return MasterScreenWidget(
+      title: ("Detalji o treneru"),
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: Container(
-            child: Column(
-              children: [
-                isLoading ? Container() : _buildForm(),
-              ],
-            ),
+          child: Column(
+            children: [
+              isLoading ? Container() : _buildForm(),
+            ],
           ),
         ),
       ),
-      title: ("Detalji o treneru"),
     );
   }
 
@@ -117,13 +114,13 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
       child: Row(
         children: [
           Padding(
-            padding: EdgeInsets.only(bottom: 50, left: 40, right: 40),
+            padding: const EdgeInsets.only(bottom: 50, left: 40, right: 40),
             child: Container(
-              decoration: BoxDecoration(),
+              decoration: const BoxDecoration(),
               child: Align(
                 alignment: Alignment.topLeft,
                 child: ConstrainedBox(
-                    constraints: BoxConstraints(
+                    constraints: const BoxConstraints(
                       maxWidth: 400.0,
                       maxHeight: 520.0,
                     ),
@@ -165,7 +162,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           Column(
@@ -188,16 +185,16 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                           children: [
                             Expanded(
                               child: FormBuilderTextField(
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20,
                                   color: Colors.black,
                                 ),
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: "Ime",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color:
-                                          const Color.fromRGBO(0, 154, 231, 1),
+                                          Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -210,19 +207,19 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                                 enabled: false,
                               ),
                             ),
-                            SizedBox(width: 30),
+                            const SizedBox(width: 30),
                             Expanded(
                               child: FormBuilderTextField(
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20,
                                   color: Colors.black,
                                 ),
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: "Prezime",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color:
-                                          const Color.fromRGBO(0, 154, 231, 1),
+                                          Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -237,21 +234,21 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Row(
                           children: [
                             Expanded(
                               child: FormBuilderTextField(
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20,
                                   color: Colors.black,
                                 ),
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: "E-mail",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color:
-                                          const Color.fromRGBO(0, 154, 231, 1),
+                                          Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -264,19 +261,19 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                                 enabled: false,
                               ),
                             ),
-                            SizedBox(width: 30),
+                            const SizedBox(width: 30),
                             Expanded(
                               child: FormBuilderTextField(
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20,
                                   color: Colors.black,
                                 ),
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: "Telefon",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color:
-                                          const Color.fromRGBO(0, 154, 231, 1),
+                                          Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -291,21 +288,21 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Row(
                           children: [
                             Expanded(
                               child: FormBuilderTextField(
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20,
                                   color: Colors.black,
                                 ),
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: "Datum zaposlenja",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color:
-                                          const Color.fromRGBO(0, 154, 231, 1),
+                                          Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -318,19 +315,19 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                                 enabled: false,
                               ),
                             ),
-                            SizedBox(width: 30),
+                            const SizedBox(width: 30),
                             Expanded(
                               child: FormBuilderTextField(
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20,
                                   color: Colors.black,
                                 ),
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: "Zvanje",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color:
-                                          const Color.fromRGBO(0, 154, 231, 1),
+                                          Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -345,21 +342,21 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Row(
                           children: [
                             Expanded(
                               child: FormBuilderTextField(
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20,
                                   color: Colors.black,
                                 ),
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: "Adresa",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color:
-                                          const Color.fromRGBO(0, 154, 231, 1),
+                                          Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -372,19 +369,19 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                                 enabled: false,
                               ),
                             ),
-                            SizedBox(width: 30),
+                            const SizedBox(width: 30),
                             Expanded(
                               child: FormBuilderTextField(
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20,
                                   color: Colors.black,
                                 ),
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: "Spol",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color:
-                                          const Color.fromRGBO(0, 154, 231, 1),
+                                          Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -413,18 +410,18 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                     onPressed: () {
                       showEditTrainer(odabraniTrener!);
                     },
-                    child: Text('Uredi trenera'),
                     style: ElevatedButton.styleFrom(
                       primary: Colors.green,
                       padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 17),
-                      side: BorderSide(color: Colors.white),
-                      textStyle: TextStyle(
+                          const EdgeInsets.symmetric(horizontal: 20, vertical: 17),
+                      side: const BorderSide(color: Colors.white),
+                      textStyle: const TextStyle(
                         fontSize: 15.0,
                       ),
                     ),
+                    child: const Text('Uredi trenera'),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   ElevatedButton(
@@ -435,16 +432,16 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                         _showAlertDialog("Greška", e.toString(), Colors.red);
                       }
                     },
-                    child: Text('Obriši trenera'),
                     style: ElevatedButton.styleFrom(
                       primary: Colors.red,
                       padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 17),
-                      side: BorderSide(color: Colors.white),
-                      textStyle: TextStyle(
+                          const EdgeInsets.symmetric(horizontal: 20, vertical: 17),
+                      side: const BorderSide(color: Colors.white),
+                      textStyle: const TextStyle(
                         fontSize: 15.0,
                       ),
                     ),
+                    child: const Text('Obriši trenera'),
                   ),
                 ],
               ),
@@ -460,21 +457,21 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Color.fromARGB(255, 238, 247, 255),
-          title: Text(
+          backgroundColor: const Color.fromARGB(255, 238, 247, 255),
+          title: const Text(
             'Potvrda brisanja',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.red,
             ),
           ),
-          content: Text('Da li ste sigurni da želite izbrisati ovog trenera?'),
+          content: const Text('Da li ste sigurni da želite izbrisati ovog trenera?'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text(
+              child: const Text(
                 'Odustani',
                 style: TextStyle(
                   fontSize: 16.0,
@@ -486,7 +483,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                 _deleteTrainer();
                 Navigator.pop(context);
               },
-              child: Text(
+              child: const Text(
                 'Izbriši',
                 style: TextStyle(
                   fontSize: 16.0,
@@ -541,7 +538,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                 fontSize: 16.0,
               ),
             ),
-            child: Text("OK"),
+            child: const Text("OK"),
           ),
         ],
         shape: RoundedRectangleBorder(
@@ -567,7 +564,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
     final TextEditingController zvanjeController =
         TextEditingController(text: trener.zvanje);
 
-    final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+    final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
     await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -579,7 +576,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                   width: MediaQuery.of(context).size.width * 0.3,
                   child: Column(children: [
                     FormBuilder(
-                      key: _formKey,
+                      key: formKey,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
@@ -704,7 +701,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                                             ),
                                             validator: (value) {
                                               if (value != null &&
-                                                  !value.isEmpty &&
+                                                  value.isNotEmpty &&
                                                   !RegExp(r'^[A-Z]')
                                                       .hasMatch(value)) {
                                                 return 'Adresa mora početi velikim slovom.';
@@ -722,7 +719,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                                             ),
                                             validator: (value) {
                                               if (value != null &&
-                                                  !value.isEmpty &&
+                                                  value.isNotEmpty &&
                                                   !RegExp(r'^[A-Z]')
                                                       .hasMatch(value)) {
                                                 return 'Zvanje mora početi velikim slovom.';
@@ -777,7 +774,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                                                 borderRadius:
                                                     BorderRadius.circular(4),
                                                 side: const BorderSide(
-                                                    color: const Color.fromRGBO(
+                                                    color: Color.fromRGBO(
                                                         0, 154, 231, 1)),
                                               ),
                                               textStyle: const TextStyle(
@@ -787,7 +784,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                                             child: Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
-                                              children: [
+                                              children: const [
                                                 Icon(Icons.upload_file),
                                                 SizedBox(
                                                   height: 10,
@@ -802,7 +799,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                                           const SizedBox(height: 32),
                                           ElevatedButton(
                                             onPressed: () async {
-                                              if (_formKey.currentState!
+                                              if (formKey.currentState!
                                                   .validate()) {
                                                 if (odabraniTrener != null) {
                                                   Treneri trener = Treneri(
@@ -835,7 +832,6 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                                                 }
                                               }
                                             },
-                                            child: const Text('Sačuvaj'),
                                             style: ElevatedButton.styleFrom(
                                               primary: const Color.fromRGBO(
                                                   0, 154, 231, 1),
@@ -847,6 +843,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                                                 fontSize: 14.0,
                                               ),
                                             ),
+                                            child: const Text('Sačuvaj'),
                                           ),
                                         ],
                                       ),

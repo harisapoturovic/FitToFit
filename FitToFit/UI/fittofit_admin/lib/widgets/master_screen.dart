@@ -1,4 +1,5 @@
 import 'package:fittofit_admin/pages/akcije.dart';
+import 'package:fittofit_admin/pages/rezervacije.dart';
 import 'package:fittofit_admin/pages/treninzi.dart';
 import 'package:fittofit_admin/utils/util.dart';
 import 'package:flutter/material.dart';
@@ -42,11 +43,11 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
             padding: const EdgeInsets.only(right: 100.0),
             child: Row(
               children: [
-                Icon(Icons.person, color: Colors.white),
-                SizedBox(width: 8.0),
+                const Icon(Icons.person, color: Colors.white),
+                const SizedBox(width: 8.0),
                 Text(
                   korisnickoIme,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontStyle: FontStyle.italic,
                       color: Colors.white,
                       fontSize: 16),
@@ -62,52 +63,62 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
             selectedIndex: selectedIndex,
             backgroundColor:
                 const Color.fromRGBO(0, 154, 231, 1).withOpacity(0.9),
-            unselectedIconTheme: IconThemeData(
+            unselectedIconTheme: const IconThemeData(
               color: Color.fromARGB(255, 0, 0, 0),
             ),
-            selectedIconTheme: IconThemeData(
-              color: const Color.fromRGBO(0, 154, 231, 1),
+            selectedIconTheme: const IconThemeData(
+              color: Color.fromRGBO(0, 154, 231, 1),
             ),
             destinations: [
               NavigationRailDestination(
                 icon: buildIcon(Icons.home, 0, 'Home', () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => KorisniciPage(),
+                      builder: (context) => const KorisniciPage(),
                     ),
                   );
                 }),
-                label: Text('Home'),
+                label: const Text('Home'),
               ),
               NavigationRailDestination(
                 icon: buildIcon(Icons.search, 1, 'Search', () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => KorisniciPage(),
+                      builder: (context) => const KorisniciPage(),
                     ),
                   );
                 }),
-                label: Text('Search'),
+                label: const Text('Search'),
               ),
               NavigationRailDestination(
                 icon: buildIcon(Icons.fitness_center, 2, 'Training', () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => TreninziPage(),
+                      builder: (context) => const TreninziPage(),
                     ),
                   );
                 }),
-                label: Text('Training'),
+                label: const Text('Training'),
               ),
               NavigationRailDestination(
                 icon: buildIcon(Icons.local_offer, 3, 'Actions', () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => AkcijePage(),
+                      builder: (context) => const AkcijePage(),
                     ),
                   );
                 }),
-                label: Text('Actions'),
+                label: const Text('Actions'),
+              ),
+               NavigationRailDestination(
+                icon: buildIcon(Icons.event, 4, 'Reservations', () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const RezervacijePage(),
+                    ),
+                  );
+                }),
+                label: const Text('Reservations'),
               ),
             ],
             onDestinationSelected: (int index) {
@@ -137,14 +148,14 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
         });
       },
       child: Container(
-        padding: EdgeInsets.all(8.0),
-        child: Icon(icon),
+        padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
           color: (hoverIndex == index || selectedIndex == index)
-              ? Color.fromARGB(255, 231, 230, 230)
+              ? const Color.fromARGB(255, 231, 230, 230)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(20.0),
         ),
+        child: Icon(icon),
       ),
     );
   }

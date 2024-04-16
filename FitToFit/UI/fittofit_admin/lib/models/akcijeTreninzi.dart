@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:fittofit_admin/models/treninzi.dart';
 import 'package:json_annotation/json_annotation.dart';
 

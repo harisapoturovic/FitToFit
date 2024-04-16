@@ -120,20 +120,18 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
+      title: ("Detalji o treningu"),
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: Container(
-            child: Column(
-              children: [
-                isLoading ? Container() : _buildForm(),
-              ],
-            ),
+          child: Column(
+            children: [
+              isLoading ? Container() : _buildForm(),
+            ],
           ),
         ),
       ),
-      title: ("Detalji o treningu"),
     );
   }
 
@@ -144,13 +142,13 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
       child: Row(
         children: [
           Padding(
-            padding: EdgeInsets.only(bottom: 50, left: 40, right: 40),
+            padding: const EdgeInsets.only(bottom: 50, left: 40, right: 40),
             child: Container(
-              decoration: BoxDecoration(),
+              decoration: const BoxDecoration(),
               child: Align(
                 alignment: Alignment.topLeft,
                 child: ConstrainedBox(
-                    constraints: BoxConstraints(
+                    constraints: const BoxConstraints(
                       maxWidth: 400.0,
                       maxHeight: 520.0,
                     ),
@@ -192,7 +190,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           Column(
@@ -215,16 +213,16 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                           children: [
                             Expanded(
                               child: FormBuilderTextField(
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20,
                                   color: Colors.black,
                                 ),
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: "Naziv",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color:
-                                          const Color.fromRGBO(0, 154, 231, 1),
+                                          Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -239,21 +237,21 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                             )
                           ],
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Row(
                           children: [
                             Expanded(
                               child: FormBuilderTextField(
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 20,
                                     color: Colors.black,
                                     height: 3),
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: "Opis",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color:
-                                          const Color.fromRGBO(0, 154, 231, 1),
+                                          Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -272,19 +270,19 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Row(
                           children: [
                             Expanded(
                               child: FormBuilderTextField(
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 20, color: Colors.black),
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: "Maksimalan broj članova",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color:
-                                          const Color.fromRGBO(0, 154, 231, 1),
+                                          Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -297,19 +295,19 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                 enabled: false,
                               ),
                             ),
-                            SizedBox(width: 30),
+                            const SizedBox(width: 30),
                             Expanded(
                               child: FormBuilderTextField(
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20,
                                   color: Colors.black,
                                 ),
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: "Cijena po terminu",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color:
-                                          const Color.fromRGBO(0, 154, 231, 1),
+                                          Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -324,19 +322,19 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Row(
                           children: [
                             Expanded(
                               child: FormBuilderTextField(
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 20, color: Colors.black),
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: "Trajanje",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color:
-                                          const Color.fromRGBO(0, 154, 231, 1),
+                                          Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -349,19 +347,19 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                 enabled: false,
                               ),
                             ),
-                            SizedBox(width: 30),
+                            const SizedBox(width: 30),
                             Expanded(
                               child: FormBuilderTextField(
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20,
                                   color: Colors.black,
                                 ),
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: "Prosječna potrošnja kalorija",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color:
-                                          const Color.fromRGBO(0, 154, 231, 1),
+                                          Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -376,7 +374,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Row(
                           children: [
                             Expanded(
@@ -389,15 +387,15 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                     final vrsta = snapshot.data;
                                     if (vrsta != null) {
                                       return FormBuilderTextField(
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 20,
                                           color: Colors.black,
                                         ),
-                                        decoration: InputDecoration(
+                                        decoration: const InputDecoration(
                                           labelText: "Vrsta treninga",
                                           border: OutlineInputBorder(
                                             borderSide: BorderSide(
-                                              color: const Color.fromRGBO(
+                                              color: Color.fromRGBO(
                                                   0, 154, 231, 1),
                                               width: 2.0,
                                             ),
@@ -412,28 +410,28 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                         enabled: false,
                                       );
                                     } else {
-                                      return Text("Vrsta treninga: Nepoznato");
+                                      return const Text("Vrsta treninga: Nepoznato");
                                     }
                                   } else {
-                                    return Text(
+                                    return const Text(
                                         "Vrsta treninga: Učitavanje...");
                                   }
                                 },
                               ),
                             ),
-                            SizedBox(width: 30),
+                            const SizedBox(width: 30),
                             Expanded(
                               child: FormBuilderTextField(
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20,
                                   color: Colors.black,
                                 ),
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: "Namjena",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color:
-                                          const Color.fromRGBO(0, 154, 231, 1),
+                                          Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -448,19 +446,19 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Row(
                           children: [
                             Expanded(
                               child: FormBuilderTextField(
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 20, color: Colors.black),
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: "Termini",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color:
-                                          const Color.fromRGBO(0, 154, 231, 1),
+                                          Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -483,7 +481,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Row(
@@ -492,18 +490,18 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                     onPressed: () {
                       showEditTrainings(odabraniTrening!);
                     },
-                    child: Text('Uredi objavu'),
                     style: ElevatedButton.styleFrom(
                       primary: Colors.green,
                       padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 17),
-                      side: BorderSide(color: Colors.white),
-                      textStyle: TextStyle(
+                          const EdgeInsets.symmetric(horizontal: 20, vertical: 17),
+                      side: const BorderSide(color: Colors.white),
+                      textStyle: const TextStyle(
                         fontSize: 15.0,
                       ),
                     ),
+                    child: const Text('Uredi objavu'),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   ElevatedButton(
@@ -514,16 +512,16 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                         _showAlertDialog("Greška", e.toString(), Colors.red);
                       }
                     },
-                    child: Text('Obriši trening'),
                     style: ElevatedButton.styleFrom(
                       primary: Colors.red,
                       padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 17),
-                      side: BorderSide(color: Colors.white),
-                      textStyle: TextStyle(
+                          const EdgeInsets.symmetric(horizontal: 20, vertical: 17),
+                      side: const BorderSide(color: Colors.white),
+                      textStyle: const TextStyle(
                         fontSize: 15.0,
                       ),
                     ),
+                    child: const Text('Obriši trening'),
                   ),
                 ],
               ),
@@ -539,21 +537,21 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Color.fromARGB(255, 238, 247, 255),
-          title: Text(
+          backgroundColor: const Color.fromARGB(255, 238, 247, 255),
+          title: const Text(
             'Potvrda brisanja',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.red,
             ),
           ),
-          content: Text('Da li ste sigurni da želite izbrisati ovaj trening?'),
+          content: const Text('Da li ste sigurni da želite izbrisati ovaj trening?'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text(
+              child: const Text(
                 'Odustani',
                 style: TextStyle(
                   fontSize: 16.0,
@@ -565,7 +563,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                 _deleteTraining();
                 Navigator.pop(context);
               },
-              child: Text(
+              child: const Text(
                 'Izbriši',
                 style: TextStyle(
                   fontSize: 16.0,
@@ -597,7 +595,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
     showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        backgroundColor: Color.fromARGB(255, 238, 247, 255),
+        backgroundColor: const Color.fromARGB(255, 238, 247, 255),
         title: Text(
           naslov,
           style: TextStyle(
@@ -607,7 +605,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
         ),
         content: Text(
           poruka,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16.0,
           ),
         ),
@@ -616,11 +614,11 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
             onPressed: () => Navigator.pop(context),
             style: TextButton.styleFrom(
               primary: Colors.blue,
-              textStyle: TextStyle(
+              textStyle: const TextStyle(
                 fontSize: 16.0,
               ),
             ),
-            child: Text("OK"),
+            child: const Text("OK"),
           ),
         ],
         shape: RoundedRectangleBorder(
@@ -648,7 +646,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
     final TextEditingController namjenaController =
         TextEditingController(text: trening.namjena);
 
-    final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+    final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
     await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -660,7 +658,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                   width: MediaQuery.of(context).size.width * 0.3,
                   child: Column(children: [
                     FormBuilder(
-                      key: _formKey,
+                      key: formKey,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
@@ -743,8 +741,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                                   value.isEmpty) {
                                                 return 'Ovo polje je obavezno!';
                                               }
-                                              if (value != null &&
-                                                  !RegExp(r'^[0-9]+$')
+                                              if (!RegExp(r'^[0-9]+$')
                                                       .hasMatch(value)) {
                                                 return 'Ovo polje može sadržavati samo brojeve.';
                                               }
@@ -767,8 +764,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                                   value.isEmpty) {
                                                 return 'Ovo polje je obavezno!';
                                               }
-                                              if (value != null &&
-                                                  !RegExp(r'^[0-9]+(?:[.,][0-9]+)*$')
+                                              if (!RegExp(r'^[0-9]+(?:[.,][0-9]+)*$')
                                                       .hasMatch(value)) {
                                                 return 'Ovo polje ne može sadržavati slova.';
                                               }
@@ -810,8 +806,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                                   value.isEmpty) {
                                                 return 'Ovo polje je obavezno!';
                                               }
-                                              if (value != null &&
-                                                  !RegExp(r'^[0-9]+(?:[.,][0-9]+)*$')
+                                              if (!RegExp(r'^[0-9]+(?:[.,][0-9]+)*$')
                                                       .hasMatch(value)) {
                                                 return 'Ovo polje ne može sadržavati slova.';
                                               }
@@ -844,7 +839,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                           ),
                                           const SizedBox(height: 16),
                                           DropdownButtonFormField(
-                                            decoration: InputDecoration(
+                                            decoration: const InputDecoration(
                                                 labelText: "Vrsta treninga"),
                                             value: odabraniTrening!.vrstaId,
                                             items: _vrsteTreningaList
@@ -908,7 +903,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                                 borderRadius:
                                                     BorderRadius.circular(4),
                                                 side: const BorderSide(
-                                                    color: const Color.fromRGBO(
+                                                    color: Color.fromRGBO(
                                                         0, 154, 231, 1)),
                                               ),
                                               textStyle: const TextStyle(
@@ -918,7 +913,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                             child: Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
-                                              children: [
+                                              children: const [
                                                 Icon(Icons.upload_file),
                                                 SizedBox(
                                                   height: 10,
@@ -933,7 +928,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                           const SizedBox(height: 32),
                                           ElevatedButton(
                                             onPressed: () async {
-                                              if (_formKey.currentState!
+                                              if (formKey.currentState!
                                                   .validate()) {
                                                 if (odabraniTrening != null) {
                                                   Treninzi trening = Treninzi(
@@ -976,7 +971,6 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                                 }
                                               }
                                             },
-                                            child: const Text('Sačuvaj'),
                                             style: ElevatedButton.styleFrom(
                                               primary: const Color.fromRGBO(
                                                   0, 154, 231, 1),
@@ -988,6 +982,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                                 fontSize: 14.0,
                                               ),
                                             ),
+                                            child: const Text('Sačuvaj'),
                                           ),
                                         ],
                                       ),

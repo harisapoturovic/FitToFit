@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
 import 'package:fittofit_admin/models/korisnici.dart';
 import 'package:fittofit_admin/models/novosti.dart';
 import 'package:fittofit_admin/models/vrste_treninga.dart';
@@ -95,20 +92,18 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
+      title: ("Detalji o objavi"),
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: Container(
-            child: Column(
-              children: [
-                isLoading ? Container() : _buildForm(),
-              ],
-            ),
+          child: Column(
+            children: [
+              isLoading ? Container() : _buildForm(),
+            ],
           ),
         ),
       ),
-      title: ("Detalji o objavi"),
     );
   }
 
@@ -138,16 +133,15 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                           children: [
                             Expanded(
                               child: FormBuilderTextField(
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20,
                                   color: Colors.black,
                                 ),
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: "Naslov",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color:
-                                          const Color.fromRGBO(0, 154, 231, 1),
+                                      color: Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -162,21 +156,20 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                             )
                           ],
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Row(
                           children: [
                             Expanded(
                               child: FormBuilderTextField(
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 20,
                                     color: Colors.black,
                                     height: 3),
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: "Sadržaj",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color:
-                                          const Color.fromRGBO(0, 154, 231, 1),
+                                      color: Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -195,19 +188,18 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Row(
                           children: [
                             Expanded(
                               child: FormBuilderTextField(
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 20, color: Colors.black),
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: "Broj lajkova",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color:
-                                          const Color.fromRGBO(0, 154, 231, 1),
+                                      color: Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -220,19 +212,18 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                                 enabled: false,
                               ),
                             ),
-                            SizedBox(width: 30),
+                            const SizedBox(width: 30),
                             Expanded(
                               child: FormBuilderTextField(
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20,
                                   color: Colors.black,
                                 ),
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: "Datum objave",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color:
-                                          const Color.fromRGBO(0, 154, 231, 1),
+                                      color: Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -247,7 +238,7 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Row(
                           children: [
                             Expanded(
@@ -260,15 +251,15 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                                     final author = snapshot.data;
                                     if (author != null) {
                                       return FormBuilderTextField(
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 20,
                                           color: Colors.black,
                                         ),
-                                        decoration: InputDecoration(
+                                        decoration: const InputDecoration(
                                           labelText: "Objavio",
                                           border: OutlineInputBorder(
                                             borderSide: BorderSide(
-                                              color: const Color.fromRGBO(
+                                              color: Color.fromRGBO(
                                                   0, 154, 231, 1),
                                               width: 2.0,
                                             ),
@@ -284,15 +275,16 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                                         enabled: false,
                                       );
                                     } else {
-                                      return Text("Objavio: Nepoznat autor");
+                                      return const Text(
+                                          "Objavio: Nepoznat autor");
                                     }
                                   } else {
-                                    return Text("Objavio: Učitavanje...");
+                                    return const Text("Objavio: Učitavanje...");
                                   }
                                 },
                               ),
                             ),
-                            SizedBox(width: 30),
+                            const SizedBox(width: 30),
                             Expanded(
                               child: FutureBuilder<VrsteTreninga?>(
                                 future: getVrstaTreningaFromNovostiId(
@@ -303,15 +295,15 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                                     final vrsta = snapshot.data;
                                     if (vrsta != null) {
                                       return FormBuilderTextField(
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 20,
                                           color: Colors.black,
                                         ),
-                                        decoration: InputDecoration(
+                                        decoration: const InputDecoration(
                                           labelText: "Namjenjeno za ",
                                           border: OutlineInputBorder(
                                             borderSide: BorderSide(
-                                              color: const Color.fromRGBO(
+                                              color: Color.fromRGBO(
                                                   0, 154, 231, 1),
                                               width: 2.0,
                                             ),
@@ -326,10 +318,12 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                                         enabled: false,
                                       );
                                     } else {
-                                      return Text("Namjenjeno za: Nepoznato");
+                                      return const Text(
+                                          "Namjenjeno za: Nepoznato");
                                     }
                                   } else {
-                                    return Text("Namjenjeno za: Učitavanje...");
+                                    return const Text(
+                                        "Namjenjeno za: Učitavanje...");
                                   }
                                 },
                               ),
@@ -341,7 +335,7 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Row(
@@ -351,19 +345,19 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                           onPressed: () {
                             showEditNews(odabranaNovost!);
                           },
-                          child: Text('Uredi objavu'),
                           style: ElevatedButton.styleFrom(
                             primary: Colors.green,
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 17),
-                            side: BorderSide(color: Colors.white),
-                            textStyle: TextStyle(
+                            side: const BorderSide(color: Colors.white),
+                            textStyle: const TextStyle(
                               fontSize: 15.0,
                             ),
                           ),
+                          child: const Text('Uredi objavu'),
                         )
                       : Container(),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   ElevatedButton(
@@ -374,16 +368,16 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                         _showAlertDialog("Greška", e.toString(), Colors.red);
                       }
                     },
-                    child: Text('Obriši objavu'),
                     style: ElevatedButton.styleFrom(
                       primary: Colors.red,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 17),
-                      side: BorderSide(color: Colors.white),
-                      textStyle: TextStyle(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 17),
+                      side: const BorderSide(color: Colors.white),
+                      textStyle: const TextStyle(
                         fontSize: 15.0,
                       ),
                     ),
+                    child: const Text('Obriši objavu'),
                   ),
                 ],
               ),
@@ -399,21 +393,22 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Color.fromARGB(255, 238, 247, 255),
-          title: Text(
+          backgroundColor: const Color.fromARGB(255, 238, 247, 255),
+          title: const Text(
             'Potvrda brisanja',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.red,
             ),
           ),
-          content: Text('Da li ste sigurni da želite izbrisati ovu objavu?'),
+          content:
+              const Text('Da li ste sigurni da želite izbrisati ovu objavu?'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text(
+              child: const Text(
                 'Odustani',
                 style: TextStyle(
                   fontSize: 16.0,
@@ -425,7 +420,7 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                 _deleteNews();
                 Navigator.pop(context);
               },
-              child: Text(
+              child: const Text(
                 'Izbriši',
                 style: TextStyle(
                   fontSize: 16.0,
@@ -457,7 +452,7 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
     showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        backgroundColor: Color.fromARGB(255, 238, 247, 255),
+        backgroundColor: const Color.fromARGB(255, 238, 247, 255),
         title: Text(
           naslov,
           style: TextStyle(
@@ -467,7 +462,7 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
         ),
         content: Text(
           poruka,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16.0,
           ),
         ),
@@ -476,11 +471,11 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
             onPressed: () => Navigator.pop(context),
             style: TextButton.styleFrom(
               primary: Colors.blue,
-              textStyle: TextStyle(
+              textStyle: const TextStyle(
                 fontSize: 16.0,
               ),
             ),
-            child: Text("OK"),
+            child: const Text("OK"),
           ),
         ],
         shape: RoundedRectangleBorder(
@@ -496,7 +491,7 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
     final TextEditingController sadrzajController =
         TextEditingController(text: novost.sadrzaj);
 
-    final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+    final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
     await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -508,7 +503,7 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                   width: MediaQuery.of(context).size.width * 0.3,
                   child: Column(children: [
                     FormBuilder(
-                      key: _formKey,
+                      key: formKey,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
@@ -568,10 +563,10 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                                           ),
                                           const SizedBox(height: 16),
                                           DropdownButtonFormField(
-                                            decoration: InputDecoration(
+                                            decoration: const InputDecoration(
                                                 labelText: "Vrsta treninga"),
-                                            value: odabranaNovost!
-                                                .vrstaTreningaId,
+                                            value:
+                                                odabranaNovost!.vrstaTreningaId,
                                             items: _vrsteTreningaList
                                                 .map((VrsteTreninga vrsta) {
                                               return DropdownMenuItem(
@@ -585,11 +580,11 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                                                     value as int?;
                                               });
                                             },
-                                          ),                                          
+                                          ),
                                           const SizedBox(height: 32),
                                           ElevatedButton(
                                             onPressed: () async {
-                                              if (_formKey.currentState!
+                                              if (formKey.currentState!
                                                   .validate()) {
                                                 if (odabranaNovost != null) {
                                                   Novosti novost = Novosti(
@@ -622,7 +617,6 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                                                 }
                                               }
                                             },
-                                            child: const Text('Sačuvaj'),
                                             style: ElevatedButton.styleFrom(
                                               primary: const Color.fromRGBO(
                                                   0, 154, 231, 1),
@@ -634,6 +628,7 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                                                 fontSize: 14.0,
                                               ),
                                             ),
+                                            child: const Text('Sačuvaj'),
                                           ),
                                         ],
                                       ),

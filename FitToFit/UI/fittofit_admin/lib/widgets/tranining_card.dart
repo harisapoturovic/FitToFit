@@ -60,19 +60,23 @@ class TrainingCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${training.naziv != null && training.naziv.length > 20 ? training.naziv.substring(0, 20) + '...' : training.naziv}',
-                  style: TextStyle(
+                  training.naziv.length > 20
+                      ? '${training.naziv.substring(0, 20)}...'
+                      : training.naziv,
+                  style: const TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
                       color: Color.fromARGB(255, 0, 99, 181)),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
-                  '${training.opis != null && training.opis.length > 30 ? training.opis.substring(0, 30) + '...' : training.opis}',
-                  style: TextStyle(
+                  training.opis.length > 30
+                      ? '${training.opis.substring(0, 30)}...'
+                      : training.opis,
+                  style: const TextStyle(
                       fontSize: 16.0, color: Color.fromARGB(255, 0, 99, 181)),
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -83,18 +87,19 @@ class TrainingCard extends StatelessWidget {
                       ),
                     );
                   },
-                  child: Text('Detalji'),
                   style: ElevatedButton.styleFrom(
-                    primary: Color.fromARGB(255, 33, 65, 243),
+                    primary: const Color.fromARGB(255, 33, 65, 243),
                     onPrimary: Colors.white,
-                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 40),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 40),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    textStyle: TextStyle(
+                    textStyle: const TextStyle(
                       fontSize: 14,
                     ),
                   ),
+                  child: const Text('Detalji'),
                 ),
               ],
             ),
