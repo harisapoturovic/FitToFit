@@ -46,6 +46,7 @@ namespace FitToFit.Services
             CreateMap<Database.Uloge, Model.Uloge>();
             CreateMap<Database.AkcijeTreninzi, Model.AkcijeTreninzi>();
             CreateMap<AkcijeTreninziInsertRequest, Database.AkcijeTreninzi>();
+            CreateMap<Database.Clanarine, Model.Clanarine>();
         }
     }
 }

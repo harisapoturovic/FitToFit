@@ -49,9 +49,14 @@ namespace FitToFit.Services
                 query = query.Where(x => x.ClanarinaId.Equals(search.ClanarinaId));
             }
 
+            if(search.TreningId!=null)
+            {
+                query = query.Where(x => x.RezervacijaStavkes.FirstOrDefault().Termin.TreningId.Equals(search.TreningId));
+            }
+
             if (search?.Datum != null)
             {
-                query = query.Where(x => x.Datum.Equals(search.Datum));
+                query = query.Where(x => x.Datum.Date.Equals(search.Datum));
             }
 
             if (search.StateMachine != null)

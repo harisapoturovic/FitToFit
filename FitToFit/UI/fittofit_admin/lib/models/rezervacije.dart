@@ -1,3 +1,4 @@
+import 'package:fittofit_admin/models/rezervacijaStavke.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'rezervacije.g.dart';
@@ -9,7 +10,8 @@ class Rezervacije {
   String? stateMachine;
   int? iznos;
   int korisnikId;
-  int clanarinaId;
+  int clanarinaId;  
+  List<RezervacijaStavke>? rezervacijaStavkes = [];
 
   Rezervacije(
       {required this.rezervacijaId,
@@ -17,7 +19,8 @@ class Rezervacije {
       this.stateMachine,
       this.iznos,
       required this.korisnikId,
-      required this.clanarinaId});
+      required this.clanarinaId,
+      this.rezervacijaStavkes});
 
   factory Rezervacije.fromJson(Map<String, dynamic> json) =>
       _$RezervacijeFromJson(json);
