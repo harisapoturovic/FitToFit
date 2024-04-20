@@ -40,18 +40,6 @@ namespace FitToFit.Services.RezervacijeStateMachine
             return _mapper.Map<Model.Rezervacije>(entity);
         }
 
-        public override async Task<Model.Rezervacije> Cancel(int id)
-        {
-            var set = _context.Set<Database.Rezervacije>();
-
-            var entity = await set.FindAsync(id);
-
-            entity.StateMachine = "canceled";
-
-            await _context.SaveChangesAsync();
-            return _mapper.Map<Model.Rezervacije>(entity);
-        }
-
         public override async Task<Rezervacije> Refuse(int id)
         {
             var entity = await _context.Set<Database.Rezervacije>().FindAsync(id);

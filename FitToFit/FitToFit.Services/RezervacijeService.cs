@@ -61,7 +61,7 @@ namespace FitToFit.Services
 
             if (search.StateMachine != null)
             {
-                query = query.Where(x => x.StateMachine.Equals(search.StateMachine) && x.StateMachine == "active");
+                query = query.Where(x => x.StateMachine.Equals(search.StateMachine));
             }
 
             return base.AddFilter(query, search);

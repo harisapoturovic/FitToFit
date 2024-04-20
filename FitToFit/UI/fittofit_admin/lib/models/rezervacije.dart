@@ -8,7 +8,7 @@ class Rezervacije {
   int rezervacijaId;
   DateTime datum;
   String? stateMachine;
-  int? iznos;
+  double? iznos;
   int korisnikId;
   int clanarinaId;  
   List<RezervacijaStavke>? rezervacijaStavkes = [];

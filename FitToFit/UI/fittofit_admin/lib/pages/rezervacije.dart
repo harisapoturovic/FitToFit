@@ -106,125 +106,192 @@ class _RezervacijePageState extends State<RezervacijePage> {
   Container _buildDataListView() {
     int counter = 1;
     return Container(
-      margin: const EdgeInsets.only(bottom: 80, top: 20),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 50.0),
-          child: Column(
-            children: _rezervacijeList.map((Rezervacije e) {
-              final currentNumber = counter++;
-              return Column(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 300.0),
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.only(left: 20),
-                      tileColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        side: const BorderSide(color: Colors.grey),
-                      ),
-                      title: Row(
-                        children: [
-                          Text(
-                            '$currentNumber',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18.0,
-                              color: Color.fromRGBO(0, 154, 231, 1),
-                            ),
-                          ),
-                          const SizedBox(width: 40),
-                          FutureBuilder<dynamic>(
-                            future: _korisniciProvider.getById(e.korisnikId),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const CircularProgressIndicator();
-                              } else {
-                                if (snapshot.hasError) {
-                                  return Text('Error: ${snapshot.error}');
-                                } else {
-                                  final korisnik = snapshot.data;
-                                  if (korisnik != null) {
-                                    return Text(
-                                      korisnik.ime + ' ' + korisnik.prezime,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18.0,
-                                        color: Color.fromRGBO(0, 154, 231, 1),
-                                      ),
-                                    );
-                                  } else {
-                                    return const Text('Invalid data format');
-                                  }
-                                }
-                              }
-                            },
-                          ),
-                          const Text('   |   '),
-                          Text(
-                            formatDate(e.datum),
-                            style: const TextStyle(
-                              fontSize: 15.0,
-                              color: Color.fromRGBO(0, 154, 231, 1),
-                            ),
-                          ),
-                          const Text('   |   '),
-                          FutureBuilder<dynamic>(
-                            future: _clanarineProvider.getById(e.clanarinaId),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const CircularProgressIndicator();
-                              } else {
-                                if (snapshot.hasError) {
-                                  return Text('Error: ${snapshot.error}');
-                                } else {
-                                  final clanarina = snapshot.data;
-                                  if (clanarina != null) {
-                                    return Text(
-                                      clanarina.naziv,
-                                      style: const TextStyle(
-                                        fontSize: 15.0,
-                                        color: Color.fromRGBO(0, 154, 231, 1),
-                                      ),
-                                    );
-                                  } else {
-                                    return const Text('Invalid data format');
-                                  }
-                                }
-                              }
-                            },
-                          )
-                        ],
-                      ),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.access_time),
-                            onPressed: () {
-                              // Handle clock icon press
-                            },
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.delete),
-                            onPressed: () {
-                              // Handle trash icon press
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
+      height: 700,
+      margin: const EdgeInsets.only(bottom: 100, top: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isActive = true;
+                      _selectedRezervacije = _aktivneRezervacijeList;
+                    });
+                  },
+                  child: Text(
+                    'Aktivne rezervacije',
+                    style: TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                        color: isActive
+                            ? const Color.fromARGB(255, 46, 142, 50)
+                            : Colors.grey),
                   ),
-                  const SizedBox(height: 8.0)
-                ],
-              );
-            }).toList(),
+                ),
+                const SizedBox(width: 10),
+                const Text('/'),
+                const SizedBox(width: 10),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isActive = false;
+                      _selectedRezervacije = _draftRezervacijeList;
+                    });
+                  },
+                  child: Text(
+                    'Draft rezervacije',
+                    style: TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                        color: isActive ? Colors.grey : Colors.blue),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
+          const SizedBox(height: 10),
+          Expanded(
+            child: Scrollbar(
+              thumbVisibility: true,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Container(
+                  margin: const EdgeInsets.symmetric(vertical: 50.0),
+                  child: Column(
+                    children: _selectedRezervacije.map((Rezervacije e) {
+                      final currentNumber = counter++;
+                      return Column(
+                        children: [
+                          Container(
+                            margin:
+                                const EdgeInsets.symmetric(horizontal: 300.0),
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.only(left: 20),
+                              tileColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                                side: const BorderSide(color: Colors.grey),
+                              ),
+                              title: Row(
+                                children: [
+                                  Text(
+                                    '$currentNumber',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18.0,
+                                      color: Color.fromRGBO(0, 154, 231, 1),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 40),
+                                  FutureBuilder<dynamic>(
+                                    future: _korisniciProvider
+                                        .getById(e.korisnikId),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return const CircularProgressIndicator();
+                                      } else {
+                                        if (snapshot.hasError) {
+                                          return Text(
+                                              'Error: ${snapshot.error}');
+                                        } else {
+                                          final korisnik = snapshot.data;
+                                          if (korisnik != null) {
+                                            return Text(
+                                              korisnik.ime +
+                                                  ' ' +
+                                                  korisnik.prezime,
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18.0,
+                                                color: Color.fromRGBO(
+                                                    0, 154, 231, 1),
+                                              ),
+                                            );
+                                          } else {
+                                            return const Text(
+                                                'Invalid data format');
+                                          }
+                                        }
+                                      }
+                                    },
+                                  ),
+                                  const Text('   |   '),
+                                  Text(
+                                    formatDate(e.datum),
+                                    style: const TextStyle(
+                                      fontSize: 15.0,
+                                      color: Color.fromRGBO(0, 154, 231, 1),
+                                    ),
+                                  ),
+                                  const Text('   |   '),
+                                  FutureBuilder<dynamic>(
+                                    future: _clanarineProvider
+                                        .getById(e.clanarinaId),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return const CircularProgressIndicator();
+                                      } else {
+                                        if (snapshot.hasError) {
+                                          return Text(
+                                              'Error: ${snapshot.error}');
+                                        } else {
+                                          final clanarina = snapshot.data;
+                                          if (clanarina != null) {
+                                            return Text(
+                                              clanarina.naziv,
+                                              style: const TextStyle(
+                                                fontSize: 15.0,
+                                                color: Color.fromRGBO(
+                                                    0, 154, 231, 1),
+                                              ),
+                                            );
+                                          } else {
+                                            return const Text(
+                                                'Invalid data format');
+                                          }
+                                        }
+                                      }
+                                    },
+                                  )
+                                ],
+                              ),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  isActive
+                                      ? IconButton(
+                                          icon: const Icon(Icons.access_time),
+                                          onPressed: () {
+                                            _confirmArchiveReservation(context, e.rezervacijaId);
+                                          },
+                                        )
+                                      : IconButton(
+                                          icon: const Icon(Icons.delete),
+                                          onPressed: () {
+                                            _confirmDeleteReservation(
+                                                context, e.rezervacijaId);
+                                          },
+                                        ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 8.0)
+                        ],
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -363,133 +430,154 @@ class _RezervacijePageState extends State<RezervacijePage> {
     );
   }
 
-  Widget _listOfActiveReservations() {
-    ScrollController scrollController = ScrollController();
-
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    isActive = true;
-                    _selectedRezervacije = _aktivneRezervacijeList;
-                  });
-                },
-                child: Text(
-                  'Aktivne rezervacije',
-                  style: TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                      color: isActive
-                          ? const Color.fromARGB(255, 46, 142, 50)
-                          : Colors.grey),
-                ),
-              ),
-              const SizedBox(width: 10),
-              const Text('/'),
-              const SizedBox(width: 10),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    isActive = false;
-                    _selectedRezervacije = _draftRezervacijeList;
-                  });
-                },
-                child: Text(
-                  'Draft rezervacije',
-                  style: TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                      color: isActive ? Colors.grey : Colors.blue),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Expanded(
-            child: Scrollbar(
-              controller: scrollController,
-              child: ListView(
-                  controller: scrollController,
-                  scrollDirection: Axis.horizontal,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  children: _selectedRezervacije.map((rezervacija) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Container(
-                        width: 300,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: const Color.fromARGB(255, 225, 225, 225),
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          //child: AkcijeCard(akcija: rezervacija),
-                        ),
-                      ),
-                    );
-                  }).toList()),
+  void _confirmDeleteReservation(BuildContext context, int id) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: const Color.fromARGB(255, 238, 247, 255),
+          title: const Text(
+            'Potvrda brisanja',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
             ),
           ),
-        ],
-      ),
+          content: const Text(
+              'Da li ste sigurni da želite izbrisati ovu rezervaciju?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'Odustani',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                _obrisiRezervaciju(id);
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'Izbriši',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+            ),
+          ],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        );
+      },
     );
   }
 
-  Widget _listOfArchivedReservations() {
-    ScrollController scrollController = ScrollController();
-
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Arhiva',
+  void _confirmArchiveReservation(BuildContext context, int id) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: const Color.fromARGB(255, 238, 247, 255),
+          title: const Text(
+            'Potvrda arhiviranja',
             style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 94, 94, 94)),
-          ),
-          const SizedBox(height: 10),
-          Expanded(
-            child: Scrollbar(
-              controller: scrollController,
-              child: ListView(
-                controller: scrollController,
-                scrollDirection: Axis.horizontal,
-                physics: const AlwaysScrollableScrollPhysics(),
-                children: _arhiviraneRezervacijeList.map((rezervacija) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Container(
-                      width: 300,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: const Color.fromARGB(255, 225, 225, 225),
-                          width: 1.0,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        //child: AkcijeCard(akcija: akcija)
-                      ),
-                    ),
-                  );
-                }).toList(),
-              ),
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
             ),
           ),
+          content: const Text('Da li ste sigurni da želite arhivirati rezervaciju?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'Odustani',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                _arhivirajRezervaciju(id);
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'Arhiviraj',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+            ),
+          ],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        );
+      },
+    );
+  }
+
+  void _obrisiRezervaciju(int rezervacijaId) async {
+    try {
+      await _rezervacijeProvider.delete(rezervacijaId);
+      _showAlertDialog(
+          "Uspješno brisanje", "Rezervacija uspješno izbrisana.", Colors.green);
+    } catch (e) {
+      _showAlertDialog("Greška", e.toString(), Colors.red);
+    }
+  }
+
+    void _arhivirajRezervaciju(int id) async {
+    try {
+      await _rezervacijeProvider.archive(id);
+      _showAlertDialog(
+          "Uspješno arhiviranje", "Rezervacija uspješno arhvirana.", Colors.green);
+    } catch (e) {
+      _showAlertDialog("Greška", e.toString(), Colors.red);
+    }
+  }
+
+  void _showAlertDialog(String naslov, String poruka, Color boja) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        backgroundColor: const Color.fromARGB(255, 238, 247, 255),
+        title: Text(
+          naslov,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: boja,
+          ),
+        ),
+        content: Text(
+          poruka,
+          style: const TextStyle(
+            fontSize: 16.0,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            style: TextButton.styleFrom(
+              primary: Colors.blue,
+              textStyle: const TextStyle(
+                fontSize: 16.0,
+              ),
+            ),
+            child: const Text("OK"),
+          ),
         ],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
       ),
     );
   }

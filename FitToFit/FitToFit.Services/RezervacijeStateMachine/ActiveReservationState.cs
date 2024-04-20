@@ -17,20 +17,6 @@ namespace FitToFit.Services.RezervacijeStateMachine
         {
         }
 
-        public override async Task<Model.Rezervacije> Refuse(int id)
-        {
-            var entity = await _context.Set<Database.Rezervacije>().FindAsync(id);
-
-            var set = _context.Set<Database.Rezervacije>();
-
-            entity.StateMachine = "refused";
-
-            //set.Remove(entity);
-            await _context.SaveChangesAsync();
-
-            return _mapper.Map<Model.Rezervacije>(entity);
-        }
-
         public override async Task<Model.Rezervacije> Cancel(int id)
         {
             var set = _context.Set<Database.Rezervacije>();
@@ -61,7 +47,6 @@ namespace FitToFit.Services.RezervacijeStateMachine
 
             list.Add("Cancel");
             list.Add("Archive");
-            list.Add("Refuse");
 
             return list;
         }

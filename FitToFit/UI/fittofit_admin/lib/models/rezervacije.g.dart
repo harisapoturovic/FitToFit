@@ -10,7 +10,7 @@ Rezervacije _$RezervacijeFromJson(Map<String, dynamic> json) => Rezervacije(
       rezervacijaId: json['rezervacijaId'] as int,
       datum: DateTime.parse(json['datum'] as String),
       stateMachine: json['stateMachine'] as String?,
-      iznos: json['iznos'] as int?,
+      iznos: (json['iznos'] as num?)?.toDouble(),
       korisnikId: json['korisnikId'] as int,
       clanarinaId: json['clanarinaId'] as int,
       rezervacijaStavkes: (json['rezervacijaStavkes'] as List<dynamic>?)

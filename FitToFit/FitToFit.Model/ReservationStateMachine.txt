@@ -7,8 +7,6 @@ archived;
 
 initial -> draft: [insert];
 draft-> active: [activate];
-draft-> canceled: [cancel];
-active -> canceled: [cancel];
 draft -> refused: [refuse];
-active -> refused: [refuse];
+active -> canceled: [cancel];
 active -> archived: [archive];
