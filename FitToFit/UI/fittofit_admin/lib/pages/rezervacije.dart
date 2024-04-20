@@ -265,19 +265,74 @@ class _RezervacijePageState extends State<RezervacijePage> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   isActive
-                                      ? IconButton(
-                                          icon: const Icon(Icons.access_time),
-                                          onPressed: () {
-                                            _confirmArchiveReservation(context, e.rezervacijaId);
-                                          },
-                                        )
-                                      : IconButton(
-                                          icon: const Icon(Icons.delete),
-                                          onPressed: () {
-                                            _confirmDeleteReservation(
-                                                context, e.rezervacijaId);
-                                          },
+                                      ? Container()
+                                      : Tooltip(
+                                          message: "Aktiviraj",
+                                          textStyle: const TextStyle(
+                                              fontSize: 16.0,
+                                              color: Colors.white),
+                                          child: IconButton(
+                                            icon: const Icon(Icons.done),
+                                            onPressed: () {
+                                              _confirmActivateReservation(
+                                                  context, e.rezervacijaId);
+                                            },
+                                          ),
                                         ),
+                                  isActive
+                                      ? Tooltip(
+                                          message: "Arhiviraj",
+                                          textStyle: const TextStyle(
+                                              fontSize: 16.0,
+                                              color: Colors.white),
+                                          child: IconButton(
+                                            icon: const Icon(Icons.access_time),
+                                            onPressed: () {
+                                              _confirmArchiveReservation(
+                                                  context, e.rezervacijaId);
+                                            },
+                                          ),
+                                        )
+                                      : Tooltip(
+                                          message: "Izbriši",
+                                          textStyle: const TextStyle(
+                                              fontSize: 16.0,
+                                              color: Colors.white),
+                                          child: IconButton(
+                                            icon: const Icon(Icons.delete),
+                                            onPressed: () {
+                                              _confirmDeleteReservation(
+                                                  context, e.rezervacijaId);
+                                            },
+                                          ),
+                                        ),
+                                  isActive
+                                      ? Tooltip(
+                                          message: 'Poništi',
+                                          textStyle: const TextStyle(
+                                              fontSize: 16.0,
+                                              color: Colors.white),
+                                          child: IconButton(
+                                            icon: const Icon(Icons.close),
+                                            onPressed: () {
+                                              _confirmCancelReservation(
+                                                  context, e.rezervacijaId);
+                                            },
+                                          ),
+                                        )
+                                      : Tooltip(
+                                          message: 'Odbij',
+                                          textStyle: const TextStyle(
+                                              fontSize: 16.0,
+                                              color: Colors.white),
+                                          child: IconButton(
+                                            icon: const Icon(Icons.block),
+                                            onPressed: () {
+                                              _confirmRefuseReservation(
+                                                  context, e.rezervacijaId);
+                                            },
+                                          ),
+                                        )
                                 ],
                               ),
                             ),
@@ -491,7 +546,8 @@ class _RezervacijePageState extends State<RezervacijePage> {
               color: Colors.red,
             ),
           ),
-          content: const Text('Da li ste sigurni da želite arhivirati rezervaciju?'),
+          content:
+              const Text('Da li ste sigurni da želite arhivirati rezervaciju?'),
           actions: [
             TextButton(
               onPressed: () {
@@ -525,6 +581,150 @@ class _RezervacijePageState extends State<RezervacijePage> {
     );
   }
 
+  void _confirmActivateReservation(BuildContext context, int id) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: const Color.fromARGB(255, 238, 247, 255),
+          title: const Text(
+            'Potvrda aktiviranja',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+            ),
+          ),
+          content:
+              const Text('Da li ste sigurni da želite aktivirati rezervaciju?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'Odustani',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                _aktivirajRezervaciju(id);
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'Aktiviraj',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+            ),
+          ],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        );
+      },
+    );
+  }
+
+  void _confirmRefuseReservation(BuildContext context, int id) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: const Color.fromARGB(255, 238, 247, 255),
+          title: const Text(
+            'Potvrda odbijanja',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+            ),
+          ),
+          content:
+              const Text('Da li ste sigurni da želite odbiti rezervaciju?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'Odustani',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                _odbijRezervaciju(id);
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'Odbij',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+            ),
+          ],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        );
+      },
+    );
+  }
+
+  void _confirmCancelReservation(BuildContext context, int id) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: const Color.fromARGB(255, 238, 247, 255),
+          title: const Text(
+            'Potvrda poništavanja',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+            ),
+          ),
+          content:
+              const Text('Da li ste sigurni da želite poništiti rezervaciju?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'Odustani',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                _ponistiRezervaciju(id);
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'Poništi',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+            ),
+          ],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        );
+      },
+    );
+  }
+
   void _obrisiRezervaciju(int rezervacijaId) async {
     try {
       await _rezervacijeProvider.delete(rezervacijaId);
@@ -535,11 +735,41 @@ class _RezervacijePageState extends State<RezervacijePage> {
     }
   }
 
-    void _arhivirajRezervaciju(int id) async {
+  void _arhivirajRezervaciju(int id) async {
     try {
       await _rezervacijeProvider.archive(id);
+      _showAlertDialog("Uspješno arhiviranje",
+          "Rezervacija uspješno arhvirana.", Colors.green);
+    } catch (e) {
+      _showAlertDialog("Greška", e.toString(), Colors.red);
+    }
+  }
+
+  void _aktivirajRezervaciju(int id) async {
+    try {
+      await _rezervacijeProvider.activate(id);
       _showAlertDialog(
-          "Uspješno arhiviranje", "Rezervacija uspješno arhvirana.", Colors.green);
+          "Uspješno aktiviranje", "Akcija uspješno aktivirana.", Colors.green);
+    } catch (e) {
+      _showAlertDialog("Greška", e.toString(), Colors.red);
+    }
+  }
+
+  void _odbijRezervaciju(int id) async {
+    try {
+      await _rezervacijeProvider.refuse(id);
+      _showAlertDialog(
+          "Uspješno odbijanje", "Akcija uspješno odbijena.", Colors.green);
+    } catch (e) {
+      _showAlertDialog("Greška", e.toString(), Colors.red);
+    }
+  }
+
+  void _ponistiRezervaciju(int id) async {
+    try {
+      await _rezervacijeProvider.cancel(id);
+      _showAlertDialog(
+          "Uspješno poništavanje", "Akcija uspješno poništena.", Colors.green);
     } catch (e) {
       _showAlertDialog("Greška", e.toString(), Colors.red);
     }
