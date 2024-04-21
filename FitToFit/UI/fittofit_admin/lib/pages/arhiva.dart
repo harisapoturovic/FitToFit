@@ -238,114 +238,122 @@ class _ArhivaPageState extends State<ArhivaPage> {
                     final currentNumber = counter++;
                     return Column(
                       children: [
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 300.0),
-                          child: ListTile(
-                            contentPadding: const EdgeInsets.only(left: 20),
-                            tileColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              side: const BorderSide(color: Colors.grey),
-                            ),
-                            title: Row(
-                              children: [
-                                Text(
-                                  '$currentNumber',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18.0,
-                                    color: Color.fromRGBO(0, 154, 231, 1),
+                        GestureDetector(
+                          onTap: () {
+                            _showDialog(e);
+                          },
+                          child: Container(
+                            margin:
+                                const EdgeInsets.symmetric(horizontal: 300.0),
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.only(left: 20),
+                              tileColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                                side: const BorderSide(color: Colors.grey),
+                              ),
+                              title: Row(
+                                children: [
+                                  Text(
+                                    '$currentNumber',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18.0,
+                                      color: Color.fromRGBO(0, 154, 231, 1),
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(width: 40),
-                                FutureBuilder<dynamic>(
-                                  future:
-                                      _korisniciProvider.getById(e.korisnikId),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      return const CircularProgressIndicator();
-                                    } else {
-                                      if (snapshot.hasError) {
-                                        return Text('Error: ${snapshot.error}');
+                                  const SizedBox(width: 40),
+                                  FutureBuilder<dynamic>(
+                                    future: _korisniciProvider
+                                        .getById(e.korisnikId),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return const CircularProgressIndicator();
                                       } else {
-                                        final korisnik = snapshot.data;
-                                        if (korisnik != null) {
+                                        if (snapshot.hasError) {
                                           return Text(
-                                            korisnik.ime +
-                                                ' ' +
-                                                korisnik.prezime,
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18.0,
-                                              color: Color.fromRGBO(
-                                                  0, 154, 231, 1),
-                                            ),
-                                          );
+                                              'Error: ${snapshot.error}');
                                         } else {
-                                          return const Text(
-                                              'Invalid data format');
+                                          final korisnik = snapshot.data;
+                                          if (korisnik != null) {
+                                            return Text(
+                                              korisnik.ime +
+                                                  ' ' +
+                                                  korisnik.prezime,
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18.0,
+                                                color: Color.fromRGBO(
+                                                    0, 154, 231, 1),
+                                              ),
+                                            );
+                                          } else {
+                                            return const Text(
+                                                'Invalid data format');
+                                          }
                                         }
                                       }
-                                    }
-                                  },
-                                ),
-                                const Text('   |   '),
-                                Text(
-                                  formatDate(e.datum),
-                                  style: const TextStyle(
-                                    fontSize: 15.0,
-                                    color: Color.fromRGBO(0, 154, 231, 1),
-                                  ),
-                                ),
-                                const Text('   |   '),
-                                FutureBuilder<dynamic>(
-                                  future:
-                                      _clanarineProvider.getById(e.clanarinaId),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      return const CircularProgressIndicator();
-                                    } else {
-                                      if (snapshot.hasError) {
-                                        return Text('Error: ${snapshot.error}');
-                                      } else {
-                                        final clanarina = snapshot.data;
-                                        if (clanarina != null) {
-                                          return Text(
-                                            clanarina.naziv,
-                                            style: const TextStyle(
-                                              fontSize: 15.0,
-                                              color: Color.fromRGBO(
-                                                  0, 154, 231, 1),
-                                            ),
-                                          );
-                                        } else {
-                                          return const Text(
-                                              'Invalid data format');
-                                        }
-                                      }
-                                    }
-                                  },
-                                )
-                              ],
-                            ),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Tooltip(
-                                  message: "Izbriši",
-                                  textStyle: const TextStyle(
-                                      fontSize: 16.0, color: Colors.white),
-                                  child: IconButton(
-                                    icon: const Icon(Icons.delete),
-                                    onPressed: () {
-                                      _confirmDeleteReservation(
-                                          context, e.rezervacijaId);
                                     },
                                   ),
-                                ),
-                              ],
+                                  const Text('   |   '),
+                                  Text(
+                                    formatDate(e.datum),
+                                    style: const TextStyle(
+                                      fontSize: 15.0,
+                                      color: Color.fromRGBO(0, 154, 231, 1),
+                                    ),
+                                  ),
+                                  const Text('   |   '),
+                                  FutureBuilder<dynamic>(
+                                    future: _clanarineProvider
+                                        .getById(e.clanarinaId),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return const CircularProgressIndicator();
+                                      } else {
+                                        if (snapshot.hasError) {
+                                          return Text(
+                                              'Error: ${snapshot.error}');
+                                        } else {
+                                          final clanarina = snapshot.data;
+                                          if (clanarina != null) {
+                                            return Text(
+                                              clanarina.naziv,
+                                              style: const TextStyle(
+                                                fontSize: 15.0,
+                                                color: Color.fromRGBO(
+                                                    0, 154, 231, 1),
+                                              ),
+                                            );
+                                          } else {
+                                            return const Text(
+                                                'Invalid data format');
+                                          }
+                                        }
+                                      }
+                                    },
+                                  )
+                                ],
+                              ),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Tooltip(
+                                    message: "Izbriši",
+                                    textStyle: const TextStyle(
+                                        fontSize: 16.0, color: Colors.white),
+                                    child: IconButton(
+                                      icon: const Icon(Icons.delete),
+                                      onPressed: () {
+                                        _confirmDeleteReservation(
+                                            context, e.rezervacijaId);
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -600,6 +608,82 @@ class _ArhivaPageState extends State<ArhivaPage> {
           borderRadius: BorderRadius.circular(10.0),
         ),
       ),
+    );
+  }
+
+  Future<Treninzi?> getTrainingByTrainingId(id) async {
+    return await _treninziProvider.getById(id);
+  }
+
+  void _showDialog(Rezervacije rezervacija) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Detalji o rezervaciji'),
+          content: Container(
+            width: 300.0,
+            height: 300.0,
+            padding: const EdgeInsets.all(5.0),
+            margin: const EdgeInsets.only(left: 50, right: 50, top: 30),
+            child: SingleChildScrollView(
+                child: Card(
+              margin: const EdgeInsets.all(10.0),
+              child: Column(
+                children: [
+                  ListView.builder(
+                      itemCount: rezervacija.rezervacijaStavkes!.length,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        final stavka = rezervacija.rezervacijaStavkes![index];
+                        return FutureBuilder<Treninzi?>(
+                          future:
+                              getTrainingByTrainingId(stavka.termin!.treningId),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const CircularProgressIndicator();
+                            } else if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            } else {
+                              final training = snapshot.data;
+                              final trainingName =
+                                  training?.naziv ?? 'Unknown Training';
+                              return ListTile(
+                                title: Row(
+                                  children: [
+                                    Text(
+                                      '- ${stavka.termin!.dan} | ${stavka.termin!.sat} | $trainingName',
+                                      style: const TextStyle(),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                          },
+                        );
+                      }),
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        '${rezervacija.iznos} KM',
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            )),
+          ),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 40.0),
+        );
+      },
     );
   }
 }
