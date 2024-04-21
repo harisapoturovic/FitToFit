@@ -44,6 +44,11 @@ class _HomePageState extends State<HomePage> {
   late Korisnici logiraniKorisnik;
   String korisnickoIme = '';
   final _formKey = GlobalKey<FormBuilderState>();
+  bool isSearching = false;
+
+  var page = 1;
+  var totalcount = 0;
+  var pageSize = 6;
 
   @override
   void initState() {
@@ -58,6 +63,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _loadData() async {
+    isSearching = false;
     var korisnici = await _korisniciProvider.get(filter: {'isAdmin': false});
     var treneri = await _treneriProvider.get(filter: {});
     var rezervacije =
@@ -65,7 +71,9 @@ class _HomePageState extends State<HomePage> {
     var vrsteTreninga = await _vrsteTreningaProvider.get(filter: {});
     var korisnik = await _korisniciProvider
         .get(filter: {'isAdmin': true, 'KorisnickoIme': korisnickoIme});
-    var novosti = await _novostiProvider.get(filter: {});
+    var novosti = await _novostiProvider
+        .get(filter: {'page': page, 'pageSize': pageSize});
+
 
     setState(() {
       brojKorisnika = korisnici.count;
@@ -74,6 +82,7 @@ class _HomePageState extends State<HomePage> {
       _vrsteTreningaList = vrsteTreninga.result;
       logiraniKorisnik = korisnik.result[0];
       _novostiList = novosti.result;
+      totalcount = novosti.count;
     });
   }
 
@@ -109,11 +118,42 @@ class _HomePageState extends State<HomePage> {
             ),
             Expanded(
               child: Column(
-                children: [_buildSearch(), _buildDataListView()],
+                children: [
+                  _buildSearch(),
+                  _buildDataListView(),
+                  _buildPageNumbers()
+                ],
               ),
             ),
           ],
         ));
+  }
+
+  Widget _buildPageNumbers() {
+    int totalPages = (totalcount / pageSize).ceil();
+    List<Widget> pageButtons = [];
+
+    for (int i = 1; i <= totalPages; i++) {
+      pageButtons.add(
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+          child: ElevatedButton(
+            onPressed: () {
+              setState(() {
+                page = i;
+                isSearching ? _getFilteredNews() : _loadData();
+              });
+            },
+            child: Text('$i'),
+          ),
+        ),
+      );
+    }
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: pageButtons,
+    );
   }
 
   Widget _buildSearch() {
@@ -151,14 +191,7 @@ class _HomePageState extends State<HomePage> {
         ),
         ElevatedButton(
           onPressed: () async {
-            var data = await _novostiProvider.get(filter: {
-              'naslov': _naslovController.text,
-              'vrstaTreningaId': _selectedVrstaTreninga
-            });
-
-            setState(() {
-              _novostiList = data.result;
-            });
+            await _getFilteredNews();
           },
           style: ElevatedButton.styleFrom(
             primary: const Color.fromRGBO(0, 154, 231, 1),
@@ -171,85 +204,98 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Future<void> _getFilteredNews() async {
+    isSearching = true;
+    var data = await _novostiProvider.get(filter: {
+      'naslov': _naslovController.text,
+      'vrstaTreningaId': _selectedVrstaTreninga,
+      'page': page,
+      'pageSize': pageSize
+    });
+    
+    setState(() {
+      _novostiList = data.result;
+      totalcount = data.count;
+    });
+  }
+
   Expanded _buildDataListView() {
     return Expanded(
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 30.0),
-          child: Column(
-            children: _novostiList
-                .map((Novosti e) => Column(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 60.0),
-                          child: ListTile(
-                            contentPadding: const EdgeInsets.only(left: 20),
-                            tileColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              side: const BorderSide(color: Colors.grey),
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 30.0),
+        child: ListView.builder(
+            itemCount: _novostiList.length,
+            itemBuilder: (context, index) {
+              final e = _novostiList[index];
+              return Column(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 60.0),
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.only(left: 20),
+                      tileColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        side: const BorderSide(color: Colors.grey),
+                      ),
+                      title: Row(
+                        children: [
+                          Text(
+                            e.naslov,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.0,
+                              color: Color.fromRGBO(0, 154, 231, 1),
                             ),
-                            title: Row(
-                              children: [
-                                Text(
-                                  e.naslov,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18.0,
-                                    color: Color.fromRGBO(0, 154, 231, 1),
-                                  ),
-                                ),
-                                const Text('   |   '),
-                                Text(
-                                  formatDate(e.datumObjave),
-                                  style: const TextStyle(
-                                    fontSize: 15.0,
-                                    color: Color.fromRGBO(0, 154, 231, 1),
-                                  ),
-                                ),
-                              ],
+                          ),
+                          const Text('   |   '),
+                          Text(
+                            formatDate(e.datumObjave),
+                            style: const TextStyle(
+                              fontSize: 15.0,
+                              color: Color.fromRGBO(0, 154, 231, 1),
                             ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(height: 5.0),
-                                Text(
-                                  e.sadrzaj != null && e.sadrzaj!.length > 80
-                                      ? '${e.sadrzaj!.substring(0, 80)}...'
-                                      : e.sadrzaj ?? '',
-                                ),
-                              ],
-                            ),
-                            trailing: Container(
-                              margin: const EdgeInsets.only(right: 30.0),
-                              child: const Text(
-                                '>',
-                                style: TextStyle(
-                                  fontSize: 30.0,
-                                  color: Color.fromRGBO(0, 154, 231, 1),
-                                ),
-                              ),
-                            ),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => NovostiDetaljiPage(
-                                    novost: e,
-                                    adminId: logiraniKorisnik.korisnikId,
-                                  ),
-                                ),
-                              );
-                            },
+                          ),
+                        ],
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 5.0),
+                          Text(
+                            e.sadrzaj != null && e.sadrzaj!.length > 80
+                                ? '${e.sadrzaj!.substring(0, 80)}...'
+                                : e.sadrzaj ?? '',
+                          ),
+                        ],
+                      ),
+                      trailing: Container(
+                        margin: const EdgeInsets.only(right: 30.0),
+                        child: const Text(
+                          '>',
+                          style: TextStyle(
+                            fontSize: 30.0,
+                            color: Color.fromRGBO(0, 154, 231, 1),
                           ),
                         ),
-                        const SizedBox(height: 8.0)
-                      ],
-                    ))
-                .toList(),
-          ),
-        ),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => NovostiDetaljiPage(
+                              novost: e,
+                              adminId: logiraniKorisnik.korisnikId,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 8.0)
+                ],
+              );
+            }),
       ),
     );
   }

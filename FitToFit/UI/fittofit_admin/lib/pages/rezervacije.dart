@@ -1,7 +1,6 @@
 import 'package:fittofit_admin/models/clanarine.dart';
 import 'package:fittofit_admin/models/korisnici.dart';
 import 'package:fittofit_admin/models/rezervacije.dart';
-import 'package:fittofit_admin/models/treneri.dart';
 import 'package:fittofit_admin/models/treninzi.dart';
 import 'package:fittofit_admin/pages/arhiva.dart';
 import 'package:fittofit_admin/providers/clanarine_provider.dart';
@@ -141,12 +140,12 @@ class _RezervacijePageState extends State<RezervacijePage> {
     for (int i = 1; i <= totalPages; i++) {
       pageButtons.add(
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
           child: ElevatedButton(
             onPressed: () {
               setState(() {
                 page = i;
-                isSearching ? _searchWidgets() : _loadData();
+                isSearching ? getFilteredReservations() : _loadData();
               });
             },
             child: Text('$i'),
@@ -183,6 +182,7 @@ class _RezervacijePageState extends State<RezervacijePage> {
                       isActive = true;
                       _selectedRezervacije = _aktivneRezervacijeList;
                     });
+                    getFilteredReservations();
                   },
                   child: Text(
                     'Aktivne rezervacije',
@@ -203,6 +203,7 @@ class _RezervacijePageState extends State<RezervacijePage> {
                       isActive = false;
                       _selectedRezervacije = _draftRezervacijeList;
                     });
+                    getFilteredReservations();
                   },
                   child: Text(
                     'Draft rezervacije',
@@ -494,40 +495,7 @@ class _RezervacijePageState extends State<RezervacijePage> {
                 padding: const EdgeInsets.only(left: 50, right: 80),
                 child: ElevatedButton(
                   onPressed: () async {
-                    isSearching = true;
-                    var data1 = await _rezervacijeProvider.get(filter: {
-                      'datum': _selectedDate,
-                      'korisnikId': _selectedKorisnik,
-                      'clanarinaId': _selectedClanarina,
-                      'treningId': _selectedTrening,
-                      'stateMachine': "active",
-                      'page': page,
-                      'pageSize': pageSize
-                    });
-
-                    var data2 = await _rezervacijeProvider.get(filter: {
-                      'datum': _selectedDate,
-                      'korisnikId': _selectedKorisnik,
-                      'clanarinaId': _selectedClanarina,
-                      'treningId': _selectedTrening,
-                      'stateMachine': "draft",
-                      'page': page,
-                      'pageSize': pageSize
-                    });
-
-                    setState(() {
-                      _aktivneRezervacijeList = data1.result;
-                      _draftRezervacijeList = data2.result;
-                      //_rezervacijeList = data1.result;
-                      if (isActive) {
-                        _selectedRezervacije = _aktivneRezervacijeList;
-                        totalcount = data1.count;
-                      } else {
-                        _selectedRezervacije = _draftRezervacijeList;
-                        totalcount = data2.count;
-                      }
-                      //_selectedRezervacije = _rezervacijeList;
-                    });
+                    await getFilteredReservations();
                   },
                   style: ElevatedButton.styleFrom(
                     primary: const Color.fromARGB(255, 3, 59, 227),
@@ -546,6 +514,41 @@ class _RezervacijePageState extends State<RezervacijePage> {
         ),
       ),
     );
+  }
+
+  Future<void> getFilteredReservations() async {
+    isSearching = true;
+    var data1 = await _rezervacijeProvider.get(filter: {
+      'datum': _selectedDate,
+      'korisnikId': _selectedKorisnik,
+      'clanarinaId': _selectedClanarina,
+      'treningId': _selectedTrening,
+      'stateMachine': "active",
+      'page': page,
+      'pageSize': pageSize
+    });
+
+    var data2 = await _rezervacijeProvider.get(filter: {
+      'datum': _selectedDate,
+      'korisnikId': _selectedKorisnik,
+      'clanarinaId': _selectedClanarina,
+      'treningId': _selectedTrening,
+      'stateMachine': "draft",
+      'page': page,
+      'pageSize': pageSize
+    });
+
+    setState(() {
+      _aktivneRezervacijeList = data1.result;
+      _draftRezervacijeList = data2.result;
+      if (isActive) {
+        _selectedRezervacije = _aktivneRezervacijeList;
+        totalcount = data1.count;
+      } else {
+        _selectedRezervacije = _draftRezervacijeList;
+        totalcount = data2.count;
+      }
+    });
   }
 
   void _confirmDeleteReservation(BuildContext context, int id) {
