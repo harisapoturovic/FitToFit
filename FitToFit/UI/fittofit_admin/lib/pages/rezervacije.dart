@@ -42,6 +42,12 @@ class _RezervacijePageState extends State<RezervacijePage> {
   List<int>? items;
   bool isActive = true;
 
+  List<Rezervacije>? pageresult;
+
+  var page = 1;
+  var totalcount = 0;
+  var pageSize = 5;
+
   @override
   void initState() {
     super.initState();
@@ -53,28 +59,40 @@ class _RezervacijePageState extends State<RezervacijePage> {
   }
 
   void _loadData() async {
-    var aktivneRezervacije = await _rezervacijeProvider
-        .get(filter: {'IsTerminiIncluded': true, 'StateMachine': "active"});
+    var aktivneRezervacije = await _rezervacijeProvider.get(filter: {
+      'IsTerminiIncluded': true,
+      'StateMachine': "active",
+      'page': page,
+      'pageSize': pageSize
+    });
 
     var arhiviraneRezervacije = await _rezervacijeProvider
         .get(filter: {'IsTerminiIncluded': true, 'StateMachine': "archived"});
 
-    var draftRezervacije = await _rezervacijeProvider
-        .get(filter: {'IsTerminiIncluded': true, 'StateMachine': "draft"});
+    var draftRezervacije = await _rezervacijeProvider.get(filter: {
+      'IsTerminiIncluded': true,
+      'StateMachine': "draft",
+      'page': page,
+      'pageSize': pageSize
+    });
     var korisnici = await _korisniciProvider.get(filter: {'isAdmin': false});
     var treninzi = await _treninziProvider.get(filter: {});
     var clanarine = await _clanarineProvider.get(filter: {});
-    var rezervacije = await _rezervacijeProvider.get(filter: {});
+    var rezervacije = await _rezervacijeProvider
+        .get(filter: {'page': page, 'pageSize': pageSize});
 
     setState(() {
       _aktivneRezervacijeList = aktivneRezervacije.result;
       _arhiviraneRezervacijeList = arhiviraneRezervacije.result;
       _draftRezervacijeList = draftRezervacije.result;
-      _selectedRezervacije = _aktivneRezervacijeList;
       _korisniciList = korisnici.result;
       _treninziList = treninzi.result;
       _clanarineList = clanarine.result;
       _rezervacijeList = rezervacije.result;
+
+      _selectedRezervacije =
+          isActive ? _aktivneRezervacijeList : _draftRezervacijeList;
+      totalcount = isActive ? aktivneRezervacije.count : draftRezervacije.count;
     });
   }
 
@@ -93,9 +111,37 @@ class _RezervacijePageState extends State<RezervacijePage> {
           const SizedBox(height: 30),
           Container(child: _searchWidgets()),
           const SizedBox(height: 10),
-          Expanded(child: _buildDataListView())
+          Expanded(child: _buildDataListView()),
+          _buildPageNumbers()
         ],
       ),
+    );
+  }
+
+  Widget _buildPageNumbers() {
+    int totalPages = (totalcount / pageSize).ceil();
+    List<Widget> pageButtons = [];
+
+    for (int i = 1; i <= totalPages; i++) {
+      pageButtons.add(
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: ElevatedButton(
+            onPressed: () {
+              setState(() {
+                page = i;
+                _loadData();
+              });
+            },
+            child: Text('$i'),
+          ),
+        ),
+      );
+    }
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: pageButtons,
     );
   }
 
@@ -103,7 +149,7 @@ class _RezervacijePageState extends State<RezervacijePage> {
     return DateFormat('dd.MM.yyyy').format(dateTime!);
   }
 
-  Container _buildDataListView() {
+  Widget _buildDataListView() {
     int counter = 1;
     return Container(
       height: 700,
@@ -120,6 +166,7 @@ class _RezervacijePageState extends State<RezervacijePage> {
                     setState(() {
                       isActive = true;
                       _selectedRezervacije = _aktivneRezervacijeList;
+                      //totalcount = _selectedRezervacije.length;
                     });
                   },
                   child: Text(
@@ -140,6 +187,7 @@ class _RezervacijePageState extends State<RezervacijePage> {
                     setState(() {
                       isActive = false;
                       _selectedRezervacije = _draftRezervacijeList;
+                      //totalcount = _selectedRezervacije.length;
                     });
                   },
                   child: Text(
@@ -155,197 +203,189 @@ class _RezervacijePageState extends State<RezervacijePage> {
           ),
           const SizedBox(height: 10),
           Expanded(
-            child: Scrollbar(
-              thumbVisibility: true,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Container(
-                  margin: const EdgeInsets.symmetric(vertical: 50.0),
-                  child: Column(
-                    children: _selectedRezervacije.map((Rezervacije e) {
-                      final currentNumber = counter++;
-                      return Column(
-                        children: [
-                          Container(
-                            margin:
-                                const EdgeInsets.symmetric(horizontal: 300.0),
-                            child: ListTile(
-                              contentPadding: const EdgeInsets.only(left: 20),
-                              tileColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                                side: const BorderSide(color: Colors.grey),
-                              ),
-                              title: Row(
-                                children: [
-                                  Text(
-                                    '$currentNumber',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18.0,
-                                      color: Color.fromRGBO(0, 154, 231, 1),
-                                    ),
+            child: Container(
+              margin: const EdgeInsets.symmetric(vertical: 50.0),
+              child: ListView.builder(
+                  itemCount: _selectedRezervacije.length,
+                  itemBuilder: (context, index) {
+                    final e = _selectedRezervacije[index];
+                    final currentNumber = counter++;
+                    return Column(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 300.0),
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.only(left: 20),
+                            tileColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              side: const BorderSide(color: Colors.grey),
+                            ),
+                            title: Row(
+                              children: [
+                                Text(
+                                  '$currentNumber',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18.0,
+                                    color: Color.fromRGBO(0, 154, 231, 1),
                                   ),
-                                  const SizedBox(width: 40),
-                                  FutureBuilder<dynamic>(
-                                    future: _korisniciProvider
-                                        .getById(e.korisnikId),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.connectionState ==
-                                          ConnectionState.waiting) {
-                                        return const CircularProgressIndicator();
+                                ),
+                                const SizedBox(width: 40),
+                                FutureBuilder<dynamic>(
+                                  future:
+                                      _korisniciProvider.getById(e.korisnikId),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const CircularProgressIndicator();
+                                    } else {
+                                      if (snapshot.hasError) {
+                                        return Text('Error: ${snapshot.error}');
                                       } else {
-                                        if (snapshot.hasError) {
+                                        final korisnik = snapshot.data;
+                                        if (korisnik != null) {
                                           return Text(
-                                              'Error: ${snapshot.error}');
+                                            korisnik.ime +
+                                                ' ' +
+                                                korisnik.prezime,
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18.0,
+                                              color: Color.fromRGBO(
+                                                  0, 154, 231, 1),
+                                            ),
+                                          );
                                         } else {
-                                          final korisnik = snapshot.data;
-                                          if (korisnik != null) {
-                                            return Text(
-                                              korisnik.ime +
-                                                  ' ' +
-                                                  korisnik.prezime,
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18.0,
-                                                color: Color.fromRGBO(
-                                                    0, 154, 231, 1),
-                                              ),
-                                            );
-                                          } else {
-                                            return const Text(
-                                                'Invalid data format');
-                                          }
+                                          return const Text(
+                                              'Invalid data format');
                                         }
                                       }
-                                    },
+                                    }
+                                  },
+                                ),
+                                const Text('   |   '),
+                                Text(
+                                  formatDate(e.datum),
+                                  style: const TextStyle(
+                                    fontSize: 15.0,
+                                    color: Color.fromRGBO(0, 154, 231, 1),
                                   ),
-                                  const Text('   |   '),
-                                  Text(
-                                    formatDate(e.datum),
-                                    style: const TextStyle(
-                                      fontSize: 15.0,
-                                      color: Color.fromRGBO(0, 154, 231, 1),
-                                    ),
-                                  ),
-                                  const Text('   |   '),
-                                  FutureBuilder<dynamic>(
-                                    future: _clanarineProvider
-                                        .getById(e.clanarinaId),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.connectionState ==
-                                          ConnectionState.waiting) {
-                                        return const CircularProgressIndicator();
+                                ),
+                                const Text('   |   '),
+                                FutureBuilder<dynamic>(
+                                  future:
+                                      _clanarineProvider.getById(e.clanarinaId),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const CircularProgressIndicator();
+                                    } else {
+                                      if (snapshot.hasError) {
+                                        return Text('Error: ${snapshot.error}');
                                       } else {
-                                        if (snapshot.hasError) {
+                                        final clanarina = snapshot.data;
+                                        if (clanarina != null) {
                                           return Text(
-                                              'Error: ${snapshot.error}');
+                                            clanarina.naziv,
+                                            style: const TextStyle(
+                                              fontSize: 15.0,
+                                              color: Color.fromRGBO(
+                                                  0, 154, 231, 1),
+                                            ),
+                                          );
                                         } else {
-                                          final clanarina = snapshot.data;
-                                          if (clanarina != null) {
-                                            return Text(
-                                              clanarina.naziv,
-                                              style: const TextStyle(
-                                                fontSize: 15.0,
-                                                color: Color.fromRGBO(
-                                                    0, 154, 231, 1),
-                                              ),
-                                            );
-                                          } else {
-                                            return const Text(
-                                                'Invalid data format');
-                                          }
+                                          return const Text(
+                                              'Invalid data format');
                                         }
                                       }
-                                    },
-                                  )
-                                ],
-                              ),
-                              trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  isActive
-                                      ? Container()
-                                      : Tooltip(
-                                          message: "Aktiviraj",
-                                          textStyle: const TextStyle(
-                                              fontSize: 16.0,
-                                              color: Colors.white),
-                                          child: IconButton(
-                                            icon: const Icon(Icons.done),
-                                            onPressed: () {
-                                              _confirmActivateReservation(
-                                                  context, e.rezervacijaId);
-                                            },
-                                          ),
+                                    }
+                                  },
+                                )
+                              ],
+                            ),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                isActive
+                                    ? Container()
+                                    : Tooltip(
+                                        message: "Aktiviraj",
+                                        textStyle: const TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.white),
+                                        child: IconButton(
+                                          icon: const Icon(Icons.done),
+                                          onPressed: () {
+                                            _confirmActivateReservation(
+                                                context, e.rezervacijaId);
+                                          },
                                         ),
-                                  isActive
-                                      ? Tooltip(
-                                          message: "Arhiviraj",
-                                          textStyle: const TextStyle(
-                                              fontSize: 16.0,
-                                              color: Colors.white),
-                                          child: IconButton(
-                                            icon: const Icon(Icons.access_time),
-                                            onPressed: () {
-                                              _confirmArchiveReservation(
-                                                  context, e.rezervacijaId);
-                                            },
-                                          ),
-                                        )
-                                      : Tooltip(
-                                          message: "Izbriši",
-                                          textStyle: const TextStyle(
-                                              fontSize: 16.0,
-                                              color: Colors.white),
-                                          child: IconButton(
-                                            icon: const Icon(Icons.delete),
-                                            onPressed: () {
-                                              _confirmDeleteReservation(
-                                                  context, e.rezervacijaId);
-                                            },
-                                          ),
+                                      ),
+                                isActive
+                                    ? Tooltip(
+                                        message: "Arhiviraj",
+                                        textStyle: const TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.white),
+                                        child: IconButton(
+                                          icon: const Icon(Icons.access_time),
+                                          onPressed: () {
+                                            _confirmArchiveReservation(
+                                                context, e.rezervacijaId);
+                                          },
                                         ),
-                                  isActive
-                                      ? Tooltip(
-                                          message: 'Poništi',
-                                          textStyle: const TextStyle(
-                                              fontSize: 16.0,
-                                              color: Colors.white),
-                                          child: IconButton(
-                                            icon: const Icon(Icons.close),
-                                            onPressed: () {
-                                              _confirmCancelReservation(
-                                                  context, e.rezervacijaId);
-                                            },
-                                          ),
-                                        )
-                                      : Tooltip(
-                                          message: 'Odbij',
-                                          textStyle: const TextStyle(
-                                              fontSize: 16.0,
-                                              color: Colors.white),
-                                          child: IconButton(
-                                            icon: const Icon(Icons.block),
-                                            onPressed: () {
-                                              _confirmRefuseReservation(
-                                                  context, e.rezervacijaId);
-                                            },
-                                          ),
-                                        )
-                                ],
-                              ),
+                                      )
+                                    : Tooltip(
+                                        message: "Izbriši",
+                                        textStyle: const TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.white),
+                                        child: IconButton(
+                                          icon: const Icon(Icons.delete),
+                                          onPressed: () {
+                                            _confirmDeleteReservation(
+                                                context, e.rezervacijaId);
+                                          },
+                                        ),
+                                      ),
+                                isActive
+                                    ? Tooltip(
+                                        message: 'Poništi',
+                                        textStyle: const TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.white),
+                                        child: IconButton(
+                                          icon: const Icon(Icons.close),
+                                          onPressed: () {
+                                            _confirmCancelReservation(
+                                                context, e.rezervacijaId);
+                                          },
+                                        ),
+                                      )
+                                    : Tooltip(
+                                        message: 'Odbij',
+                                        textStyle: const TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.white),
+                                        child: IconButton(
+                                          icon: const Icon(Icons.block),
+                                          onPressed: () {
+                                            _confirmRefuseReservation(
+                                                context, e.rezervacijaId);
+                                          },
+                                        ),
+                                      )
+                              ],
                             ),
                           ),
-                          const SizedBox(height: 8.0)
-                        ],
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ),
+                        ),
+                        const SizedBox(height: 8.0)
+                      ],
+                    );
+                  }),
             ),
-          ),
+          )
         ],
       ),
     );

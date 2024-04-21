@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure;
 using FitToFit.Model;
 using FitToFit.Model.SearchObjects;
 using FitToFit.Services.Database;
@@ -25,24 +26,28 @@ namespace FitToFit.Services
         {
             var query = _context.Set<Tdb>().AsQueryable();
 
-            PagedResult<T> result = new PagedResult<T>();
+            var respons = new PagedResult<T>();
 
             query = AddInclude(query, search);
         
             query = AddFilter(query, search);
 
-            result.Count = await query.CountAsync();
-
             if (search?.Page.HasValue == true && search?.PageSize.HasValue == true)
             {
-                query = query.Take(search.PageSize.Value).Skip(search.Page.Value * search.PageSize.Value);
-            }
-        
-            var list = await query.ToListAsync();
+                var list = await query
+                   .Skip((int)((search.Page - 1) * search.PageSize))
+                   .Take((int)search.PageSize)
+                   .ToListAsync();
 
-            var tmp = _mapper.Map<List<T>>(list);
-            result.Result = tmp;
-            return result;
+                respons.Result = _mapper.Map<List<T>>(list);
+            }
+            else
+            {
+                var list = await query.ToListAsync();
+                respons.Result = _mapper.Map<List<T>>(list);
+            }
+            respons.Count = query.Count();
+            return respons;
         }
         
         public virtual async Task<T> GetById(int id)
