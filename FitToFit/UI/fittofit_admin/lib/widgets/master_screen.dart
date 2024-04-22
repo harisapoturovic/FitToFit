@@ -1,4 +1,5 @@
 import 'package:fittofit_admin/pages/akcije.dart';
+import 'package:fittofit_admin/pages/ponuda.dart';
 import 'package:fittofit_admin/pages/rezervacije.dart';
 import 'package:fittofit_admin/pages/treninzi.dart';
 import 'package:fittofit_admin/utils/util.dart';
@@ -11,10 +12,7 @@ class MasterScreenWidget extends StatefulWidget {
   String? title;
   final Widget? floatingActionButton;
   MasterScreenWidget(
-      {this.child,
-      this.title,
-      super.key,
-      this.floatingActionButton});
+      {this.child, this.title, super.key, this.floatingActionButton});
 
   @override
   State<MasterScreenWidget> createState() => _MasterScreenWidgetState();
@@ -71,54 +69,94 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
             ),
             destinations: [
               NavigationRailDestination(
-                icon: buildIcon(Icons.home, 0, 'Home', () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const KorisniciPage(),
-                    ),
-                  );
-                }),
+                icon: Tooltip(
+                  message: 'Početna',
+                  textStyle:
+                      const TextStyle(fontSize: 14.0, color: Colors.white),
+                  child: buildIcon(Icons.home, 0, 'Home', () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const KorisniciPage(),
+                      ),
+                    );
+                  }),
+                ),
                 label: const Text('Home'),
               ),
               NavigationRailDestination(
-                icon: buildIcon(Icons.search, 1, 'Search', () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const KorisniciPage(),
-                    ),
-                  );
-                }),
+                icon: Tooltip(
+                  message: 'Korisnici',
+                  textStyle:
+                      const TextStyle(fontSize: 14.0, color: Colors.white),
+                  child: buildIcon(Icons.search, 1, 'Search', () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const KorisniciPage(),
+                      ),
+                    );
+                  }),
+                ),
                 label: const Text('Search'),
               ),
               NavigationRailDestination(
-                icon: buildIcon(Icons.fitness_center, 2, 'Training', () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const TreninziPage(),
-                    ),
-                  );
-                }),
+                icon: Tooltip(
+                  message: 'Treninzi',
+                  textStyle:
+                      const TextStyle(fontSize: 14.0, color: Colors.white),
+                  child: buildIcon(Icons.fitness_center, 2, 'Training', () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const TreninziPage(),
+                      ),
+                    );
+                  }),
+                ),
                 label: const Text('Training'),
               ),
               NavigationRailDestination(
-                icon: buildIcon(Icons.local_offer, 3, 'Actions', () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const AkcijePage(),
-                    ),
-                  );
-                }),
+                icon: Tooltip(
+                  message: 'Akcije',
+                  textStyle:
+                      const TextStyle(fontSize: 14.0, color: Colors.white),
+                  child: buildIcon(Icons.local_offer, 3, 'Actions', () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const AkcijePage(),
+                      ),
+                    );
+                  }),
+                ),
                 label: const Text('Actions'),
               ),
-               NavigationRailDestination(
-                icon: buildIcon(Icons.event, 4, 'Reservations', () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const RezervacijePage(),
-                    ),
-                  );
-                }),
+              NavigationRailDestination(
+                icon: Tooltip(
+                  message: 'Rezervacije',
+                  textStyle:
+                      const TextStyle(fontSize: 14.0, color: Colors.white),
+                  child: buildIcon(Icons.event, 4, 'Reservations', () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const RezervacijePage(),
+                      ),
+                    );
+                  }),
+                ),
                 label: const Text('Reservations'),
+              ),
+              NavigationRailDestination(
+                icon: Tooltip(
+                  message: 'Ponuda',
+                  textStyle:
+                      const TextStyle(fontSize: 14.0, color: Colors.white),
+                  child: buildIcon(Icons.local_mall, 5, 'Ponuda', () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const PonudaPage(),
+                      ),
+                    );
+                  }),
+                ),
+                label: const Text('Ponuda'),
               ),
             ],
             onDestinationSelected: (int index) {
