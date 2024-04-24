@@ -12,6 +12,7 @@ import 'package:fittofit_admin/providers/treninzi_clanarine_provider.dart';
 import 'package:fittofit_admin/providers/treninzi_provider.dart';
 import 'package:fittofit_admin/widgets/master_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -43,6 +44,7 @@ class _PonudaPageState extends State<PonudaPage> {
   String? _selectedDan;
   bool isRaspored = true;
   bool isSearching = false;
+  final _formKey = GlobalKey<FormBuilderState>();
 
   var page = 1;
   var totalcount = 0;
@@ -52,7 +54,7 @@ class _PonudaPageState extends State<PonudaPage> {
     'Ponedjeljak',
     'Utorak',
     'Srijeda',
-    'četvrtak',
+    'Četvrtak',
     'Petak'
   ];
 
@@ -113,7 +115,9 @@ class _PonudaPageState extends State<PonudaPage> {
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 630),
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                if (isRaspored) _showAddTerminDialog();
+              },
               style: ElevatedButton.styleFrom(
                 primary: const Color.fromARGB(255, 159, 160, 255),
                 padding:
@@ -225,7 +229,7 @@ class _PonudaPageState extends State<PonudaPage> {
           Expanded(
             child: Container(
               margin:
-                  const EdgeInsets.symmetric(vertical:30.0, horizontal: 300),
+                  const EdgeInsets.symmetric(vertical: 30.0, horizontal: 300),
               padding: const EdgeInsets.all(10.0),
               decoration: BoxDecoration(
                 border: Border.all(
@@ -353,13 +357,16 @@ class _PonudaPageState extends State<PonudaPage> {
                                 },
                               ),
                               const Text('   |   '),
-                              Text(
-                                '${e.brojClanova} članova',
-                                style: const TextStyle(
-                                  fontSize: 15.0,
-                                  color: Color.fromRGBO(0, 154, 231, 1),
-                                ),
-                              )
+                              if (e.brojClanova != null)
+                                Text(
+                                  '${e.brojClanova} članova',
+                                  style: const TextStyle(
+                                    fontSize: 15.0,
+                                    color: Color.fromRGBO(0, 154, 231, 1),
+                                  ),
+                                )
+                              else
+                                const Text('')
                             ],
                           ),
                           trailing: Row(
@@ -632,5 +639,181 @@ class _PonudaPageState extends State<PonudaPage> {
         ),
       ),
     );
+  }
+
+  void _showAddTerminDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Dodaj termin'),
+          content: Container(
+            width: 400.0,
+            height: 500.0,
+            padding: const EdgeInsets.all(5.0),
+            margin: const EdgeInsets.only(left: 50, right: 50, top: 50),
+            child: SingleChildScrollView(
+              child: FormBuilder(
+                key: _formKey,
+                autovalidateMode: AutovalidateMode.always,
+                child: Column(
+                  children: [
+                    FormBuilderDropdown(
+                      name: 'dan',
+                      decoration:
+                          const InputDecoration(labelText: 'Radni dani'),
+                      initialValue: radniDani[0],
+                      items: radniDani.map((dan) {
+                        return DropdownMenuItem(
+                          value: dan,
+                          child: Text(dan),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 10.0),
+                    FormBuilderTextField(
+                      name: 'sat',
+                      decoration: const InputDecoration(labelText: 'Sat'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Ovo polje je obavezno!';
+                        }
+                        if (value.length < 5) {
+                          return 'Ovo polje može imati minimalno 4 karaktera.';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 10.0),
+                    FormBuilderTextField(
+                      name: 'brojClanova',
+                      decoration:
+                          const InputDecoration(labelText: 'Broj članova'),
+                      validator: (value) {
+                        if (value != null && value.length > 2) {
+                          return 'Ovo polje može sadržavati jednu ili dvije cifre.';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 10.0),
+                    FormBuilderDropdown(
+                      name: 'treningId',
+                      decoration: const InputDecoration(labelText: 'Trening'),
+                      initialValue: _treninziList[0].treningId,
+                      items: _treninziList.map((trening) {
+                        return DropdownMenuItem(
+                          value: trening.treningId,
+                          child: Text(trening.naziv),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 10.0),
+                    FormBuilderDropdown(
+                      name: 'trenerId',
+                      decoration: const InputDecoration(labelText: 'Trener'),
+                      initialValue: _treneriList[0].trenerId,
+                      items: _treneriList.map((trener) {
+                        return DropdownMenuItem(
+                          value: trener.trenerId,
+                          child: Text('${trener.ime} ${trener.prezime}'),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 10.0),
+                    FormBuilderDropdown(
+                      name: 'salaId',
+                      decoration: const InputDecoration(labelText: 'Sala'),
+                      initialValue: _saleList[0].salaId,
+                      items: _saleList.map((sala) {
+                        return DropdownMenuItem(
+                          value: sala.salaId,
+                          child: Text(sala.naziv),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: ElevatedButton.styleFrom(
+                textStyle: const TextStyle(
+                  fontSize: 14.0,
+                ),
+              ),
+              child: const Text('Odustani'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                _dodajTermin();
+              },
+              style: ElevatedButton.styleFrom(
+                primary: const Color.fromRGBO(0, 154, 231, 1),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
+                textStyle: const TextStyle(
+                  fontSize: 14.0,
+                ),
+              ),
+              child: const Text('Spremi'),
+            ),
+          ],
+          contentPadding: const EdgeInsets.symmetric(horizontal: 40.0),
+        );
+      },
+    );
+  }
+
+  void _dodajTermin() {
+    _formKey.currentState?.saveAndValidate();
+    final currentFormState = _formKey.currentState;
+    if (!_areAllFieldsFilled(currentFormState)) {
+      _showAlertDialog(
+          "Upozorenje", "Popunite sva obavezna polja.", Colors.orange);
+      return;
+    }
+    if (currentFormState != null) {
+      if (!currentFormState.validate()) {
+        _showAlertDialog(
+            "Upozorenje",
+            "Molimo vas da ispravno popunite sva obavezna polja.",
+            Colors.orange);
+        return;
+      }
+    }
+    var request = Map.from(_formKey.currentState!.value);
+    try {
+      _terminiProvider.insert(request);
+      _showAlertDialog("Uspješan unos", "Termin uspješno dodan.", Colors.green);
+    } on Exception catch (e) {
+      _showAlertDialog("Greška", e.toString(), Colors.red);
+    }
+  }
+
+  bool _areAllFieldsFilled(FormBuilderState? formState) {
+    if (formState == null) {
+      return false;
+    }
+
+    List<String> requiredFields = ['dan', 'treningId', 'trenerId', 'salaId'];
+
+    for (String fieldName in requiredFields) {
+      if (formState.fields[fieldName]?.value == null ||
+          formState.fields[fieldName]!.value.toString().isEmpty) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  String formatDateForJson(DateTime dateTime) {
+    return dateTime.toIso8601String();
   }
 }
