@@ -91,7 +91,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
 
   void _loadData() async {
     if (!mounted) return;
-    
+
     final treningid = widget.trening.treningId;
     var data = await _treninziProvider.getById(treningid);
     var vrsteTreninga = await _vrsteTreningaProvider.get(filter: {});
@@ -221,8 +221,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                   labelText: "Naziv",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color:
-                                          Color.fromRGBO(0, 154, 231, 1),
+                                      color: Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -250,8 +249,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                   labelText: "Opis",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color:
-                                          Color.fromRGBO(0, 154, 231, 1),
+                                      color: Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -281,8 +279,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                   labelText: "Maksimalan broj članova",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color:
-                                          Color.fromRGBO(0, 154, 231, 1),
+                                      color: Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -306,8 +303,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                   labelText: "Cijena po terminu",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color:
-                                          Color.fromRGBO(0, 154, 231, 1),
+                                      color: Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -333,8 +329,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                   labelText: "Trajanje",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color:
-                                          Color.fromRGBO(0, 154, 231, 1),
+                                      color: Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -358,8 +353,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                   labelText: "Prosječna potrošnja kalorija",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color:
-                                          Color.fromRGBO(0, 154, 231, 1),
+                                      color: Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -410,7 +404,8 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                         enabled: false,
                                       );
                                     } else {
-                                      return const Text("Vrsta treninga: Nepoznato");
+                                      return const Text(
+                                          "Vrsta treninga: Nepoznato");
                                     }
                                   } else {
                                     return const Text(
@@ -430,8 +425,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                   labelText: "Namjena",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color:
-                                          Color.fromRGBO(0, 154, 231, 1),
+                                      color: Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -457,8 +451,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                   labelText: "Termini",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color:
-                                          Color.fromRGBO(0, 154, 231, 1),
+                                      color: Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -492,8 +485,8 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                     },
                     style: ElevatedButton.styleFrom(
                       primary: Colors.green,
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 20, vertical: 17),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 17),
                       side: const BorderSide(color: Colors.white),
                       textStyle: const TextStyle(
                         fontSize: 15.0,
@@ -514,8 +507,8 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                     },
                     style: ElevatedButton.styleFrom(
                       primary: Colors.red,
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 20, vertical: 17),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 17),
                       side: const BorderSide(color: Colors.white),
                       textStyle: const TextStyle(
                         fontSize: 15.0,
@@ -545,7 +538,8 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
               color: Colors.red,
             ),
           ),
-          content: const Text('Da li ste sigurni da želite izbrisati ovaj trening?'),
+          content:
+              const Text('Da li ste sigurni da želite izbrisati ovaj trening?'),
           actions: [
             TextButton(
               onPressed: () {
@@ -630,8 +624,6 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
 
   showEditTrainings(Treninzi trening) async {
     String? trainingImage = trening.slika;
-    final TextEditingController nazivController =
-        TextEditingController(text: trening.naziv);
     final TextEditingController opisController =
         TextEditingController(text: trening.opis);
     final TextEditingController maxBrojClanovaController =
@@ -684,27 +676,6 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                             height: 16,
                                           ),
                                           FormBuilderTextField(
-                                            name: 'naziv',
-                                            controller: nazivController,
-                                            decoration: const InputDecoration(
-                                              labelText: 'Naziv',
-                                              border: OutlineInputBorder(),
-                                            ),
-                                            validator: (value) {
-                                              if (value == null ||
-                                                  value.isEmpty) {
-                                                return 'Ovo polje je obavezno!';
-                                              }
-                                              if (!RegExp(r'^[A-Z]')
-                                                  .hasMatch(value)) {
-                                                return 'Naziv mora početi velikim slovom.';
-                                              }
-
-                                              return null;
-                                            },
-                                          ),
-                                          const SizedBox(height: 16),
-                                          FormBuilderTextField(
                                             name: 'opis',
                                             controller: opisController,
                                             decoration: const InputDecoration(
@@ -742,7 +713,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                                 return 'Ovo polje je obavezno!';
                                               }
                                               if (!RegExp(r'^[0-9]+$')
-                                                      .hasMatch(value)) {
+                                                  .hasMatch(value)) {
                                                 return 'Ovo polje može sadržavati samo brojeve.';
                                               }
 
@@ -764,8 +735,9 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                                   value.isEmpty) {
                                                 return 'Ovo polje je obavezno!';
                                               }
-                                              if (!RegExp(r'^[0-9]+(?:[.,][0-9]+)*$')
-                                                      .hasMatch(value)) {
+                                              if (!RegExp(
+                                                      r'^[0-9]+(?:[.,][0-9]+)*$')
+                                                  .hasMatch(value)) {
                                                 return 'Ovo polje ne može sadržavati slova.';
                                               }
 
@@ -806,8 +778,9 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                                   value.isEmpty) {
                                                 return 'Ovo polje je obavezno!';
                                               }
-                                              if (!RegExp(r'^[0-9]+(?:[.,][0-9]+)*$')
-                                                      .hasMatch(value)) {
+                                              if (!RegExp(
+                                                      r'^[0-9]+(?:[.,][0-9]+)*$')
+                                                  .hasMatch(value)) {
                                                 return 'Ovo polje ne može sadržavati slova.';
                                               }
 
@@ -935,15 +908,15 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                                       treningId: odabraniTrening!
                                                           .treningId,
                                                       naziv:
-                                                          nazivController.text,
+                                                          odabraniTrening!.naziv,
                                                       opis: opisController.text,
-                                                      maxBrojClanova:
-                                                          int.tryParse(maxBrojClanovaController.text) ??
-                                                              0,
-                                                      cijenaPoTerminu: double.tryParse(
-                                                              cijenaPoTerminuController
+                                                      maxBrojClanova: int.tryParse(
+                                                              maxBrojClanovaController
                                                                   .text) ??
-                                                          0.0,
+                                                          0,
+                                                      cijenaPoTerminu:
+                                                          double.tryParse(cijenaPoTerminuController.text) ??
+                                                              0.0,
                                                       trajanje:
                                                           trajanjeController
                                                               .text,
@@ -954,11 +927,11 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                                           .text,
                                                       vrstaId:
                                                           _selectedVrstaTreninga ??
-                                                              0,
+                                                              odabraniTrening!
+                                                                  .vrstaId,
                                                       slika: trainingImage,
-                                                      terminis: odabraniTrening
-                                                              ?.terminis ??
-                                                          []);
+                                                      terminis:
+                                                          odabraniTrening?.terminis ?? []);
 
                                                   _treninziProvider.update(
                                                       odabraniTrening!

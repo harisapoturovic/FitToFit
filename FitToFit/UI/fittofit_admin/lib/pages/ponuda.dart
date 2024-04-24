@@ -378,7 +378,9 @@ class _PonudaPageState extends State<PonudaPage> {
                                     fontSize: 16.0, color: Colors.white),
                                 child: IconButton(
                                   icon: const Icon(Icons.edit),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    showEditTermin(e);
+                                  },
                                 ),
                               ),
                               Tooltip(
@@ -813,7 +815,204 @@ class _PonudaPageState extends State<PonudaPage> {
     return true;
   }
 
-  String formatDateForJson(DateTime dateTime) {
-    return dateTime.toIso8601String();
+  showEditTermin(Termini termin) async {
+    final TextEditingController satController =
+        TextEditingController(text: termin.sat);
+    final TextEditingController brojClanovaController =
+        TextEditingController(text: termin.brojClanova.toString());
+
+    final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+                title: const Text('Ažuriraj termin'),
+                content: SingleChildScrollView(
+                    child: Container(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: Column(children: [
+                    FormBuilder(
+                      key: formKey,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                  constraints:
+                                      const BoxConstraints(maxWidth: 800),
+                                  child: Card(
+                                    color: Colors.white,
+                                    elevation: 50,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(12)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          const SizedBox(
+                                            height: 16,
+                                          ),
+                                          FormBuilderDropdown(
+                                            name: 'dan',
+                                            decoration: const InputDecoration(
+                                                labelText: 'Radni dani'),
+                                            initialValue: termin.dan,
+                                            items: radniDani.map((dan) {
+                                              return DropdownMenuItem(
+                                                value: dan,
+                                                child: Text(dan),
+                                              );
+                                            }).toList(),
+                                            onChanged: (value) {
+                                              setState(() {
+                                                _selectedDan = value as String?;
+                                              });
+                                            },
+                                          ),
+                                          const SizedBox(height: 10.0),
+                                          FormBuilderTextField(
+                                            name: 'sat',
+                                            controller: satController,
+                                            decoration: const InputDecoration(
+                                                labelText: 'Sat'),
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return 'Ovo polje je obavezno!';
+                                              }
+                                              if (value.length < 5) {
+                                                return 'Ovo polje može imati minimalno 4 karaktera.';
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                          const SizedBox(height: 16),
+                                          FormBuilderTextField(
+                                            name: 'brojClanova',
+                                            controller: brojClanovaController,
+                                            decoration: const InputDecoration(
+                                              labelText: 'Broj članova',
+                                              border: OutlineInputBorder(),
+                                            ),
+                                            validator: (value) {
+                                              if (value != null &&
+                                                  value.length > 2) {
+                                                return 'Ovo polje može sadržavati jednu ili dvije cifre.';
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                          const SizedBox(height: 16),
+                                          FormBuilderDropdown(
+                                            name: 'treningId',
+                                            decoration: const InputDecoration(
+                                                labelText: 'Trening'),
+                                            initialValue: termin.treningId,
+                                            items: _treninziList.map((trening) {
+                                              return DropdownMenuItem(
+                                                value: trening.treningId,
+                                                child: Text(trening.naziv),
+                                              );
+                                            }).toList(),
+                                            onChanged: (value) {
+                                              setState(() {
+                                                _selectedTrening =
+                                                    value as int?;
+                                              });
+                                            },
+                                          ),
+                                          const SizedBox(height: 10.0),
+                                          FormBuilderDropdown(
+                                            name: 'trenerId',
+                                            decoration: const InputDecoration(
+                                                labelText: 'Trener'),
+                                            initialValue: termin.trenerId,
+                                            items: _treneriList.map((trener) {
+                                              return DropdownMenuItem(
+                                                value: trener.trenerId,
+                                                child: Text(
+                                                    '${trener.ime} ${trener.prezime}'),
+                                              );
+                                            }).toList(),
+                                            onChanged: (value) {
+                                              setState(() {
+                                                _selectedTrener = value as int?;
+                                              });
+                                            },
+                                          ),
+                                          const SizedBox(height: 10.0),
+                                          FormBuilderDropdown(
+                                            name: 'salaId',
+                                            decoration: const InputDecoration(
+                                                labelText: 'Sala'),
+                                            initialValue: termin.salaId,
+                                            items: _saleList.map((sala) {
+                                              return DropdownMenuItem(
+                                                value: sala.salaId,
+                                                child: Text(sala.naziv),
+                                              );
+                                            }).toList(),
+                                            onChanged: (value) {
+                                              setState(() {
+                                                _selectedSala = value as int?;
+                                              });
+                                            },
+                                          ),
+                                          const SizedBox(height: 32),
+                                          ElevatedButton(
+                                            onPressed: () async {
+                                              if (formKey.currentState!
+                                                  .validate()) {
+                                                Termini t = Termini(
+                                                    terminId: termin.terminId,
+                                                    dan: _selectedDan ?? termin.dan,
+                                                    sat: satController.text,
+                                                    brojClanova: int.tryParse(
+                                                            brojClanovaController
+                                                                .text) ??
+                                                        0,
+                                                    treningId:
+                                                        _selectedTrening ?? termin.treningId,
+                                                    trenerId: _selectedTrener ?? termin.trenerId,
+                                                    salaId: _selectedSala ?? termin.salaId);
+
+                                                _terminiProvider.update(
+                                                    termin.terminId, t);
+                                                _showAlertDialog(
+                                                    "Uspješan edit",
+                                                    "Podaci o terminu uspješno ažurirani.",
+                                                    Colors.green);
+                                              }
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              primary: const Color.fromRGBO(
+                                                  0, 154, 231, 1),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 18,
+                                                      vertical: 15),
+                                              textStyle: const TextStyle(
+                                                fontSize: 14.0,
+                                              ),
+                                            ),
+                                            child: const Text('Sačuvaj'),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ))
+                            ]),
+                      ),
+                    )
+                  ]),
+                )));
+          });
+        });
   }
 }

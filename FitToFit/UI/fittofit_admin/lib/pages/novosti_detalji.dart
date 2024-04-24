@@ -605,7 +605,7 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                                                           odabranaNovost!
                                                               .korisnikId,
                                                       vrstaTreningaId:
-                                                          _selectedVrstaTreninga);
+                                                          _selectedVrstaTreninga ?? odabranaNovost!.vrstaTreningaId);
 
                                                   _novostiProvider.update(
                                                       odabranaNovost!.novostId,
