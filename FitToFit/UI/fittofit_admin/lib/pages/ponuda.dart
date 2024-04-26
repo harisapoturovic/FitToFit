@@ -51,6 +51,7 @@ class _PonudaPageState extends State<PonudaPage> {
   bool isRaspored = true;
   bool isSearching = false;
   final _formKey = GlobalKey<FormBuilderState>();
+  final _formKey2 = GlobalKey<FormBuilderState>();
   final TextEditingController _cijenaController = TextEditingController();
 
   var page = 1;
@@ -128,7 +129,7 @@ class _PonudaPageState extends State<PonudaPage> {
             margin: const EdgeInsets.symmetric(horizontal: 630),
             child: ElevatedButton(
               onPressed: () {
-                if (isRaspored) _showAddTerminDialog();
+                isRaspored ? _showAddTerminDialog() : _showAddStavkuDialog();
               },
               style: ElevatedButton.styleFrom(
                 primary: const Color.fromARGB(255, 159, 160, 255),
@@ -144,7 +145,7 @@ class _PonudaPageState extends State<PonudaPage> {
               ),
               child: isRaspored
                   ? const Text('Dodaj termin')
-                  : const Text('Dodaj stavku na cjenovnik'),
+                  : const Text('Dodaj stavku'),
             ),
           ),
           const SizedBox(height: 50),
@@ -214,9 +215,8 @@ class _PonudaPageState extends State<PonudaPage> {
               setState(() {
                 isRaspored = false;
                 _selectedList = _treninziClanarineList;
-                _loadData(); // zbog page buttons da se refreshuju
               });
-              //getFiltriraneTermine();
+              getFiltriraneTermine();
             },
             child: Text(
               'Cjenovnik',
@@ -493,7 +493,9 @@ class _PonudaPageState extends State<PonudaPage> {
                                 child: IconButton(
                                   icon: const Icon(Icons.edit),
                                   onPressed: () {
-                                    showEditTermin(e);
+                                    isRaspored
+                                        ? showEditTermin(e)
+                                        : showEditStavku(e);
                                   },
                                 ),
                               ),
@@ -504,7 +506,11 @@ class _PonudaPageState extends State<PonudaPage> {
                                 child: IconButton(
                                   icon: const Icon(Icons.delete),
                                   onPressed: () {
-                                    _confirmDeleteTermin(context, e.terminId);
+                                    isRaspored
+                                        ? _confirmDeleteTermin(
+                                            context, e.terminId)
+                                        : _confirmDeleteStavku(
+                                            context, e.treningClanarinaId);
                                   },
                                 ),
                               )
@@ -725,7 +731,9 @@ class _PonudaPageState extends State<PonudaPage> {
     var data2 = await _treninziClanarineProvider.get(filter: {
       'vrstaTreningaId': _selectedVrstaTr,
       'clanarinaId': _selectedClanarina,
-      'ucestalost':  _selectedUcestalost != null ? int.parse(_selectedUcestalost![0]) : null,
+      'ucestalost': _selectedUcestalost != null
+          ? int.parse(_selectedUcestalost![0])
+          : null,
       'cijena': int.tryParse(_cijenaController.text),
       'page': page,
       'pageSize': pageSize
@@ -738,8 +746,7 @@ class _PonudaPageState extends State<PonudaPage> {
       if (isRaspored) {
         _selectedList = _terminiList;
         totalcount = data1.count;
-      }
-      else{
+      } else {
         _selectedList = _treninziClanarineList;
         totalcount = data2.count;
       }
@@ -799,6 +806,64 @@ class _PonudaPageState extends State<PonudaPage> {
       await _terminiProvider.delete(terminId);
       _showAlertDialog(
           "Uspješno brisanje", "Termin uspješno izbrisan.", Colors.green);
+    } catch (e) {
+      _showAlertDialog("Greška", e.toString(), Colors.red);
+    }
+  }
+
+  void _confirmDeleteStavku(BuildContext context, int id) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: const Color.fromARGB(255, 238, 247, 255),
+          title: const Text(
+            'Potvrda brisanja',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+            ),
+          ),
+          content: const Text(
+              'Da li ste sigurni da želite izbrisati ovu stavku sa cjenovnika?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'Odustani',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                _obrisiStavku(id);
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'Izbriši',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+            ),
+          ],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        );
+      },
+    );
+  }
+
+  void _obrisiStavku(int id) async {
+    try {
+      await _treninziClanarineProvider.delete(id);
+      _showAlertDialog(
+          "Uspješno brisanje", "Stavka uspješno izbrisana.", Colors.green);
     } catch (e) {
       _showAlertDialog("Greška", e.toString(), Colors.red);
     }
@@ -1013,6 +1078,163 @@ class _PonudaPageState extends State<PonudaPage> {
     return true;
   }
 
+  void _showAddStavkuDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Dodaj stavku'),
+          content: Container(
+            width: 400.0,
+            height: 500.0,
+            padding: const EdgeInsets.all(5.0),
+            margin: const EdgeInsets.only(left: 50, right: 50, top: 50),
+            child: SingleChildScrollView(
+              child: FormBuilder(
+                key: _formKey2,
+                autovalidateMode: AutovalidateMode.always,
+                child: Column(
+                  children: [
+                    FormBuilderDropdown(
+                      name: 'vrstaTreningaId',
+                      decoration:
+                          const InputDecoration(labelText: 'Vrsta treninga'),
+                      initialValue: _vrsteTreningaList[0].vrstaTreningaId,
+                      items: _vrsteTreningaList.map((trening) {
+                        return DropdownMenuItem(
+                          value: trening.vrstaTreningaId,
+                          child: Text(trening.naziv!),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 10.0),
+                    FormBuilderDropdown(
+                      name: 'clanarinaId',
+                      decoration: const InputDecoration(labelText: 'Članarina'),
+                      initialValue: _clanarineList[0].clanarinaId,
+                      items: _clanarineList.map((clanarina) {
+                        return DropdownMenuItem(
+                          value: clanarina.clanarinaId,
+                          child: Text(clanarina.naziv),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 10.0),
+                    FormBuilderTextField(
+                      name: 'ucestalost',
+                      decoration:
+                          const InputDecoration(labelText: 'Učestalost'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Ovo polje je obavezno!';
+                        }
+                        if (!RegExp(r'^[1-5]$').hasMatch(value)) {
+                          return 'Ovo polje može sadržavati samo brojeve od 1 do 5.';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 10.0),
+                    FormBuilderTextField(
+                      name: 'cijena',
+                      decoration: const InputDecoration(labelText: 'Cijena'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Ovo polje je obavezno!';
+                        }
+                        if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                          return 'Ovo polje može sadržavati samo brojeve.';
+                        }
+                        return null;
+                      },
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: ElevatedButton.styleFrom(
+                textStyle: const TextStyle(
+                  fontSize: 14.0,
+                ),
+              ),
+              child: const Text('Odustani'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                _dodajStavku();
+              },
+              style: ElevatedButton.styleFrom(
+                primary: const Color.fromRGBO(0, 154, 231, 1),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
+                textStyle: const TextStyle(
+                  fontSize: 14.0,
+                ),
+              ),
+              child: const Text('Spremi'),
+            ),
+          ],
+          contentPadding: const EdgeInsets.symmetric(horizontal: 40.0),
+        );
+      },
+    );
+  }
+
+  void _dodajStavku() {
+    _formKey2.currentState?.saveAndValidate();
+    final currentFormState = _formKey2.currentState;
+    if (!_areAllFieldsFilled2(currentFormState)) {
+      _showAlertDialog(
+          "Upozorenje", "Popunite sva obavezna polja.", Colors.orange);
+      return;
+    }
+    if (currentFormState != null) {
+      if (!currentFormState.validate()) {
+        _showAlertDialog(
+            "Upozorenje",
+            "Molimo vas da ispravno popunite sva obavezna polja.",
+            Colors.orange);
+        return;
+      }
+    }
+    var request = Map.from(_formKey2.currentState!.value);
+    try {
+      _treninziClanarineProvider.insert(request);
+      _showAlertDialog("Uspješan unos", "Stavka uspješno dodana na cjenovnik.",
+          Colors.green);
+    } on Exception catch (e) {
+      _showAlertDialog("Greška", e.toString(), Colors.red);
+    }
+  }
+
+  bool _areAllFieldsFilled2(FormBuilderState? formState) {
+    if (formState == null) {
+      return false;
+    }
+
+    List<String> requiredFields = [
+      'cijena',
+      'clanarinaId',
+      'vrstaTreningaId',
+      'ucestalost'
+    ];
+
+    for (String fieldName in requiredFields) {
+      if (formState.fields[fieldName]?.value == null ||
+          formState.fields[fieldName]!.value.toString().isEmpty) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   showEditTermin(Termini termin) async {
     final TextEditingController satController =
         TextEditingController(text: termin.sat);
@@ -1189,6 +1411,188 @@ class _PonudaPageState extends State<PonudaPage> {
                                                 _showAlertDialog(
                                                     "Uspješan edit",
                                                     "Podaci o terminu uspješno ažurirani.",
+                                                    Colors.green);
+                                              }
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              primary: const Color.fromRGBO(
+                                                  0, 154, 231, 1),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 18,
+                                                      vertical: 15),
+                                              textStyle: const TextStyle(
+                                                fontSize: 14.0,
+                                              ),
+                                            ),
+                                            child: const Text('Sačuvaj'),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ))
+                            ]),
+                      ),
+                    )
+                  ]),
+                )));
+          });
+        });
+  }
+
+  showEditStavku(TreninziClanarine stavka) async {
+    final TextEditingController ucestalostController =
+        TextEditingController(text: stavka.ucestalost.toString());
+    final TextEditingController cijenaController =
+        TextEditingController(text: stavka.cijena.toString());
+
+    final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+                title: const Text('Ažuriraj stavku'),
+                content: SingleChildScrollView(
+                    child: Container(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: Column(children: [
+                    FormBuilder(
+                      key: formKey,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                  constraints:
+                                      const BoxConstraints(maxWidth: 800),
+                                  child: Card(
+                                    color: Colors.white,
+                                    elevation: 50,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(12)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          const SizedBox(
+                                            height: 16,
+                                          ),
+                                          FormBuilderDropdown(
+                                            name: 'vrstaTreningaId',
+                                            decoration: const InputDecoration(
+                                                labelText: 'Vrsta treninga'),
+                                            initialValue:
+                                                stavka.vrstaTreningaId,
+                                            items: _vrsteTreningaList
+                                                .map((trening) {
+                                              return DropdownMenuItem(
+                                                value: trening.vrstaTreningaId,
+                                                child: Text(trening.naziv!),
+                                              );
+                                            }).toList(),
+                                            onChanged: (value) {
+                                              setState(() {
+                                                _selectedVrstaTr =
+                                                    value as int?;
+                                              });
+                                            },
+                                          ),
+                                          const SizedBox(height: 10.0),
+                                          FormBuilderDropdown(
+                                            name: 'clanarinaId',
+                                            decoration: const InputDecoration(
+                                                labelText: 'Članarina'),
+                                            initialValue: stavka.clanarinaId,
+                                            items:
+                                                _clanarineList.map((clanarina) {
+                                              return DropdownMenuItem(
+                                                value: clanarina.clanarinaId,
+                                                child: Text(clanarina.naziv),
+                                              );
+                                            }).toList(),
+                                            onChanged: (value) {
+                                              setState(() {
+                                                _selectedClanarina =
+                                                    value as int?;
+                                              });
+                                            },
+                                          ),
+                                          const SizedBox(height: 10.0),
+                                          FormBuilderTextField(
+                                            name: 'ucestalost',
+                                            controller: ucestalostController,
+                                            decoration: const InputDecoration(
+                                                labelText: 'Učestalost'),
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return 'Ovo polje je obavezno!';
+                                              }
+                                              if (!RegExp(r'^[1-5]$')
+                                                  .hasMatch(value)) {
+                                                return 'Ovo polje može sadržavati samo brojeve od 1 do 5.';
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                          const SizedBox(height: 16),
+                                          FormBuilderTextField(
+                                            name: 'cijena',
+                                            controller: cijenaController,
+                                            decoration: const InputDecoration(
+                                              labelText: 'Cijena',
+                                              border: OutlineInputBorder(),
+                                            ),
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return 'Ovo polje je obavezno!';
+                                              }
+                                              if (!RegExp(r'^[0-9]+$')
+                                                  .hasMatch(value)) {
+                                                return 'Ovo polje može sadržavati samo brojeve.';
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                          const SizedBox(height: 32),
+                                          ElevatedButton(
+                                            onPressed: () async {
+                                              if (formKey.currentState!
+                                                  .validate()) {
+                                                TreninziClanarine tc = TreninziClanarine(
+                                                    treningClanarinaId: stavka
+                                                        .treningClanarinaId,
+                                                    vrstaTreningaId:
+                                                        _selectedVrstaTr ??
+                                                            stavka
+                                                                .vrstaTreningaId,
+                                                    clanarinaId:
+                                                        _selectedClanarina ??
+                                                            stavka.clanarinaId,
+                                                    ucestalost: int.tryParse(
+                                                            ucestalostController
+                                                                .text) ??
+                                                        0,
+                                                    cijena: int.tryParse(
+                                                            cijenaController
+                                                                .text) ??
+                                                        0);
+
+                                                _treninziClanarineProvider
+                                                    .update(
+                                                        stavka
+                                                            .treningClanarinaId,
+                                                        tc);
+                                                _showAlertDialog(
+                                                    "Uspješan edit",
+                                                    "Podaci o stavci uspješno ažurirani.",
                                                     Colors.green);
                                               }
                                             },
