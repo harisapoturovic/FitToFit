@@ -4,12 +4,14 @@ import 'package:fittofit_admin/models/termini.dart';
 import 'package:fittofit_admin/models/treneri.dart';
 import 'package:fittofit_admin/models/treninzi.dart';
 import 'package:fittofit_admin/models/treninziClanarine.dart';
+import 'package:fittofit_admin/models/vrste_treninga.dart';
 import 'package:fittofit_admin/providers/clanarine_provider.dart';
 import 'package:fittofit_admin/providers/sale_provider.dart';
 import 'package:fittofit_admin/providers/termini_provider.dart';
 import 'package:fittofit_admin/providers/treneri_provider.dart';
 import 'package:fittofit_admin/providers/treninzi_clanarine_provider.dart';
 import 'package:fittofit_admin/providers/treninzi_provider.dart';
+import 'package:fittofit_admin/providers/vrste_treninga_provider.dart';
 import 'package:fittofit_admin/widgets/master_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -27,12 +29,14 @@ class _PonudaPageState extends State<PonudaPage> {
   late TerminiProvider _terminiProvider;
   late TreninziClanarineProvider _treninziClanarineProvider;
   late TreneriProvider _treneriProvider;
+  late VrsteTreningaProvider _vrsteTreningaProvider;
   late TreninziProvider _treninziProvider;
   late ClanarineProvider _clanarineProvider;
   late SaleProvider _saleProvider;
   List<Termini> _terminiList = [];
   List<TreninziClanarine> _treninziClanarineList = [];
   List<Treneri> _treneriList = [];
+  List<VrsteTreninga> _vrsteTreningaList = [];
   List<Treninzi> _treninziList = [];
   List<Clanarine> _clanarineList = [];
   List<Sale> _saleList = [];
@@ -40,11 +44,14 @@ class _PonudaPageState extends State<PonudaPage> {
   int? _selectedTrener;
   int? _selectedTrening;
   int? _selectedClanarina;
+  int? _selectedVrstaTr;
   int? _selectedSala;
   String? _selectedDan;
+  String? _selectedUcestalost;
   bool isRaspored = true;
   bool isSearching = false;
   final _formKey = GlobalKey<FormBuilderState>();
+  final TextEditingController _cijenaController = TextEditingController();
 
   var page = 1;
   var totalcount = 0;
@@ -58,6 +65,8 @@ class _PonudaPageState extends State<PonudaPage> {
     'Petak'
   ];
 
+  final List<String> ucestalost = ['1x', '2x', '3x', '4x', '5x'];
+
   @override
   void initState() {
     super.initState();
@@ -67,6 +76,7 @@ class _PonudaPageState extends State<PonudaPage> {
     _clanarineProvider = context.read<ClanarineProvider>();
     _saleProvider = context.read<SaleProvider>();
     _treninziClanarineProvider = context.read<TreninziClanarineProvider>();
+    _vrsteTreningaProvider = context.read<VrsteTreningaProvider>();
     _loadData();
   }
 
@@ -80,6 +90,7 @@ class _PonudaPageState extends State<PonudaPage> {
     var treninzi = await _treninziProvider.get(filter: {});
     var clanarine = await _clanarineProvider.get(filter: {});
     var sale = await _saleProvider.get(filter: {});
+    var vrsteTreninga = await _vrsteTreningaProvider.get(filter: {});
 
     setState(() {
       _terminiList = termini.result;
@@ -88,6 +99,7 @@ class _PonudaPageState extends State<PonudaPage> {
       _treninziList = treninzi.result;
       _clanarineList = clanarine.result;
       _saleList = sale.result;
+      _vrsteTreningaList = vrsteTreninga.result;
 
       _selectedList = isRaspored ? _terminiList : _treninziClanarineList;
       totalcount = isRaspored ? termini.count : treninziClanarine.count;
@@ -202,8 +214,9 @@ class _PonudaPageState extends State<PonudaPage> {
               setState(() {
                 isRaspored = false;
                 _selectedList = _treninziClanarineList;
+                _loadData(); // zbog page buttons da se refreshuju
               });
-              getFiltriraneTermine();
+              //getFiltriraneTermine();
             },
             child: Text(
               'Cjenovnik',
@@ -251,124 +264,225 @@ class _PonudaPageState extends State<PonudaPage> {
                             borderRadius: BorderRadius.circular(10.0),
                             side: const BorderSide(color: Colors.grey),
                           ),
-                          title: Row(
-                            children: [
-                              Text(
-                                '$currentNumber.',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18.0,
-                                  color: Color.fromRGBO(0, 154, 231, 1),
-                                ),
-                              ),
-                              const SizedBox(width: 40),
-                              Text(
-                                e.dan + ' u ' + e.sat,
-                                style: const TextStyle(
-                                  fontSize: 15.0,
-                                  color: Color.fromRGBO(0, 154, 231, 1),
-                                ),
-                              ),
-                              const Text('   |   '),
-                              FutureBuilder<dynamic>(
-                                future: _treninziProvider.getById(e.treningId),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return const CircularProgressIndicator();
-                                  } else {
-                                    if (snapshot.hasError) {
-                                      return Text('Error: ${snapshot.error}');
-                                    } else {
-                                      final trening = snapshot.data;
-                                      if (trening != null) {
-                                        return Text(
-                                          trening.naziv,
-                                          style: const TextStyle(
-                                            fontSize: 15.0,
-                                            color:
-                                                Color.fromRGBO(0, 154, 231, 1),
-                                          ),
-                                        );
-                                      } else {
-                                        return const Text(
-                                            'Invalid data format');
-                                      }
-                                    }
-                                  }
-                                },
-                              ),
-                              const Text('   |   '),
-                              FutureBuilder<dynamic>(
-                                future: _treneriProvider.getById(e.trenerId),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return const CircularProgressIndicator();
-                                  } else {
-                                    if (snapshot.hasError) {
-                                      return Text('Error: ${snapshot.error}');
-                                    } else {
-                                      final trener = snapshot.data;
-                                      if (trener != null) {
-                                        return Text(
-                                          trener.ime + ' ' + trener.prezime,
-                                          style: const TextStyle(
-                                            fontSize: 15.0,
-                                            color:
-                                                Color.fromRGBO(0, 154, 231, 1),
-                                          ),
-                                        );
-                                      } else {
-                                        return const Text(
-                                            'Invalid data format');
-                                      }
-                                    }
-                                  }
-                                },
-                              ),
-                              const Text('   |   '),
-                              FutureBuilder<dynamic>(
-                                future: _saleProvider.getById(e.salaId),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return const CircularProgressIndicator();
-                                  } else {
-                                    if (snapshot.hasError) {
-                                      return Text('Error: ${snapshot.error}');
-                                    } else {
-                                      final sala = snapshot.data;
-                                      if (sala != null) {
-                                        return Text(
-                                          sala.naziv,
-                                          style: const TextStyle(
-                                            fontSize: 15.0,
-                                            color:
-                                                Color.fromRGBO(0, 154, 231, 1),
-                                          ),
-                                        );
-                                      } else {
-                                        return const Text(
-                                            'Invalid data format');
-                                      }
-                                    }
-                                  }
-                                },
-                              ),
-                              const Text('   |   '),
-                              if (e.brojClanova != null)
-                                Text(
-                                  '${e.brojClanova} članova',
-                                  style: const TextStyle(
-                                    fontSize: 15.0,
-                                    color: Color.fromRGBO(0, 154, 231, 1),
-                                  ),
+                          title: isRaspored
+                              ? Row(
+                                  children: [
+                                    Text(
+                                      '$currentNumber.',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18.0,
+                                        color: Color.fromRGBO(0, 154, 231, 1),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 40),
+                                    Text(
+                                      e.dan + ' u ' + e.sat,
+                                      style: const TextStyle(
+                                        fontSize: 15.0,
+                                        color: Color.fromRGBO(0, 154, 231, 1),
+                                      ),
+                                    ),
+                                    const Text('   |   '),
+                                    FutureBuilder<dynamic>(
+                                      future: _treninziProvider
+                                          .getById(e.treningId),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return const CircularProgressIndicator();
+                                        } else {
+                                          if (snapshot.hasError) {
+                                            return Text(
+                                                'Error: ${snapshot.error}');
+                                          } else {
+                                            final trening = snapshot.data;
+                                            if (trening != null) {
+                                              return Text(
+                                                trening.naziv,
+                                                style: const TextStyle(
+                                                  fontSize: 15.0,
+                                                  color: Color.fromRGBO(
+                                                      0, 154, 231, 1),
+                                                ),
+                                              );
+                                            } else {
+                                              return const Text(
+                                                  'Invalid data format');
+                                            }
+                                          }
+                                        }
+                                      },
+                                    ),
+                                    const Text('   |   '),
+                                    FutureBuilder<dynamic>(
+                                      future:
+                                          _treneriProvider.getById(e.trenerId),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return const CircularProgressIndicator();
+                                        } else {
+                                          if (snapshot.hasError) {
+                                            return Text(
+                                                'Error: ${snapshot.error}');
+                                          } else {
+                                            final trener = snapshot.data;
+                                            if (trener != null) {
+                                              return Text(
+                                                trener.ime +
+                                                    ' ' +
+                                                    trener.prezime,
+                                                style: const TextStyle(
+                                                  fontSize: 15.0,
+                                                  color: Color.fromRGBO(
+                                                      0, 154, 231, 1),
+                                                ),
+                                              );
+                                            } else {
+                                              return const Text(
+                                                  'Invalid data format');
+                                            }
+                                          }
+                                        }
+                                      },
+                                    ),
+                                    const Text('   |   '),
+                                    FutureBuilder<dynamic>(
+                                      future: _saleProvider.getById(e.salaId),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return const CircularProgressIndicator();
+                                        } else {
+                                          if (snapshot.hasError) {
+                                            return Text(
+                                                'Error: ${snapshot.error}');
+                                          } else {
+                                            final sala = snapshot.data;
+                                            if (sala != null) {
+                                              return Text(
+                                                sala.naziv,
+                                                style: const TextStyle(
+                                                  fontSize: 15.0,
+                                                  color: Color.fromRGBO(
+                                                      0, 154, 231, 1),
+                                                ),
+                                              );
+                                            } else {
+                                              return const Text(
+                                                  'Invalid data format');
+                                            }
+                                          }
+                                        }
+                                      },
+                                    ),
+                                    const Text('   |   '),
+                                    if (e.brojClanova != null)
+                                      Text(
+                                        '${e.brojClanova} članova',
+                                        style: const TextStyle(
+                                          fontSize: 15.0,
+                                          color: Color.fromRGBO(0, 154, 231, 1),
+                                        ),
+                                      )
+                                    else
+                                      const Text('')
+                                  ],
                                 )
-                              else
-                                const Text('')
-                            ],
-                          ),
+                              : Row(
+                                  children: [
+                                    Text(
+                                      '$currentNumber.',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18.0,
+                                        color: Color.fromRGBO(0, 154, 231, 1),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 40),
+                                    FutureBuilder<dynamic>(
+                                      future: _vrsteTreningaProvider
+                                          .getById(e.vrstaTreningaId),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return const CircularProgressIndicator();
+                                        } else {
+                                          if (snapshot.hasError) {
+                                            return Text(
+                                                'Error: ${snapshot.error}');
+                                          } else {
+                                            final trening = snapshot.data;
+                                            if (trening != null) {
+                                              return Text(
+                                                trening.naziv,
+                                                style: const TextStyle(
+                                                  fontSize: 15.0,
+                                                  color: Color.fromRGBO(
+                                                      0, 154, 231, 1),
+                                                ),
+                                              );
+                                            } else {
+                                              return const Text(
+                                                  'Invalid data format');
+                                            }
+                                          }
+                                        }
+                                      },
+                                    ),
+                                    const Text('   |   '),
+                                    FutureBuilder<dynamic>(
+                                      future: _clanarineProvider
+                                          .getById(e.clanarinaId),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return const CircularProgressIndicator();
+                                        } else {
+                                          if (snapshot.hasError) {
+                                            return Text(
+                                                'Error: ${snapshot.error}');
+                                          } else {
+                                            final clanarina = snapshot.data;
+                                            if (clanarina != null) {
+                                              return Text(
+                                                clanarina.naziv,
+                                                style: const TextStyle(
+                                                  fontSize: 15.0,
+                                                  color: Color.fromRGBO(
+                                                      0, 154, 231, 1),
+                                                ),
+                                              );
+                                            } else {
+                                              return const Text(
+                                                  'Invalid data format');
+                                            }
+                                          }
+                                        }
+                                      },
+                                    ),
+                                    const Text('   |   '),
+                                    if (e.ucestalost != null)
+                                      Text(
+                                        '${e.ucestalost} x',
+                                        style: const TextStyle(
+                                          fontSize: 15.0,
+                                          color: Color.fromRGBO(0, 154, 231, 1),
+                                        ),
+                                      )
+                                    else
+                                      const Text(''),
+                                    const Text('   |   '),
+                                    Text(
+                                      '${e.cijena} KM',
+                                      style: const TextStyle(
+                                        fontSize: 15.0,
+                                        color: Color.fromRGBO(0, 154, 231, 1),
+                                      ),
+                                    )
+                                  ],
+                                ),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -413,99 +527,186 @@ class _PonudaPageState extends State<PonudaPage> {
       color: const Color.fromARGB(255, 78, 101, 214).withOpacity(0.1),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 20),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(
-              child: DropdownButtonFormField(
-                decoration: const InputDecoration(labelText: "Radni dani"),
-                items: radniDani.map((String dan) {
-                  return DropdownMenuItem(
-                    value: dan,
-                    child: Text(dan),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedDan = value as String;
-                  });
-                },
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: DropdownButtonFormField(
-                decoration: const InputDecoration(labelText: "Treninzi"),
-                items: _treninziList.map((Treninzi trening) {
-                  return DropdownMenuItem(
-                    value: trening.treningId,
-                    child: Text(trening.naziv),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedTrening = value as int?;
-                  });
-                },
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: DropdownButtonFormField(
-                decoration: const InputDecoration(labelText: "Treneri"),
-                items: _treneriList.map((Treneri trener) {
-                  return DropdownMenuItem(
-                    value: trener.trenerId,
-                    child: Text('${trener.ime} ${trener.prezime}'),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedTrener = value as int?;
-                  });
-                },
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: DropdownButtonFormField(
-                decoration: const InputDecoration(labelText: "Sale"),
-                items: _saleList.map((Sale sala) {
-                  return DropdownMenuItem(
-                    value: sala.salaId,
-                    child: Text(sala.naziv),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedSala = value as int?;
-                  });
-                },
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 50, right: 80),
-                child: ElevatedButton(
-                  onPressed: () async {
-                    await getFiltriraneTermine();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: const Color.fromARGB(255, 3, 59, 227),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 17),
-                    side: const BorderSide(color: Colors.white),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+        child: isRaspored
+            ? Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: DropdownButtonFormField(
+                      decoration:
+                          const InputDecoration(labelText: "Radni dani"),
+                      items: radniDani.map((String dan) {
+                        return DropdownMenuItem(
+                          value: dan,
+                          child: Text(dan),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedDan = value as String;
+                        });
+                      },
                     ),
                   ),
-                  child: const Text("Pretraži"),
-                ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: DropdownButtonFormField(
+                      decoration: const InputDecoration(labelText: "Treninzi"),
+                      items: _treninziList.map((Treninzi trening) {
+                        return DropdownMenuItem(
+                          value: trening.treningId,
+                          child: Text(trening.naziv),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedTrening = value as int?;
+                        });
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: DropdownButtonFormField(
+                      decoration: const InputDecoration(labelText: "Treneri"),
+                      items: _treneriList.map((Treneri trener) {
+                        return DropdownMenuItem(
+                          value: trener.trenerId,
+                          child: Text('${trener.ime} ${trener.prezime}'),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedTrener = value as int?;
+                        });
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: DropdownButtonFormField(
+                      decoration: const InputDecoration(labelText: "Sale"),
+                      items: _saleList.map((Sale sala) {
+                        return DropdownMenuItem(
+                          value: sala.salaId,
+                          child: Text(sala.naziv),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedSala = value as int?;
+                        });
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 50, right: 80),
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          await getFiltriraneTermine();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: const Color.fromARGB(255, 3, 59, 227),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 17),
+                          side: const BorderSide(color: Colors.white),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        child: const Text("Pretraži"),
+                      ),
+                    ),
+                  )
+                ],
+              )
+            : Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: DropdownButtonFormField(
+                      decoration: const InputDecoration(labelText: "Treninzi"),
+                      items: _vrsteTreningaList.map((VrsteTreninga trening) {
+                        return DropdownMenuItem(
+                          value: trening.vrstaTreningaId,
+                          child: Text(trening.naziv!),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedVrstaTr = value as int?;
+                        });
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: DropdownButtonFormField(
+                      decoration: const InputDecoration(labelText: "Članarine"),
+                      items: _clanarineList.map((Clanarine clanarina) {
+                        return DropdownMenuItem(
+                          value: clanarina.clanarinaId,
+                          child: Text(clanarina.naziv),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedClanarina = value as int?;
+                        });
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: DropdownButtonFormField(
+                      decoration:
+                          const InputDecoration(labelText: "Učestalost"),
+                      items: ucestalost.map((String u) {
+                        return DropdownMenuItem(
+                          value: u,
+                          child: Text(u),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedUcestalost = value as String;
+                        });
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: TextField(
+                      decoration:
+                          const InputDecoration(labelText: "Cijena (KM)"),
+                      controller: _cijenaController,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 50, right: 80),
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          await getFiltriraneTermine();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: const Color.fromARGB(255, 3, 59, 227),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 17),
+                          side: const BorderSide(color: Colors.white),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        child: const Text("Pretraži"),
+                      ),
+                    ),
+                  )
+                ],
               ),
-            )
-          ],
-        ),
       ),
     );
   }
@@ -521,30 +722,27 @@ class _PonudaPageState extends State<PonudaPage> {
       'pageSize': pageSize
     });
 
-    //var data2 = await _rezervacijeProvider.get(filter: {
-    //  'datum': _selectedDate,
-    //  'korisnikId': _selectedKorisnik,
-    //  'clanarinaId': _selectedClanarina,
-    //  'treningId': _selectedTrening,
-    //  'stateMachine': "draft",
-    //  'page': page,
-    //  'pageSize': pageSize
-    //});
+    var data2 = await _treninziClanarineProvider.get(filter: {
+      'vrstaTreningaId': _selectedVrstaTr,
+      'clanarinaId': _selectedClanarina,
+      'ucestalost':  _selectedUcestalost != null ? int.parse(_selectedUcestalost![0]) : null,
+      'cijena': int.tryParse(_cijenaController.text),
+      'page': page,
+      'pageSize': pageSize
+    });
 
     setState(() {
       _terminiList = data1.result;
+      _treninziClanarineList = data2.result;
+
       if (isRaspored) {
         _selectedList = _terminiList;
         totalcount = data1.count;
       }
-      //_draftRezervacijeList = data2.result;
-      //if (isActive) {
-      //  _selectedRezervacije = _aktivneRezervacijeList;
-      //  totalcount = data1.count;
-      //} else {
-      //  _selectedRezervacije = _draftRezervacijeList;
-      //  totalcount = data2.count;
-      //}
+      else{
+        _selectedList = _treninziClanarineList;
+        totalcount = data2.count;
+      }
     });
   }
 
@@ -971,16 +1169,20 @@ class _PonudaPageState extends State<PonudaPage> {
                                                   .validate()) {
                                                 Termini t = Termini(
                                                     terminId: termin.terminId,
-                                                    dan: _selectedDan ?? termin.dan,
+                                                    dan: _selectedDan ??
+                                                        termin.dan,
                                                     sat: satController.text,
                                                     brojClanova: int.tryParse(
                                                             brojClanovaController
                                                                 .text) ??
                                                         0,
                                                     treningId:
-                                                        _selectedTrening ?? termin.treningId,
-                                                    trenerId: _selectedTrener ?? termin.trenerId,
-                                                    salaId: _selectedSala ?? termin.salaId);
+                                                        _selectedTrening ??
+                                                            termin.treningId,
+                                                    trenerId: _selectedTrener ??
+                                                        termin.trenerId,
+                                                    salaId: _selectedSala ??
+                                                        termin.salaId);
 
                                                 _terminiProvider.update(
                                                     termin.terminId, t);
