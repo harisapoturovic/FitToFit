@@ -176,4 +176,32 @@ abstract class BaseProvider<T> with ChangeNotifier {
     });
     return query;
   }
+
+  Future<void> changePassword(
+      int userId, String newPassword, String currentPassword) async {
+    var url = "$_baseUrl$_endpoint/$userId/change-password";
+    var uri = Uri.parse(url);
+    var headers = createHeaders();
+
+    var jsonRequest = jsonEncode({
+      "Id": userId,
+      "Password": newPassword,
+      "NewPassword": newPassword,
+    });
+
+    var response = await http.post(uri, headers: headers, body: jsonRequest);
+
+    if (response.statusCode == 200) {
+      print("Password changed successfully!");
+    } else if (response.statusCode == 500) {
+      var responseBody = json.decode(response.body);
+      if (responseBody['error'] == 'Invalid password.') {
+        throw Exception("Invalid current password. Please try again.");
+      } else {
+        throw Exception("Unknown error");
+      }
+    } else {
+      throw Exception("Unknown error");
+    }
+  }
 }

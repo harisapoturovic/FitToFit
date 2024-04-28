@@ -135,5 +135,22 @@ namespace FitToFit.Services
 
             return _mapper.Map<Model.Korisnici>(entity);
         }
+
+        public async Task ChangePasswordAsync(KorisniciChangePassword userChangePass)
+        {
+            var user = await _context.Korisnicis.FindAsync(userChangePass.Id);
+
+            if (user == null)
+                throw new($"User with ID {userChangePass.Id} not found.");
+
+            if (user.LozinkaHash == GenerateHash(user.LozinkaSalt, userChangePass.Password))
+                throw new("Invalid password.");
+
+            user.LozinkaSalt = GenerateSalt();
+            user.LozinkaHash = GenerateHash(user.LozinkaSalt, userChangePass.NewPassword);
+
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+        }
     }
 }

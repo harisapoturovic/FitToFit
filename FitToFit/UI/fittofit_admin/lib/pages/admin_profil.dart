@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:fittofit_admin/pages/change_password.dart';
 import 'package:image/image.dart' as img;
 
 import 'package:file_picker/file_picker.dart';
@@ -212,6 +213,32 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
                                             fontWeight: FontWeight.bold),
                                       ),
                                       child: const Text('Uredi'),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                ChangePasswordScreen(
+                                              userId:
+                                                  odabraniKorisnik!.korisnikId,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Colors.grey,
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 15, horizontal: 30),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                        textStyle:
+                                            const TextStyle(fontSize: 14),
+                                      ),
+                                      child: const Text('Promijeni lozinku'),
                                     ),
                                   ],
                                 ),

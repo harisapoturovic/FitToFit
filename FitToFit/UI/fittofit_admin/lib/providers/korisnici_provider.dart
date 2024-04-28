@@ -2,12 +2,32 @@ import 'package:fittofit_admin/models/korisnici.dart';
 
 import 'base_provider.dart';
 
-class KorisniciProvider extends BaseProvider<Korisnici>
-{
+class KorisniciProvider extends BaseProvider<Korisnici> {
   KorisniciProvider() : super("Korisnici");
-  
+  int? _loggedInUserId; // Polje za spremanje ID-a ulogiranog korisnika
+  int? get loggedInUserId => _loggedInUserId;
+
   @override
   Korisnici fromJson(data) {
-  return Korisnici.fromJson(data);
+    return Korisnici.fromJson(data);
+  }
+
+  int?
+      currentUserId; // Dodajte varijablu za pohranu trenutnog korisnikovog ID-a
+
+  void setCurrentUserId(int? userId) {
+    currentUserId = userId;
+
+    notifyListeners(); // Obavijestite slušatelje (widgete) o promjeni
+  }
+
+  Future<void> updateUser() async {
+    if (currentUserId != null) {
+      final updatedUser = await getById(currentUserId!);
+
+      if (updatedUser != null) {
+        notifyListeners();
+      }
+    }
   }
 }
