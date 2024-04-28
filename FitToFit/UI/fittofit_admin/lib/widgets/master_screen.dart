@@ -1,9 +1,13 @@
+import 'package:fittofit_admin/models/korisnici.dart';
+import 'package:fittofit_admin/pages/admin_profil.dart';
 import 'package:fittofit_admin/pages/akcije.dart';
 import 'package:fittofit_admin/pages/ponuda.dart';
 import 'package:fittofit_admin/pages/rezervacije.dart';
 import 'package:fittofit_admin/pages/treninzi.dart';
+import 'package:fittofit_admin/providers/korisnici_provider.dart';
 import 'package:fittofit_admin/utils/util.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../pages/korisnici.dart';
 
@@ -22,11 +26,23 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
   int selectedIndex = 0;
   int hoverIndex = -1;
   String korisnickoIme = '';
+  late KorisniciProvider _korisniciProvider;
+  Korisnici? odabraniKorisnik;
 
   @override
   void initState() {
     super.initState();
     korisnickoIme = "${Authorization.username}";
+    _korisniciProvider = context.read<KorisniciProvider>();
+    _loadData();
+  }
+
+  void _loadData() async {
+    var korisnik = await _korisniciProvider
+        .get(filter: {'isAdmin': true, 'korisnickoIme': korisnickoIme});
+    setState(() {
+      odabraniKorisnik = korisnik.result[0];
+    });
   }
 
   @override
@@ -43,13 +59,26 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               children: [
                 const Icon(Icons.person, color: Colors.white),
                 const SizedBox(width: 8.0),
-                Text(
-                  korisnickoIme,
-                  style: const TextStyle(
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AdminProfilPage(
+                          korisnik: odabraniKorisnik!,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    korisnickoIme,
+                    style: const TextStyle(
                       fontStyle: FontStyle.italic,
                       color: Colors.white,
-                      fontSize: 16),
-                ),
+                      fontSize: 16,
+                    ),
+                  ),
+                )
               ],
             ),
           ),
