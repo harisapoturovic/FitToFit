@@ -23,21 +23,11 @@ namespace FitToFit.Services
         {
             if (!string.IsNullOrWhiteSpace(search?.Naziv))
             {
-                query = query.Where(x => x.Naziv.Contains(search.Naziv));
+                query = query.Where(x => x.Naziv.StartsWith(search.Naziv));
             }
 
             return base.AddFilter(query, search);
-        }
-
-        public override Task BeforeInsert(Database.Vjezbe entity, VjezbeInsertRequest insert)
-        {
-            entity.TreninziVjezbes = insert.Items.Select(item => new Database.TreninziVjezbe
-            {
-                VjezbaId = entity.VjezbaId,
-                TreningId = item.TreningId,
-            }).ToList();
-            return base.BeforeInsert(entity, insert);
-        }       
+        }    
 
         public override async Task<Model.Vjezbe> Delete(int id)
         {

@@ -4,6 +4,7 @@ import 'package:fittofit_admin/pages/akcije.dart';
 import 'package:fittofit_admin/pages/ponuda.dart';
 import 'package:fittofit_admin/pages/rezervacije.dart';
 import 'package:fittofit_admin/pages/treninzi.dart';
+import 'package:fittofit_admin/pages/vjezbe.dart';
 import 'package:fittofit_admin/providers/korisnici_provider.dart';
 import 'package:fittofit_admin/utils/util.dart';
 import 'package:flutter/material.dart';
@@ -186,6 +187,21 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                   }),
                 ),
                 label: const Text('Ponuda'),
+              ),
+              NavigationRailDestination(
+                icon: Tooltip(
+                  message: 'Vježbe',
+                  textStyle:
+                      const TextStyle(fontSize: 14.0, color: Colors.white),
+                  child: buildIcon(Icons.directions_run, 6, 'Vježbe', () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const VjezbePage(),
+                      ),
+                    );
+                  }),
+                ),
+                label: const Text('Vježbe'),
               ),
             ],
             onDestinationSelected: (int index) {

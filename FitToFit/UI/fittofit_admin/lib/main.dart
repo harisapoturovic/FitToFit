@@ -11,6 +11,8 @@ import 'package:fittofit_admin/providers/termini_provider.dart';
 import 'package:fittofit_admin/providers/treneri_provider.dart';
 import 'package:fittofit_admin/providers/treninzi_clanarine_provider.dart';
 import 'package:fittofit_admin/providers/treninzi_provider.dart';
+import 'package:fittofit_admin/providers/vjezbe_provider.dart';
+import 'package:fittofit_admin/providers/vjezbe_treninzi_provider.dart';
 import 'package:fittofit_admin/providers/vrste_treninga_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -31,7 +33,9 @@ void main() {
         ChangeNotifierProvider(create: (_) => AcTreningProvider()),
         ChangeNotifierProvider(create: (_) => ClanarineProvider()),
         ChangeNotifierProvider(create: (_) => TreninziClanarineProvider()),
-        ChangeNotifierProvider(create: (_) => SaleProvider())
+        ChangeNotifierProvider(create: (_) => SaleProvider()),
+        ChangeNotifierProvider(create: (_) => VjezbeProvider()),
+        ChangeNotifierProvider(create: (_) => VjezbeTreninziProvider())
       ],
       child: const MyApp(),
     ),
