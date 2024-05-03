@@ -27,5 +27,6 @@ namespace FitToFit.Model.Requests
         public string Namjena { get; set; } = null!;
 
         public byte[]? Slika { get; set; }
+        public List<VjezbeTreninziInsertRequest>? Items { get; set; }
     }
 }

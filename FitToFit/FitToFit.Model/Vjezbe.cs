@@ -15,6 +15,6 @@ namespace FitToFit.Model
         public string? Opis { get; set; }
 
         public byte[]? Slika { get; set; }
-        public virtual ICollection<TreninziVjezbe> TreninziVjezbes { get; set; } = new List<TreninziVjezbe>();
+        //public virtual ICollection<TreninziVjezbe> TreninziVjezbes { get; set; } = new List<TreninziVjezbe>();
     }
 }

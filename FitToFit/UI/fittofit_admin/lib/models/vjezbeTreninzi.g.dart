@@ -15,6 +15,9 @@ VjezbeTreninzi _$VjezbeTreninziFromJson(Map<String, dynamic> json) =>
       trening: json['trening'] == null
           ? null
           : Treninzi.fromJson(json['trening'] as Map<String, dynamic>),
+      vjezba: json['vjezba'] == null
+          ? null
+          : Vjezbe.fromJson(json['vjezba'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$VjezbeTreninziToJson(VjezbeTreninzi instance) =>
@@ -24,4 +27,5 @@ Map<String, dynamic> _$VjezbeTreninziToJson(VjezbeTreninzi instance) =>
       'vjezbaId': instance.vjezbaId,
       'treningId': instance.treningId,
       'trening': instance.trening,
+      'vjezba': instance.vjezba,
     };

@@ -203,6 +203,10 @@ class _VjezbePageState extends State<VjezbePage> {
                           return 'Naziv mora početi velikim slovom.';
                         }
 
+                        if (value.length > 50) {
+                          return 'Možete unijeti maksimalno 50 karaktera.';
+                        }
+
                         return null;
                       },
                     ),

@@ -2,7 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:fittofit_admin/models/termini.dart';
+import 'package:fittofit_admin/models/vjezbe.dart';
 import 'package:fittofit_admin/providers/termini_provider.dart';
+import 'package:fittofit_admin/providers/vjezbe_provider.dart';
+import 'package:fittofit_admin/providers/vjezbe_treninzi_provider.dart';
 import 'package:image/image.dart' as img;
 
 import 'package:file_picker/file_picker.dart';
@@ -30,14 +33,20 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
   late VrsteTreningaProvider _vrsteTreningaProvider;
   late TreninziProvider _treninziProvider;
   late TerminiProvider _terminiProvider;
+  late VjezbeTreninziProvider _vjezbeTreninziProvider;
+  late VjezbeProvider _vjezbeProvider;
   Treninzi? odabraniTrening;
   bool isLoading = true;
   Image? trainingImage;
   int? _selectedVrstaTreninga;
   List<VrsteTreninga> _vrsteTreningaList = [];
   List<Termini> _terminiResult = [];
+  List<Vjezbe> _vjezbeList = [];
+  List<Treninzi> _treninziList = [];
   final _formKey = GlobalKey<FormBuilderState>();
+  final _formKey2 = GlobalKey<FormBuilderState>();
   Map<String, dynamic> _initialValue = {};
+  final TextEditingController _trajanjeController = TextEditingController();
 
   @override
   void initState() {
@@ -79,6 +88,8 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
     _treninziProvider = context.read<TreninziProvider>();
     _vrsteTreningaProvider = context.read<VrsteTreningaProvider>();
     _terminiProvider = context.read<TerminiProvider>();
+    _vjezbeTreninziProvider = context.read<VjezbeTreninziProvider>();
+    _vjezbeProvider = context.read<VjezbeProvider>();
     initForm();
     _loadData();
   }
@@ -97,12 +108,17 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
     var vrsteTreninga = await _vrsteTreningaProvider.get(filter: {});
     var termini = await _terminiProvider
         .get(filter: {"TreningId": "${widget.trening.treningId}"});
+    var vjezbe = await _vjezbeProvider.get(filter: {});
+    var treninzi = await _treninziProvider
+        .get(filter: {'IsVjezbeIncluded': true, 'naziv': data.naziv});
 
     if (!mounted) return;
     setState(() {
       odabraniTrening = data;
       _vrsteTreningaList = vrsteTreninga.result;
       _terminiResult = termini.result;
+      _vjezbeList = vjezbe.result;
+      _treninziList = treninzi.result;
     });
   }
 
@@ -141,54 +157,155 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
       initialValue: _initialValue,
       child: Row(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 50, left: 40, right: 40),
-            child: Container(
-              decoration: const BoxDecoration(),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxWidth: 400.0,
-                      maxHeight: 520.0,
-                    ),
-                    child: ClipRect(
-                      child: trainingImage != null
-                          ? Container(
-                              width: 400.0,
-                              height: 520.0,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: const Color.fromRGBO(0, 154, 231, 1),
-                                  width: 4.0,
+          Column(
+            children: [
+              Container(
+                decoration: const BoxDecoration(),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: ConstrainedBox(
+                      constraints: const BoxConstraints(
+                        maxWidth: 300.0,
+                        maxHeight: 300.0,
+                      ),
+                      child: ClipRect(
+                        child: trainingImage != null
+                            ? Container(
+                                width: 300.0,
+                                height: 250.0,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: const Color.fromRGBO(0, 154, 231, 1),
+                                    width: 4.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(15.0),
                                 ),
-                                borderRadius: BorderRadius.circular(15.0),
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(12.0),
-                                child: Image(
-                                  image: trainingImage!.image,
-                                  width: 400.0,
-                                  height: 400.0,
-                                  fit: BoxFit.cover,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  child: Image(
+                                    image: trainingImage!.image,
+                                    width: 300.0,
+                                    height: 250.0,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                              ),
-                            )
-                          : Container(
-                              width: 400.0,
-                              height: 400.0,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: const Color.fromRGBO(0, 154, 231, 1),
-                                  width: 2.0,
+                              )
+                            : Container(
+                                width: 300.0,
+                                height: 250.0,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: const Color.fromRGBO(0, 154, 231, 1),
+                                    width: 2.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(12.0),
                                 ),
-                                borderRadius: BorderRadius.circular(12.0),
+                                child:
+                                    Image.asset('assets/images/training.jpg'),
                               ),
-                              child: Image.asset('assets/images/training.jpg'),
-                            ),
-                    )),
+                      )),
+                ),
               ),
-            ),
+              Container(
+                width: 350.0,
+                height: 250.0,
+                padding: const EdgeInsets.all(5.0),
+                margin: const EdgeInsets.only(left: 50, right: 50, top: 30),
+                child: SingleChildScrollView(
+                  child: Card(
+                    margin: const EdgeInsets.all(10.0),
+                    child: Column(
+                      children: [
+                        const ListTile(
+                          title: Text(
+                            'Vježbe koje se mogu izvoditi:',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(255, 103, 103, 103),
+                            ),
+                          ),
+                        ),
+                        const Divider(),
+                        _treninziList.isNotEmpty
+                            ? ListView.builder(
+                                itemCount:
+                                    _treninziList[0].treninziVjezbes?.length ??
+                                        0,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  return ListTile(
+                                    title: Text(
+                                      '- ${_treninziList[0].treninziVjezbes?[index].vjezba?.naziv ?? 'empty'}',
+                                      style: const TextStyle(),
+                                    ),
+                                    trailing: GestureDetector(
+                                      onTap: () {
+                                        try {
+                                          _confirmDeleteVjezbu(
+                                              context,
+                                              _treninziList[0]
+                                                  .treninziVjezbes?[index]
+                                                  .treningVjezbaId);
+                                        } on Exception catch (e) {
+                                          _showAlertDialog("Greška",
+                                              e.toString(), Colors.red);
+                                        }
+                                      },
+                                      child: const Icon(Icons.delete),
+                                    ),
+                                  );
+                                },
+                              )
+                            : const Text("Nema vježbi na treningu!",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color.fromARGB(255, 86, 86, 86),
+                                )),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            _dodajVjezbu(context);
+                          },
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                Colors.transparent),
+                            elevation: MaterialStateProperty.all<double>(0),
+                            overlayColor: MaterialStateProperty.all<Color>(
+                                Colors.transparent),
+                            foregroundColor: MaterialStateProperty.all<Color>(
+                                const Color.fromARGB(255, 96, 96, 96)),
+                            textStyle: MaterialStateProperty.all<TextStyle>(
+                              const TextStyle(
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                            padding:
+                                MaterialStateProperty.all<EdgeInsetsGeometry>(
+                                    EdgeInsets.zero),
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            minimumSize:
+                                MaterialStateProperty.all<Size>(Size.zero),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Text('Dodaj vježbu na trening'),
+                              SizedBox(width: 5),
+                              Icon(Icons.add)
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
           const SizedBox(
             height: 30,
@@ -242,9 +359,9 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                             Expanded(
                               child: FormBuilderTextField(
                                 style: const TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 16,
                                     color: Colors.black,
-                                    height: 3),
+                                    height: 2),
                                 decoration: const InputDecoration(
                                   labelText: "Opis",
                                   border: OutlineInputBorder(
@@ -261,7 +378,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                       EdgeInsets.symmetric(vertical: 1),
                                 ),
                                 minLines: 1,
-                                maxLines: 3,
+                                maxLines: 5,
                                 name: "opis",
                                 enabled: false,
                               ),
@@ -446,7 +563,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                             Expanded(
                               child: FormBuilderTextField(
                                 style: const TextStyle(
-                                    fontSize: 20, color: Colors.black),
+                                    fontSize: 16, color: Colors.black),
                                 decoration: const InputDecoration(
                                   labelText: "Termini",
                                   border: OutlineInputBorder(
@@ -907,13 +1024,12 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                                   Treninzi trening = Treninzi(
                                                       treningId: odabraniTrening!
                                                           .treningId,
-                                                      naziv:
-                                                          odabraniTrening!.naziv,
+                                                      naziv: odabraniTrening!
+                                                          .naziv,
                                                       opis: opisController.text,
-                                                      maxBrojClanova: int.tryParse(
-                                                              maxBrojClanovaController
-                                                                  .text) ??
-                                                          0,
+                                                      maxBrojClanova:
+                                                          int.tryParse(maxBrojClanovaController.text) ??
+                                                              0,
                                                       cijenaPoTerminu:
                                                           double.tryParse(cijenaPoTerminuController.text) ??
                                                               0.0,
@@ -930,8 +1046,9 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                                               odabraniTrening!
                                                                   .vrstaId,
                                                       slika: trainingImage,
-                                                      terminis:
-                                                          odabraniTrening?.terminis ?? []);
+                                                      terminis: odabraniTrening
+                                                              ?.terminis ??
+                                                          []);
 
                                                   _treninziProvider.update(
                                                       odabraniTrening!
@@ -968,5 +1085,214 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                 )));
           });
         });
+  }
+
+  void _dodajVjezbu(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Nova vježba na treningu'),
+          content: Container(
+            width: 350.0,
+            height: 200.0,
+            padding: const EdgeInsets.all(5.0),
+            margin: const EdgeInsets.only(left: 50, right: 50, top: 20),
+            child: SingleChildScrollView(
+                child: Card(
+              margin: const EdgeInsets.all(10.0),
+              child: FormBuilder(
+                key: _formKey2,
+                autovalidateMode: AutovalidateMode.always,
+                child: Column(
+                  children: [
+                    FormBuilderTextField(
+                      name: 'trajanje',
+                      controller: _trajanjeController,
+                      decoration: const InputDecoration(
+                        labelText: 'Trajanje',
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Ovo polje je obavezno!';
+                        }
+                        if (!RegExp(r'^[0-9]+(?:[.,][0-9]+)*$')
+                            .hasMatch(value)) {
+                          return 'Ovo polje ne može sadržavati slova.';
+                        }
+
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    FormBuilderDropdown(
+                      name: 'vjezbaId',
+                      decoration: const InputDecoration(labelText: 'Vježbe'),
+                      initialValue: _vjezbeList[0].vjezbaId,
+                      items: _vjezbeList.map((vjezba) {
+                        return DropdownMenuItem(
+                          value: vjezba.vjezbaId,
+                          child: Text(vjezba.naziv),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+              ),
+            )),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: ElevatedButton.styleFrom(
+                textStyle: const TextStyle(
+                  fontSize: 14.0,
+                ),
+              ),
+              child: const Text('Odustani'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                _dodajVjezbuNaTrening();
+              },
+              style: ElevatedButton.styleFrom(
+                primary: const Color.fromRGBO(0, 154, 231, 1),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
+                textStyle: const TextStyle(
+                  fontSize: 14.0,
+                ),
+              ),
+              child: const Text('Spremi'),
+            ),
+          ],
+          contentPadding: const EdgeInsets.symmetric(horizontal: 40.0),
+        );
+      },
+    );
+  }
+
+  void _dodajVjezbuNaTrening() async {
+    _formKey2.currentState?.saveAndValidate();
+    final currentFormState = _formKey2.currentState;
+    if (!_areAllFieldsFilled(currentFormState)) {
+      _showAlertDialog(
+          "Upozorenje", "Popunite sva obavezna polja.", Colors.orange);
+      return;
+    }
+    if (currentFormState != null) {
+      if (!currentFormState.validate()) {
+        _showAlertDialog(
+            "Upozorenje",
+            "Molimo vas da ispravno popunite sva obavezna polja.",
+            Colors.orange);
+        return;
+      }
+    }
+
+    var request = Map.from(_formKey2.currentState!.value);
+    request['treningId'] = widget.trening.treningId;
+    request['trajanje'] = _trajanjeController.text;
+
+    if (_treninziList[0].treninziVjezbes != null) {
+      for (var at in _treninziList[0].treninziVjezbes!) {
+        if (request['vjezbaId'] == at.vjezbaId) {
+          _showAlertDialog("Upozorenje", "Odabrana vježba je već na treningu.",
+              Colors.orange);
+          return;
+        }
+      }
+    }
+    try {
+      await _vjezbeTreninziProvider.insert(request);
+      _showAlertDialog(
+          "Uspješan unos",
+          "Vježba uspješno dodana na ${widget.trening.naziv} trening.",
+          Colors.green);
+    } on Exception catch (e) {
+      _showAlertDialog("Greška", e.toString(), Colors.red);
+    }
+  }
+
+  bool _areAllFieldsFilled(FormBuilderState? formState) {
+    if (formState == null) {
+      return false;
+    }
+
+    List<String> requiredFields = ['vjezbaId'];
+
+    for (String fieldName in requiredFields) {
+      if (formState.fields[fieldName]?.value == null ||
+          formState.fields[fieldName]!.value.toString().isEmpty) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  void _confirmDeleteVjezbu(BuildContext context, int? vjezbaTreningId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: const Color.fromARGB(255, 238, 247, 255),
+          title: const Text(
+            'Potvrda brisanja',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+            ),
+          ),
+          content: const Text(
+              'Da li ste sigurni da želite ukloniti vježbu sa treninga?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'Odustani',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                _ukloniVjezbu(vjezbaTreningId);
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'Ukoni',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+            ),
+          ],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        );
+      },
+    );
+  }
+
+  void _ukloniVjezbu(int? vjezbaTreningId) async {
+    try {
+      if (vjezbaTreningId != null) {
+        await _vjezbeTreninziProvider.delete(vjezbaTreningId);
+        _showAlertDialog("Uspješno brisanje",
+            "Vježba uspješno uklonjena sa treninga.", Colors.green);
+      }
+    } catch (e) {
+      _showAlertDialog("Greška", e.toString(), Colors.red);
+    }
   }
 }

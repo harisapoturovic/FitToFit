@@ -9,5 +9,6 @@ namespace FitToFit.Model.SearchObjects
     public class VjezbeSearchObject : BaseSearchObject
     {
         public string? Naziv { get; set; }
+        public bool? IsTreninziIncluded { get; set; }
     }
 }

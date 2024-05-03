@@ -17,5 +17,7 @@ namespace FitToFit.Model
         public int VjezbaId { get; set; }
 
         public virtual Vjezbe Vjezba { get; set; } = null!;
+
+        //public virtual Treninzi Trening { get; set; } = null!;
     }
 }

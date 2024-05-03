@@ -36,6 +36,7 @@ class _VjezbaCardState extends State<VjezbaCard> {
 
   @override
   Widget build(BuildContext context) {
+    ScrollController scrollController = ScrollController();
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(
@@ -44,61 +45,60 @@ class _VjezbaCardState extends State<VjezbaCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          ClipRect(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15.0),
               child:
-                  widget.vjezba.slika != null || widget.vjezba.slika!.isNotEmpty
+                  widget.vjezba.slika != null && widget.vjezba.slika!.isNotEmpty
                       ? Container(
                           width: 250.0,
                           height: 150.0,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15.0),
+                            image: DecorationImage(
+                              image: slika!.image,
+                              fit: BoxFit.cover,
+                              alignment: Alignment.center,
+                            ),
                           ),
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10.0),
-                              child: SizedBox(
-                                  width: 130.0,
-                                  height: 130.0,
-                                  child: Image(
-                                    image: slika!.image,
-                                    fit: BoxFit.cover,
-                                  ))))
-                      : Container(
+                        )
+                      : SizedBox(
                           width: 250.0,
                           height: 150.0,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: const Color.fromRGBO(0, 154, 231, 1),
-                              width: 4.0,
-                            ),
-                            borderRadius: BorderRadius.circular(200.0),
-                          ),
-                          child: Image.asset('assets/images/vjezba.jpg'),
+                          child: Image.asset('assets/images/vjezba.jpg',
+                              fit: BoxFit.cover),
                         ),
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                widget.vjezba.naziv.length > 20
-                    ? '${widget.vjezba.naziv.substring(0, 20)}...'
-                    : widget.vjezba.naziv,
-                style: const TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 90, 90, 90)),
+          Expanded(
+            child: SingleChildScrollView(
+              controller: scrollController,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      widget.vjezba.naziv,
+                      style: const TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 90, 90, 90)),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      '${widget.vjezba.opis}',
+                      style:
+                          const TextStyle(fontSize: 16.0, color: Colors.grey),
+                    ),
+                  )
+                ],
               ),
-              const SizedBox(height: 8),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  '${widget.vjezba.opis}',
-                  style: const TextStyle(fontSize: 16.0, color: Colors.grey),
-                ),
-              )
-            ],
+            ),
           ),
           const SizedBox(height: 20),
           Row(
@@ -190,6 +190,10 @@ class _VjezbaCardState extends State<VjezbaCard> {
                                               if (!RegExp(r'^[A-Z]')
                                                   .hasMatch(value)) {
                                                 return 'Naziv mora početi velikim slovom.';
+                                              }
+
+                                              if (value.length > 50) {
+                                                return 'Možete unijeti maksimalno 50 karaktera.';
                                               }
 
                                               return null;

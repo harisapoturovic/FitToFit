@@ -8,7 +8,8 @@ namespace FitToFit.Model.Requests
 {
     public class VjezbeTreninziInsertRequest
     {
-        public int TreningId { get; set; }
-        public int? VjezbaId { get; set; }
+        public int? TreningId { get; set; }
+        public int VjezbaId { get; set; }
+        public decimal Trajanje { get; set; }
     }
 }

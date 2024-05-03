@@ -50,6 +50,18 @@ namespace FitToFit.Services
             return base.AddFilter(query, search);
         }
 
+
+        public override Task BeforeInsert(Database.Treninzi entity, TreninziInsertRequest insert)
+        {
+            entity.TreninziVjezbes = insert.Items.Select(item => new Database.TreninziVjezbe
+            {
+                TreningId = entity.TreningId,
+                VjezbaId = item.VjezbaId,
+                Trajanje=item.Trajanje
+            }).ToList();
+            return base.BeforeInsert(entity, insert);
+        }
+
         public override async Task<Model.Treninzi> Insert(TreninziInsertRequest insert)
         {
             var set = _context.Set<Database.Treninzi>();
@@ -57,6 +69,7 @@ namespace FitToFit.Services
             Database.Treninzi entity = _mapper.Map<Database.Treninzi>(insert);
 
             set.Add(entity);
+            await BeforeInsert(entity, insert);
 
             await _context.SaveChangesAsync();
 

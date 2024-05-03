@@ -24,7 +24,7 @@ namespace FitToFit.Services
             CreateMap<TreneriInsertRequest, Database.Treneri>();
             CreateMap<TreneriUpdateRequest, Database.Treneri>();
             CreateMap<Database.Treninzi, Model.Treninzi>();
-            CreateMap<Model.Treninzi, Database.Treninzi>();
+            //CreateMap<Model.Treninzi, Database.Treninzi>();
             CreateMap<TreninziInsertRequest, Database.Treninzi>();
             CreateMap<TreninziUpdateRequest, Database.Treninzi>();
             CreateMap<Database.Termini, Model.Termini>();
@@ -39,6 +39,7 @@ namespace FitToFit.Services
             CreateMap<AkcijeInsertRequest, Database.Akcije>();
             CreateMap<AkcijeUpdateRequest, Database.Akcije>();
             CreateMap<Database.AkcijeTreninzi, Model.AkcijeTreninzi>();
+            CreateMap<AkcijeTreninziInsertRequest, Database.AkcijeTreninzi>();
             CreateMap<Database.TreninziClanarine, Model.TreninziClanarine>();
             CreateMap<TreninziClanarineInsertRequest, Database.TreninziClanarine>();
             CreateMap<TreninziClanarineUpdateRequest, Database.TreninziClanarine>();
@@ -47,7 +48,6 @@ namespace FitToFit.Services
             CreateMap<RezervacijeUpdateRequest, Database.Rezervacije>();
             CreateMap<Database.RezervacijaStavke, Model.RezervacijaStavke>();
             CreateMap<Database.Uloge, Model.Uloge>();
-            CreateMap<AkcijeTreninziInsertRequest, Database.AkcijeTreninzi>();
             CreateMap<Database.Clanarine, Model.Clanarine>();
             CreateMap<Database.Sale, Model.Sale>();
         }
