@@ -16,7 +16,7 @@ class Treneri {
   DateTime datumZaposlenja;
   String? zvanje;
   String? slika;
-  List<Ocjene>? ocjene;
+  List<Ocjene>? ocjenes;
 
   Treneri(
       {required this.trenerId,
@@ -29,7 +29,7 @@ class Treneri {
       required this.datumZaposlenja,
       this.zvanje,
       this.slika,
-      this.ocjene});
+      this.ocjenes});
 
   factory Treneri.fromJson(Map<String, dynamic> json) =>
       _$TreneriFromJson(json);

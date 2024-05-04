@@ -47,7 +47,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
         "email": widget.trener.email,
         "zvanje": widget.trener.zvanje,
         "slika": widget.trener.slika,
-        "ocjene": widget.trener.ocjene
+        "ocjene": widget.trener.ocjenes
       };
     } else {
       userImage = Image.asset('assets/images/user.png');
@@ -62,7 +62,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
         "email": widget.trener.email,
         "zvanje": widget.trener.zvanje,
         "slika": widget.trener.slika,
-        "ocjene": widget.trener.ocjene
+        "ocjene": widget.trener.ocjenes
       };
     }
     _treneriProvider = context.read<TreneriProvider>();

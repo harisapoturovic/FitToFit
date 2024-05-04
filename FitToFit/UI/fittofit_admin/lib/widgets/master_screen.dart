@@ -1,6 +1,7 @@
 import 'package:fittofit_admin/models/korisnici.dart';
 import 'package:fittofit_admin/pages/admin_profil.dart';
 import 'package:fittofit_admin/pages/akcije.dart';
+import 'package:fittofit_admin/pages/izvjestaj.dart';
 import 'package:fittofit_admin/pages/ponuda.dart';
 import 'package:fittofit_admin/pages/rezervacije.dart';
 import 'package:fittofit_admin/pages/treninzi.dart';
@@ -202,6 +203,21 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                   }),
                 ),
                 label: const Text('Vježbe'),
+              ),
+              NavigationRailDestination(
+                icon: Tooltip(
+                  message: 'Izvještaj',
+                  textStyle:
+                      const TextStyle(fontSize: 14.0, color: Colors.white),
+                  child: buildIcon(Icons.report, 7, 'Izvještaj', () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const IzvjestajPage(),
+                      ),
+                    );
+                  }),
+                ),
+                label: const Text('Izvještaj'),
               ),
             ],
             onDestinationSelected: (int index) {

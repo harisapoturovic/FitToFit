@@ -50,6 +50,8 @@ namespace FitToFit.Services
             CreateMap<Database.Uloge, Model.Uloge>();
             CreateMap<Database.Clanarine, Model.Clanarine>();
             CreateMap<Database.Sale, Model.Sale>();
+            CreateMap<Database.RezervacijaStavke, Model.RezervacijaStavke>();
+            CreateMap<Model.RezervacijaStavke, Database.RezervacijaStavke>();
         }
     }
 }

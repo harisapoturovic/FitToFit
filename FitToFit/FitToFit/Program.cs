@@ -31,7 +31,7 @@ builder.Services.AddTransient<IClanarineService, ClanarineService>();
 builder.Services.AddTransient<ISaleService, SaleService>();
 builder.Services.AddTransient<IVjezbeService, VjezbeService>();
 builder.Services.AddTransient<IVjezbeTreninziService, VjezbeTreninziService>();
-
+builder.Services.AddTransient<IRezervacijaStavkeService, RezervacijaStavkeService>();
 
 builder.Services.AddTransient<AkcijeBaseState>();
 builder.Services.AddTransient<InitialActionState>();
