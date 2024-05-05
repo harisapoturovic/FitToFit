@@ -20,5 +20,11 @@ namespace FitToFit.Controllers
         {
             return await (_service as IRezervacijaStavkeService).GetTop3Terms(order);
         }
+
+        [HttpGet("getProfitForLast3Years")]
+        public virtual async Task<Model.Profit> GetProfitForLast3Years()
+        {
+            return await (_service as IRezervacijaStavkeService).GetProfitForLast3Years();
+        }
     }
 }
