@@ -1,7 +1,7 @@
 import 'package:fittofit_admin/models/korisnici.dart';
 import 'package:fittofit_admin/pages/admin_profil.dart';
 import 'package:fittofit_admin/pages/akcije.dart';
-import 'package:fittofit_admin/pages/izvjestaj.dart';
+import 'package:fittofit_admin/pages/izvjestaj/izvjestaj.dart';
 import 'package:fittofit_admin/pages/ponuda.dart';
 import 'package:fittofit_admin/pages/rezervacije.dart';
 import 'package:fittofit_admin/pages/treninzi.dart';
