@@ -1,3 +1,4 @@
+import 'package:fittofit_admin/pages/registracija.dart';
 import 'package:fittofit_admin/providers/novosti_provider.dart';
 import 'package:fittofit_admin/providers/treneri_provider.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class LoginPage extends StatelessWidget {
             child: Row(
               children: [
                 const Text(
-                  "Don't have an account?",
+                  "Nemate korisnički račun?",
                   style: TextStyle(
                       fontStyle: FontStyle.italic,
                       color: Colors.white,
@@ -38,15 +39,19 @@ class LoginPage extends StatelessWidget {
                 const SizedBox(width: 8.0),
                 TextButton(
                   onPressed: () {
-                    // Navigate to the sign-up page or show a sign-up dialog
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const RegistracijaPage(),
+                      ),
+                    );
                   },
                   style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Colors.white),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 15) // White border
-                      ),
+                          horizontal: 20, vertical: 15)),
                   child: const Text(
-                    "SIGN UP",
+                    "REGISTRUJ SE",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
@@ -76,7 +81,7 @@ class LoginPage extends StatelessWidget {
                       const SizedBox(height: 10),
                       TextField(
                         decoration: InputDecoration(
-                          labelText: "Username",
+                          labelText: "Korisničko ime",
                           prefixIcon: const Icon(Icons.person),
                           filled: true,
                           fillColor: Colors.grey[80],
@@ -96,7 +101,7 @@ class LoginPage extends StatelessWidget {
                       const SizedBox(height: 8),
                       TextField(
                         decoration: InputDecoration(
-                          labelText: "Password",
+                          labelText: "Lozinka",
                           prefixIcon: const Icon(Icons.password),
                           filled: true,
                           fillColor: Colors.grey[80],
@@ -156,7 +161,7 @@ class LoginPage extends StatelessWidget {
                           elevation: 3,
                         ),
                         child: const Text(
-                          "LOGIN",
+                          "PRIJAVI SE",
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -172,10 +177,7 @@ class LoginPage extends StatelessWidget {
             ),
           ),
         ],
-      ), /*
-      floatingActionButton: FloatingActionButton(onPressed: () {},
-      child: Icon(Icons.add),
-      ),*/
+      ),
     );
   }
 }
