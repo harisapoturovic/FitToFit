@@ -108,6 +108,7 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
   }
 
   FormBuilder _buildForm() {
+    final ScrollController _scrollController = ScrollController();
     return FormBuilder(
       key: _formKey,
       initialValue: _initialValue,
@@ -159,12 +160,12 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                         const SizedBox(height: 20),
                         Row(
                           children: [
-                            Expanded(
+                           Expanded(
                               child: FormBuilderTextField(
                                 style: const TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 16,
                                     color: Colors.black,
-                                    height: 3),
+                                    height: 2),
                                 decoration: const InputDecoration(
                                   labelText: "Sadržaj",
                                   border: OutlineInputBorder(
@@ -181,7 +182,7 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                                       EdgeInsets.symmetric(vertical: 1),
                                 ),
                                 minLines: 1,
-                                maxLines: 3,
+                                maxLines: 5,
                                 name: "sadrzaj",
                                 enabled: false,
                               ),
@@ -244,7 +245,7 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                             Expanded(
                               child: FutureBuilder<Korisnici?>(
                                 future: getKorisnikFromNovostiId(
-                                    odabranaNovost!.korisnikId),
+                                    odabranaNovost?.korisnikId ?? 0),
                                 builder: (context, snapshot) {
                                   if (snapshot.connectionState ==
                                       ConnectionState.done) {
@@ -288,7 +289,7 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                             Expanded(
                               child: FutureBuilder<VrsteTreninga?>(
                                 future: getVrstaTreningaFromNovostiId(
-                                    odabranaNovost!.vrstaTreningaId!),
+                                    odabranaNovost?.vrstaTreningaId ?? 0),
                                 builder: (context, snapshot) {
                                   if (snapshot.connectionState ==
                                       ConnectionState.done) {

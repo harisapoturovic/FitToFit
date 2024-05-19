@@ -491,7 +491,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                             Expanded(
                               child: FutureBuilder<VrsteTreninga?>(
                                 future: getVrstaTreningaFromNovostiId(
-                                    odabraniTrening!.vrstaId),
+                                    odabraniTrening?.vrstaId ?? 0),
                                 builder: (context, snapshot) {
                                   if (snapshot.connectionState ==
                                       ConnectionState.done) {
@@ -1048,7 +1048,9 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                                       slika: trainingImage,
                                                       terminis: odabraniTrening
                                                               ?.terminis ??
-                                                          []);
+                                                          [],
+                                                      treninziVjezbes:
+                                                          odabraniTrening?.treninziVjezbes ?? []);
 
                                                   _treninziProvider.update(
                                                       odabraniTrening!
@@ -1110,7 +1112,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                       name: 'trajanje',
                       controller: _trajanjeController,
                       decoration: const InputDecoration(
-                        labelText: 'Trajanje',
+                        labelText: 'Trajanje (min)',
                         border: OutlineInputBorder(),
                       ),
                       validator: (value) {

@@ -178,7 +178,7 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
                                 Column(
                                   children: [
                                     Text(
-                                      '${odabraniKorisnik!.ime} ${odabraniKorisnik!.prezime}',
+                                      '${odabraniKorisnik?.ime} ${odabraniKorisnik?.prezime}',
                                       style: const TextStyle(
                                           fontSize: 20.0,
                                           fontWeight: FontWeight.bold,
