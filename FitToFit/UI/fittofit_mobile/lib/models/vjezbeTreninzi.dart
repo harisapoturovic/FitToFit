@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
-import 'package:fittofit_admin/models/treninzi.dart';
-import 'package:fittofit_admin/models/vjezbe.dart';
+import 'package:fittofit_mobile/models/treninzi.dart';
+import 'package:fittofit_mobile/models/vjezbe.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'vjezbeTreninzi.g.dart';

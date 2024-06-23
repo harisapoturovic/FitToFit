@@ -1,4 +1,5 @@
-import 'package:fittofit_admin/models/treninzi.dart';
+// ignore_for_file: file_names
+import 'package:fittofit_mobile/models/treninzi.dart';
 
 class AcTrening {
   List<AcTreningItem> items = [];

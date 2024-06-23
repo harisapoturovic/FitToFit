@@ -1,4 +1,4 @@
-import 'package:fittofit_admin/models/akcijeTreninzi.dart';
+import 'package:fittofit_mobile/models/akcijeTreninzi.dart';
 
 import 'base_provider.dart';
 

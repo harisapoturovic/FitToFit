@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:fittofit_admin/models/search_result.dart';
-import 'package:fittofit_admin/utils/util.dart';
+import 'package:fittofit_mobile/models/search_result.dart';
+import 'package:fittofit_mobile/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -15,7 +15,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
   BaseProvider(String endpoint) {
     _endpoint = endpoint;
     _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "https://localhost:7058/");
+        defaultValue: "https://10.0.2.2:7058/");
   }
 
   Future<SearchResult<T>> get({dynamic filter}) async {
@@ -142,7 +142,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
   }
 
   String getQueryString(Map params,
-      {String prefix: '&', bool inRecursion: false}) {
+      {String prefix = '&', bool inRecursion = false}) {
     String query = '';
     params.forEach((key, value) {
       if (inRecursion) {

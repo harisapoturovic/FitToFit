@@ -1,11 +1,12 @@
-import 'package:fittofit_admin/pages/registracija.dart';
-import 'package:fittofit_admin/providers/novosti_provider.dart';
-import 'package:fittofit_admin/providers/treneri_provider.dart';
+// ignore_for_file: must_be_immutable
+
+import 'package:fittofit_mobile/pages/registracija.dart';
+import 'package:fittofit_mobile/providers/novosti_provider.dart';
+import 'package:fittofit_mobile/providers/treneri_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../utils/util.dart';
-import 'home.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -132,9 +133,9 @@ class LoginPage extends StatelessWidget {
                             await _treneriProvider.get();
 
                             print("login proceed $username $password");
-                            Navigator.of(context).push(MaterialPageRoute(
+                            /*Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) =>
-                                    HomePage(username: username)));
+                                    HomePage(username: username)));*/
                           } on Exception catch (e) {
                             showDialog(
                                 context: context,

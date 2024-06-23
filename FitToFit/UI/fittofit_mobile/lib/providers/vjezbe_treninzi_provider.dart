@@ -1,4 +1,4 @@
-import 'package:fittofit_admin/models/vjezbeTreninzi.dart';
+import 'package:fittofit_mobile/models/vjezbeTreninzi.dart';
 
 import 'base_provider.dart';
 

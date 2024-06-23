@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:fittofit_admin/models/akcije.dart';
-import 'package:http/http.dart'as http; 
+import 'package:fittofit_mobile/models/akcije.dart';
+import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 import 'base_provider.dart';
@@ -16,9 +16,9 @@ class AkcijeProvider extends BaseProvider<Akcije> {
   }
 
   Future<Akcije> archive(int id) async {
-      var url = "${BaseProvider.baseUrl}$_endpoint/$id/archive";
-      var uri = Uri.parse(url);
-      var headers = createHeaders();
+    var url = "${BaseProvider.baseUrl}$_endpoint/$id/archive";
+    var uri = Uri.parse(url);
+    var headers = createHeaders();
 
     try {
       Response response = await http.put(uri, headers: headers);
@@ -34,9 +34,9 @@ class AkcijeProvider extends BaseProvider<Akcije> {
   }
 
   Future<Akcije> activate(int id) async {
-      var url = "${BaseProvider.baseUrl}$_endpoint/$id/activate";
-      var uri = Uri.parse(url);
-      var headers = createHeaders();
+    var url = "${BaseProvider.baseUrl}$_endpoint/$id/activate";
+    var uri = Uri.parse(url);
+    var headers = createHeaders();
 
     try {
       Response response = await http.put(uri, headers: headers);

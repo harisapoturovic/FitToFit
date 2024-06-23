@@ -1,4 +1,4 @@
-import 'package:fittofit_admin/models/treninziClanarine.dart';
+import 'package:fittofit_mobile/models/treninziClanarine.dart';
 
 import 'base_provider.dart';
 

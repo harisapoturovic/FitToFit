@@ -1,4 +1,4 @@
-import 'package:fittofit_admin/models/korisnici.dart';
+import 'package:fittofit_mobile/models/korisnici.dart';
 
 import 'base_provider.dart';
 

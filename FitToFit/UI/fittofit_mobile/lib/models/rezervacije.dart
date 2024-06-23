@@ -1,4 +1,4 @@
-import 'package:fittofit_admin/models/rezervacijaStavke.dart';
+import 'package:fittofit_mobile/models/rezervacijaStavke.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'rezervacije.g.dart';
@@ -10,7 +10,7 @@ class Rezervacije {
   String? stateMachine;
   double? iznos;
   int korisnikId;
-  int clanarinaId;  
+  int clanarinaId;
   List<RezervacijaStavke>? rezervacijaStavkes = [];
 
   Rezervacije(

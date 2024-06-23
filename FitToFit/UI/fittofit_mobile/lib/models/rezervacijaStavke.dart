@@ -1,6 +1,6 @@
 // ignore_for_file: file_names
 
-import 'package:fittofit_admin/models/termini.dart';
+import 'package:fittofit_mobile/models/termini.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'rezervacijaStavke.g.dart';

@@ -1,5 +1,7 @@
-import 'package:fittofit_admin/models/acTrening.dart';
-import 'package:fittofit_admin/models/treninzi.dart';
+// ignore_for_file: file_names
+
+import 'package:fittofit_mobile/models/acTrening.dart';
+import 'package:fittofit_mobile/models/treninzi.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 

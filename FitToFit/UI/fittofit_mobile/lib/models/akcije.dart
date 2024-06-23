@@ -1,6 +1,5 @@
-import 'package:fittofit_admin/models/akcijeTreninzi.dart';
+import 'package:fittofit_mobile/models/akcijeTreninzi.dart';
 import 'package:json_annotation/json_annotation.dart';
-
 part 'akcije.g.dart';
 
 @JsonSerializable()

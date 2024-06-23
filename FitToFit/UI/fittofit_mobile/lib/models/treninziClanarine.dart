@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'treninziClanarine.g.dart';
@@ -7,7 +9,7 @@ class TreninziClanarine {
   int treningClanarinaId;
   int cijena;
   int? ucestalost;
-  int clanarinaId;  
+  int clanarinaId;
   int vrstaTreningaId;
 
   TreninziClanarine(

@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:fittofit_admin/models/odabraniTermini.dart';
-import 'package:fittofit_admin/models/profit.dart';
-import 'package:fittofit_admin/models/rezervacijaStavke.dart';
-import 'package:fittofit_admin/providers/base_provider.dart';
+import 'package:fittofit_mobile/models/odabraniTermini.dart';
+import 'package:fittofit_mobile/models/profit.dart';
+import 'package:fittofit_mobile/models/rezervacijaStavke.dart';
+import 'package:fittofit_mobile/providers/base_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 

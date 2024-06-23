@@ -1,11 +1,10 @@
-import 'package:fittofit_admin/models/korisnici.dart';
-import 'package:fittofit_admin/pages/home.dart';
-import 'package:fittofit_admin/providers/korisnici_provider.dart';
-import 'package:fittofit_admin/utils/util.dart';
-import 'package:fittofit_admin/widgets/master_screen.dart';
+
+import 'package:fittofit_mobile/models/korisnici.dart';
+import 'package:fittofit_mobile/providers/korisnici_provider.dart';
+import 'package:fittofit_mobile/utils/util.dart';
+import 'package:fittofit_mobile/widgets/master_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-
 import 'package:provider/provider.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
@@ -23,8 +22,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   late KorisniciProvider _korisniciProvider;
 
-  TextEditingController _newPasswordController = TextEditingController();
-  TextEditingController _currentPasswordController = TextEditingController();
+  final TextEditingController _newPasswordController = TextEditingController();
+  final TextEditingController _currentPasswordController = TextEditingController();
 
   Future<Korisnici?> getUserFromUserId(int userId) async {
     final user = await _korisniciProvider.getById(userId);
@@ -50,7 +49,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   }
 
   Widget _buildBody() {
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width * 0.6,
       child: FormBuilder(
           key: _formKey,
@@ -125,7 +124,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   void _updatePassword() async {
     _formKey.currentState?.save();
-    Korisnici? korisnik = await getUserFromUserId(widget.userId);
 
     try {
       if (_formKey.currentState!.validate()) {
@@ -155,23 +153,20 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
           Authorization.password = newPassword;
 
-          var data = await _korisniciProvider.get(filter: {
-            'IsAdmin': "true",
-          });
-
           var userId = widget.userId;
 
+          // ignore: use_build_context_synchronously
           Provider.of<KorisniciProvider>(context, listen: false)
               .setCurrentUserId(widget.userId);
 
           if (userId != null) {
-            Navigator.of(context).push(
+            /*Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => HomePage(
                   username: data.result[0].korisnickoIme,
                 ),
               ),
-            );
+            );*/
           }
         } on FormatException catch (_) {
           _showAlertDialog("Invalid password.");

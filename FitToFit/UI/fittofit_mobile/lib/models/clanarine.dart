@@ -1,5 +1,5 @@
-import 'package:fittofit_admin/models/rezervacije.dart';
-import 'package:fittofit_admin/models/treninziClanarine.dart';
+import 'package:fittofit_mobile/models/rezervacije.dart';
+import 'package:fittofit_mobile/models/treninziClanarine.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'clanarine.g.dart';

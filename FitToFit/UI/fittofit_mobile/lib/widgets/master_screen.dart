@@ -1,18 +1,10 @@
-import 'package:fittofit_admin/models/korisnici.dart';
-import 'package:fittofit_admin/pages/admin_profil.dart';
-import 'package:fittofit_admin/pages/akcije.dart';
-import 'package:fittofit_admin/pages/izvjestaj/izvjestaj.dart';
-import 'package:fittofit_admin/pages/ponuda.dart';
-import 'package:fittofit_admin/pages/rezervacije.dart';
-import 'package:fittofit_admin/pages/treninzi.dart';
-import 'package:fittofit_admin/pages/vjezbe.dart';
-import 'package:fittofit_admin/providers/korisnici_provider.dart';
-import 'package:fittofit_admin/utils/util.dart';
+import 'package:fittofit_mobile/models/korisnici.dart';
+import 'package:fittofit_mobile/providers/korisnici_provider.dart';
+import 'package:fittofit_mobile/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../pages/korisnici.dart';
-
+// ignore: must_be_immutable
 class MasterScreenWidget extends StatefulWidget {
   Widget? child;
   String? title;
@@ -54,187 +46,8 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
         title: Text(widget.title ?? ""),
         backgroundColor: const Color.fromRGBO(0, 154, 231, 1).withOpacity(0.9),
         elevation: 0,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 100.0),
-            child: Row(
-              children: [
-                const Icon(Icons.person, color: Colors.white),
-                const SizedBox(width: 8.0),
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AdminProfilPage(
-                          korisnik: odabraniKorisnik!,
-                        ),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    korisnickoIme,
-                    style: const TextStyle(
-                      fontStyle: FontStyle.italic,
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
-      body: Row(
-        children: [
-          NavigationRail(
-            selectedIndex: selectedIndex,
-            backgroundColor:
-                const Color.fromRGBO(0, 154, 231, 1).withOpacity(0.9),
-            unselectedIconTheme: const IconThemeData(
-              color: Color.fromARGB(255, 0, 0, 0),
-            ),
-            selectedIconTheme: const IconThemeData(
-              color: Color.fromRGBO(0, 154, 231, 1),
-            ),
-            destinations: [
-              NavigationRailDestination(
-                icon: Tooltip(
-                  message: 'Početna',
-                  textStyle:
-                      const TextStyle(fontSize: 14.0, color: Colors.white),
-                  child: buildIcon(Icons.home, 0, 'Home', () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const KorisniciPage(),
-                      ),
-                    );
-                  }),
-                ),
-                label: const Text('Home'),
-              ),
-              NavigationRailDestination(
-                icon: Tooltip(
-                  message: 'Korisnici',
-                  textStyle:
-                      const TextStyle(fontSize: 14.0, color: Colors.white),
-                  child: buildIcon(Icons.search, 1, 'Search', () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const KorisniciPage(),
-                      ),
-                    );
-                  }),
-                ),
-                label: const Text('Search'),
-              ),
-              NavigationRailDestination(
-                icon: Tooltip(
-                  message: 'Treninzi',
-                  textStyle:
-                      const TextStyle(fontSize: 14.0, color: Colors.white),
-                  child: buildIcon(Icons.fitness_center, 2, 'Training', () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const TreninziPage(),
-                      ),
-                    );
-                  }),
-                ),
-                label: const Text('Training'),
-              ),
-              NavigationRailDestination(
-                icon: Tooltip(
-                  message: 'Akcije',
-                  textStyle:
-                      const TextStyle(fontSize: 14.0, color: Colors.white),
-                  child: buildIcon(Icons.local_offer, 3, 'Actions', () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const AkcijePage(),
-                      ),
-                    );
-                  }),
-                ),
-                label: const Text('Actions'),
-              ),
-              NavigationRailDestination(
-                icon: Tooltip(
-                  message: 'Rezervacije',
-                  textStyle:
-                      const TextStyle(fontSize: 14.0, color: Colors.white),
-                  child: buildIcon(Icons.event, 4, 'Reservations', () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const RezervacijePage(),
-                      ),
-                    );
-                  }),
-                ),
-                label: const Text('Reservations'),
-              ),
-              NavigationRailDestination(
-                icon: Tooltip(
-                  message: 'Ponuda',
-                  textStyle:
-                      const TextStyle(fontSize: 14.0, color: Colors.white),
-                  child: buildIcon(Icons.local_mall, 5, 'Ponuda', () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const PonudaPage(),
-                      ),
-                    );
-                  }),
-                ),
-                label: const Text('Ponuda'),
-              ),
-              NavigationRailDestination(
-                icon: Tooltip(
-                  message: 'Vježbe',
-                  textStyle:
-                      const TextStyle(fontSize: 14.0, color: Colors.white),
-                  child: buildIcon(Icons.directions_run, 6, 'Vježbe', () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const VjezbePage(),
-                      ),
-                    );
-                  }),
-                ),
-                label: const Text('Vježbe'),
-              ),
-              NavigationRailDestination(
-                icon: Tooltip(
-                  message: 'Izvještaj',
-                  textStyle:
-                      const TextStyle(fontSize: 14.0, color: Colors.white),
-                  child: buildIcon(Icons.report, 7, 'Izvještaj', () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const IzvjestajPage(),
-                      ),
-                    );
-                  }),
-                ),
-                label: const Text('Izvještaj'),
-              ),
-            ],
-            onDestinationSelected: (int index) {
-              setState(() {
-                selectedIndex = index;
-              });
-            },
-          ),
-          Expanded(
-            child: Center(
-              child: widget.child!,
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: widget.floatingActionButton,
-    );
+       ),
+      );
   }
 
   Widget buildIcon(
@@ -259,15 +72,3 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
     );
   }
 }
-
-
-    /*Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.lightBlue,
-        title: Text(widget.title ?? ""),
-        leading: Image.asset("assets/images/teg.png",
-                    height: 1000,
-                    width: 1000,),
-                    
-      ),
-      body: widget.child!*/

@@ -1,5 +1,5 @@
-import 'package:fittofit_admin/models/termini.dart';
-import 'package:fittofit_admin/models/vjezbeTreninzi.dart';
+import 'package:fittofit_mobile/models/termini.dart';
+import 'package:fittofit_mobile/models/vjezbeTreninzi.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'treninzi.g.dart';
@@ -16,7 +16,7 @@ class Treninzi {
   int vrstaId;
   String namjena;
   String? slika;
-  List<Termini> terminis=[];
+  List<Termini> terminis = [];
   List<VjezbeTreninzi>? treninziVjezbes = [];
 
   Treninzi(
