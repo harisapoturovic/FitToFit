@@ -48,9 +48,6 @@ builder.Services.AddTransient<RefusedReservationState>();
 builder.Services.AddTransient<ArchivedReservationState>();
 
 // Add services to the container.
-
-builder.Services.AddControllers();
-
 builder.Services.AddControllers(x =>
 {
     x.Filters.Add<ErrorFilter>();
@@ -98,6 +95,10 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();    
 app.UseAuthorization();
+
+// Specify the URLs to listen on
+app.Urls.Add("http://0.0.0.0:5058");
+app.Urls.Add("https://0.0.0.0:7058");
 
 app.MapControllers();
 

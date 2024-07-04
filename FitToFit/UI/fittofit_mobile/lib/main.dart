@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() {
- runApp(
+  runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => NovostiProvider()),
@@ -44,7 +44,6 @@ void main() {
   );
 }
 
-
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -52,8 +51,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(primaryColor: Colors.lightBlue, fontFamily: "Calibri"),
-        home: LoginPage());
+      title: 'Flutter Demo',
+      theme: ThemeData(primaryColor: Colors.lightBlue, fontFamily: "Calibri"),
+      home: LoginPage()
+    );
   }
 }

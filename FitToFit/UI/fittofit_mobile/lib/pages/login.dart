@@ -1,4 +1,5 @@
-import 'package:fittofit_mobile/pages/home.dart';
+import 'package:fittofit_mobile/pages/navpages/home.dart';
+import 'package:fittofit_mobile/pages/navpages/home.dart';
 import 'package:fittofit_mobile/utils/util.dart';
 import 'package:flutter/material.dart';
 
@@ -69,7 +70,7 @@ class LoginPage extends StatelessWidget {
                               print("login proceed $username $password");
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) =>
-                                      HomePage(username: username)));
+                                      const HomePage(selectedIndex: 0,)));
                             } on Exception catch (e) {
                               showDialog(
                                 context: context,
