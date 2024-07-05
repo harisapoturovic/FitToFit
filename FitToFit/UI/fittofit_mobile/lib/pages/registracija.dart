@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:fittofit_mobile/models/korisnici.dart';
 import 'package:fittofit_mobile/providers/korisnici_provider.dart';
-import 'package:fittofit_mobile/widgets/master_screen.dart';
+import 'package:fittofit_mobile/widgets/master_screen_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';

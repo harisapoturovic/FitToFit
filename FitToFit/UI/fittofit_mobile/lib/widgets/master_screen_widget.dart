@@ -85,12 +85,12 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
   ResponsiveNavigationBar? _buildNavigationBar() {
     return (widget.showNavBar == true)
         ? ResponsiveNavigationBar(
-            backgroundColor: Color.fromARGB(255, 237, 237, 237),
+            backgroundColor: const Color.fromARGB(255, 237, 237, 237),
             backgroundOpacity: 1,
-            activeIconColor: Colors.blue,
+            activeIconColor: const Color.fromARGB(255, 152, 73, 212),
             inactiveIconColor: Colors.grey,
             fontSize: 25,
-            padding: const EdgeInsets.all(2),
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
             showActiveButtonText: false,
             textStyle: const TextStyle(
               color: Colors.black,
@@ -129,18 +129,28 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               }
             },
             navigationBarButtons: const <NavigationBarButton>[
-              NavigationBarButton(text: 'Početna', icon: Icons.home),
-              NavigationBarButton(text: 'Treninzi', icon: Icons.search),
+              NavigationBarButton(
+                text: 'Početna',
+                icon: Icons.home,
+                backgroundColor: Color.fromARGB(255, 237, 237, 237),
+              ),
+              NavigationBarButton(
+                text: 'Treninzi',
+                icon: Icons.search,
+                backgroundColor: Color.fromARGB(255, 237, 237, 237),
+              ),
               NavigationBarButton(
                 text: 'Rezervacije',
                 icon: Icons.check,
                 padding: EdgeInsets.all(10),
+                backgroundColor: Color.fromARGB(255, 237, 237, 237),
               ),
               NavigationBarButton(
                 text: 'Profil',
                 icon: Icons.person,
                 padding:
-                    EdgeInsets.only(right: 31, left: 10, top: 10, bottom: 10),
+                    EdgeInsets.only(right: 20, left: 10, top: 10, bottom: 10),
+                backgroundColor: Color.fromARGB(255, 237, 237, 237),
               )
             ],
           )

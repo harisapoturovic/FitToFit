@@ -1,4 +1,3 @@
-import 'package:fittofit_mobile/pages/bottomNavBar.dart';
 import 'package:fittofit_mobile/widgets/master_screen_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -12,13 +11,6 @@ class ReservationPage extends StatefulWidget {
 }
 
 class _ReservationPageState extends State<ReservationPage> {
-  int _selectedIndex = 2;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +18,8 @@ class _ReservationPageState extends State<ReservationPage> {
       selectedIndex: 2,
       child: Scaffold(
           appBar: AppBar(
-            title: const Text('Reservation Page'),
+            title: const Text('Rezervacije'),
+            backgroundColor: const Color.fromARGB(255, 152, 73, 212),
           ),
           body: Center(
             child: Column(

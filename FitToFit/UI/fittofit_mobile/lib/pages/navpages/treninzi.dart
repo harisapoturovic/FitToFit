@@ -1,4 +1,3 @@
-import 'package:fittofit_mobile/pages/bottomNavBar.dart';
 import 'package:fittofit_mobile/widgets/master_screen_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -11,13 +10,6 @@ class TrainingPage extends StatefulWidget {
 }
 
 class _TrainingPageState extends State<TrainingPage> {
-  int _selectedIndex = 1;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +17,8 @@ class _TrainingPageState extends State<TrainingPage> {
       selectedIndex: 1,
       child: Scaffold(
           appBar: AppBar(
-            title: const Text('Training Page'),
+            title: const Text('Treninzi'),
+            backgroundColor: const Color.fromARGB(255, 152, 73, 212),
           ),
           body: Center(
             child: Column(

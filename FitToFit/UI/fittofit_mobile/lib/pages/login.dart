@@ -1,5 +1,4 @@
 import 'package:fittofit_mobile/pages/navpages/home.dart';
-import 'package:fittofit_mobile/pages/navpages/home.dart';
 import 'package:fittofit_mobile/utils/util.dart';
 import 'package:flutter/material.dart';
 
