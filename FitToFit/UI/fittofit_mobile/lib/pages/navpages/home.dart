@@ -1,4 +1,6 @@
+import 'package:fittofit_mobile/models/korisnici.dart';
 import 'package:fittofit_mobile/models/novosti.dart';
+import 'package:fittofit_mobile/providers/korisnici_provider.dart';
 import 'package:fittofit_mobile/widgets/master_screen_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fittofit_mobile/providers/novosti_provider.dart';
@@ -7,8 +9,10 @@ import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   final int selectedIndex;
-
-  const HomePage({Key? key, required this.selectedIndex}) : super(key: key);
+  final String username;
+  const HomePage(
+      {Key? key, required this.selectedIndex, required this.username})
+      : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -16,9 +20,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late NovostiProvider _novostiProvider;
+  late KorisniciProvider _korisniciProvider;
   List<Novosti> _novostiList = [];
+  late Korisnici korisnik;
   bool isLiked = false;
-  String formattedDate = DateFormat('dd.MM.yyyy').format(DateTime.now());
+  bool isLoading = true;
 
   var page = 1;
   var totalcount = 0;
@@ -28,16 +34,28 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _novostiProvider = context.read<NovostiProvider>();
+    _korisniciProvider = context.read<KorisniciProvider>();
+    initForm();
     _loadData();
+  }
+
+  Future initForm() async {
+    setState(() {
+      isLoading = false;
+    });
   }
 
   void _loadData() async {
     var novosti = await _novostiProvider
         .get(filter: {'page': page, 'pageSize': pageSize});
 
+    var user = await _korisniciProvider.get(filter: {
+      'username': widget.username,
+    });
     setState(() {
       _novostiList = novosti.result;
       totalcount = novosti.count;
+      korisnik = user.result[0];
     });
   }
 
@@ -71,9 +89,9 @@ class _HomePageState extends State<HomePage> {
                         backgroundImage: AssetImage('assets/images/user.png'),
                       ),
                       title: RichText(
-                        text: const TextSpan(
+                        text: TextSpan(
                           text: 'Dobrodošli, \n',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.normal,
                             fontStyle: FontStyle.italic,
@@ -81,8 +99,8 @@ class _HomePageState extends State<HomePage> {
                           ),
                           children: <TextSpan>[
                             TextSpan(
-                              text: 'Harisa Poturović',
-                              style: TextStyle(
+                              text: '${korisnik.ime} ${korisnik.prezime}',
+                              style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -102,44 +120,18 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                const Text('Home Page Content.'),
-                Text('Count: $totalcount'),
-                const SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: <Widget>[
-                      Card(
-                        child: ListTile(
-                          leading: const Icon(Icons.notifications_sharp),
-                          title: const Text('Notification 1'),
-                          subtitle: const Text('5.7.2024. | 12:00h'),
-                          trailing: IconButton(
-                            icon: isLiked
-                                ? const Icon(Icons.favorite)
-                                : const Icon(Icons.favorite_border),
-                            onPressed: () {
-                              setState(() {
-                                isLiked = !isLiked;
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-                      Card(
-                        child: ListTile(
-                          leading: const Icon(Icons.notifications_sharp),
-                          title: const Text('Notification 2'),
-                          subtitle: const Text('5.7.2024. | 15:00h'),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.favorite_border),
-                            onPressed: () {},
-                          ),
-                        ),
-                      ),
-                    ],
+                const SizedBox(height: 30),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: _novostiList.length,
+                    itemBuilder: (context, index) {
+                      return isLoading
+                          ? Container()
+                          : _buildNewsCard(_novostiList[index]);
+                    },
                   ),
                 ),
+                _buildPageNumbers(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -183,7 +175,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
-                    ),
+                    )
                   ],
                 )
               ],
@@ -191,6 +183,64 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
+    );
+  }
+
+  _buildNewsCard(Novosti novost) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+      child: Column(
+        children: <Widget>[
+          Card(
+            child: ListTile(
+              leading: const Icon(Icons.notifications_sharp),
+              title: Text(novost.naslov),
+              subtitle: Text(
+                  '${DateFormat('dd.MM.yyyy').format(novost.datumObjave)} | vrijemeToDo'),
+              trailing: IconButton(
+                icon: isLiked
+                    ? const Icon(Icons.favorite)
+                    : const Icon(Icons.favorite_border),
+                onPressed: () {
+                  setState(() {
+                    isLiked = !isLiked;
+                  });
+                },
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPageNumbers() {
+    int totalPages = (totalcount / pageSize).ceil();
+    List<Widget> pageButtons = [];
+
+    for (int i = 1; i <= totalPages; i++) {
+      pageButtons.add(
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: ElevatedButton(
+            onPressed: () {
+              setState(() {
+                page = i;
+                _loadData();
+              });
+            },
+            style: ElevatedButton.styleFrom(
+              primary: const Color.fromARGB(255, 240, 215, 245),
+              onPrimary: Colors.black,
+            ),
+            child: Text('$i'),
+          ),
+        ),
+      );
+    }
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: pageButtons,
     );
   }
 }

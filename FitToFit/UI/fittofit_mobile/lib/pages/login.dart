@@ -1,15 +1,19 @@
 import 'package:fittofit_mobile/pages/navpages/home.dart';
+import 'package:fittofit_mobile/providers/korisnici_provider.dart';
 import 'package:fittofit_mobile/utils/util.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key});
 
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  late KorisniciProvider _korisniciProvider;
 
   @override
   Widget build(BuildContext context) {
+    _korisniciProvider = context.read<KorisniciProvider>();
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
@@ -66,10 +70,19 @@ class LoginPage extends StatelessWidget {
                             Authorization.password = password;
 
                             try {
-                              print("login proceed $username $password");
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) =>
-                                      const HomePage(selectedIndex: 0,)));
+                              await _korisniciProvider.get(filter: {
+                                'username': username,
+                              });
+
+                              // ignore: use_build_context_synchronously
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => HomePage(
+                                    selectedIndex: 0,
+                                    username: username,
+                                  ),
+                                ),
+                              );
                             } on Exception catch (e) {
                               showDialog(
                                 context: context,
