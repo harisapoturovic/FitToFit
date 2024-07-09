@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:fittofit_mobile/providers/novosti_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   final int selectedIndex;
@@ -27,6 +28,7 @@ class _HomePageState extends State<HomePage> {
   bool isSearching = false;
   String? korisnickoIme = '';
   final TextEditingController _naslovController = TextEditingController();
+  late SharedPreferences _prefs;
 
   var page = 1;
   var totalcount = 0;
@@ -39,6 +41,11 @@ class _HomePageState extends State<HomePage> {
     _korisniciProvider = context.read<KorisniciProvider>();
     initForm();
     _loadData();
+    _initSharedPreferences();
+  }
+
+  Future<void> _initSharedPreferences() async {
+    _prefs = await SharedPreferences.getInstance();
   }
 
   Future initForm() async {
@@ -210,32 +217,57 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _buildNewsCard(Novosti novost) {
+  Widget _buildNewsCard(Novosti novost) {
+    final bool isRead = _prefs.getBool('${novost.novostId}') ?? false;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
       child: Column(
         children: <Widget>[
           Card(
             child: ListTile(
+              tileColor: isRead? Colors.white : Color.fromARGB(255, 250, 215, 212),
               leading: const Icon(
                 Icons.notifications_active_outlined,
                 size: 35.0,
                 color: Color.fromARGB(255, 186, 152, 174),
               ),
               title: Text(novost.naslov,
-                  style: const TextStyle(fontWeight: FontWeight.bold)),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  )),
               subtitle: Text(
                   '${DateFormat('dd.MM.yyyy').format(novost.datumObjave)} | ${novost.datumObjave.hour}h'),
-              trailing: IconButton(
-                icon: isLiked
-                    ? const Icon(Icons.favorite)
-                    : const Icon(Icons.favorite_border),
-                onPressed: () {
-                  setState(() {
-                    isLiked = !isLiked;
-                  });
-                },
-              ),
+              onTap: () {
+                _markNewsAsRead(novost.novostId);
+              },
+              trailing: novost.vrstaTreningaId != null && novost.isLiked != null
+                  ? IconButton(
+                      icon: novost.isLiked!
+                          ? const Icon(Icons.favorite)
+                          : const Icon(Icons.favorite_border),
+                      onPressed: () {
+                        setState(() {
+                          novost.isLiked = !novost.isLiked!;
+
+                          if (novost.isLiked!) {
+                            novost.brojLajkova++;
+                          }
+
+                          Novosti n = Novosti(
+                              novostId: novost.novostId,
+                              naslov: novost.naslov,
+                              sadrzaj: novost.sadrzaj,
+                              datumObjave: novost.datumObjave,
+                              isLiked: novost.isLiked,
+                              brojLajkova: novost.brojLajkova,
+                              korisnikId: novost.korisnikId,
+                              vrstaTreningaId: novost.vrstaTreningaId);
+
+                          _novostiProvider.update(novost.novostId, n);
+                        });
+                      },
+                    )
+                  : const SizedBox(),
             ),
           )
         ],
@@ -284,6 +316,12 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _novostiList = data.result;
       totalcount = data.count;
+    });
+  }
+
+  Future<void> _markNewsAsRead(int novostId) async {
+    await _prefs.setBool('$novostId', true);
+    setState(() {
     });
   }
 }

@@ -14,7 +14,7 @@ namespace FitToFit.Model.Requests
 
         public string? Sadrzaj { get; set; }
 
-        public bool? IsLiked { get; set; }
+        public bool? IsLiked { get; set; } = false;
 
         public int BrojLajkova { get; set; }
 
