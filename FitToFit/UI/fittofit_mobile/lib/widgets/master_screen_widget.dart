@@ -110,7 +110,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               switch (index) {
                 case 0:
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (_) => HomePage(selectedIndex: index, username: '',)));
+                      builder: (_) => HomePage(selectedIndex: index)));
                   break;
                 case 1:
                   Navigator.of(context).pushReplacement(MaterialPageRoute(

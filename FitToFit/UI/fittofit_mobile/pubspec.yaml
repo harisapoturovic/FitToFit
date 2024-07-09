@@ -42,6 +42,7 @@ dependencies:
   file_picker: ^4.6.1
   badges: ^3.1.1
   responsive_navigation_bar: ^4.0.4
+  shared_preferences: ^2.1.1
 
 
 dev_dependencies:

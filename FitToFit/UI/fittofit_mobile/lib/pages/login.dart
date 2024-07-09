@@ -74,13 +74,13 @@ class LoginPage extends StatelessWidget {
                                 'username': username,
                               });
 
+                              await setUserName(username);
+
                               // ignore: use_build_context_synchronously
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => HomePage(
-                                    selectedIndex: 0,
-                                    username: username,
-                                  ),
+                                  builder: (context) =>
+                                      const HomePage(selectedIndex: 0),
                                 ),
                               );
                             } on Exception catch (e) {
