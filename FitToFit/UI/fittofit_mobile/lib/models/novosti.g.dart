@@ -15,6 +15,7 @@ Novosti _$NovostiFromJson(Map<String, dynamic> json) => Novosti(
       datumObjave: DateTime.parse(json['datumObjave'] as String),
       korisnikId: json['korisnikId'] as int,
       vrstaTreningaId: json['vrstaTreningaId'] as int?,
+      isRead: json['isRead'] as bool?,
     );
 
 Map<String, dynamic> _$NovostiToJson(Novosti instance) => <String, dynamic>{
@@ -26,4 +27,5 @@ Map<String, dynamic> _$NovostiToJson(Novosti instance) => <String, dynamic>{
       'datumObjave': instance.datumObjave.toIso8601String(),
       'korisnikId': instance.korisnikId,
       'vrstaTreningaId': instance.vrstaTreningaId,
+      'isRead': instance.isRead,
     };

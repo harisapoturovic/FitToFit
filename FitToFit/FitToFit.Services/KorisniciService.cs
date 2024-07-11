@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FitToFit.Model.Requests;
 using FitToFit.Model.SearchObjects;
-using FitToFit.Services.Database;
+using FitToFit.Database;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -151,6 +151,31 @@ namespace FitToFit.Services
 
             _context.Update(user);
             await _context.SaveChangesAsync();
+        }
+
+        public virtual async Task<Model.Korisnici> Insert(KorisniciInsertRequest insert)
+        {
+            var set = _context.Set<Korisnici>();
+
+            Korisnici entity = _mapper.Map<Korisnici>(insert);
+
+            set.Add(entity);
+            await BeforeInsert(entity, insert);
+
+            await _context.SaveChangesAsync();
+
+            var novosti = _context.Set<Novosti>();
+            var korisniciNovosti = _context.Set<KorisniciNovosti>();
+            foreach (var item in novosti)
+            {
+                KorisniciNovosti n = new KorisniciNovosti();
+                n.KorisnikId = entity.KorisnikId;
+                n.NovostId = item.NovostId;
+
+                korisniciNovosti.Add(n);
+            }
+            await _context.SaveChangesAsync();
+            return _mapper.Map<Model.Korisnici>(entity);
         }
     }
 }

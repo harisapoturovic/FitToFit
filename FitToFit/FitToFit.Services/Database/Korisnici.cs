@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FitToFit.Services.Database;
+namespace FitToFit.Database;
 
 public partial class Korisnici
 {
@@ -36,6 +36,8 @@ public partial class Korisnici
     public byte[]? Slika { get; set; }
 
     public int? UlogaId { get; set; }
+
+    public virtual ICollection<KorisniciNovosti> KorisniciNovostis { get; set; } = new List<KorisniciNovosti>();
 
     public virtual ICollection<Novosti> Novostis { get; set; } = new List<Novosti>();
 

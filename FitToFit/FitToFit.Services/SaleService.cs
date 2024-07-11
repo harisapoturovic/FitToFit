@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using FitToFit.Model.SearchObjects;
-using FitToFit.Services.Database;
+using FitToFit.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace FitToFit.Services.Database;
+namespace FitToFit.Database;
 
 public partial class Ib200048Context : DbContext
 {
@@ -22,6 +22,8 @@ public partial class Ib200048Context : DbContext
     public virtual DbSet<Clanarine> Clanarines { get; set; }
 
     public virtual DbSet<Korisnici> Korisnicis { get; set; }
+
+    public virtual DbSet<KorisniciNovosti> KorisniciNovostis { get; set; }
 
     public virtual DbSet<Novosti> Novostis { get; set; }
 
@@ -123,6 +125,33 @@ public partial class Ib200048Context : DbContext
             entity.HasOne(d => d.Uloga).WithMany(p => p.Korisnicis)
                 .HasForeignKey(d => d.UlogaId)
                 .HasConstraintName("FK__Korisnici__Uloga__4A8310C6");
+        });
+
+        modelBuilder.Entity<KorisniciNovosti>(entity =>
+        {
+            entity.HasKey(e => e.KorisniciNovostiId).HasName("PK__Korisnic__6213B3FD0E5E5AF9");
+
+            entity.ToTable("KorisniciNovosti");
+
+            entity.Property(e => e.KorisniciNovostiId).HasColumnName("KorisniciNovostiID");
+            entity.Property(e => e.IsLiked)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("isLiked");
+            entity.Property(e => e.IsRead)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("isRead");
+            entity.Property(e => e.KorisnikId).HasColumnName("KorisnikID");
+            entity.Property(e => e.NovostId).HasColumnName("NovostID");
+
+            entity.HasOne(d => d.Korisnik).WithMany(p => p.KorisniciNovostis)
+                .HasForeignKey(d => d.KorisnikId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Korisnici__Koris__4F47C5E3");
+
+            entity.HasOne(d => d.Novost).WithMany(p => p.KorisniciNovostis)
+                .HasForeignKey(d => d.NovostId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Korisnici__Novos__503BEA1C");
         });
 
         modelBuilder.Entity<Novosti>(entity =>

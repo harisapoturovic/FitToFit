@@ -1,4 +1,5 @@
-﻿using FitToFit.Model.Requests;
+﻿using FitToFit.Model;
+using FitToFit.Model.Requests;
 using FitToFit.Model.SearchObjects;
 using System;
 using System.Collections.Generic;
@@ -8,11 +9,13 @@ using System.Threading.Tasks;
 
 namespace FitToFit.Services
 {
-    public interface IKorisniciService : ICRUDService<Model.Korisnici, KorisniciSearchObject, KorisniciInsertRequest, KorisniciUpdateRequest>
+    public interface IKorisniciService : ICRUDService<Korisnici, KorisniciSearchObject, KorisniciInsertRequest, KorisniciUpdateRequest>
     {
-        public Task<Model.Korisnici> Login(string username, string password);
+        public Task<Korisnici> Login(string username, string password);
 
         Task ChangePasswordAsync(KorisniciChangePassword userChangePass);
+
+        Task<Korisnici> Insert(KorisniciInsertRequest insert);
     }
 }
 

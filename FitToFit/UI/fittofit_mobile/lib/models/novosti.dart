@@ -14,6 +14,7 @@ class Novosti {
   DateTime datumObjave;
   int korisnikId;
   int? vrstaTreningaId;
+  bool? isRead;
 
   Novosti(
       {required this.novostId,
@@ -23,7 +24,8 @@ class Novosti {
       required this.brojLajkova,
       required this.datumObjave,
       required this.korisnikId,
-      this.vrstaTreningaId});
+      this.vrstaTreningaId,
+      this.isRead});
 
   factory Novosti.fromJson(Map<String, dynamic> json) =>
       _$NovostiFromJson(json);

@@ -1,5 +1,5 @@
 using FitToFit.Services;
-using FitToFit.Services.Database;
+using FitToFit.Database;
 using FitToFit.Services.RezervacijeStateMachine;
 using FitToFit.Services.AkcijeStateMachine;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +32,7 @@ builder.Services.AddTransient<ISaleService, SaleService>();
 builder.Services.AddTransient<IVjezbeService, VjezbeService>();
 builder.Services.AddTransient<IVjezbeTreninziService, VjezbeTreninziService>();
 builder.Services.AddTransient<IRezervacijaStavkeService, RezervacijaStavkeService>();
+builder.Services.AddTransient<IKorisniciNovostiService, KorisniciNovostiService>();
 
 builder.Services.AddTransient<AkcijeBaseState>();
 builder.Services.AddTransient<InitialActionState>();

@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
+using FitToFit.Database;
 using FitToFit.Model.SearchObjects;
-using FitToFit.Services.Database;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FitToFit.Services
 {

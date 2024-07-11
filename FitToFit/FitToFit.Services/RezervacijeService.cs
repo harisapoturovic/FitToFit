@@ -3,7 +3,7 @@ using EasyNetQ;
 using FitToFit.Model;
 using FitToFit.Model.Requests;
 using FitToFit.Model.SearchObjects;
-using FitToFit.Services.Database;
+using FitToFit.Database;
 using FitToFit.Services.RezervacijeStateMachine;
 using Microsoft.EntityFrameworkCore;
 using System;

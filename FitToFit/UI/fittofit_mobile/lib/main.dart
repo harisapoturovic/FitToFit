@@ -3,6 +3,7 @@ import 'package:fittofit_mobile/providers/acTrening_provider.dart';
 import 'package:fittofit_mobile/providers/akcije_provider.dart';
 import 'package:fittofit_mobile/providers/akcije_treninzi_provider.dart';
 import 'package:fittofit_mobile/providers/clanarine_provider.dart';
+import 'package:fittofit_mobile/providers/korisnici_novosti_provider.dart';
 import 'package:fittofit_mobile/providers/korisnici_provider.dart';
 import 'package:fittofit_mobile/providers/novosti_provider.dart';
 import 'package:fittofit_mobile/providers/rezervacije_provider.dart';
@@ -37,7 +38,8 @@ void main() {
         ChangeNotifierProvider(create: (_) => SaleProvider()),
         ChangeNotifierProvider(create: (_) => VjezbeProvider()),
         ChangeNotifierProvider(create: (_) => VjezbeTreninziProvider()),
-        ChangeNotifierProvider(create: (_) => RezervacijeStavkeProvider())
+        ChangeNotifierProvider(create: (_) => RezervacijeStavkeProvider()),
+        ChangeNotifierProvider(create: (_) => KorisniciNovostiProvider())
       ],
       child: const MyApp(),
     ),

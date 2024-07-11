@@ -52,6 +52,9 @@ namespace FitToFit.Services
             CreateMap<Database.Sale, Model.Sale>();
             CreateMap<Database.RezervacijaStavke, Model.RezervacijaStavke>();
             CreateMap<Model.RezervacijaStavke, Database.RezervacijaStavke>();
+            CreateMap<Database.KorisniciNovosti, Model.KorisniciNovosti>();
+            CreateMap<Model.KorisniciNovosti, Database.KorisniciNovosti>();
+            CreateMap<KorisniciNovostiInsertRequest, Database.KorisniciNovosti>();
         }
     }
 }

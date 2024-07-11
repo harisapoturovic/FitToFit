@@ -3,7 +3,7 @@ using FitToFit.Model;
 using FitToFit.Model.Requests;
 using FitToFit.Model.SearchObjects;
 using FitToFit.Services.AkcijeStateMachine;
-using FitToFit.Services.Database;
+using FitToFit.Database;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

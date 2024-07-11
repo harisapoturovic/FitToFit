@@ -23,5 +23,7 @@ namespace FitToFit.Model
         public int KorisnikId { get; set; }
 
         public int? VrstaTreningaId { get; set; }
+
+        public bool? IsRead { get; set; }
     }
 }

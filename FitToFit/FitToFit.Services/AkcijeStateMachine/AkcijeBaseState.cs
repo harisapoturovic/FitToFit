@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FitToFit.Model;
 using FitToFit.Model.Requests;
-using FitToFit.Services.Database;
+using FitToFit.Database;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

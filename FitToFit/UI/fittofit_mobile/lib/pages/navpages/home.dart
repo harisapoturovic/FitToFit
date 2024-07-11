@@ -1,5 +1,7 @@
 import 'package:fittofit_mobile/models/korisnici.dart';
+import 'package:fittofit_mobile/models/korisniciNovosti.dart';
 import 'package:fittofit_mobile/models/novosti.dart';
+import 'package:fittofit_mobile/providers/korisnici_novosti_provider.dart';
 import 'package:fittofit_mobile/providers/korisnici_provider.dart';
 import 'package:fittofit_mobile/utils/util.dart';
 import 'package:fittofit_mobile/widgets/custom_avatar.dart';
@@ -21,14 +23,15 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late NovostiProvider _novostiProvider;
   late KorisniciProvider _korisniciProvider;
+  late KorisniciNovostiProvider _korisniciNovostiProvider;
   List<Novosti> _novostiList = [];
+  List<KorisniciNovosti> _korisniciNovostiList = [];
   late Korisnici korisnik;
   bool isLiked = false;
   bool isLoading = true;
   bool isSearching = false;
   String? korisnickoIme = '';
   final TextEditingController _naslovController = TextEditingController();
-  late SharedPreferences _prefs;
 
   var page = 1;
   var totalcount = 0;
@@ -39,13 +42,9 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _novostiProvider = context.read<NovostiProvider>();
     _korisniciProvider = context.read<KorisniciProvider>();
+    _korisniciNovostiProvider = context.read<KorisniciNovostiProvider>();
     initForm();
     _loadData();
-    _initSharedPreferences();
-  }
-
-  Future<void> _initSharedPreferences() async {
-    _prefs = await SharedPreferences.getInstance();
   }
 
   Future initForm() async {
@@ -62,10 +61,13 @@ class _HomePageState extends State<HomePage> {
     korisnickoIme = await getUserName();
     var user = await _korisniciProvider
         .get(filter: {'korisnickoIme': korisnickoIme, 'isAdmin': false});
+    var kn = await _korisniciNovostiProvider.get();
+
     setState(() {
       _novostiList = novosti.result;
       totalcount = novosti.count;
       korisnik = user.result[0];
+      _korisniciNovostiList = kn.result;
       isLoading = false;
     });
   }
@@ -218,14 +220,23 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildNewsCard(Novosti novost) {
-    final bool isRead = _prefs.getBool('${novost.novostId}') ?? false;
+    KorisniciNovosti? korisniciNovosti = _korisniciNovostiList.firstWhere(
+      (kn) =>
+          kn.novostId == novost.novostId &&
+          kn.korisnikId == korisnik.korisnikId,
+    );
+    novost.isRead = korisniciNovosti.isRead;
+    novost.isLiked = korisniciNovosti.isLiked;
+    bool canMarkAsRead = !novost.isRead!;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
       child: Column(
         children: <Widget>[
           Card(
             child: ListTile(
-              tileColor: isRead? Colors.white : Color.fromARGB(255, 250, 215, 212),
+              tileColor: novost.isRead!
+                  ? Colors.white
+                  : const Color.fromARGB(255, 250, 215, 212),
               leading: const Icon(
                 Icons.notifications_active_outlined,
                 size: 35.0,
@@ -238,7 +249,35 @@ class _HomePageState extends State<HomePage> {
               subtitle: Text(
                   '${DateFormat('dd.MM.yyyy').format(novost.datumObjave)} | ${novost.datumObjave.hour}h'),
               onTap: () {
-                _markNewsAsRead(novost.novostId);
+                if (canMarkAsRead) {
+                  setState(() {
+                    novost.isRead = !novost.isRead!;
+                    korisniciNovosti.isRead = !korisniciNovosti.isRead;
+
+                    Novosti n = Novosti(
+                        novostId: novost.novostId,
+                        naslov: novost.naslov,
+                        sadrzaj: novost.sadrzaj,
+                        datumObjave: novost.datumObjave,
+                        isLiked: novost.isLiked,
+                        brojLajkova: novost.brojLajkova,
+                        korisnikId: novost.korisnikId,
+                        vrstaTreningaId: novost.vrstaTreningaId,
+                        isRead: novost.isRead);
+
+                    _novostiProvider.update(novost.novostId, n);
+
+                    KorisniciNovosti kn = KorisniciNovosti(
+                        korisniciNovostiId: korisniciNovosti.korisniciNovostiId,
+                        korisnikId: korisniciNovosti.korisnikId,
+                        novostId: korisniciNovosti.novostId,
+                        isLiked: korisniciNovosti.isLiked,
+                        isRead: korisniciNovosti.isRead);
+
+                    _korisniciNovostiProvider.update(
+                        korisniciNovosti.korisniciNovostiId, kn);
+                  });
+                }
               },
               trailing: novost.vrstaTreningaId != null && novost.isLiked != null
                   ? IconButton(
@@ -248,9 +287,11 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () {
                         setState(() {
                           novost.isLiked = !novost.isLiked!;
-
+                          korisniciNovosti.isLiked = !korisniciNovosti.isLiked;
                           if (novost.isLiked!) {
                             novost.brojLajkova++;
+                          } else {
+                            novost.brojLajkova--;
                           }
 
                           Novosti n = Novosti(
@@ -261,9 +302,21 @@ class _HomePageState extends State<HomePage> {
                               isLiked: novost.isLiked,
                               brojLajkova: novost.brojLajkova,
                               korisnikId: novost.korisnikId,
-                              vrstaTreningaId: novost.vrstaTreningaId);
+                              vrstaTreningaId: novost.vrstaTreningaId,
+                              isRead: novost.isRead);
 
                           _novostiProvider.update(novost.novostId, n);
+
+                          KorisniciNovosti kn = KorisniciNovosti(
+                              korisniciNovostiId:
+                                  korisniciNovosti.korisniciNovostiId,
+                              korisnikId: korisniciNovosti.korisnikId,
+                              novostId: korisniciNovosti.novostId,
+                              isLiked: korisniciNovosti.isLiked,
+                              isRead: korisniciNovosti.isRead);
+
+                          _korisniciNovostiProvider.update(
+                              korisniciNovosti.korisniciNovostiId, kn);
                         });
                       },
                     )
@@ -316,12 +369,6 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _novostiList = data.result;
       totalcount = data.count;
-    });
-  }
-
-  Future<void> _markNewsAsRead(int novostId) async {
-    await _prefs.setBool('$novostId', true);
-    setState(() {
     });
   }
 }
