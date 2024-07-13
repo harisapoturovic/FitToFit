@@ -71,7 +71,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
         Positioned.fill(
           child: Opacity(
             opacity: 0.3,
-            child: Image.asset('assets/images/logo.png', fit: BoxFit.cover),
+            child: Image.asset('assets/images/background.png', fit: BoxFit.cover),
           ),
         ),
         Align(
@@ -87,7 +87,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
         ? ResponsiveNavigationBar(
             backgroundColor: const Color.fromARGB(255, 237, 237, 237),
             backgroundOpacity: 1,
-            activeIconColor: const Color.fromARGB(255, 152, 73, 212),
+            activeIconColor: Colors.deepPurple.shade300,
             inactiveIconColor: Colors.grey,
             fontSize: 25,
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),

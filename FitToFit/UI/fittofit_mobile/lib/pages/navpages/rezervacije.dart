@@ -11,16 +11,14 @@ class ReservationPage extends StatefulWidget {
 }
 
 class _ReservationPageState extends State<ReservationPage> {
-
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
       selectedIndex: 2,
       child: Scaffold(
           appBar: AppBar(
-            title: const Text('Rezervacije'),
-            backgroundColor: const Color.fromARGB(255, 152, 73, 212),
-          ),
+              title: const Text('Rezervacije'),
+              backgroundColor: Colors.deepPurple.shade300),
           body: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

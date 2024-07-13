@@ -1,6 +1,7 @@
 import 'package:fittofit_mobile/models/korisnici.dart';
 import 'package:fittofit_mobile/models/korisniciNovosti.dart';
 import 'package:fittofit_mobile/models/novosti.dart';
+import 'package:fittofit_mobile/pages/novosti_detalji.dart';
 import 'package:fittofit_mobile/providers/korisnici_novosti_provider.dart';
 import 'package:fittofit_mobile/providers/korisnici_provider.dart';
 import 'package:fittofit_mobile/utils/util.dart';
@@ -84,7 +85,7 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         appBar: AppBar(
             title: const Text('Početna'),
-            backgroundColor: const Color.fromARGB(255, 152, 73, 212)),
+            backgroundColor: Colors.deepPurple.shade300),
         body: Center(
           child: isLoading
               ? const CircularProgressIndicator()
@@ -171,7 +172,7 @@ class _HomePageState extends State<HomePage> {
                         ElevatedButton(
                           onPressed: () {},
                           style: ElevatedButton.styleFrom(
-                            primary: const Color.fromARGB(255, 205, 151, 255),
+                            primary:  const Color.fromARGB(255, 205, 151, 255),
                             onPrimary: Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -237,10 +238,10 @@ class _HomePageState extends State<HomePage> {
               tileColor: novost.isRead!
                   ? Colors.white
                   : const Color.fromARGB(255, 250, 215, 212),
-              leading: const Icon(
+              leading: Icon(
                 Icons.notifications_active_outlined,
                 size: 35.0,
-                color: Color.fromARGB(255, 186, 152, 174),
+                color: Colors.deepPurple.shade200,
               ),
               title: Text(novost.naslov,
                   style: const TextStyle(
@@ -278,6 +279,12 @@ class _HomePageState extends State<HomePage> {
                         korisniciNovosti.korisniciNovostiId, kn);
                   });
                 }
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NovostiDetaljiPage(novost: novost),
+                  ),
+                );
               },
               trailing: novost.vrstaTreningaId != null && novost.isLiked != null
                   ? IconButton(
@@ -344,7 +351,7 @@ class _HomePageState extends State<HomePage> {
               });
             },
             style: ElevatedButton.styleFrom(
-              primary: const Color.fromARGB(255, 240, 215, 245),
+              primary: Colors.deepPurple.shade100,
               onPrimary: Colors.black,
             ),
             child: Text('$i'),

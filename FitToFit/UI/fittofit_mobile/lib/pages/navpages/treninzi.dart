@@ -10,16 +10,14 @@ class TrainingPage extends StatefulWidget {
 }
 
 class _TrainingPageState extends State<TrainingPage> {
-
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
       selectedIndex: 1,
       child: Scaffold(
           appBar: AppBar(
-            title: const Text('Treninzi'),
-            backgroundColor: const Color.fromARGB(255, 152, 73, 212),
-          ),
+              title: const Text('Treninzi'),
+              backgroundColor: Colors.deepPurple.shade300),
           body: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

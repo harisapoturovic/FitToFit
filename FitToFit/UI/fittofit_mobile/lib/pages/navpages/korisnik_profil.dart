@@ -10,16 +10,14 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
       selectedIndex: 3,
       child: Scaffold(
           appBar: AppBar(
-            title: const Text('Profil'),
-            backgroundColor: const Color.fromARGB(255, 152, 73, 212),
-          ),
+              title: const Text('Profil'),
+              backgroundColor: Colors.deepPurple.shade300),
           body: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
