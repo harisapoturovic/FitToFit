@@ -35,11 +35,6 @@ class _NovostiDetaljiPage extends State<NovostiDetaljiPage> {
     return user;
   }
 
-  Future<Novosti?> getNovostFromId(int novostId) async {
-    final novost = await _novostiProvider.getById(novostId);
-    return novost;
-  }
-
   Future initForm() async {
     setState(() {
       isLoading = false;

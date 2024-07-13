@@ -1,6 +1,7 @@
 import 'package:fittofit_mobile/models/korisnici.dart';
 import 'package:fittofit_mobile/models/korisniciNovosti.dart';
 import 'package:fittofit_mobile/models/novosti.dart';
+import 'package:fittofit_mobile/pages/cjenovnik.dart';
 import 'package:fittofit_mobile/pages/novosti_detalji.dart';
 import 'package:fittofit_mobile/providers/korisnici_novosti_provider.dart';
 import 'package:fittofit_mobile/providers/korisnici_provider.dart';
@@ -11,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:fittofit_mobile/providers/novosti_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   final int selectedIndex;
@@ -170,9 +170,16 @@ class _HomePageState extends State<HomePage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CjenovnikPage(),
+                              ),
+                            );
+                          },
                           style: ElevatedButton.styleFrom(
-                            primary:  const Color.fromARGB(255, 205, 151, 255),
+                            primary: const Color.fromARGB(255, 205, 151, 255),
                             onPrimary: Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
