@@ -37,7 +37,13 @@ namespace FitToFit.Services
 
             if (search.ClanarinaId != null)
             {
-                query = query.Where(x => x.ClanarinaId.Equals(search.ClanarinaId));            }
+                query = query.Where(x => x.ClanarinaId.Equals(search.ClanarinaId));
+            }
+
+            if (!string.IsNullOrWhiteSpace(search?.VrstaTreningaNaziv))
+            {
+                query = query.Where(x => x.VrstaTreninga.Naziv.Equals(search.VrstaTreningaNaziv));
+            }
 
 
             return base.AddFilter(query, search);

@@ -44,6 +44,13 @@ namespace FitToFit.Services
             {
                 query = query.Where(x => x.SalaId.Equals(search.SalaId));
             }
+
+            if (!string.IsNullOrWhiteSpace(search?.NazivTreninga))
+            {
+                query = query.Where(x => x.Trening.Naziv.Equals(search.NazivTreninga));
+            }
+
+
             return base.AddFilter(query, search);
         }
     }

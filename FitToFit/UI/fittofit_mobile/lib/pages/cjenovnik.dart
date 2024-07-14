@@ -22,7 +22,6 @@ class _CjenovnikPageState extends State<CjenovnikPage> {
   List<TreninziClanarine> _list = [];
   List<VrsteTreninga> _vrsteTreningaList = [];
   String? _selectedType;
-  late int? treningId;
 
   @override
   void initState() {
@@ -82,17 +81,8 @@ class _CjenovnikPageState extends State<CjenovnikPage> {
                         setState(() {
                           _selectedType = isSelected ? null : vrsta.naziv;
                         });
-                        if (_selectedType == 'Grupni') {
-                          treningId = 1;
-                        } else if (_selectedType == 'Individualni') {
-                          treningId = 2;
-                        } else if (_selectedType == 'Poluindividualni') {
-                          treningId = 3;
-                        } else {
-                          treningId = null;
-                        }
                         var data = await _treninziClanarineProvider
-                            .get(filter: {'vrstaTreningaId': treningId});
+                            .get(filter: {'vrstaTreningaNaziv': _selectedType});
                         setState(() {
                           _list = data.result;
                         });
@@ -102,15 +92,12 @@ class _CjenovnikPageState extends State<CjenovnikPage> {
                           (states) {
                             if (isSelected) {
                               return const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                decoration: TextDecoration.underline,
-                                fontSize: 18
-                              );
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.underline,
+                                  fontSize: 18);
                             } else {
                               return const TextStyle(
-                                fontWeight: FontWeight.normal,
-                                fontSize: 16
-                              );
+                                  fontWeight: FontWeight.normal, fontSize: 16);
                             }
                           },
                         ),
@@ -165,16 +152,17 @@ class _CjenovnikPageState extends State<CjenovnikPage> {
                                   ConnectionState.done) {
                                 final vrstaTreninga = snapshot.data;
                                 if (vrstaTreninga != null) {
-                                  return Text('Vrsta treninga: ${vrstaTreninga.naziv}');
+                                  return Text(
+                                      'Vrsta treninga: ${vrstaTreninga.naziv}');
                                 } else {
                                   return const Text("Nepoznato");
                                 }
                               } else {
-                                return const Text("Učitavanje vrste treninga...");
+                                return const Text(
+                                    "Učitavanje vrste treninga...");
                               }
                             },
                           ),
-                          const SizedBox(height: 4.0),
                           if (item.ucestalost != null) ...[
                             const SizedBox(height: 4.0),
                             Text('Učestalost: ${item.ucestalost}x'),

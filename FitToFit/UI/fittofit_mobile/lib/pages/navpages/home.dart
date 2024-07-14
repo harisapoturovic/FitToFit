@@ -3,6 +3,7 @@ import 'package:fittofit_mobile/models/korisniciNovosti.dart';
 import 'package:fittofit_mobile/models/novosti.dart';
 import 'package:fittofit_mobile/pages/cjenovnik.dart';
 import 'package:fittofit_mobile/pages/novosti_detalji.dart';
+import 'package:fittofit_mobile/pages/raspored.dart';
 import 'package:fittofit_mobile/providers/korisnici_novosti_provider.dart';
 import 'package:fittofit_mobile/providers/korisnici_provider.dart';
 import 'package:fittofit_mobile/utils/util.dart';
@@ -174,7 +175,7 @@ class _HomePageState extends State<HomePage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => CjenovnikPage(),
+                                builder: (context) => const CjenovnikPage(),
                               ),
                             );
                           },
@@ -198,7 +199,14 @@ class _HomePageState extends State<HomePage> {
                         ),
                         const SizedBox(width: 30),
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const RasporedPage(),
+                              ),
+                            );
+                          },
                           style: ElevatedButton.styleFrom(
                             primary: const Color.fromARGB(255, 107, 189, 255),
                             onPrimary: Colors.white,
