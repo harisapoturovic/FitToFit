@@ -77,7 +77,7 @@ namespace FitToFit.Services
             }
             if (!string.IsNullOrWhiteSpace(search.KorisnickoIme))
             {
-                filteredQuery = filteredQuery.Where(x => x.KorisnickoIme.Contains(search.KorisnickoIme));
+                filteredQuery = filteredQuery.Where(x => x.KorisnickoIme.Equals(search.KorisnickoIme));
             }
             if (search.IsAdmin==true)
             {

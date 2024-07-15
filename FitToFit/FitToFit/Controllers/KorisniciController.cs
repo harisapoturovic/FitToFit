@@ -18,7 +18,7 @@ namespace FitToFit.Controllers
             _korisniciService = service;
         }
 
-        [Authorize(Roles = "Administrator")] //[AllowAnonymous]
+        [AllowAnonymous] //[Authorize(Roles = "Administrator")] 
         public override Task<Korisnici> Insert([FromBody] KorisniciInsertRequest insert)
         {
             return base.Insert(insert);

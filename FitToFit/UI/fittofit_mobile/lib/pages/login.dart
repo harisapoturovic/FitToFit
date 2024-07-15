@@ -1,4 +1,5 @@
 import 'package:fittofit_mobile/pages/navpages/home.dart';
+import 'package:fittofit_mobile/pages/registracija.dart';
 import 'package:fittofit_mobile/providers/korisnici_provider.dart';
 import 'package:fittofit_mobile/utils/util.dart';
 import 'package:flutter/material.dart';
@@ -123,7 +124,14 @@ class LoginPage extends StatelessWidget {
                                 color: Color.fromARGB(255, 105, 105, 105))),
                         const SizedBox(height: 5),
                         ElevatedButton(
-                          onPressed: () async {},
+                          onPressed: () async {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const RegistracijaPage(),
+                              ),
+                            );
+                          },
                           style: ElevatedButton.styleFrom(
                             primary: const Color.fromARGB(255, 209, 173, 244),
                             onPrimary: Colors.white,

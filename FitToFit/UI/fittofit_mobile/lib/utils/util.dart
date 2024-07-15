@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -20,4 +21,16 @@ Future<void> setUserName(String username) async {
 Future<String?> getUserName() async {
   final prefs = await SharedPreferences.getInstance();
   return prefs.getString('username');
+}
+
+class Debouncer {
+  final Duration delay;
+  Timer? _timer;
+
+  Debouncer({required this.delay});
+
+  void run(VoidCallback action) {
+    _timer?.cancel();
+    _timer = Timer(delay, action);
+  }
 }
