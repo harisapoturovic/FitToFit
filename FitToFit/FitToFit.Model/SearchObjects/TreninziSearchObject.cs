@@ -12,5 +12,6 @@ namespace FitToFit.Model.SearchObjects
         public string? VrstaTreninga { get; set; }
         public bool? IsVjezbeIncluded { get; set; }
         public bool? IsTerminiIncluded { get; set; }
+        public string? VrstaTreningaNaziv { get; set; }
     }
 }
