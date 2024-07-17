@@ -52,6 +52,11 @@ namespace FitToFit.Services
                 query = query.Where(x => x.Vrsta.Naziv.Equals(search.VrstaTreningaNaziv));
             }
 
+            if (!string.IsNullOrWhiteSpace(search?.Namjena))
+            {
+                query = query.Where(x => x.Namjena.Equals(search.Namjena));
+            }
+
             return base.AddFilter(query, search);
         }
 

@@ -13,5 +13,6 @@ namespace FitToFit.Model.SearchObjects
         public bool? IsVjezbeIncluded { get; set; }
         public bool? IsTerminiIncluded { get; set; }
         public string? VrstaTreningaNaziv { get; set; }
+        public string? Namjena { get; set; }
     }
 }

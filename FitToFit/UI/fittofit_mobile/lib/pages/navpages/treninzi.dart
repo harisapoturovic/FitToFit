@@ -1,7 +1,6 @@
-import 'dart:convert';
-
 import 'package:fittofit_mobile/models/treninzi.dart';
 import 'package:fittofit_mobile/models/vrste_treninga.dart';
+import 'package:fittofit_mobile/pages/treninzi_detalji.dart';
 import 'package:fittofit_mobile/providers/treninzi_provider.dart';
 import 'package:fittofit_mobile/providers/vrste_treninga_provider.dart';
 import 'package:fittofit_mobile/utils/util.dart';
@@ -23,8 +22,17 @@ class _TrainingPageState extends State<TrainingPage> {
   List<VrsteTreninga> _vrsteTreningaList = [];
   List<Treninzi> _treninziList = [];
   String? _selectedType;
+  String? _selectedNamjena;
   bool isSearching = false;
   final TextEditingController _nazivController = TextEditingController();
+  List<String> namjena = [
+    'Mršavljenje',
+    'Izgradnja mišića',
+    'Kondicija',
+    'Opuštanje',
+    'Fleksibilnost i mobilnost',
+    'Rehabilitacija i oporavak'
+  ];
 
   @override
   void initState() {
@@ -57,7 +65,7 @@ class _TrainingPageState extends State<TrainingPage> {
               backgroundColor: Colors.deepPurple.shade300),
           body: Center(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -71,11 +79,7 @@ class _TrainingPageState extends State<TrainingPage> {
                             setState(() {
                               _selectedType = isSelected ? null : vrsta.naziv;
                             });
-                            var data = await _treninziProvider.get(
-                                filter: {'vrstaTreningaNaziv': _selectedType});
-                            setState(() {
-                              _treninziList = data.result;
-                            });
+                            _getFilteredTrainings();
                           },
                           style: ButtonStyle(
                             textStyle:
@@ -100,7 +104,6 @@ class _TrainingPageState extends State<TrainingPage> {
                     }).toList(),
                   ),
                 ),
-                const SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: TextField(
@@ -117,9 +120,57 @@ class _TrainingPageState extends State<TrainingPage> {
                     },
                   ),
                 ),
+                const SizedBox(height: 5),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: namjena.map((n) {
+                        bool isSelected = n == _selectedNamjena;
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: TextButton(
+                            onPressed: () async {
+                              setState(() {
+                                _selectedNamjena = isSelected ? null : n;
+                              });
+                              _getFilteredTrainings();
+                            },
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.blue.shade300),
+                              foregroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white), // Text color
+                              padding:
+                                  MaterialStateProperty.all<EdgeInsetsGeometry>(
+                                const EdgeInsets.symmetric(
+                                    vertical: 10.0, horizontal: 20.0),
+                              ),
+                              textStyle:
+                                  MaterialStateProperty.resolveWith<TextStyle>(
+                                (states) {
+                                  if (isSelected) {
+                                    return const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18);
+                                  } else {
+                                    return const TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 16);
+                                  }
+                                },
+                              ),
+                            ),
+                            child: Text(n),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
                 Expanded(
                   child: ListView.builder(
-                    padding: const EdgeInsets.symmetric(vertical: 15.0),
                     itemCount: _treninziList.length,
                     itemBuilder: (BuildContext context, int index) {
                       return _buildTrainingBlock(_treninziList[index]);
@@ -133,9 +184,15 @@ class _TrainingPageState extends State<TrainingPage> {
   }
 
   Widget _buildTrainingBlock(Treninzi treninzi) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
-      
+    return GestureDetector(
+      onTap: (() {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TreninziDetaljiPage(trening: treninzi),
+          ),
+        );
+      }),
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -197,8 +254,11 @@ class _TrainingPageState extends State<TrainingPage> {
 
   Future<void> _getFilteredTrainings() async {
     isSearching = true;
-    var data =
-        await _treninziProvider.get(filter: {'naziv': _nazivController.text});
+    var data = await _treninziProvider.get(filter: {
+      'naziv': _nazivController.text,
+      'vrstaTreningaNaziv': _selectedType,
+      'namjena': _selectedNamjena
+    });
 
     setState(() {
       _treninziList = data.result;
