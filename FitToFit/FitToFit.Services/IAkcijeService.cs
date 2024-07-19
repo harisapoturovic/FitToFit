@@ -9,5 +9,6 @@ namespace FitToFit.Services
         Task<Akcije> Activate(int id);
         Task<Akcije> Archive(int id);
         Task<List<string>> AllowedActions(int id);
+        Task<List<Akcije>> GetAkcijeForTrening(int treningId);
     }
 }

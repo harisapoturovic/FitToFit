@@ -47,7 +47,7 @@ class _TrainingPageState extends State<TrainingPage> {
     var vrsteTreninga =
         await _vrsteTreningaProvider.get(filter: {'isTerminiIncluded': false});
 
-    var treninzi = await _treninziProvider.get();
+    var treninzi = await _treninziProvider.get(filter: {'isVjezbeIncluded': true});
 
     setState(() {
       _vrsteTreningaList = vrsteTreninga.result;

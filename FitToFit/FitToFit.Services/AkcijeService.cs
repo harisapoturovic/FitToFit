@@ -132,5 +132,17 @@ namespace FitToFit.Services
             }
             return _mapper.Map<Model.Akcije>(action);
         }
+
+        public async Task<List<Model.Akcije>> GetAkcijeForTrening(int treningId)
+        {
+            var akcijeQuery = _context.Akcijes
+                                    .Where(a => a.AkcijeTreninzis.Any(at => at.TreningId == treningId && at.Akcija.StateMachine=="active"))
+                                    .Include(a => a.AkcijeTreninzis);
+
+            var akcijeList = await akcijeQuery.ToListAsync();
+
+            return _mapper.Map<List<Model.Akcije>>(akcijeList);
+        }
+
     }
 }

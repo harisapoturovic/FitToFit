@@ -34,5 +34,10 @@ namespace FitToFit.Controllers
             return await (_service as IAkcijeService).AllowedActions(id);
         }
 
+        [HttpGet("getAkcijeForTrening")]
+        public virtual async Task<List<Akcije>> GetAkcijeForTrening(int treningId)
+        {
+            return await (_service as IAkcijeService).GetAkcijeForTrening(treningId);
+        }
     }
 }
