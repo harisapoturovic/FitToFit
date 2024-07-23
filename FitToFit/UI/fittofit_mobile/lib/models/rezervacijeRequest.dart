@@ -2,12 +2,14 @@ class RezervacijeRequest {
   String datum;
   int korisnikId;
   int clanarinaId;
+  int iznos;
   List<RezervacijeItem> items;
 
   RezervacijeRequest({
     required this.datum,
     required this.korisnikId,
     required this.clanarinaId,
+    required this.iznos,
     required this.items,
   });
 
@@ -16,6 +18,7 @@ class RezervacijeRequest {
       'datum': datum,
       'korisnikId': korisnikId,
       'clanarinaId': clanarinaId,
+      'iznos': iznos,
       'items': items.map((item) => item.toJson()).toList(),
     };
   }

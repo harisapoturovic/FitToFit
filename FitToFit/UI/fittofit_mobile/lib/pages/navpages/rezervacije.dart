@@ -1,16 +1,19 @@
-import 'dart:convert';
-
 import 'package:fittofit_mobile/models/clanarine.dart';
+import 'package:fittofit_mobile/models/korisnici.dart';
 import 'package:fittofit_mobile/models/rezervacijeRequest.dart';
 import 'package:fittofit_mobile/models/search_result.dart';
 import 'package:fittofit_mobile/models/termini.dart';
 import 'package:fittofit_mobile/models/treninzi.dart';
+import 'package:fittofit_mobile/models/treninziClanarine.dart';
 import 'package:fittofit_mobile/models/vrste_treninga.dart';
 import 'package:fittofit_mobile/providers/clanarine_provider.dart';
+import 'package:fittofit_mobile/providers/korisnici_provider.dart';
 import 'package:fittofit_mobile/providers/rezervacije_provider.dart';
 import 'package:fittofit_mobile/providers/termini_provider.dart';
+import 'package:fittofit_mobile/providers/treninzi_clanarine_provider.dart';
 import 'package:fittofit_mobile/providers/treninzi_provider.dart';
 import 'package:fittofit_mobile/providers/vrste_treninga_provider.dart';
+import 'package:fittofit_mobile/utils/util.dart';
 import 'package:fittofit_mobile/widgets/master_screen_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -31,15 +34,21 @@ class _ReservationPageState extends State<ReservationPage> {
   late TreninziProvider _treninziProvider;
   late TerminiProvider _terminiProvider;
   late RezervacijeProvider _rezervacijeProvider;
+  late KorisniciProvider _korisniciProvider;
+  late TreninziClanarineProvider _treninziClanarineProvider;
   List<Clanarine> _clanarineList = [];
   List<VrsteTreninga> _vrsteTreningaList = [];
   List<Treninzi> _treninziList = [];
   List<Termini> _terminiList = [];
   List<Termini> _termin = [];
+  List<TreninziClanarine> _treninziClanarineList = [];
+  int? _rezervacijeCount;
   List<int> _terminiIds = [];
   int? _selectedClanarina;
   int? _selectedVrstaTreninga;
   int? _selectedTrening;
+  String? korisnickoIme = '';
+  late Korisnici korisnik;
 
   @override
   void initState() {
@@ -49,6 +58,8 @@ class _ReservationPageState extends State<ReservationPage> {
     _treninziProvider = context.read<TreninziProvider>();
     _terminiProvider = context.read<TerminiProvider>();
     _rezervacijeProvider = context.read<RezervacijeProvider>();
+    _korisniciProvider = context.read<KorisniciProvider>();
+    _treninziClanarineProvider = context.read<TreninziClanarineProvider>();
     _loadData();
   }
 
@@ -57,17 +68,45 @@ class _ReservationPageState extends State<ReservationPage> {
     var vrsteTreninga = await _vrsteTreningaProvider.get(filter: {});
     var treninzi = await _treninziProvider
         .get(filter: {'vrstaTreninga': _selectedVrstaTreninga});
+    korisnickoIme = await getUserName();
+    var user = await _korisniciProvider
+        .get(filter: {'korisnickoIme': korisnickoIme, 'isAdmin': false});
 
     setState(() {
       _clanarineList = clanarine.result;
       _vrsteTreningaList = vrsteTreninga.result;
       _treninziList = treninzi.result;
+      korisnik = user.result[0];
     });
     if (_selectedTrening != null) {
       var termini =
           await _terminiProvider.get(filter: {'treningId': _selectedTrening});
       setState(() {
         _terminiList = termini.result;
+      });
+    }
+    if (user != null) {
+      var rezervacije = await _rezervacijeProvider.get(filter: {
+        'korisnikId': korisnik.korisnikId,
+        'stateMachine': 'active'
+      });
+      setState(() {
+        _rezervacijeCount = rezervacije.count;
+      });
+    }
+  }
+
+  void _loadCjenovnik() async {
+    if (_selectedVrstaTreninga != null &&
+        _selectedClanarina != null &&
+        _terminiIds.isNotEmpty) {
+      var cjenovnik = await _treninziClanarineProvider.get(filter: {
+        'vrstaTreningaId': _selectedVrstaTreninga,
+        'clanarinaId': _selectedClanarina,
+        'ucestalost': _terminiIds.length
+      });
+      setState(() {
+        _treninziClanarineList = cjenovnik.result;
       });
     }
   }
@@ -78,7 +117,7 @@ class _ReservationPageState extends State<ReservationPage> {
     return termini.result;
   }
 
-  Map<String, List<Termini>> _groupTermsByDay(List<Termini> terminiList) {
+  Map<String, List<Termini>> _grupisiTerminePoDanu(List<Termini> terminiList) {
     Map<String, List<Termini>> groupedByDay = {};
     terminiList.forEach((termin) {
       String day = termin.dan;
@@ -88,10 +127,6 @@ class _ReservationPageState extends State<ReservationPage> {
       groupedByDay[day]!.add(termin);
     });
     return groupedByDay;
-  }
-
-  void _reserveTerm(Termini termin) {
-    print('Reserved term ${termin.terminId}');
   }
 
   String formatDate(DateTime? dateTime) {
@@ -170,7 +205,7 @@ class _ReservationPageState extends State<ReservationPage> {
                   if (_terminiList.isNotEmpty)
                     Expanded(
                       child: ListView(
-                        children: _buildGroupedTerms(),
+                        children: _buildGroupedTermine(),
                       ),
                     ),
                   if (_terminiList.isEmpty)
@@ -180,7 +215,7 @@ class _ReservationPageState extends State<ReservationPage> {
                     ),
                   ElevatedButton(
                     onPressed: () {
-                      int korisnikId = 1033; //id logovanog usera
+                      int korisnikId = korisnik.korisnikId;
                       int clanarinaId = _selectedClanarina!;
                       List<int> terminIds = _terminiIds;
                       DateTime now = DateTime.now();
@@ -198,10 +233,19 @@ class _ReservationPageState extends State<ReservationPage> {
                         datum: formattedDate,
                         korisnikId: korisnikId,
                         clanarinaId: clanarinaId,
+                        iznos: _treninziClanarineList[0].cijena,
                         items: items,
                       );
-
-                      _rezervacijeProvider.insert(request.toJson());
+                      if (_rezervacijeCount! < 3) {
+                        _rezervacijeProvider.insert(request.toJson());
+                        _showAlertDialog("Rezervisano!",
+                            "Uspješno kreirana rezervacija.", Colors.green);
+                      } else {
+                        _showAlertDialog(
+                            "Greška",
+                            "Napravili ste maksimalan broj rezervacija. Otkažite neku od njih ili sačekajte da istekne neka od prethodno rezervisanih.",
+                            Colors.red);
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       primary: Colors.blue.shade200,
@@ -224,9 +268,10 @@ class _ReservationPageState extends State<ReservationPage> {
     );
   }
 
-  List<Widget> _buildGroupedTerms() {
+  List<Widget> _buildGroupedTermine() {
     if (_terminiList.isNotEmpty) {
-      Map<String, List<Termini>> groupedByDay = _groupTermsByDay(_terminiList);
+      Map<String, List<Termini>> groupedByDay =
+          _grupisiTerminePoDanu(_terminiList);
 
       return groupedByDay.entries.map((entry) {
         String day = entry.key;
@@ -257,7 +302,6 @@ class _ReservationPageState extends State<ReservationPage> {
                       onPressed: () {
                         if (isAvailable) {
                           fetchData(day, termin);
-                          _reserveTerm(termin);
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -314,6 +358,44 @@ class _ReservationPageState extends State<ReservationPage> {
         _termin = selectedTermin.result;
       });
       _terminiIds.add(_termin[0].terminId);
+      _loadCjenovnik();
     }
+  }
+
+  void _showAlertDialog(String naslov, String poruka, Color boja) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        backgroundColor: const Color.fromARGB(255, 238, 247, 255),
+        title: Text(
+          naslov,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: boja,
+          ),
+        ),
+        content: Text(
+          poruka,
+          style: const TextStyle(
+            fontSize: 16.0,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            style: TextButton.styleFrom(
+              primary: Colors.blue,
+              textStyle: const TextStyle(
+                fontSize: 16.0,
+              ),
+            ),
+            child: const Text("OK"),
+          ),
+        ],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+      ),
+    );
   }
 }

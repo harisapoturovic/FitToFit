@@ -14,7 +14,7 @@ namespace FitToFit.Model.Requests
         public int KorisnikId { get; set; }
         [Required]
         public int ClanarinaId { get; set; }
-
+        public decimal? Iznos { get; set; }
         public List<RezervacijaStavkeInsertRequest>? Items { get; set; }
     }
 }
