@@ -14,5 +14,6 @@ namespace FitToFit.Model.SearchObjects
         public bool? IsTerminiIncluded { get; set; }
         public string? VrstaTreningaNaziv { get; set; }
         public string? Namjena { get; set; }
+        public int? TreningId { get; set; }
     }
 }

@@ -57,6 +57,11 @@ namespace FitToFit.Services
                 query = query.Where(x => x.Namjena.Equals(search.Namjena));
             }
 
+            if (search?.TreningId != null)
+            {
+                query = query.Where(x => x.TreningId.Equals(search.TreningId));
+            }
+
             return base.AddFilter(query, search);
         }
 

@@ -10,7 +10,7 @@ Termini _$TerminiFromJson(Map<String, dynamic> json) => Termini(
       terminId: json['terminId'] as int,
       dan: json['dan'] as String,
       sat: json['sat'] as String?,
-      brojClanova: json['brojClanova'] as int?,
+      brojClanova: json['brojClanova'] as int,
       treningId: json['treningId'] as int,
       trenerId: json['trenerId'] as int,
       salaId: json['salaId'] as int,

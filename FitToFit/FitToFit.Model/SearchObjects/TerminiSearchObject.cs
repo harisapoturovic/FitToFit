@@ -14,5 +14,6 @@ namespace FitToFit.Model.SearchObjects
         public int? TrenerId { get; set; }
         public int? SalaId { get; set; }
         public string? NazivTreninga { get; set; }
+        public int? TerminId { get; set; }
     }
 }

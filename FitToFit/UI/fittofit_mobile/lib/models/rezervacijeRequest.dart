@@ -2,14 +2,14 @@ class RezervacijeRequest {
   String datum;
   int korisnikId;
   int clanarinaId;
-  int iznos;
+  int? iznos;
   List<RezervacijeItem> items;
 
   RezervacijeRequest({
     required this.datum,
     required this.korisnikId,
     required this.clanarinaId,
-    required this.iznos,
+    this.iznos,
     required this.items,
   });
 

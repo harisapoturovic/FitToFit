@@ -50,6 +50,10 @@ namespace FitToFit.Services
                 query = query.Where(x => x.Trening.Naziv.Equals(search.NazivTreninga));
             }
 
+            if (search.TerminId != null)
+            {
+                query = query.Where(x => x.TerminId.Equals(search.TerminId));
+            }
 
             return base.AddFilter(query, search);
         }

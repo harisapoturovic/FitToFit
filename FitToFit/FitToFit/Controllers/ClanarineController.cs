@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace FitToFit.Controllers
 {
     [ApiController]
-    public class ClanarineController : BaseController<Model.Clanarine, BaseSearchObject>
+    public class ClanarineController : BaseController<Model.Clanarine, ClanarineSearchObject>
     {
-        public ClanarineController(ILogger<BaseController<Clanarine, BaseSearchObject>> logger, IClanarineService service)
+        public ClanarineController(ILogger<BaseController<Clanarine, ClanarineSearchObject>> logger, IClanarineService service)
             :base(logger, service)
         {
         }

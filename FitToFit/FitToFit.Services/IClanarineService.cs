@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FitToFit.Services
 {
-    public interface IClanarineService : IService<Model.Clanarine, BaseSearchObject>
+    public interface IClanarineService : IService<Model.Clanarine, ClanarineSearchObject>
     {
     }
 }

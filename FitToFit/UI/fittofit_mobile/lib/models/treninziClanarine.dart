@@ -7,14 +7,14 @@ part 'treninziClanarine.g.dart';
 @JsonSerializable()
 class TreninziClanarine {
   int treningClanarinaId;
-  int cijena;
+  int? cijena;
   int? ucestalost;
   int clanarinaId;
   int vrstaTreningaId;
 
   TreninziClanarine(
       {required this.treningClanarinaId,
-      required this.cijena,
+      this.cijena,
       this.ucestalost,
       required this.vrstaTreningaId,
       required this.clanarinaId});

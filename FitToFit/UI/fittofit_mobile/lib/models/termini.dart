@@ -7,7 +7,7 @@ class Termini {
   int terminId;
   String dan;
   String? sat;
-  int? brojClanova;
+  int brojClanova;
   int treningId;
   int trenerId;
   int salaId;
@@ -16,7 +16,7 @@ class Termini {
       {required this.terminId,
       required this.dan,
       this.sat,
-      this.brojClanova,
+      required this.brojClanova,
       required this.treningId,
       required this.trenerId,
       required this.salaId});
