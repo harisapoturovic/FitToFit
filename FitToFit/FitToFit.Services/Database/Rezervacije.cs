@@ -17,6 +17,8 @@ public partial class Rezervacije
 
     public decimal? Iznos { get; set; }
 
+    public DateTime? DatumIsteka { get; set; }
+
     public virtual Clanarine Clanarina { get; set; } = null!;
 
     public virtual Korisnici Korisnik { get; set; } = null!;

@@ -15,6 +15,8 @@ namespace FitToFit.Model.Requests
         [Required]
         public int ClanarinaId { get; set; }
         public decimal? Iznos { get; set; }
+
+        public DateTime DatumIsteka { get; set; }
         public List<RezervacijaStavkeInsertRequest>? Items { get; set; }
     }
 }

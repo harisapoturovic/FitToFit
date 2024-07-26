@@ -36,6 +36,17 @@ namespace FitToFit.Services.RezervacijeStateMachine
 
             entity.StateMachine = "active";
 
+            var reservationItems = _context.RezervacijaStavkes.Where(rs => rs.RezervacijaId == id).ToList();
+
+            foreach (var item in reservationItems)
+            {
+                var termin = await _context.Terminis.FindAsync(item.TerminId);
+                if (termin != null)
+                {
+                    termin.BrojClanova = (byte)(termin.BrojClanova + 1);
+                }
+            }
+
             await _context.SaveChangesAsync();
             return _mapper.Map<Model.Rezervacije>(entity);
         }

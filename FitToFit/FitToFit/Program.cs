@@ -13,6 +13,8 @@ using System.Text;
 using System.Text.Json;
 using AutoMapper;
 using FitToFit.Model.Requests;
+using Quartz;
+using FitToFit.CronJob;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +35,8 @@ builder.Services.AddTransient<IVjezbeService, VjezbeService>();
 builder.Services.AddTransient<IVjezbeTreninziService, VjezbeTreninziService>();
 builder.Services.AddTransient<IRezervacijaStavkeService, RezervacijaStavkeService>();
 builder.Services.AddTransient<IKorisniciNovostiService, KorisniciNovostiService>();
+builder.Services.AddDbContext<Ib200048Context>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddTransient<AkcijeBaseState>();
 builder.Services.AddTransient<InitialActionState>();
@@ -47,6 +51,18 @@ builder.Services.AddTransient<ActiveReservationState>();
 builder.Services.AddTransient<CanceledReservationState>();
 builder.Services.AddTransient<RefusedReservationState>();
 builder.Services.AddTransient<ArchivedReservationState>();
+
+object value = builder.Services.AddQuartz(q =>
+{
+    q.UseMicrosoftDependencyInjectionJobFactory();
+
+    q.ScheduleJob<CleanupJob>(trigger => trigger
+        .WithIdentity("cleanupTrigger")
+        .StartNow()
+        .WithCronSchedule("0 * * * * ?"));
+    // .WithCronSchedule("0 0 * * *")); 
+});
+builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
 // Add services to the container.
 builder.Services.AddControllers(x =>

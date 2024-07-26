@@ -3,6 +3,7 @@ class RezervacijeRequest {
   int korisnikId;
   int clanarinaId;
   int? iznos;
+  String datumIsteka;
   List<RezervacijeItem> items;
 
   RezervacijeRequest({
@@ -11,6 +12,7 @@ class RezervacijeRequest {
     required this.clanarinaId,
     this.iznos,
     required this.items,
+    required this.datumIsteka,
   });
 
   Map<String, dynamic> toJson() {
@@ -20,6 +22,7 @@ class RezervacijeRequest {
       'clanarinaId': clanarinaId,
       'iznos': iznos,
       'items': items.map((item) => item.toJson()).toList(),
+      'datumIsteka': datumIsteka,
     };
   }
 }

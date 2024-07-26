@@ -214,6 +214,7 @@ class _ReservationPageState extends State<ReservationPage> {
                         );
                       }).toList(),
                       onChanged: (value) {
+                        _terminiIds.clear();
                         setState(() {
                           _selectedTrening = value as int?;
                         });
@@ -348,8 +349,16 @@ class _ReservationPageState extends State<ReservationPage> {
     setState(() {
       _termin = selectedTermin.result;
     });
-    _terminiIds.add(_termin[0].terminId);
-    _loadCjenovnik();
+    if (_termin.isNotEmpty && !_terminiIds.contains(_termin[0].terminId)) {
+      _terminiIds.add(_termin[0].terminId);
+      _loadCjenovnik();
+    } else {
+      _showAlertDialog(
+        "Greška",
+        "Ne možete odabrati isti termin više puta.",
+        Colors.red,
+      );
+    }
   }
 
   Future<Termini> fetchTermin(int terminId) async {
@@ -507,10 +516,30 @@ class _ReservationPageState extends State<ReservationPage> {
                                     int clanarinaId = _selectedClanarina ?? 0;
                                     List<int> terminIds = _terminiIds;
                                     DateTime now = DateTime.now();
+                                    DateTime datumIsteka;
+
+                                    if (_selectedClanarina == 1) {
+                                      // Mjesečna članarina
+                                      datumIsteka =
+                                          now.add(const Duration(days: 30));
+                                    } else if (_selectedClanarina == 2) {
+                                      // Sedmična članarina
+                                      datumIsteka =
+                                          now.add(const Duration(days: 7));
+                                    } else if (_selectedClanarina == 3) {
+                                      // Dnevna članarina
+                                      datumIsteka =
+                                          now.add(const Duration(hours: 24));
+                                    } else {
+                                      datumIsteka = now;
+                                    }
 
                                     String formattedDate = DateFormat(
                                             "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
                                         .format(now.toUtc());
+                                    String formattedDatumIsteka = DateFormat(
+                                            "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                                        .format(datumIsteka.toUtc());
 
                                     List<RezervacijeItem> items = terminIds
                                         .map((terminId) =>
@@ -526,58 +555,194 @@ class _ReservationPageState extends State<ReservationPage> {
                                           'Za odabranu članarinu "Dnevna" morate uzeti samo jedan termin, a za preostale članarine više od jednog termina.',
                                           Colors.red,
                                         );
-                                      } else {
-                                        RezervacijeRequest request =
-                                            RezervacijeRequest(
-                                          datum: formattedDate,
-                                          korisnikId: korisnikId,
-                                          clanarinaId: clanarinaId,
-                                          iznos:
-                                              _treninziClanarineList[0].cijena,
-                                          items: items,
-                                        );
+                                        return;
+                                      }
 
-                                        if (_rezervacijeCount1! < 3 &&
-                                            _rezervacijeCount2! == 0 &&
-                                            provjeriClanarinu()) {
-                                          _rezervacijeProvider
-                                              .insert(request.toJson());
-                                          for (var terminId in terminIds) {
-                                            Termini fetchedTermin =
-                                                await fetchTermin(terminId);
-                                            fetchedTermin.brojClanova++;
-                                            Termini t = Termini(
-                                                dan: fetchedTermin.dan,
-                                                salaId: fetchedTermin.salaId,
-                                                terminId: terminId,
-                                                trenerId:
-                                                    fetchedTermin.trenerId,
-                                                treningId:
-                                                    fetchedTermin.treningId,
-                                                sat: fetchedTermin.sat,
-                                                brojClanova:
-                                                    fetchedTermin.brojClanova);
-                                            _terminiProvider.update(
-                                                terminId, t);
+                                      DateTime convertToDateTime(
+                                          String dan, String? sat) {
+                                        Map<String, int> daysOfWeek = {
+                                          'Ponedjeljak': DateTime.monday,
+                                          'Utorak': DateTime.tuesday,
+                                          'Srijeda': DateTime.wednesday,
+                                          'Četvrtak': DateTime.thursday,
+                                          'Petak': DateTime.friday,
+                                          'Subota': DateTime.saturday,
+                                          'Nedjelja': DateTime.sunday,
+                                        };
+
+                                        DateTime now = DateTime.now();
+                                        int dayOfWeek =
+                                            daysOfWeek[dan] ?? DateTime.monday;
+
+                                        DateTime date = now.add(Duration(
+                                            days:
+                                                (dayOfWeek - now.weekday + 7) %
+                                                    7));
+                                        if (sat != null) {
+                                          String cleanedSat = sat.replaceAll(
+                                              RegExp(r'[^\d:]'), '');
+
+                                          List<String> timeParts =
+                                              cleanedSat.split(':');
+
+                                          if (timeParts.length == 2) {
+                                            try {
+                                              int hour =
+                                                  int.parse(timeParts[0]);
+                                              int minute =
+                                                  int.parse(timeParts[1]);
+
+                                              date = DateTime(
+                                                  date.year,
+                                                  date.month,
+                                                  date.day,
+                                                  hour,
+                                                  minute);
+                                            } catch (e) {
+                                              print(
+                                                  'Greška pri parsiranju vremena: $e');
+                                            }
                                           }
+                                        }
 
-                                          _showAlertDialog(
-                                            "Rezervisano!",
-                                            "Uspješno kreirana rezervacija.",
-                                            Colors.green,
-                                          );
-                                        } else if (_rezervacijeCount2! != 0) {
-                                          _showAlertDialog(
-                                              "Greška",
-                                              "Prethodno ste rezervisali odabrani trening. Nije moguće rezervisati isti trening u sklopu više rezervacija.",
-                                              Colors.red);
-                                        } else if (_rezervacijeCount1! != 0) {
+                                        return date;
+                                      }
+
+                                      if (_selectedClanarina == 3) {
+                                        DateTime tomorrow =
+                                            now.add(const Duration(days: 1));
+
+                                        List<Future<Termini>> terminFutures =
+                                            terminIds
+                                                .map((terminId) =>
+                                                    fetchTermin(terminId))
+                                                .toList();
+                                        List<Termini> termini =
+                                            await Future.wait(terminFutures);
+
+                                        bool allTerminiAreTomorrow =
+                                            termini.every((termin) {
+                                          DateTime terminDate =
+                                              convertToDateTime(
+                                                  termin.dan, termin.sat);
+                                          return terminDate.year ==
+                                                  tomorrow.year &&
+                                              terminDate.month ==
+                                                  tomorrow.month &&
+                                              terminDate.day == tomorrow.day;
+                                        });
+
+                                        if (!allTerminiAreTomorrow) {
                                           _showAlertDialog(
                                             "Greška",
-                                            "Napravili ste maksimalan broj rezervacija. Otkažite neku od njih ili sačekajte da istekne neka od prethodno rezervisanih.",
+                                            'Za dnevnu članarinu možete odabrati samo termine koji su zakazani za sutra.',
                                             Colors.red,
                                           );
+                                          return;
                                         }
+
+                                        if (terminIds.length > 1) {
+                                          _showAlertDialog(
+                                            "Greška",
+                                            'Za dnevnu članarinu možete odabrati samo jedan termin.',
+                                            Colors.red,
+                                          );
+                                          return;
+                                        }
+                                      } else if (_selectedClanarina == 2) {
+                                        DateTime sevenDaysFromNow =
+                                            now.add(const Duration(days: 7));
+
+                                        List<Future<Termini>> terminFutures =
+                                            terminIds
+                                                .map((terminId) =>
+                                                    fetchTermin(terminId))
+                                                .toList();
+                                        List<Termini> termini =
+                                            await Future.wait(terminFutures);
+
+                                        bool allTerminiAreWithinSevenDays =
+                                            termini.every((termin) {
+                                          DateTime terminDate =
+                                              convertToDateTime(
+                                                  termin.dan, termin.sat);
+                                          return terminDate.isAfter(now) &&
+                                              terminDate
+                                                  .isBefore(sevenDaysFromNow);
+                                        });
+
+                                        if (!allTerminiAreWithinSevenDays) {
+                                          _showAlertDialog(
+                                            "Greška",
+                                            'Za sedmičnu članarinu možete odabrati samo termine unutar narednih 7 dana.',
+                                            Colors.red,
+                                          );
+                                          return;
+                                        }
+                                      } else if (_selectedClanarina == 1) {
+                                        DateTime thirtyDaysFromNow =
+                                            now.add(const Duration(days: 30));
+
+                                        List<Future<Termini>> terminFutures =
+                                            terminIds
+                                                .map((terminId) =>
+                                                    fetchTermin(terminId))
+                                                .toList();
+                                        List<Termini> termini =
+                                            await Future.wait(terminFutures);
+
+                                        bool allTerminiAreWithinThirtyDays =
+                                            termini.every((termin) {
+                                          DateTime terminDate =
+                                              convertToDateTime(
+                                                  termin.dan, termin.sat);
+                                          return terminDate.isAfter(now) &&
+                                              terminDate
+                                                  .isBefore(thirtyDaysFromNow);
+                                        });
+
+                                        if (!allTerminiAreWithinThirtyDays) {
+                                          _showAlertDialog(
+                                            "Greška",
+                                            'Za mjesečnu članarinu možete odabrati samo termine unutar narednih 30 dana.',
+                                            Colors.red,
+                                          );
+                                          return;
+                                        }
+                                      }
+
+                                      RezervacijeRequest request =
+                                          RezervacijeRequest(
+                                        datum: formattedDate,
+                                        korisnikId: korisnikId,
+                                        clanarinaId: clanarinaId,
+                                        iznos: _treninziClanarineList[0].cijena,
+                                        items: items,
+                                        datumIsteka: formattedDatumIsteka,
+                                      );
+
+                                      if (_rezervacijeCount1! < 3 &&
+                                          _rezervacijeCount2! == 0 &&
+                                          provjeriClanarinu()) {
+                                        await _rezervacijeProvider
+                                            .insert(request.toJson());
+
+                                        _showAlertDialog(
+                                          "Rezervisano!",
+                                          "Uspješno kreirana rezervacija.",
+                                          Colors.green,
+                                        );
+                                      } else if (_rezervacijeCount2! != 0) {
+                                        _showAlertDialog(
+                                            "Greška",
+                                            "Prethodno ste rezervisali odabrani trening. Nije moguće rezervisati isti trening u sklopu više rezervacija.",
+                                            Colors.red);
+                                      } else if (_rezervacijeCount1! != 0) {
+                                        _showAlertDialog(
+                                          "Greška",
+                                          "Napravili ste maksimalan broj rezervacija. Otkažite neku od njih ili sačekajte da istekne neka od prethodno rezervisanih.",
+                                          Colors.red,
+                                        );
                                       }
                                     } else {
                                       _showAlertDialog(
@@ -597,6 +762,7 @@ class _ReservationPageState extends State<ReservationPage> {
                                 const SizedBox(width: 20),
                                 ElevatedButton(
                                   onPressed: () {
+                                    _terminiIds.clear();
                                     Navigator.pop(context);
                                   },
                                   style: ButtonStyle(
