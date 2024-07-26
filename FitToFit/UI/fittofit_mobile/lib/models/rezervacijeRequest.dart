@@ -2,7 +2,7 @@ class RezervacijeRequest {
   String datum;
   int korisnikId;
   int clanarinaId;
-  int? iznos;
+  double? iznos;
   String datumIsteka;
   List<RezervacijeItem> items;
 

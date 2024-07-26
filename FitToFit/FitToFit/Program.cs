@@ -59,8 +59,8 @@ object value = builder.Services.AddQuartz(q =>
     q.ScheduleJob<CleanupJob>(trigger => trigger
         .WithIdentity("cleanupTrigger")
         .StartNow()
-        .WithCronSchedule("0 * * * * ?"));
-    // .WithCronSchedule("0 0 * * *")); 
+        .WithCronSchedule("0 0 * * * ?")); //svaki sat
+    //.WithCronSchedule("0 * * * * ?"));  svake minute
 });
 builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 

@@ -1,3 +1,4 @@
+import 'package:fittofit_mobile/models/akcije.dart';
 import 'package:fittofit_mobile/models/clanarine.dart';
 import 'package:fittofit_mobile/models/korisnici.dart';
 import 'package:fittofit_mobile/models/rezervacijeRequest.dart';
@@ -6,6 +7,7 @@ import 'package:fittofit_mobile/models/termini.dart';
 import 'package:fittofit_mobile/models/treninzi.dart';
 import 'package:fittofit_mobile/models/treninziClanarine.dart';
 import 'package:fittofit_mobile/models/vrste_treninga.dart';
+import 'package:fittofit_mobile/providers/akcije_provider.dart';
 import 'package:fittofit_mobile/providers/clanarine_provider.dart';
 import 'package:fittofit_mobile/providers/korisnici_provider.dart';
 import 'package:fittofit_mobile/providers/rezervacije_provider.dart';
@@ -36,6 +38,7 @@ class _ReservationPageState extends State<ReservationPage> {
   late RezervacijeProvider _rezervacijeProvider;
   late KorisniciProvider _korisniciProvider;
   late TreninziClanarineProvider _treninziClanarineProvider;
+  late AkcijeProvider _akcijeProvider;
   List<Clanarine> _clanarineList = [];
   List<VrsteTreninga> _vrsteTreningaList = [];
   List<Treninzi> _treninziList = [];
@@ -43,6 +46,7 @@ class _ReservationPageState extends State<ReservationPage> {
   List<Termini> _termin = [];
   late Treninzi _trening;
   List<TreninziClanarine> _treninziClanarineList = [];
+  List<Akcije> _akcijeList = [];
   int? _rezervacijeCount1;
   int? _rezervacijeCount2;
   List<int> _terminiIds = [];
@@ -52,6 +56,7 @@ class _ReservationPageState extends State<ReservationPage> {
   String? korisnickoIme = '';
   late Korisnici korisnik;
   late Clanarine _clanarina;
+  Set<String> _selectedTermini = {};
 
   @override
   void initState() {
@@ -63,6 +68,7 @@ class _ReservationPageState extends State<ReservationPage> {
     _rezervacijeProvider = context.read<RezervacijeProvider>();
     _korisniciProvider = context.read<KorisniciProvider>();
     _treninziClanarineProvider = context.read<TreninziClanarineProvider>();
+    _akcijeProvider = context.read<AkcijeProvider>();
     _loadData();
   }
 
@@ -86,9 +92,12 @@ class _ReservationPageState extends State<ReservationPage> {
           await _terminiProvider.get(filter: {'treningId': _selectedTrening});
       var trening =
           await _treninziProvider.get(filter: {'treningId': _selectedTrening});
+      var akcije = await _akcijeProvider.get(
+          filter: {'treningId': _selectedTrening, 'stateMachine': 'active'});
       setState(() {
         _terminiList = termini.result;
         _trening = trening.result[0];
+        _akcijeList = akcije.result;
       });
     }
     if (_selectedClanarina != null) {
@@ -256,7 +265,8 @@ class _ReservationPageState extends State<ReservationPage> {
                             ),
                           ),
                         )
-                      : Container()
+                      : Container(),
+                  const SizedBox(height: 30)
                 ],
               ),
             ),
@@ -292,17 +302,31 @@ class _ReservationPageState extends State<ReservationPage> {
                 bool isFullyBooked = !isAvailable &&
                     termin.brojClanova == _trening.maxBrojClanova;
 
+                String key = '${day}_${termin.sat}';
+                Color buttonColor = _selectedTermini.contains(key)
+                    ? Colors.green
+                    : Colors.purple.shade200;
+
                 return Stack(
                   alignment: Alignment.center,
                   children: [
                     ElevatedButton(
                       onPressed: () {
                         if (isAvailable) {
-                          fetchData(day, termin);
+                          setState(() {
+                            if (_selectedTermini.contains(key)) {
+                              _selectedTermini.remove(key);
+                              _terminiIds.remove(termin.terminId);
+                            } else {
+                              _selectedTermini.add(key);
+                              _terminiIds.add(termin.terminId);
+                            }
+                            _loadCjenovnik();
+                          });
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.purple.shade200,
+                        primary: buttonColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
@@ -387,7 +411,7 @@ class _ReservationPageState extends State<ReservationPage> {
       Termini fetchedTermin = await fetchTermin(terminId);
 
       String termText =
-          "${fetchedTermin.dan} - ${fetchedTermin.sat} - ${fetchedTermin.brojClanova}";
+          "${fetchedTermin.dan} (${fetchedTermin.sat}) - ${fetchedTermin.brojClanova}";
 
       terminiClanoviTextList.add(termText);
     }
@@ -495,7 +519,7 @@ class _ReservationPageState extends State<ReservationPage> {
                             const SizedBox(height: 10),
                             _treninziClanarineList.isNotEmpty
                                 ? Text(
-                                    "Ukupno za platiti: ${_treninziClanarineList[0].cijena}KM",
+                                    "Ukupno za platiti: ${uracunajAkciju()}KM",
                                     style: const TextStyle(
                                         fontSize: 16.0,
                                         fontWeight: FontWeight.bold),
@@ -711,12 +735,14 @@ class _ReservationPageState extends State<ReservationPage> {
                                         }
                                       }
 
+                                      double finalnaCijena = uracunajAkciju();
+
                                       RezervacijeRequest request =
                                           RezervacijeRequest(
                                         datum: formattedDate,
                                         korisnikId: korisnikId,
                                         clanarinaId: clanarinaId,
-                                        iznos: _treninziClanarineList[0].cijena,
+                                        iznos: finalnaCijena,
                                         items: items,
                                         datumIsteka: formattedDatumIsteka,
                                       );
@@ -792,5 +818,15 @@ class _ReservationPageState extends State<ReservationPage> {
     return (_selectedClanarina == 3 && _terminiIds.length == 1) ||
         ((_selectedClanarina == 1 || _selectedClanarina == 2) &&
             _terminiIds.length > 1);
+  }
+
+  double uracunajAkciju() {
+    double iznos = _treninziClanarineList[0].cijena!.toDouble();
+    double discountPercentage = 0;
+    for (Akcije akcija in _akcijeList) {
+      discountPercentage = akcija.iznos.toDouble();
+      iznos -= iznos * (discountPercentage / 100);
+    }
+    return double.parse(iznos.toStringAsFixed(2));
   }
 }

@@ -12,5 +12,6 @@ namespace FitToFit.Model.SearchObjects
         public DateTime? DatumPocetka { get; set; }
         public bool? IsTreninziIncluded { get; set; }
         public string? StateMachine { get; set; }
+        public int? TreningId { get; set; }
     }
 }

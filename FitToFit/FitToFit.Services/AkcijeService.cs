@@ -48,6 +48,10 @@ namespace FitToFit.Services
                 query = query.Where(x => x.StateMachine.Contains(search.StateMachine));
             }
 
+            if (search?.TreningId != null)
+            {
+                query = query.Where(a => a.AkcijeTreninzis.Any(at => at.TreningId == search.TreningId));
+            }
 
             //foreach (var i in query)
             //{
