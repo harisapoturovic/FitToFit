@@ -342,13 +342,13 @@ class _ReservationPageState extends State<ReservationPage> {
                     if (isFullyBooked)
                       const Positioned.fill(
                         child: Align(
-                          alignment: Alignment.topCenter,
+                          alignment: Alignment.center,
                           child: Text(
                             'X',
                             style: TextStyle(
                               color: Colors.red,
                               fontWeight: FontWeight.bold,
-                              fontSize: 26,
+                              fontSize: 28,
                             ),
                           ),
                         ),
