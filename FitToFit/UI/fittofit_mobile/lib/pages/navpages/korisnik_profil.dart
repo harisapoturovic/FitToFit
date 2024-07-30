@@ -3,6 +3,10 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:fittofit_mobile/models/rezervacije.dart';
+import 'package:fittofit_mobile/models/treninzi.dart';
+import 'package:fittofit_mobile/providers/rezervacije_provider.dart';
+import 'package:fittofit_mobile/providers/treninzi_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
@@ -24,14 +28,30 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   late KorisniciProvider _korisniciProvider;
+  late RezervacijeProvider _rezervacijeProvider;
+  late TreninziProvider _treninziProvider;
   late Korisnici korisnik;
+  List<Rezervacije> _aktivneRezervacijeList = [];
+  List<Rezervacije> _draftRezervacijeList = [];
+  List<Rezervacije> _arhiviraneRezervacijeList = [];
+  List<Rezervacije> _odbijeneRezervacijeList = [];
+  List<Rezervacije> _otkazaneRezervacijeList = [];
   String? korisnickoIme = '';
   bool isLoading = true;
+  List<String> vrsteRezervacija = [
+    'Aktivne',
+    'Na obradi', //draft
+    'Arhivirane',
+    'Odbijene',
+    'Otkazane'
+  ];
 
   @override
   void initState() {
     super.initState();
     _korisniciProvider = context.read<KorisniciProvider>();
+    _rezervacijeProvider = context.read<RezervacijeProvider>();
+    _treninziProvider = context.read<TreninziProvider>();
     initForm();
     _loadData();
   }
@@ -51,6 +71,40 @@ class _ProfilePageState extends State<ProfilePage> {
       korisnik = user.result[0];
       isLoading = false;
     });
+    if (korisnik != null) {
+      var aktivneRezervacije = await _rezervacijeProvider.get(filter: {
+        'korisnikId': korisnik.korisnikId,
+        'stateMachine': 'active',
+        'isTerminiIncluded': true
+      });
+      var draftRezervacije = await _rezervacijeProvider.get(filter: {
+        'korisnikId': korisnik.korisnikId,
+        'stateMachine': 'draft',
+        'isTerminiIncluded': true
+      });
+      var arhiviraneRezervacije = await _rezervacijeProvider.get(filter: {
+        'korisnikId': korisnik.korisnikId,
+        'stateMachine': 'archived',
+        'isTerminiIncluded': true
+      });
+      var odbijeneRezervacije = await _rezervacijeProvider.get(filter: {
+        'korisnikId': korisnik.korisnikId,
+        'stateMachine': 'refused',
+        'isTerminiIncluded': true
+      });
+      var otkazaneRezervacije = await _rezervacijeProvider.get(filter: {
+        'korisnikId': korisnik.korisnikId,
+        'stateMachine': 'canceled',
+        'isTerminiIncluded': true
+      });
+      setState(() {
+        _aktivneRezervacijeList = aktivneRezervacije.result;
+        _draftRezervacijeList = draftRezervacije.result;
+        _arhiviraneRezervacijeList = arhiviraneRezervacije.result;
+        _odbijeneRezervacijeList = odbijeneRezervacije.result;
+        _otkazaneRezervacijeList = otkazaneRezervacije.result;
+      });
+    }
   }
 
   @override
@@ -189,6 +243,8 @@ class _ProfilePageState extends State<ProfilePage> {
       onPressed: () {
         if (text == 'Lični podaci') {
           _showUserDetailsBottomSheet(context);
+        } else if (text == 'Moje rezervacije') {
+          _showReservationsBottomSheet(context);
         } else if (text == 'Pravila korištenja') {
           _showTermsOfServiceBottomSheet(context);
         }
@@ -552,6 +608,257 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
           ),
+        );
+      },
+    );
+  }
+
+  Future<Treninzi?> getTrainingByTrainingId(id) async {
+    Treninzi t = await _treninziProvider.getById(id);
+    return t;
+  }
+
+  void _showReservationsBottomSheet(BuildContext context) {
+    String selectedStatus = 'Aktivne';
+
+    List<Rezervacije> getFilteredReservations() {
+      switch (selectedStatus) {
+        case 'Na obradi':
+          return _draftRezervacijeList;
+        case 'Arhivirane':
+          return _arhiviraneRezervacijeList;
+        case 'Odbijene':
+          return _odbijeneRezervacijeList;
+        case 'Otkazane':
+          return _otkazaneRezervacijeList;
+        case 'Aktivne':
+        default:
+          return _aktivneRezervacijeList;
+      }
+    }
+
+    void _cancelReservation(Rezervacije reservation) async {
+      try {
+        await _rezervacijeProvider.cancel(reservation.rezervacijaId);
+        _showAlertDialog("Uspješano otkazivanje",
+            "Rezervacija uspješno otkazana.", Colors.green);
+      } catch (e) {
+        _showAlertDialog("Greška", e.toString(), Colors.red);
+      }
+      _loadData();
+    }
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            final reservations = getFilteredReservations();
+
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Moje Rezervacije',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                      const SizedBox(height: 16.0),
+                      DropdownButton<String>(
+                        value: selectedStatus,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            selectedStatus = newValue!;
+                          });
+                        },
+                        items: vrsteRezervacija
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                      const SizedBox(height: 16.0),
+                      if (reservations.isEmpty) ...[
+                        Center(
+                          child: Text(
+                            'Nema rezervacija za odabrani status.',
+                            style:
+                                Theme.of(context).textTheme.bodyText2?.copyWith(
+                                      color: Colors.black54,
+                                    ),
+                          ),
+                        ),
+                        const SizedBox(height: 16.0),
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Center(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  primary:
+                                      const Color.fromARGB(255, 248, 248, 248)),
+                              child: const Icon(
+                                Icons.arrow_downward,
+                                color: Colors.lightBlue,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ] else ...[
+                        const SizedBox(height: 16.0),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: reservations.length,
+                          itemBuilder: (context, index) {
+                            final reservation = reservations[index];
+                            return Container(
+                              margin: const EdgeInsets.only(bottom: 8.0),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[100],
+                                borderRadius: BorderRadius.circular(8.0),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    spreadRadius: 1,
+                                    blurRadius: 5,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '${DateFormat('dd.MM.yyyy').format(reservation.datum)} - ${DateFormat('dd.MM.yyyy').format(reservation.datumIsteka!)}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium,
+                                    ),
+                                    if (reservation.rezervacijaStavkes !=
+                                        null) ...[
+                                      ...reservation.rezervacijaStavkes!
+                                          .map((item) {
+                                        final termin = item.termin;
+                                        return FutureBuilder<Treninzi?>(
+                                          future: getTrainingByTrainingId(
+                                              termin!.treningId),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.waiting) {
+                                              return ListTile(
+                                                title: Text(
+                                                  '${termin.dan} u ${termin.sat ?? 'N/A'}',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText1,
+                                                ),
+                                                subtitle: const Text(
+                                                    'Trening: Loading...'),
+                                              );
+                                            } else if (snapshot.hasError) {
+                                              return ListTile(
+                                                title: Text(
+                                                  '${termin.dan} u ${termin.sat ?? 'N/A'}',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText1,
+                                                ),
+                                                subtitle: const Text(
+                                                    'Trening: Error'),
+                                              );
+                                            } else if (!snapshot.hasData) {
+                                              return ListTile(
+                                                title: Text(
+                                                  '${termin.dan} u ${termin.sat ?? 'N/A'}',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText1,
+                                                ),
+                                                subtitle: const Text(
+                                                    'Trening: Not found'),
+                                              );
+                                            } else {
+                                              final training = snapshot.data!;
+                                              return ListTile(
+                                                title: Text(
+                                                  '${termin.dan} u ${termin.sat ?? 'N/A'}',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText1,
+                                                ),
+                                                subtitle: Text(
+                                                  '${training.naziv} trening',
+                                                ),
+                                              );
+                                            }
+                                          },
+                                        );
+                                      }).toList()
+                                    ],
+                                    if (selectedStatus == 'Aktivne') ...[
+                                      const SizedBox(height: 8.0),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          _cancelReservation(reservation);
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          primary: Colors.grey.shade700,
+                                          onPrimary: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          elevation: 3,
+                                        ),
+                                        child: const Text('Otkaži'),
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 16.0),
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Center(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  primary:
+                                      const Color.fromARGB(255, 248, 248, 248)),
+                              child: const Icon(
+                                Icons.arrow_downward,
+                                color: Colors.lightBlue,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
         );
       },
     );

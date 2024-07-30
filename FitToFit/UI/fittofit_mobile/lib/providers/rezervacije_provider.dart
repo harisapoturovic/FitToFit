@@ -1,71 +1,15 @@
 import 'dart:convert';
-
 import 'package:fittofit_mobile/models/rezervacije.dart';
 import 'package:fittofit_mobile/providers/base_provider.dart';
-import 'package:http/http.dart';
-import 'package:http/http.dart' as http;
 
 class RezervacijeProvider extends BaseProvider<Rezervacije> {
   final String _endpoint = "Rezervacije";
+
   RezervacijeProvider() : super("Rezervacije");
 
   @override
   Rezervacije fromJson(data) {
     return Rezervacije.fromJson(data);
-  }
-
-  Future<Rezervacije> archive(int id) async {
-    var url = "${BaseProvider.baseUrl}$_endpoint/$id/archive";
-    var uri = Uri.parse(url);
-    var headers = createHeaders();
-
-    try {
-      Response response = await http.put(uri, headers: headers);
-      if (isValidResponse(response)) {
-        var data = jsonDecode(response.body);
-        return fromJson(data);
-      } else {
-        throw Exception('Unknown error');
-      }
-    } catch (e) {
-      throw Exception('Failed to connect to the server');
-    }
-  }
-
-  Future<Rezervacije> activate(int id) async {
-    var url = "${BaseProvider.baseUrl}$_endpoint/$id/activate";
-    var uri = Uri.parse(url);
-    var headers = createHeaders();
-
-    try {
-      Response response = await http.put(uri, headers: headers);
-      if (isValidResponse(response)) {
-        var data = jsonDecode(response.body);
-        return fromJson(data);
-      } else {
-        throw Exception('Unknown error');
-      }
-    } catch (e) {
-      throw Exception('Failed to connect to the server');
-    }
-  }
-
-  Future<Rezervacije> refuse(int id) async {
-    var url = "${BaseProvider.baseUrl}$_endpoint/$id/refuse";
-    var uri = Uri.parse(url);
-    var headers = createHeaders();
-
-    try {
-      Response response = await http.put(uri, headers: headers);
-      if (isValidResponse(response)) {
-        var data = jsonDecode(response.body);
-        return fromJson(data);
-      } else {
-        throw Exception('Unknown error');
-      }
-    } catch (e) {
-      throw Exception('Failed to connect to the server');
-    }
   }
 
   Future<Rezervacije> cancel(int id) async {
@@ -74,15 +18,17 @@ class RezervacijeProvider extends BaseProvider<Rezervacije> {
     var headers = createHeaders();
 
     try {
-      Response response = await http.put(uri, headers: headers);
+      final response = await http!.put(uri, headers: headers);
+
       if (isValidResponse(response)) {
         var data = jsonDecode(response.body);
         return fromJson(data);
       } else {
-        throw Exception('Unknown error');
+        throw Exception(
+            'Failed to cancel reservation. Status code: ${response.statusCode}');
       }
     } catch (e) {
-      throw Exception('Failed to connect to the server');
+      throw Exception('Failed to connect to the server. Error: $e');
     }
   }
 }
