@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FitToFit.Services
 {
@@ -15,6 +17,24 @@ namespace FitToFit.Services
         public NovostiService(Ib200048Context context, IMapper mapper)
             : base(context, mapper)
         {
+        }
+
+        private List<int> GetActiveVrstaTreningaIds(int korisnikId)
+        {
+            var treningIds = _context.Rezervacijes
+                .Where(r => r.KorisnikId == korisnikId && r.StateMachine == "active")
+                .SelectMany(r => r.RezervacijaStavkes)
+                .Select(rs => rs.Termin.TreningId)
+                .Distinct()
+                .ToList();
+
+            var vrstaTreningaIds = _context.Treninzis
+                .Where(t => treningIds.Contains(t.TreningId))
+                .Select(t => t.VrstaId)
+                .Distinct()
+                .ToList();
+
+            return vrstaTreningaIds;
         }
 
         public override IQueryable<Novosti> AddFilter(IQueryable<Novosti> query, NovostiSearchObject? search = null)
@@ -32,7 +52,22 @@ namespace FitToFit.Services
             {
                 query = query.Where(x => x.VrstaTreningaId.Equals(search.VrstaTreningaId));
             }
+            if (search.KorisnikId != null)
+            {
+                var korisnikId = search.KorisnikId.Value;
 
+                var activeVrstaTreningaIds = GetActiveVrstaTreningaIds(korisnikId);
+
+                if (activeVrstaTreningaIds.IsNullOrEmpty())
+                {
+                    query = query.Where(x => x.VrstaTreningaId == null);
+                }
+                else
+                {
+                    query = query.Where(x => activeVrstaTreningaIds.Contains(x.VrstaTreningaId ?? 0) || x.VrstaTreningaId == null);
+                }
+            }
+            query = query.OrderByDescending(x => x.DatumObjave);
             return base.AddFilter(query, search);
         }
 

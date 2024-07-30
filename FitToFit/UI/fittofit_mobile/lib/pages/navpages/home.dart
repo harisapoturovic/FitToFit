@@ -1,11 +1,15 @@
 import 'package:fittofit_mobile/models/korisnici.dart';
 import 'package:fittofit_mobile/models/korisniciNovosti.dart';
 import 'package:fittofit_mobile/models/novosti.dart';
+import 'package:fittofit_mobile/models/rezervacije.dart';
+import 'package:fittofit_mobile/models/treninzi.dart';
 import 'package:fittofit_mobile/pages/cjenovnik.dart';
 import 'package:fittofit_mobile/pages/novosti_detalji.dart';
 import 'package:fittofit_mobile/pages/raspored.dart';
 import 'package:fittofit_mobile/providers/korisnici_novosti_provider.dart';
 import 'package:fittofit_mobile/providers/korisnici_provider.dart';
+import 'package:fittofit_mobile/providers/rezervacije_provider.dart';
+import 'package:fittofit_mobile/providers/treninzi_provider.dart';
 import 'package:fittofit_mobile/utils/util.dart';
 import 'package:fittofit_mobile/widgets/custom_avatar.dart';
 import 'package:fittofit_mobile/widgets/master_screen_widget.dart';
@@ -26,8 +30,11 @@ class _HomePageState extends State<HomePage> {
   late NovostiProvider _novostiProvider;
   late KorisniciProvider _korisniciProvider;
   late KorisniciNovostiProvider _korisniciNovostiProvider;
+  late RezervacijeProvider _rezervacijeProvider;
+  late TreninziProvider _treninziProvider;
   List<Novosti> _novostiList = [];
   List<KorisniciNovosti> _korisniciNovostiList = [];
+  List<Rezervacije> _rezervacijeList = [];
   late Korisnici korisnik;
   bool isLiked = false;
   bool isLoading = true;
@@ -45,6 +52,8 @@ class _HomePageState extends State<HomePage> {
     _novostiProvider = context.read<NovostiProvider>();
     _korisniciProvider = context.read<KorisniciProvider>();
     _korisniciNovostiProvider = context.read<KorisniciNovostiProvider>();
+    _rezervacijeProvider = context.read<RezervacijeProvider>();
+    _treninziProvider = context.read<TreninziProvider>();
     initForm();
     _loadData();
   }
@@ -57,20 +66,23 @@ class _HomePageState extends State<HomePage> {
 
   void _loadData() async {
     isSearching = false;
-    var novosti = await _novostiProvider
-        .get(filter: {'page': page, 'pageSize': pageSize});
-
     korisnickoIme = await getUserName();
     var user = await _korisniciProvider
         .get(filter: {'korisnickoIme': korisnickoIme, 'isAdmin': false});
     var kn = await _korisniciNovostiProvider.get();
 
     setState(() {
-      _novostiList = novosti.result;
-      totalcount = novosti.count;
       korisnik = user.result[0];
       _korisniciNovostiList = kn.result;
       isLoading = false;
+    });
+    
+    var novosti = await _novostiProvider
+        .get(filter: {'page': page, 'pageSize': pageSize, 'korisnikId':korisnik.korisnikId});
+        
+    setState(() {
+      _novostiList = novosti.result;
+      totalcount = novosti.count;
     });
   }
 
