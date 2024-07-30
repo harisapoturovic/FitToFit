@@ -3,9 +3,15 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:fittofit_mobile/models/ocjene.dart';
+import 'package:fittofit_mobile/models/ocjeneRequest.dart';
 import 'package:fittofit_mobile/models/rezervacije.dart';
+import 'package:fittofit_mobile/models/search_result.dart';
+import 'package:fittofit_mobile/models/treneri.dart';
 import 'package:fittofit_mobile/models/treninzi.dart';
+import 'package:fittofit_mobile/providers/ocjene_provider.dart';
 import 'package:fittofit_mobile/providers/rezervacije_provider.dart';
+import 'package:fittofit_mobile/providers/treneri_provider.dart';
 import 'package:fittofit_mobile/providers/treninzi_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -30,12 +36,15 @@ class _ProfilePageState extends State<ProfilePage> {
   late KorisniciProvider _korisniciProvider;
   late RezervacijeProvider _rezervacijeProvider;
   late TreninziProvider _treninziProvider;
+  late OcjeneProvider _ocjeneProvider;
+  late TreneriProvider _treneriProvider;
   late Korisnici korisnik;
   List<Rezervacije> _aktivneRezervacijeList = [];
   List<Rezervacije> _draftRezervacijeList = [];
   List<Rezervacije> _arhiviraneRezervacijeList = [];
   List<Rezervacije> _odbijeneRezervacijeList = [];
   List<Rezervacije> _otkazaneRezervacijeList = [];
+  List<Ocjene> _ocjeneList = [];
   String? korisnickoIme = '';
   bool isLoading = true;
   List<String> vrsteRezervacija = [
@@ -52,6 +61,8 @@ class _ProfilePageState extends State<ProfilePage> {
     _korisniciProvider = context.read<KorisniciProvider>();
     _rezervacijeProvider = context.read<RezervacijeProvider>();
     _treninziProvider = context.read<TreninziProvider>();
+    _ocjeneProvider = context.read<OcjeneProvider>();
+    _treneriProvider = context.read<TreneriProvider>();
     initForm();
     _loadData();
   }
@@ -97,12 +108,16 @@ class _ProfilePageState extends State<ProfilePage> {
         'stateMachine': 'canceled',
         'isTerminiIncluded': true
       });
+
+      var ocjene = await _ocjeneProvider
+          .get(filter: {'korisnikId': korisnik.korisnikId});
       setState(() {
         _aktivneRezervacijeList = aktivneRezervacije.result;
         _draftRezervacijeList = draftRezervacije.result;
         _arhiviraneRezervacijeList = arhiviraneRezervacije.result;
         _odbijeneRezervacijeList = odbijeneRezervacije.result;
         _otkazaneRezervacijeList = otkazaneRezervacije.result;
+        _ocjeneList = ocjene.result;
       });
     }
   }
@@ -245,6 +260,8 @@ class _ProfilePageState extends State<ProfilePage> {
           _showUserDetailsBottomSheet(context);
         } else if (text == 'Moje rezervacije') {
           _showReservationsBottomSheet(context);
+        } else if (text == 'Moje ocjene') {
+          _showRatingsBottomSheet(context);
         } else if (text == 'Pravila korištenja') {
           _showTermsOfServiceBottomSheet(context);
         }
@@ -859,6 +876,199 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             );
           },
+        );
+      },
+    );
+  }
+
+  Future<Treneri?> getTrainerByTrainerId(id) async {
+    Treneri t = await _treneriProvider.getById(id);
+    return t;
+  }
+
+  void _showRatingsBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Moje Ocjene',
+                style: Theme.of(context).textTheme.headline6,
+              ),
+              const SizedBox(height: 16.0),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: _ocjeneList.length,
+                  itemBuilder: (context, index) {
+                    final rating = _ocjeneList[index];
+
+                    return FutureBuilder<Treneri?>(
+                      future: getTrainerByTrainerId(rating.trenerId),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const ListTile(
+                            title: Text('Loading...'),
+                          );
+                        } else if (snapshot.hasError) {
+                          return const ListTile(
+                            title: Text('Error fetching trainer details'),
+                          );
+                        } else if (snapshot.hasData && snapshot.data != null) {
+                          final trainer = snapshot.data!;
+                          final trainerName =
+                              '${trainer.ime} ${trainer.prezime}';
+                          return ListTile(
+                            title: Text('$trainerName - ${rating.ocjena}'),
+                            subtitle: Text(
+                              DateFormat('dd.MM.yyyy').format(rating.datum),
+                            ),
+                          );
+                        } else {
+                          return const ListTile(
+                            title: Text('No trainer data available'),
+                          );
+                        }
+                      },
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              FutureBuilder<SearchResult<Treneri>>(
+                future: _fetchAvailableTrainers(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return const Text('Error fetching trainers');
+                  } else if (snapshot.hasData && snapshot.data != null) {
+                    final trainers = snapshot.data!;
+                    final ratedTrainerIds =
+                        _ocjeneList.map((e) => e.trenerId).toSet();
+
+                    final availableTrainers = trainers.result
+                        .where((trainer) =>
+                            !ratedTrainerIds.contains(trainer.trenerId))
+                        .toList();
+
+                    return Column(
+                      children: [
+                        DropdownButtonFormField<Treneri>(
+                          decoration: const InputDecoration(
+                            labelText: 'Odaberi trenera',
+                            border: OutlineInputBorder(),
+                          ),
+                          items: availableTrainers.map((trainer) {
+                            return DropdownMenuItem<Treneri>(
+                              value: trainer,
+                              child: Text('${trainer.ime} ${trainer.prezime}'),
+                            );
+                          }).toList(),
+                          onChanged: (selectedTrainer) {
+                            if (selectedTrainer != null) {
+                              _showRatingDialog(context, selectedTrainer);
+                            }
+                          },
+                          hint: const Text('Odaberi trenera'),
+                        ),
+                        const SizedBox(height: 16.0),
+                      ],
+                    );
+                  } else {
+                    return const Text('Svi treneri već ocijenjeni');
+                  }
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Center(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: const Color.fromARGB(255, 248, 248, 248),
+                    ),
+                    child: const Icon(
+                      Icons.arrow_downward,
+                      color: Colors.lightBlue,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<SearchResult<Treneri>> _fetchAvailableTrainers() async {
+    return await _treneriProvider.get();
+  }
+
+  void _showRatingDialog(BuildContext context, Treneri trainer) {
+    final _ratingController = TextEditingController();
+    String formattedDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        .format(DateTime.now().toUtc());
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Ocijeni ${trainer.ime} ${trainer.prezime}'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: _ratingController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: 'Ocjena (1-5)',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Odustani'),
+            ),
+            TextButton(
+              onPressed: () async {
+                final ratingValue = int.tryParse(_ratingController.text) ?? 0;
+                if (ratingValue >= 1 && ratingValue <= 5) {
+                  try {
+                    OcjeneRequest ocjena = OcjeneRequest(
+                        datum: formattedDate,
+                        korisnikId: korisnik.korisnikId,
+                        ocjena: ratingValue,
+                        trenerId: trainer.trenerId);
+                    await _ocjeneProvider.insert(ocjena);
+                    _showAlertDialog("Ocjena spremljena",
+                        "Uspješno ocijenjen trener.", Colors.green);
+                    _loadData();
+                    _fetchAvailableTrainers();
+                  } catch (e) {
+                    _showAlertDialog("Greška", e.toString(), Colors.red);
+                  }
+                } else {
+                  _showAlertDialog("Greška",
+                      "Molimo unesite ocjenu između 1 i 5.", Colors.red);
+                }
+              },
+              child: const Text('Potvrdi'),
+            ),
+          ],
         );
       },
     );

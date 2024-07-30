@@ -55,6 +55,9 @@ namespace FitToFit.Services
             CreateMap<Database.KorisniciNovosti, Model.KorisniciNovosti>();
             CreateMap<Model.KorisniciNovosti, Database.KorisniciNovosti>();
             CreateMap<KorisniciNovostiInsertRequest, Database.KorisniciNovosti>();
+            CreateMap<Database.Ocjene, Model.Ocjene>();
+            CreateMap<Model.Ocjene, Database.Ocjene>();
+            CreateMap<OcjeneInsertRequest, Database.Ocjene>();
         }
     }
 }

@@ -35,6 +35,7 @@ builder.Services.AddTransient<IVjezbeService, VjezbeService>();
 builder.Services.AddTransient<IVjezbeTreninziService, VjezbeTreninziService>();
 builder.Services.AddTransient<IRezervacijaStavkeService, RezervacijaStavkeService>();
 builder.Services.AddTransient<IKorisniciNovostiService, KorisniciNovostiService>();
+builder.Services.AddTransient<IOcjeneService, OcjeneService>();
 builder.Services.AddDbContext<Ib200048Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
