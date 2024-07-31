@@ -200,4 +200,25 @@ abstract class BaseProvider<T> with ChangeNotifier {
       throw Exception("Unknown error");
     }
   }
+
+   Future<void> changeUsername(
+      int userId, String newUsername, String currentUsername) async {
+    var url = "$_baseUrl$_endpoint/$userId/change-username";
+    var uri = Uri.parse(url);
+    var headers = createHeaders();
+
+    var jsonRequest = jsonEncode({
+      "Id": userId,
+      "Username": currentUsername,
+      "NewUsername": newUsername,
+    });
+
+    var response = await http.post(uri, headers: headers, body: jsonRequest);
+
+    if (isValidResponse(response)) {
+      print("username changed successfully!");
+    } else {
+      throw Exception("Unknown error");
+    }
+  }
 }

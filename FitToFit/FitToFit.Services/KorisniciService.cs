@@ -141,13 +141,26 @@ namespace FitToFit.Services
             var user = await _context.Korisnicis.FindAsync(userChangePass.Id);
 
             if (user == null)
-                throw new($"User with ID {userChangePass.Id} not found.");
+                throw new($"Korisnik sa ID-em {userChangePass.Id} nije pronađen.");
 
             if (user.LozinkaHash == GenerateHash(user.LozinkaSalt, userChangePass.Password))
-                throw new("Invalid password.");
+                throw new("Pogrešna lozinka.");
 
             user.LozinkaSalt = GenerateSalt();
             user.LozinkaHash = GenerateHash(user.LozinkaSalt, userChangePass.NewPassword);
+
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task ChangeUsernameAsync(KorisniciChangeUsername userChangeUsername)
+        {
+            var user = await _context.Korisnicis.FindAsync(userChangeUsername.Id);
+
+            if (user == null)
+                throw new($"Korisnik sa ID-em {userChangeUsername.Id} nije pronađen.");
+
+            user.KorisnickoIme = userChangeUsername.NewUsername;
 
             _context.Update(user);
             await _context.SaveChangesAsync();

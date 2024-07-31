@@ -20,7 +20,7 @@ namespace FitToFit.Controllers
         }
 
         [HttpGet()]
-        [AllowAnonymous]
+        //[AllowAnonymous]
         public async Task<PagedResult<T>> Get([FromQuery] Tsearch? search=null)
         {
            return await _service.Get(search);   

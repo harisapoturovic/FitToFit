@@ -9,6 +9,8 @@ import 'package:fittofit_mobile/models/rezervacije.dart';
 import 'package:fittofit_mobile/models/search_result.dart';
 import 'package:fittofit_mobile/models/treneri.dart';
 import 'package:fittofit_mobile/models/treninzi.dart';
+import 'package:fittofit_mobile/pages/change_password.dart';
+import 'package:fittofit_mobile/pages/change_username.dart';
 import 'package:fittofit_mobile/providers/ocjene_provider.dart';
 import 'package:fittofit_mobile/providers/rezervacije_provider.dart';
 import 'package:fittofit_mobile/providers/treneri_provider.dart';
@@ -215,6 +217,24 @@ class _ProfilePageState extends State<ProfilePage> {
                               context, Icons.policy, 'Pravila korištenja'),
                         ],
                       ),
+                    ),
+                    const SizedBox(height: 30),
+                    Container(
+                      padding: const EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildLink(context, Icons.person_outline,
+                              'Promijeni korisničko ime'),
+                          const Divider(),
+                          _buildLink(context, Icons.password_outlined,
+                              'Promijeni lozinku')
+                        ],
+                      ),
                     )
                   ],
                 ),
@@ -264,6 +284,22 @@ class _ProfilePageState extends State<ProfilePage> {
           _showRatingsBottomSheet(context);
         } else if (text == 'Pravila korištenja') {
           _showTermsOfServiceBottomSheet(context);
+        } else if (text == 'Promijeni lozinku') {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => ChangePasswordScreen(
+                userId: korisnik.korisnikId,
+              ),
+            ),
+          );
+        } else if (text == 'Promijeni korisničko ime') {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => ChangeUsernameScreen(
+                userId: korisnik.korisnikId,
+              ),
+            ),
+          );
         }
       },
       child: Row(

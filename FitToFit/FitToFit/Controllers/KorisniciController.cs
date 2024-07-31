@@ -31,16 +31,36 @@ namespace FitToFit.Controllers
             {
                 if (userId != changePasswordModel.Id)
                 {
-                    return Forbid("You don't have permission to change this user's password.");
+                    return Forbid("Nemate permisije da mijenjate lozinku.");
                 }
 
                 await _korisniciService.ChangePasswordAsync(changePasswordModel);
 
-                return Ok(new { Message = "Password changed successfully." }); // 200 OK with a success message
+                return Ok(new { Message = "Lozinka uspješno promijenjena." }); 
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message); // 500 Internal Server Error
+                return StatusCode(500, ex.Message); 
+            }
+        }
+
+        [HttpPost("{userId}/change-username")]
+        public async Task<IActionResult> ChangeUsername(int userId, [FromBody] KorisniciChangeUsername changeUsernameModel)
+        {
+            try
+            {
+                if (userId != changeUsernameModel.Id)
+                {
+                    return Forbid("Nemate permisije da mijenjate username.");
+                }
+
+                await _korisniciService.ChangeUsernameAsync(changeUsernameModel);
+
+                return Ok(new { Message = "Username promijenjen uspješno." }); 
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message); 
             }
         }
     }

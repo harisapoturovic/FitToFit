@@ -1,5 +1,4 @@
 import 'package:fittofit_admin/models/korisnici.dart';
-import 'package:fittofit_admin/pages/home.dart';
 import 'package:fittofit_admin/providers/korisnici_provider.dart';
 import 'package:fittofit_admin/utils/util.dart';
 import 'package:fittofit_admin/widgets/master_screen.dart';
@@ -50,25 +49,18 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   }
 
   Widget _buildBody() {
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width * 0.6,
       child: FormBuilder(
           key: _formKey,
           autovalidateMode: AutovalidateMode.always,
           child: Column(
             children: [
-              const Text(
-                'Uredi Lozinku',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-              ),
-              const SizedBox(
-                height: 50,
-              ),
               Card(
                 elevation: 5,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0),
-                  side: const BorderSide(color: Colors.purple, width: 3.0),
+                  side: BorderSide(color: Colors.blue.shade300, width: 3.0),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
@@ -76,7 +68,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        'Trenutna Lozinka',
+                        'Trenutna lozinka',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),
@@ -85,8 +77,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         name: 'currentPassword',
                         controller: _currentPasswordController,
                       ),
+                      const SizedBox(
+                        height: 20,
+                      ),
                       const Text(
-                        'Nova Lozinka',
+                        'Nova lozinka',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),
@@ -111,6 +106,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       Center(
                         child: ElevatedButton(
                           onPressed: _updatePassword,
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.blue.shade300,
+                            onPrimary: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            elevation: 3,
+                          ),
                           child: const Text('Sačuvaj'),
                         ),
                       ),
@@ -125,7 +128,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   void _updatePassword() async {
     _formKey.currentState?.save();
-    Korisnici? korisnik = await getUserFromUserId(widget.userId);
 
     try {
       if (_formKey.currentState!.validate()) {
@@ -134,18 +136,19 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
         final currentFormState = _formKey.currentState;
         if (!_areAllFieldsFilled(currentFormState)) {
-          _showAlertDialog("Please enter both current and new usernames!");
+          _showAlertDialog("Greška",
+              "Molimo unesite i trenutnu i novu lozinku!", Colors.red);
           return;
         }
 
         if (currentFormState != null) {
           if (!currentFormState.validate()) {
-            _showAlertDialog("Please enter both current and new usernames!");
+            _showAlertDialog("Greška",
+                "Molimo unesite i trenutnu i novu lozinku!", Colors.red);
             return;
           }
         }
 
-        // Call the method to change the password
         try {
           await _korisniciProvider.changePassword(
             widget.userId,
@@ -155,26 +158,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
           Authorization.password = newPassword;
 
-          var data = await _korisniciProvider.get(filter: {
-            'IsAdmin': "true",
-          });
-
-          var userId = widget.userId;
-
           Provider.of<KorisniciProvider>(context, listen: false)
               .setCurrentUserId(widget.userId);
-
-          if (userId != null) {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => HomePage(
-                  username: data.result[0].korisnickoIme,
-                ),
-              ),
-            );
-          }
+          _showAlertDialog("Lozinka promijenjena",
+              "Uspješno promijenjena lozinka.", Colors.green);
         } on FormatException catch (_) {
-          _showAlertDialog("Invalid password.");
+          _showAlertDialog("Greška", "Netačna lozinka!", Colors.red);
         } on Exception catch (e) {
           showDialog(
             context: context,
@@ -192,7 +181,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         }
       }
     } catch (error) {
-      print('Error updating credentials: $error');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
@@ -212,18 +200,39 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     return currentPassword.isNotEmpty && newPassword.isNotEmpty;
   }
 
-  void _showAlertDialog(String message) {
+  void _showAlertDialog(String naslov, String poruka, Color boja) {
     showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        title: const Text("Error"),
-        content: Text(message),
+        backgroundColor: const Color.fromARGB(255, 238, 247, 255),
+        title: Text(
+          naslov,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: boja,
+          ),
+        ),
+        content: Text(
+          poruka,
+          style: const TextStyle(
+            fontSize: 16.0,
+          ),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
+            style: TextButton.styleFrom(
+              primary: Colors.blue,
+              textStyle: const TextStyle(
+                fontSize: 16.0,
+              ),
+            ),
             child: const Text("OK"),
-          )
+          ),
         ],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
       ),
     );
   }

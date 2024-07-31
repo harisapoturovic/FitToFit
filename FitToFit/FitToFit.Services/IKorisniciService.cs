@@ -15,6 +15,8 @@ namespace FitToFit.Services
 
         Task ChangePasswordAsync(KorisniciChangePassword userChangePass);
 
+        Task ChangeUsernameAsync(KorisniciChangeUsername userChangePass);
+
         Task<Korisnici> Insert(KorisniciInsertRequest insert);
     }
 }

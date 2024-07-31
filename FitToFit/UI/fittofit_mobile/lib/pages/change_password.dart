@@ -1,4 +1,3 @@
-
 import 'package:fittofit_mobile/models/korisnici.dart';
 import 'package:fittofit_mobile/providers/korisnici_provider.dart';
 import 'package:fittofit_mobile/utils/util.dart';
@@ -23,7 +22,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   late KorisniciProvider _korisniciProvider;
 
   final TextEditingController _newPasswordController = TextEditingController();
-  final TextEditingController _currentPasswordController = TextEditingController();
+  final TextEditingController _currentPasswordController =
+      TextEditingController();
 
   Future<Korisnici?> getUserFromUserId(int userId) async {
     final user = await _korisniciProvider.getById(userId);
@@ -39,10 +39,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-      title: "Izmjena lozinke",
-      child: Center(
-        child: SingleChildScrollView(
-          child: _buildBody(),
+      child: Scaffold(
+        appBar: AppBar(
+            title: const Text('Izmjena lozinke'),
+            backgroundColor: Colors.deepPurple.shade300),
+        body: Center(
+          child: SingleChildScrollView(
+            child: _buildBody(),
+          ),
         ),
       ),
     );
@@ -54,70 +58,65 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       child: FormBuilder(
           key: _formKey,
           autovalidateMode: AutovalidateMode.always,
-          child: Column(
-            children: [
-              const Text(
-                'Uredi Lozinku',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-              ),
-              const SizedBox(
-                height: 50,
-              ),
-              Card(
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                  side: const BorderSide(color: Colors.purple, width: 3.0),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Trenutna Lozinka',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
-                      ),
-                      FormBuilderTextField(
-                        obscureText: true,
-                        name: 'currentPassword',
-                        controller: _currentPasswordController,
-                      ),
-                      const Text(
-                        'Nova Lozinka',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
-                      ),
-                      FormBuilderTextField(
-                        obscureText: true,
-                        name: 'newPassword',
-                        controller: _newPasswordController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Ovo polje je obavezno!';
-                          } else if (value.length < 8 ||
-                              !value.contains(RegExp(r'[A-Z]')) ||
-                              !value.contains(RegExp(r'[a-z]')) ||
-                              !value.contains(RegExp(r'[0-9]'))) {
-                            return '8 karaktera,uključujući najmanje jedno veliko slovo (A-Z), jedno malo slovo (a-z) i jednu cifru (0-9)';
-                          }
-
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      Center(
-                        child: ElevatedButton(
-                          onPressed: _updatePassword,
-                          child: const Text('Sačuvaj'),
-                        ),
-                      ),
-                    ],
+          child: Card(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+              side: const BorderSide(color: Colors.purple, width: 3.0),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Trenutna lozinka',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
-                ),
+                  FormBuilderTextField(
+                    obscureText: true,
+                    name: 'currentPassword',
+                    controller: _currentPasswordController,
+                  ),
+                  const Text(
+                    'Nova lozinka',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                  FormBuilderTextField(
+                    obscureText: true,
+                    name: 'newPassword',
+                    controller: _newPasswordController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Ovo polje je obavezno!';
+                      } else if (value.length < 8 ||
+                          !value.contains(RegExp(r'[A-Z]')) ||
+                          !value.contains(RegExp(r'[a-z]')) ||
+                          !value.contains(RegExp(r'[0-9]'))) {
+                        return '8 karaktera,uključujući najmanje jedno veliko slovo (A-Z), jedno malo slovo (a-z) i jednu cifru (0-9)';
+                      }
+
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: _updatePassword,
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.deepPurple.shade300,
+                        onPrimary: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        elevation: 3,
+                      ),
+                      child: const Text('Sačuvaj'),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           )),
     );
   }
@@ -132,18 +131,19 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
         final currentFormState = _formKey.currentState;
         if (!_areAllFieldsFilled(currentFormState)) {
-          _showAlertDialog("Please enter both current and new usernames!");
+          _showAlertDialog("Greška",
+              "Molimo unesite i trenutnu i novu lozinku!", Colors.red);
           return;
         }
 
         if (currentFormState != null) {
           if (!currentFormState.validate()) {
-            _showAlertDialog("Please enter both current and new usernames!");
+            _showAlertDialog("Greška",
+                "Molimo unesite i trenutnu i novu lozinku!", Colors.red);
             return;
           }
         }
 
-        // Call the method to change the password
         try {
           await _korisniciProvider.changePassword(
             widget.userId,
@@ -153,23 +153,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
           Authorization.password = newPassword;
 
-          var userId = widget.userId;
-
-          // ignore: use_build_context_synchronously
           Provider.of<KorisniciProvider>(context, listen: false)
               .setCurrentUserId(widget.userId);
-
-          if (userId != null) {
-            /*Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => HomePage(
-                  username: data.result[0].korisnickoIme,
-                ),
-              ),
-            );*/
-          }
+          _showAlertDialog("Lozinka promijenjena",
+              "Uspješno promijenjena lozinka.", Colors.green);
         } on FormatException catch (_) {
-          _showAlertDialog("Invalid password.");
+          _showAlertDialog("Greška", "Netačna lozinka", Colors.red);
         } on Exception catch (e) {
           showDialog(
             context: context,
@@ -187,7 +176,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         }
       }
     } catch (error) {
-      print('Error updating credentials: $error');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
@@ -207,18 +195,39 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     return currentPassword.isNotEmpty && newPassword.isNotEmpty;
   }
 
-  void _showAlertDialog(String message) {
+  void _showAlertDialog(String naslov, String poruka, Color boja) {
     showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        title: const Text("Error"),
-        content: Text(message),
+        backgroundColor: const Color.fromARGB(255, 238, 247, 255),
+        title: Text(
+          naslov,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: boja,
+          ),
+        ),
+        content: Text(
+          poruka,
+          style: const TextStyle(
+            fontSize: 16.0,
+          ),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
+            style: TextButton.styleFrom(
+              primary: Colors.blue,
+              textStyle: const TextStyle(
+                fontSize: 16.0,
+              ),
+            ),
             child: const Text("OK"),
-          )
+          ),
         ],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
       ),
     );
   }

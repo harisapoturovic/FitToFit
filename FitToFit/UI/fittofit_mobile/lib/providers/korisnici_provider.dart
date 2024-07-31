@@ -4,7 +4,7 @@ import 'base_provider.dart';
 
 class KorisniciProvider extends BaseProvider<Korisnici> {
   KorisniciProvider() : super("Korisnici");
-  int? _loggedInUserId; // Polje za spremanje ID-a ulogiranog korisnika
+  int? _loggedInUserId;
   int? get loggedInUserId => _loggedInUserId;
 
   @override
@@ -12,13 +12,12 @@ class KorisniciProvider extends BaseProvider<Korisnici> {
     return Korisnici.fromJson(data);
   }
 
-  int?
-      currentUserId; // Dodajte varijablu za pohranu trenutnog korisnikovog ID-a
+  int? currentUserId;
 
   void setCurrentUserId(int? userId) {
     currentUserId = userId;
 
-    notifyListeners(); // Obavijestite slušatelje (widgete) o promjeni
+    notifyListeners();
   }
 
   Future<void> updateUser() async {
