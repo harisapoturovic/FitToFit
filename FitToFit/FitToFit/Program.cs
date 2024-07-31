@@ -15,6 +15,7 @@ using AutoMapper;
 using FitToFit.Model.Requests;
 using Quartz;
 using FitToFit.CronJob;
+using FitToFit.CronJobs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,11 +58,16 @@ object value = builder.Services.AddQuartz(q =>
 {
     q.UseMicrosoftDependencyInjectionJobFactory();
 
-    q.ScheduleJob<CleanupJob>(trigger => trigger
-        .WithIdentity("cleanupTrigger")
+    q.ScheduleJob<CleanupRezervacijeJob>(trigger => trigger
+        .WithIdentity("cleanupRezervacijeTrigger")
         .StartNow()
         .WithCronSchedule("0 0 * * * ?")); //svaki sat
     //.WithCronSchedule("0 * * * * ?"));  svake minute
+
+    q.ScheduleJob<CleanupNovostiJob>(trigger => trigger
+        .WithIdentity("cleanupNovostiTrigger")
+        .StartNow()
+        .WithCronSchedule("0 0 * * * ?"));
 });
 builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 

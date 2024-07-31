@@ -4,12 +4,12 @@ using Quartz;
 
 namespace FitToFit.CronJob
 {
-    public class CleanupJob : IJob
+    public class CleanupRezervacijeJob : IJob
     {
         private readonly IRezervacijeService _rezervacijeService;
         private readonly Ib200048Context _context;
 
-        public CleanupJob(IRezervacijeService rezervacijeService, Ib200048Context context)
+        public CleanupRezervacijeJob(IRezervacijeService rezervacijeService, Ib200048Context context)
         {
             _rezervacijeService = rezervacijeService;
             _context = context;
