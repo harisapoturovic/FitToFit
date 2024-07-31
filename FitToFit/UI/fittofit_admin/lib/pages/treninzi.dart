@@ -104,7 +104,7 @@ class _TreninziPageState extends State<TreninziPage> {
                 onPressed: () async {
                   var data = await _treninziProvider.get(filter: {
                     'naziv': _nazivController.text,
-                    'vrstaTreninga': _selectedType
+                    'vrstaTreningaNaziv': _selectedType
                   });
 
                   setState(() {

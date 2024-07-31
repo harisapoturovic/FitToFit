@@ -11,6 +11,7 @@ import 'package:fittofit_mobile/models/treneri.dart';
 import 'package:fittofit_mobile/models/treninzi.dart';
 import 'package:fittofit_mobile/pages/change_password.dart';
 import 'package:fittofit_mobile/pages/change_username.dart';
+import 'package:fittofit_mobile/pages/login.dart';
 import 'package:fittofit_mobile/providers/ocjene_provider.dart';
 import 'package:fittofit_mobile/providers/rezervacije_provider.dart';
 import 'package:fittofit_mobile/providers/treneri_provider.dart';
@@ -233,6 +234,40 @@ class _ProfilePageState extends State<ProfilePage> {
                           const Divider(),
                           _buildLink(context, Icons.password_outlined,
                               'Promijeni lozinku')
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 25.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              Authorization.username = null;
+                              Authorization.password = null;
+
+                              Provider.of<KorisniciProvider>(context,
+                                      listen: false)
+                                  .setCurrentUserId(null);
+
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(builder: (_) => LoginPage()),
+                                (route) => false,
+                              );
+                            },
+                            icon: const Icon(Icons.logout, color: Color.fromRGBO(123, 123, 123, 0.965),),
+                            iconSize: 30.0,
+                          ),
+                          const SizedBox(width: 8.0),
+                          const Text(
+                            'Odjavi se',
+                            style: TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey),
+                          ),
                         ],
                       ),
                     )

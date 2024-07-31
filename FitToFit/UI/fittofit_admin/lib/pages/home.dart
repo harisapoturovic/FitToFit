@@ -74,7 +74,6 @@ class _HomePageState extends State<HomePage> {
     var novosti = await _novostiProvider
         .get(filter: {'page': page, 'pageSize': pageSize});
 
-
     setState(() {
       brojKorisnika = korisnici.count;
       brojTrenera = treneri.count;
@@ -212,7 +211,7 @@ class _HomePageState extends State<HomePage> {
       'page': page,
       'pageSize': pageSize
     });
-    
+
     setState(() {
       _novostiList = data.result;
       totalcount = data.count;
@@ -402,8 +401,12 @@ class _HomePageState extends State<HomePage> {
                       name: 'sadrzaj',
                       decoration: const InputDecoration(labelText: 'Sadrzaj'),
                       validator: (value) {
-                        if (value != null && value.length < 5) {
+                        if (value == null || value.isEmpty) {
+                          return 'Ovo polje je obavezno.';
+                        } else if (value.length < 5) {
                           return 'Morate unijeti najmanje 5 karaktera.';
+                        } else if (value.length > 600) {
+                          return 'Prmeašili ste maksimalan broj karaktera.';
                         }
 
                         return null;

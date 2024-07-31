@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:fittofit_admin/pages/change_password.dart';
 import 'package:fittofit_admin/pages/change_username.dart';
+import 'package:fittofit_admin/pages/login.dart';
 import 'package:image/image.dart' as img;
 
 import 'package:file_picker/file_picker.dart';
@@ -121,7 +122,7 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
               width: 800,
               height: 650,
               child: Padding(
-                padding: const EdgeInsets.all(40.0),
+                padding: const EdgeInsets.all(20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -268,6 +269,43 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
                                       child: const Text(
                                           'Promijeni korisničko ime'),
                                     ),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 25.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          IconButton(
+                                            onPressed: () {
+                                              Authorization.username = null;
+                                              Authorization.password = null;
+
+                                              Provider.of<KorisniciProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .setCurrentUserId(null);
+
+                                              Navigator.pushAndRemoveUntil(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        LoginPage()),
+                                                (route) => false,
+                                              );
+                                            },
+                                            icon: const Icon(Icons.logout),
+                                            iconSize: 30.0,
+                                          ),
+                                          const SizedBox(width: 8.0),
+                                          const Text(
+                                            'Odjavi se',
+                                            style: TextStyle(
+                                                fontSize: 16.0,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
+                                    )
                                   ],
                                 ),
                                 const SizedBox(width: 100),
@@ -292,7 +330,7 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                )
+                                ),
                               ],
                             ),
                           )
