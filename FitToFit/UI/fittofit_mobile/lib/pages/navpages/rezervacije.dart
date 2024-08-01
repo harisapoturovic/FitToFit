@@ -157,10 +157,6 @@ class _ReservationPageState extends State<ReservationPage> {
     return groupedByDay;
   }
 
-  String formatDate(DateTime? dateTime) {
-    return DateFormat('dd.MM.yyyy').format(dateTime!);
-  }
-
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(

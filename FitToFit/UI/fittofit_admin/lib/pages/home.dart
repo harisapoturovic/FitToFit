@@ -8,6 +8,7 @@ import 'package:fittofit_admin/providers/novosti_provider.dart';
 import 'package:fittofit_admin/providers/rezervacije_provider.dart';
 import 'package:fittofit_admin/providers/treneri_provider.dart';
 import 'package:fittofit_admin/providers/vrste_treninga_provider.dart';
+import 'package:fittofit_admin/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
@@ -94,6 +95,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return MasterScreenWidget(
         title: "Početna",
+        selectedIndex: 0,
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             _showAddNewsDialog();
@@ -297,10 +299,6 @@ class _HomePageState extends State<HomePage> {
             }),
       ),
     );
-  }
-
-  String formatDate(DateTime? dateTime) {
-    return DateFormat('dd.MM.yyyy').format(dateTime!);
   }
 
   Dashboard() {
@@ -535,10 +533,6 @@ class _HomePageState extends State<HomePage> {
     }
 
     return true;
-  }
-
-  String formatDateForJson(DateTime dateTime) {
-    return dateTime.toIso8601String();
   }
 
   void _showAlertDialog(String naslov, String poruka, Color boja) {

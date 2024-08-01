@@ -45,10 +45,6 @@ class _TreninziDetaljiPage2State extends State<TreninziDetaljiPage2> {
     return akcija;
   }
 
-  String formatDate(DateTime? dateTime) {
-    return DateFormat('dd.MM.yyyy').format(dateTime!);
-  }
-
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(

@@ -116,6 +116,7 @@ class _PonudaPageState extends State<PonudaPage> {
   Widget build(BuildContext context) {
     return MasterScreenWidget(
       title: "Ponuda",
+      selectedIndex: 5,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -180,10 +181,6 @@ class _PonudaPageState extends State<PonudaPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: pageButtons,
     );
-  }
-
-  String formatDate(DateTime? dateTime) {
-    return DateFormat('dd.MM.yyyy').format(dateTime!);
   }
 
   Widget _tabs() {

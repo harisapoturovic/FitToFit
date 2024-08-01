@@ -2,9 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Authorization{
+class Authorization {
   static String? username;
   static String? password;
 }
@@ -33,4 +34,8 @@ class Debouncer {
     _timer?.cancel();
     _timer = Timer(delay, action);
   }
+}
+
+String formatDate(DateTime? dateTime) {
+  return DateFormat('dd.MM.yyyy').format(dateTime!);
 }

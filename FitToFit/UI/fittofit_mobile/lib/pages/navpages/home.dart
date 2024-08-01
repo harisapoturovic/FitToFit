@@ -2,7 +2,6 @@ import 'package:fittofit_mobile/models/korisnici.dart';
 import 'package:fittofit_mobile/models/korisniciNovosti.dart';
 import 'package:fittofit_mobile/models/novosti.dart';
 import 'package:fittofit_mobile/models/rezervacije.dart';
-import 'package:fittofit_mobile/models/treninzi.dart';
 import 'package:fittofit_mobile/pages/cjenovnik.dart';
 import 'package:fittofit_mobile/pages/novosti_detalji.dart';
 import 'package:fittofit_mobile/pages/raspored.dart';

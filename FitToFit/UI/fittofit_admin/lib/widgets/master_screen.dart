@@ -1,6 +1,7 @@
 import 'package:fittofit_admin/models/korisnici.dart';
 import 'package:fittofit_admin/pages/admin_profil.dart';
 import 'package:fittofit_admin/pages/akcije.dart';
+import 'package:fittofit_admin/pages/home.dart';
 import 'package:fittofit_admin/pages/izvjestaj/izvjestaj.dart';
 import 'package:fittofit_admin/pages/ponuda.dart';
 import 'package:fittofit_admin/pages/rezervacije.dart';
@@ -17,15 +18,20 @@ class MasterScreenWidget extends StatefulWidget {
   Widget? child;
   String? title;
   final Widget? floatingActionButton;
+  int? selectedIndex;
   MasterScreenWidget(
-      {this.child, this.title, super.key, this.floatingActionButton});
+      {this.child,
+      this.title,
+      super.key,
+      this.floatingActionButton,
+      this.selectedIndex});
 
   @override
   State<MasterScreenWidget> createState() => _MasterScreenWidgetState();
 }
 
 class _MasterScreenWidgetState extends State<MasterScreenWidget> {
-  int selectedIndex = 0;
+  int _selectedIndex = 0;
   int hoverIndex = -1;
   String korisnickoIme = '';
   late KorisniciProvider _korisniciProvider;
@@ -36,6 +42,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
     super.initState();
     korisnickoIme = Authorization.username ?? '';
     _korisniciProvider = context.read<KorisniciProvider>();
+    _selectedIndex = widget.selectedIndex!;
     _loadData();
   }
 
@@ -94,7 +101,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
         children: [
           korisnickoIme != ''
               ? NavigationRail(
-                  selectedIndex: selectedIndex,
+                  selectedIndex: _selectedIndex,
                   backgroundColor:
                       const Color.fromRGBO(0, 154, 231, 1).withOpacity(0.9),
                   unselectedIconTheme: const IconThemeData(
@@ -112,7 +119,9 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                         child: buildIcon(Icons.home, 0, 'Home', () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => const KorisniciPage(),
+                              builder: (context) => HomePage(
+                                username: korisnickoIme,
+                              ),
                             ),
                           );
                         }),
@@ -228,7 +237,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                   ],
                   onDestinationSelected: (int index) {
                     setState(() {
-                      selectedIndex = index;
+                      _selectedIndex = index;
                     });
                   },
                 )
@@ -256,7 +265,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
       child: Container(
         padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
-          color: (hoverIndex == index || selectedIndex == index)
+          color: (hoverIndex == index || _selectedIndex == index)
               ? const Color.fromARGB(255, 231, 230, 230)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(20.0),

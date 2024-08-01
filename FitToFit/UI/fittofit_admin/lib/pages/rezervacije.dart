@@ -7,6 +7,7 @@ import 'package:fittofit_admin/providers/clanarine_provider.dart';
 import 'package:fittofit_admin/providers/korisnici_provider.dart';
 import 'package:fittofit_admin/providers/rezervacije_provider.dart';
 import 'package:fittofit_admin/providers/treninzi_provider.dart';
+import 'package:fittofit_admin/utils/util.dart';
 import 'package:fittofit_admin/widgets/master_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -93,6 +94,7 @@ class _RezervacijePageState extends State<RezervacijePage> {
   Widget build(BuildContext context) {
     return MasterScreenWidget(
       title: "Rezervacije",
+      selectedIndex: 4,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -158,10 +160,6 @@ class _RezervacijePageState extends State<RezervacijePage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: pageButtons,
     );
-  }
-
-  String formatDate(DateTime? dateTime) {
-    return DateFormat('dd.MM.yyyy').format(dateTime!);
   }
 
   Widget _buildDataListView() {

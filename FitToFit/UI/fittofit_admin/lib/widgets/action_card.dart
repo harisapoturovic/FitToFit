@@ -3,6 +3,7 @@ import 'package:fittofit_admin/models/treninzi.dart';
 import 'package:fittofit_admin/providers/akcije_provider.dart';
 import 'package:fittofit_admin/providers/akcije_treninzi_provider.dart';
 import 'package:fittofit_admin/providers/treninzi_provider.dart';
+import 'package:fittofit_admin/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
@@ -45,10 +46,6 @@ class _AkcijeCardState extends State<AkcijeCard> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-  }
-
-  String formatDate(DateTime? dateTime) {
-    return DateFormat('dd.MM.yyyy').format(dateTime!);
   }
 
   @override

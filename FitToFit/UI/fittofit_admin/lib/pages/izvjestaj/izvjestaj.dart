@@ -105,6 +105,7 @@ class _IzvjestajPageState extends State<IzvjestajPage> {
   Widget build(BuildContext context) {
     return MasterScreenWidget(
         title: "Izvještaj",
+        selectedIndex: 7,
         child: Padding(
           padding: const EdgeInsets.only(top: 100),
           child: Column(

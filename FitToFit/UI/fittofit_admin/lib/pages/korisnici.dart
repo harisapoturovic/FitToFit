@@ -87,6 +87,7 @@ class _KorisniciPageState extends State<KorisniciPage> {
   Widget build(BuildContext context) {
     return MasterScreenWidget(
       title: "Korisnici & treneri",
+      selectedIndex: 1,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _showAddTrainerDialog();

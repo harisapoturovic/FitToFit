@@ -52,6 +52,7 @@ class _VjezbePageState extends State<VjezbePage> {
   Widget build(BuildContext context) {
     return MasterScreenWidget(
       title: "Vježbe",
+      selectedIndex: 6,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _showAddVjezbuDialog();
@@ -296,10 +297,6 @@ class _VjezbePageState extends State<VjezbePage> {
     }
 
     return true;
-  }
-
-  String formatDateForJson(DateTime dateTime) {
-    return dateTime.toIso8601String();
   }
 
   void _showAlertDialog(String naslov, String poruka, Color boja) {

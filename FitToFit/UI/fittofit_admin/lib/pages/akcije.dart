@@ -4,6 +4,7 @@ import 'package:fittofit_admin/models/treninzi.dart';
 import 'package:fittofit_admin/providers/acTrening_provider.dart';
 import 'package:fittofit_admin/providers/akcije_provider.dart';
 import 'package:fittofit_admin/providers/treninzi_provider.dart';
+import 'package:fittofit_admin/utils/util.dart';
 import 'package:fittofit_admin/widgets/action_card.dart';
 import 'package:fittofit_admin/widgets/master_screen.dart';
 import 'package:flutter/material.dart';
@@ -77,6 +78,7 @@ class _AkcijePageState extends State<AkcijePage> {
   Widget build(BuildContext context) {
     return MasterScreenWidget(
       title: "Akcije",
+      selectedIndex: 3,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _showAddActionDialog();
@@ -100,10 +102,6 @@ class _AkcijePageState extends State<AkcijePage> {
         ],
       ),
     );
-  }
-
-  String formatDate(DateTime? dateTime) {
-    return DateFormat('dd.MM.yyyy').format(dateTime!);
   }
 
   Widget _searchWidgets() {
@@ -556,10 +554,6 @@ class _AkcijePageState extends State<AkcijePage> {
     }
 
     return true;
-  }
-
-  String formatDateForJson(DateTime dateTime) {
-    return dateTime.toIso8601String();
   }
 
   void _showAlertDialog(String naslov, String poruka, Color boja) {
