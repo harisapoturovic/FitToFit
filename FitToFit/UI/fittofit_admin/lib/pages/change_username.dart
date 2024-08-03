@@ -38,6 +38,7 @@ class _ChangeUsernameScreenState extends State<ChangeUsernameScreen> {
   Widget build(BuildContext context) {
     return MasterScreenWidget(
       title: "Izmjena korisničkog imena",
+      selectedIndex: 0,
       child: Center(
         child: SingleChildScrollView(
           child: _buildBody(),

@@ -68,6 +68,7 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
   Widget build(BuildContext context) {
     return MasterScreenWidget(
       title: "Registracija",
+      selectedIndex: 0,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Center(

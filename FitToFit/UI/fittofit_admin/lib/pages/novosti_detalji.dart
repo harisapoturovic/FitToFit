@@ -93,6 +93,7 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
   Widget build(BuildContext context) {
     return MasterScreenWidget(
       title: ("Detalji o objavi"),
+      selectedIndex: 0,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: SingleChildScrollView(

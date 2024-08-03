@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FitToFit.Services
 {
@@ -84,7 +85,8 @@ namespace FitToFit.Services
             Database.Treninzi entity = _mapper.Map<Database.Treninzi>(insert);
 
             set.Add(entity);
-            await BeforeInsert(entity, insert);
+            if(!insert.Items.IsNullOrEmpty())
+                await BeforeInsert(entity, insert);
 
             await _context.SaveChangesAsync();
 
@@ -92,6 +94,30 @@ namespace FitToFit.Services
             //_messageProducer.SendingMessage("\n NOVI TRENING " + "\nID: " + entity.TreningId + "\nNaziv: " + entity.Naziv);
 
             return _mapper.Map<Model.Treninzi>(entity);
+        }
+
+        public virtual async Task<Model.Treninzi> Delete(int id)
+        {
+            var set = _context.Set<Database.Treninzi>();
+            var vjezebTreninziSet = _context.Set<Database.TreninziVjezbe>();
+
+            var trening = await set.FirstOrDefaultAsync(n => n.TreningId == id);
+
+            if (trening == null)
+            {
+                throw new InvalidOperationException("Trening nije pronađen");
+            }
+
+            var vjezebTreninziList = await vjezebTreninziSet
+                .Where(kn => kn.TreningId == id)
+                .ToListAsync();
+
+            vjezebTreninziSet.RemoveRange(vjezebTreninziList);
+
+            set.Remove(trening);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<Model.Treninzi>(trening);
         }
     }
 }

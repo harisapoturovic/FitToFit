@@ -95,5 +95,29 @@ namespace FitToFit.Services
             await _context.SaveChangesAsync();
             return _mapper.Map<Model.Novosti>(entity);
         }
+
+        public virtual async Task<Model.Novosti> Delete(int id)
+        {
+            var set = _context.Set<Novosti>();
+            var korisniciNovostiSet = _context.Set<KorisniciNovosti>();
+
+            var novost = await set.FirstOrDefaultAsync(n => n.NovostId == id);
+
+            if (novost == null)
+            {
+                throw new InvalidOperationException("Novost nije pronađena");
+            }
+
+            var korisniciNovostiList = await korisniciNovostiSet
+                .Where(kn => kn.NovostId == id)
+                .ToListAsync();
+
+            korisniciNovostiSet.RemoveRange(korisniciNovostiList);
+
+            set.Remove(novost);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<Model.Novosti>(novost);
+        }
     }
 }

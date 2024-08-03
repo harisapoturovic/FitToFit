@@ -140,7 +140,6 @@ class _ProfilePageState extends State<ProfilePage> {
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const SizedBox(height: 30),
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
@@ -188,7 +187,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ]),
                       ]),
                     ),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 10),
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                       _buildInfoCard('${korisnik.visina}cm', 'Visina'),
                       const SizedBox(width: 20),
@@ -197,7 +196,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       _buildInfoCard(
                           "${calculateAge(korisnik.datumRodjenja!)}", 'Godine'),
                     ]),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 10),
                     Container(
                       padding: const EdgeInsets.all(16.0),
                       decoration: BoxDecoration(

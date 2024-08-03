@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:fittofit_admin/models/termini.dart';
+import 'package:fittofit_admin/models/treninziUpdateRequest.dart';
 import 'package:fittofit_admin/models/vjezbe.dart';
 import 'package:fittofit_admin/providers/termini_provider.dart';
 import 'package:fittofit_admin/providers/vjezbe_provider.dart';
@@ -106,8 +107,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
     final treningid = widget.trening.treningId;
     var data = await _treninziProvider.getById(treningid);
     var vrsteTreninga = await _vrsteTreningaProvider.get(filter: {});
-    var termini = await _terminiProvider
-        .get(filter: {"TreningId": "${widget.trening.treningId}"});
+    var termini = await _terminiProvider.get(filter: {'treningId': treningid});
     var vjezbe = await _vjezbeProvider.get(filter: {});
     var treninzi = await _treninziProvider
         .get(filter: {'IsVjezbeIncluded': true, 'naziv': data.naziv});
@@ -137,6 +137,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
   Widget build(BuildContext context) {
     return MasterScreenWidget(
       title: ("Detalji o treningu"),
+      selectedIndex: 2,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: SingleChildScrollView(
@@ -319,10 +320,10 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                 ),
                 child: SizedBox(
                   width: 900,
-                  height: 600,
+                  height: 650,
                   child: Padding(
                     padding:
-                        const EdgeInsets.only(left: 40, right: 40, top: 30),
+                        const EdgeInsets.only(left: 20, right: 20, top: 30),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -350,7 +351,51 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                 name: "naziv",
                                 enabled: false,
                               ),
-                            )
+                            ),
+                            const SizedBox(width: 30),
+                            Expanded(
+                              child: FutureBuilder<VrsteTreninga?>(
+                                future: getVrstaTreningaFromNovostiId(
+                                    odabraniTrening?.vrstaId ?? 0),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.done) {
+                                    final vrsta = snapshot.data;
+                                    if (vrsta != null) {
+                                      return FormBuilderTextField(
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.black,
+                                        ),
+                                        decoration: const InputDecoration(
+                                          labelText: "Vrsta treninga",
+                                          border: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color.fromRGBO(
+                                                  0, 154, 231, 1),
+                                              width: 2.0,
+                                            ),
+                                          ),
+                                          labelStyle: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 25,
+                                          ),
+                                        ),
+                                        name: 'vrstaTreninga',
+                                        initialValue: "${vrsta.naziv} trening",
+                                        enabled: false,
+                                      );
+                                    } else {
+                                      return const Text(
+                                          "Vrsta treninga: Nepoznato");
+                                    }
+                                  } else {
+                                    return const Text(
+                                        "Vrsta treninga: Učitavanje...");
+                                  }
+                                },
+                              ),
+                            ),
                           ],
                         ),
                         const SizedBox(height: 20),
@@ -409,7 +454,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                 enabled: false,
                               ),
                             ),
-                            const SizedBox(width: 30),
+                            const SizedBox(width: 10),
                             Expanded(
                               child: FormBuilderTextField(
                                 style: const TextStyle(
@@ -417,7 +462,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                   color: Colors.black,
                                 ),
                                 decoration: const InputDecoration(
-                                  labelText: "Cijena po terminu",
+                                  labelText: "Cijena po terminu (KM)",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color.fromRGBO(0, 154, 231, 1),
@@ -433,33 +478,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                 enabled: false,
                               ),
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: FormBuilderTextField(
-                                style: const TextStyle(
-                                    fontSize: 20, color: Colors.black),
-                                decoration: const InputDecoration(
-                                  labelText: "Trajanje",
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Color.fromRGBO(0, 154, 231, 1),
-                                      width: 2.0,
-                                    ),
-                                  ),
-                                  labelStyle: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 25,
-                                  ),
-                                ),
-                                name: "trajanje",
-                                enabled: false,
-                              ),
-                            ),
-                            const SizedBox(width: 30),
+                            const SizedBox(width: 10),
                             Expanded(
                               child: FormBuilderTextField(
                                 style: const TextStyle(
@@ -467,7 +486,8 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                   color: Colors.black,
                                 ),
                                 decoration: const InputDecoration(
-                                  labelText: "Prosječna potrošnja kalorija",
+                                  labelText:
+                                      "Prosječna potrošnja kalorija (kcal)",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color.fromRGBO(0, 154, 231, 1),
@@ -489,46 +509,24 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                         Row(
                           children: [
                             Expanded(
-                              child: FutureBuilder<VrsteTreninga?>(
-                                future: getVrstaTreningaFromNovostiId(
-                                    odabraniTrening?.vrstaId ?? 0),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.done) {
-                                    final vrsta = snapshot.data;
-                                    if (vrsta != null) {
-                                      return FormBuilderTextField(
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.black,
-                                        ),
-                                        decoration: const InputDecoration(
-                                          labelText: "Vrsta treninga",
-                                          border: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: Color.fromRGBO(
-                                                  0, 154, 231, 1),
-                                              width: 2.0,
-                                            ),
-                                          ),
-                                          labelStyle: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 25,
-                                          ),
-                                        ),
-                                        name: 'vrstaTreninga',
-                                        initialValue: "${vrsta.naziv} trening",
-                                        enabled: false,
-                                      );
-                                    } else {
-                                      return const Text(
-                                          "Vrsta treninga: Nepoznato");
-                                    }
-                                  } else {
-                                    return const Text(
-                                        "Vrsta treninga: Učitavanje...");
-                                  }
-                                },
+                              child: FormBuilderTextField(
+                                style: const TextStyle(
+                                    fontSize: 20, color: Colors.black),
+                                decoration: const InputDecoration(
+                                  labelText: "Trajanje (min/h)",
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color.fromRGBO(0, 154, 231, 1),
+                                      width: 2.0,
+                                    ),
+                                  ),
+                                  labelStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 25,
+                                  ),
+                                ),
+                                name: "trajanje",
+                                enabled: false,
                               ),
                             ),
                             const SizedBox(width: 30),
@@ -560,39 +558,42 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                         const SizedBox(height: 20),
                         Row(
                           children: [
-                            Expanded(
-                              child: FormBuilderTextField(
-                                style: const TextStyle(
-                                    fontSize: 16, color: Colors.black),
-                                decoration: const InputDecoration(
-                                  labelText: "Termini",
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Color.fromRGBO(0, 154, 231, 1),
-                                      width: 2.0,
-                                    ),
-                                  ),
-                                  labelStyle: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 25,
-                                  ),
-                                ),
-                                name: "termini",
-                                initialValue: _terminiResult.map((termini) {
-                                  return '${termini.dan}${termini.sat != null ? ' u ${termini.sat}' : ''}';
-                                }).join(", "),
-                                enabled: false,
+                            Container(
+                              width: 350.0,
+                              height: 150.0,
+                              child: SingleChildScrollView(
+                                child: _terminiResult.isNotEmpty
+                                    ? ListView.builder(
+                                        itemCount: _terminiResult.length,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        itemBuilder: (context, index) {
+                                          return ListTile(
+                                            title: Text(
+                                              '- ${_terminiResult[index].dan}${_terminiResult[index].sat != null ? ' u ${_terminiResult[index].sat}' : ''}',
+                                              style: const TextStyle(),
+                                            ),
+                                          );
+                                        },
+                                      )
+                                    : const Text(
+                                        "Nema dostupnih termina",
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color:
+                                              Color.fromARGB(255, 86, 86, 86),
+                                        ),
+                                      ),
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ],
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 10,
               ),
               Row(
                 children: [
@@ -1021,36 +1022,29 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                               if (formKey.currentState!
                                                   .validate()) {
                                                 if (odabraniTrening != null) {
-                                                  Treninzi trening = Treninzi(
-                                                      treningId: odabraniTrening!
-                                                          .treningId,
-                                                      naziv: odabraniTrening!
-                                                          .naziv,
+                                                  TreninziUpdateRequest trening = TreninziUpdateRequest(
                                                       opis: opisController.text,
-                                                      maxBrojClanova:
-                                                          int.tryParse(maxBrojClanovaController.text) ??
-                                                              0,
+                                                      maxBrojClanova: int.tryParse(
+                                                              maxBrojClanovaController
+                                                                  .text) ??
+                                                          0,
                                                       cijenaPoTerminu:
-                                                          double.tryParse(cijenaPoTerminuController.text) ??
+                                                          double.tryParse(
+                                                                  cijenaPoTerminuController
+                                                                      .text) ??
                                                               0.0,
-                                                      trajanje:
-                                                          trajanjeController
-                                                              .text,
+                                                      trajanje: trajanjeController
+                                                          .text,
                                                       prosjecnaPotrosnjaKalorija:
-                                                          double.tryParse(prosjecnaPotrosnjaKalorijaClanovaController.text) ??
+                                                          double.tryParse(
+                                                                  prosjecnaPotrosnjaKalorijaClanovaController
+                                                                      .text) ??
                                                               0.0,
                                                       namjena: namjenaController
                                                           .text,
-                                                      vrstaId:
-                                                          _selectedVrstaTreninga ??
-                                                              odabraniTrening!
-                                                                  .vrstaId,
-                                                      slika: trainingImage,
-                                                      terminis: odabraniTrening
-                                                              ?.terminis ??
-                                                          [],
-                                                      treninziVjezbes:
-                                                          odabraniTrening?.treninziVjezbes ?? []);
+                                                      vrstaId: _selectedVrstaTreninga ??
+                                                          odabraniTrening!.vrstaId,
+                                                      slika: trainingImage);
 
                                                   _treninziProvider.update(
                                                       odabraniTrening!

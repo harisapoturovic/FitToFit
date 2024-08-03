@@ -243,9 +243,12 @@ class _TreninziPageState extends State<TreninziPage> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
-                        }
-                        if (!RegExp(r'^[A-Z]').hasMatch(value)) {
+                        } else if (!RegExp(r'^[A-Z]').hasMatch(value)) {
                           return 'Opis mora početi velikim slovom.';
+                        } else if (value.length < 5) {
+                          return 'Morate unijeti najmanje 5 karaktera.';
+                        } else if (value.length > 600) {
+                          return 'Premašili ste maksimalan broj karaktera.';
                         }
 
                         return null;

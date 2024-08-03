@@ -129,19 +129,39 @@ class _AkcijePageState extends State<AkcijePage> {
           ),
           const SizedBox(width: 10),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 50),
-              child: FormBuilderDateTimePicker(
-                  name: 'datumPocetka',
-                  inputType: InputType.date,
-                  decoration: const InputDecoration(labelText: 'Datum početka'),
-                  format: DateFormat("yyyy-MM-dd"),
-                  initialDate: _selectedDate ?? DateTime.now(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedDate = value;
-                    });
-                  }),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: FormBuilderDateTimePicker(
+                      name: 'datumPocetka',
+                      inputType: InputType.date,
+                      decoration: InputDecoration(
+                        labelText: 'Datum početka',
+                        suffixIcon: _selectedDate != null
+                            ? IconButton(
+                                icon:
+                                    const Icon(Icons.clear, color: Colors.red),
+                                onPressed: () {
+                                  setState(() {
+                                    _selectedDate = null;
+                                  });
+                                },
+                              )
+                            : null,
+                      ),
+                      format: DateFormat("yyyy-MM-dd"),
+                      initialValue: _selectedDate,
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedDate = value;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           const SizedBox(width: 10),

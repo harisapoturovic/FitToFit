@@ -422,7 +422,19 @@ class _RezervacijePageState extends State<RezervacijePage> {
           children: [
             Expanded(
               child: DropdownButtonFormField(
-                decoration: const InputDecoration(labelText: "Korisnici"),
+                decoration: InputDecoration(
+                  labelText: "Korisnici",
+                  suffixIcon: _selectedKorisnik != null
+                      ? IconButton(
+                          icon: const Icon(Icons.clear, color: Colors.red),
+                          onPressed: () {
+                            setState(() {
+                              _selectedKorisnik = null;
+                            });
+                          },
+                        )
+                      : null,
+                ),
                 items: _korisniciList.map((Korisnici korisnik) {
                   return DropdownMenuItem(
                     value: korisnik.korisnikId,
@@ -441,22 +453,47 @@ class _RezervacijePageState extends State<RezervacijePage> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 10, right: 10),
                 child: FormBuilderDateTimePicker(
-                    name: 'datum',
-                    inputType: InputType.date,
-                    decoration: const InputDecoration(labelText: 'Datum'),
-                    format: DateFormat("yyyy-MM-dd"),
-                    initialDate: _selectedDate ?? DateTime.now(),
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedDate = value;
-                      });
-                    }),
+                  name: 'datum',
+                  inputType: InputType.date,
+                  decoration: InputDecoration(
+                    labelText: 'Datum',
+                    suffixIcon: _selectedDate != null
+                        ? IconButton(
+                            icon: const Icon(Icons.clear, color: Colors.red),
+                            onPressed: () {
+                              setState(() {
+                                _selectedDate = null;
+                              });
+                            },
+                          )
+                        : null,
+                  ),
+                  format: DateFormat("yyyy-MM-dd"),
+                  initialValue: _selectedDate,
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedDate = value;
+                    });
+                  },
+                ),
               ),
             ),
             const SizedBox(width: 10),
             Expanded(
               child: DropdownButtonFormField(
-                decoration: const InputDecoration(labelText: "Treninzi"),
+                decoration: InputDecoration(
+                  labelText: "Treninzi",
+                  suffixIcon: _selectedTrening != null
+                      ? IconButton(
+                          icon: const Icon(Icons.clear, color: Colors.red),
+                          onPressed: () {
+                            setState(() {
+                              _selectedTrening = null;
+                            });
+                          },
+                        )
+                      : null,
+                ),
                 items: _treninziList.map((Treninzi trening) {
                   return DropdownMenuItem(
                     value: trening.treningId,
@@ -473,7 +510,19 @@ class _RezervacijePageState extends State<RezervacijePage> {
             const SizedBox(width: 20),
             Expanded(
               child: DropdownButtonFormField(
-                decoration: const InputDecoration(labelText: "Članarine"),
+                decoration: InputDecoration(
+                  labelText: "Članarine",
+                  suffixIcon: _selectedClanarina != null
+                      ? IconButton(
+                          icon: const Icon(Icons.clear, color: Colors.red),
+                          onPressed: () {
+                            setState(() {
+                              _selectedClanarina = null;
+                            });
+                          },
+                        )
+                      : null,
+                ),
                 items: _clanarineList.map((Clanarine clanarina) {
                   return DropdownMenuItem(
                     value: clanarina.clanarinaId,

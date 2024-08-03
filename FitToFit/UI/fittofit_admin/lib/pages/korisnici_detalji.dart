@@ -63,6 +63,7 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
         'datumPocetkaTreniranja':
             dateFormat.format(widget.korisnik.datumPocetkaTreniranja!),
         "spol": widget.korisnik.spol,
+        "adresa": widget.korisnik.adresa,
         "telefon": widget.korisnik.telefon,
         "tezina": widget.korisnik.tezina.toString(),
         "visina": widget.korisnik.visina.toString(),
@@ -98,6 +99,7 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
   Widget build(BuildContext context) {
     return MasterScreenWidget(
       title: ("Detalji o korisniku"),
+      selectedIndex: 1,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: SingleChildScrollView(
@@ -795,7 +797,7 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
                                             name: 'visina',
                                             controller: visinaController,
                                             decoration: const InputDecoration(
-                                              labelText: 'Visina',
+                                              labelText: 'Visina (cm)',
                                               border: OutlineInputBorder(),
                                             ),
                                             validator: (value) {
@@ -820,7 +822,7 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
                                             name: 'tezina',
                                             controller: tezinaController,
                                             decoration: const InputDecoration(
-                                              labelText: 'Težina',
+                                              labelText: 'Težina (kg)',
                                               border: OutlineInputBorder(),
                                             ),
                                             validator: (value) {

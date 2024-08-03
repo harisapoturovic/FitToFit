@@ -92,6 +92,7 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
   Widget build(BuildContext context) {
     return MasterScreenWidget(
       title: ("Moj profil"),
+      selectedIndex: 0,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: SingleChildScrollView(

@@ -40,6 +40,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   Widget build(BuildContext context) {
     return MasterScreenWidget(
       title: "Izmjena lozinke",
+      selectedIndex: 0,
       child: Center(
         child: SingleChildScrollView(
           child: _buildBody(),

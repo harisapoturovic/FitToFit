@@ -12,5 +12,6 @@ namespace FitToFit.Services
     public interface INovostiService : ICRUDService<Novosti, NovostiSearchObject, NovostiInsertRequest, NovostiUpdateRequest>
     {
         Task<Novosti> Insert(NovostiInsertRequest insert);
+        Task<Novosti> Delete(int id);
     }
 }

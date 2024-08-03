@@ -15,7 +15,6 @@ import 'package:fittofit_admin/providers/vrste_treninga_provider.dart';
 import 'package:fittofit_admin/widgets/master_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class PonudaPage extends StatefulWidget {
@@ -535,9 +534,22 @@ class _PonudaPageState extends State<PonudaPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
-                    child: DropdownButtonFormField(
-                      decoration:
-                          const InputDecoration(labelText: "Radni dani"),
+                    child: DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                        labelText: "Radni dani",
+                        suffixIcon: _selectedDan != null
+                            ? IconButton(
+                                icon:
+                                    const Icon(Icons.clear, color: Colors.red),
+                                onPressed: () {
+                                  setState(() {
+                                    _selectedDan = null;
+                                  });
+                                },
+                              )
+                            : null,
+                      ),
+                      value: _selectedDan,
                       items: radniDani.map((String dan) {
                         return DropdownMenuItem(
                           value: dan,
@@ -546,15 +558,29 @@ class _PonudaPageState extends State<PonudaPage> {
                       }).toList(),
                       onChanged: (value) {
                         setState(() {
-                          _selectedDan = value as String;
+                          _selectedDan = value;
                         });
                       },
                     ),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
-                    child: DropdownButtonFormField(
-                      decoration: const InputDecoration(labelText: "Treninzi"),
+                    child: DropdownButtonFormField<int?>(
+                      decoration: InputDecoration(
+                        labelText: "Treninzi",
+                        suffixIcon: _selectedTrening != null
+                            ? IconButton(
+                                icon:
+                                    const Icon(Icons.clear, color: Colors.red),
+                                onPressed: () {
+                                  setState(() {
+                                    _selectedTrening = null;
+                                  });
+                                },
+                              )
+                            : null,
+                      ),
+                      value: _selectedTrening,
                       items: _treninziList.map((Treninzi trening) {
                         return DropdownMenuItem(
                           value: trening.treningId,
@@ -563,15 +589,29 @@ class _PonudaPageState extends State<PonudaPage> {
                       }).toList(),
                       onChanged: (value) {
                         setState(() {
-                          _selectedTrening = value as int?;
+                          _selectedTrening = value;
                         });
                       },
                     ),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
-                    child: DropdownButtonFormField(
-                      decoration: const InputDecoration(labelText: "Treneri"),
+                    child: DropdownButtonFormField<int?>(
+                      decoration: InputDecoration(
+                        labelText: "Treneri",
+                        suffixIcon: _selectedTrener != null
+                            ? IconButton(
+                                icon:
+                                    const Icon(Icons.clear, color: Colors.red),
+                                onPressed: () {
+                                  setState(() {
+                                    _selectedTrener = null;
+                                  });
+                                },
+                              )
+                            : null,
+                      ),
+                      value: _selectedTrener,
                       items: _treneriList.map((Treneri trener) {
                         return DropdownMenuItem(
                           value: trener.trenerId,
@@ -580,15 +620,29 @@ class _PonudaPageState extends State<PonudaPage> {
                       }).toList(),
                       onChanged: (value) {
                         setState(() {
-                          _selectedTrener = value as int?;
+                          _selectedTrener = value;
                         });
                       },
                     ),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
-                    child: DropdownButtonFormField(
-                      decoration: const InputDecoration(labelText: "Sale"),
+                    child: DropdownButtonFormField<int?>(
+                      decoration: InputDecoration(
+                        labelText: "Sale",
+                        suffixIcon: _selectedSala != null
+                            ? IconButton(
+                                icon:
+                                    const Icon(Icons.clear, color: Colors.red),
+                                onPressed: () {
+                                  setState(() {
+                                    _selectedSala = null;
+                                  });
+                                },
+                              )
+                            : null,
+                      ),
+                      value: _selectedSala,
                       items: _saleList.map((Sale sala) {
                         return DropdownMenuItem(
                           value: sala.salaId,
@@ -597,7 +651,7 @@ class _PonudaPageState extends State<PonudaPage> {
                       }).toList(),
                       onChanged: (value) {
                         setState(() {
-                          _selectedSala = value as int?;
+                          _selectedSala = value;
                         });
                       },
                     ),
@@ -622,7 +676,7 @@ class _PonudaPageState extends State<PonudaPage> {
                         child: const Text("Pretraži"),
                       ),
                     ),
-                  )
+                  ),
                 ],
               )
             : Row(
@@ -646,8 +700,22 @@ class _PonudaPageState extends State<PonudaPage> {
                   ),
                   const SizedBox(width: 10),
                   Expanded(
-                    child: DropdownButtonFormField(
-                      decoration: const InputDecoration(labelText: "Članarine"),
+                    child: DropdownButtonFormField<int?>(
+                      decoration: InputDecoration(
+                        labelText: "Članarine",
+                        suffixIcon: _selectedClanarina != null
+                            ? IconButton(
+                                icon:
+                                    const Icon(Icons.clear, color: Colors.red),
+                                onPressed: () {
+                                  setState(() {
+                                    _selectedClanarina = null;
+                                  });
+                                },
+                              )
+                            : null,
+                      ),
+                      value: _selectedClanarina,
                       items: _clanarineList.map((Clanarine clanarina) {
                         return DropdownMenuItem(
                           value: clanarina.clanarinaId,
@@ -656,16 +724,29 @@ class _PonudaPageState extends State<PonudaPage> {
                       }).toList(),
                       onChanged: (value) {
                         setState(() {
-                          _selectedClanarina = value as int?;
+                          _selectedClanarina = value;
                         });
                       },
                     ),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
-                    child: DropdownButtonFormField(
-                      decoration:
-                          const InputDecoration(labelText: "Učestalost"),
+                    child: DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                        labelText: "Učestalost",
+                        suffixIcon: _selectedUcestalost != null
+                            ? IconButton(
+                                icon:
+                                    const Icon(Icons.clear, color: Colors.red),
+                                onPressed: () {
+                                  setState(() {
+                                    _selectedUcestalost = null;
+                                  });
+                                },
+                              )
+                            : null,
+                      ),
+                      value: _selectedUcestalost,
                       items: ucestalost.map((String u) {
                         return DropdownMenuItem(
                           value: u,
@@ -674,7 +755,7 @@ class _PonudaPageState extends State<PonudaPage> {
                       }).toList(),
                       onChanged: (value) {
                         setState(() {
-                          _selectedUcestalost = value as String;
+                          _selectedUcestalost = value;
                         });
                       },
                     ),
@@ -682,8 +763,20 @@ class _PonudaPageState extends State<PonudaPage> {
                   const SizedBox(width: 10),
                   Expanded(
                     child: TextField(
-                      decoration:
-                          const InputDecoration(labelText: "Cijena (KM)"),
+                      decoration: InputDecoration(
+                        labelText: "Cijena (KM)",
+                        suffixIcon: _cijenaController.text.isNotEmpty
+                            ? IconButton(
+                                icon:
+                                    const Icon(Icons.clear, color: Colors.red),
+                                onPressed: () {
+                                  setState(() {
+                                    _cijenaController.clear();
+                                  });
+                                },
+                              )
+                            : null,
+                      ),
                       controller: _cijenaController,
                     ),
                   ),
@@ -707,7 +800,7 @@ class _PonudaPageState extends State<PonudaPage> {
                         child: const Text("Pretraži"),
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
       ),

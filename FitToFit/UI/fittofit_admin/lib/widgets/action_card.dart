@@ -37,10 +37,22 @@ class _AkcijeCardState extends State<AkcijeCard> {
   }
 
   void _loadData() async {
-    var treninzi = await _treninziProvider.get();
-    setState(() {
-      _treninziList = treninzi.result;
-    });
+    try {
+      var treninzi = await _treninziProvider.get();
+
+      if (mounted) {
+        setState(() {
+          _treninziList = treninzi.result;
+        });
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -117,7 +129,7 @@ class _AkcijeCardState extends State<AkcijeCard> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Detalji'),
+          title: Text('Detalji - ${widget.akcija.naziv}'),
           content: Container(
             width: 350.0,
             height: 400.0,

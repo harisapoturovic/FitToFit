@@ -172,8 +172,20 @@ class _HomePageState extends State<HomePage> {
         ),
         Expanded(
           child: DropdownButtonFormField(
-            decoration: const InputDecoration(labelText: "Vrsta treninga"),
-            //value: _vrsteTreningaList[0].vrstaTreningaId,
+            decoration: InputDecoration(
+              labelText: "Vrsta treninga",
+              suffixIcon: _selectedVrstaTreninga != null
+                  ? IconButton(
+                      icon: const Icon(Icons.clear, color: Colors.red),
+                      onPressed: () {
+                        setState(() {
+                          _selectedVrstaTreninga = null;
+                        });
+                      },
+                    )
+                  : null,
+            ),
+            value: _selectedVrstaTreninga,
             items: _vrsteTreningaList.map((VrsteTreninga vrsta) {
               return DropdownMenuItem(
                 value: vrsta.vrstaTreningaId,
@@ -367,6 +379,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _showAddNewsDialog() {
+    int? selectedVrstaTreninga;
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -404,7 +417,7 @@ class _HomePageState extends State<HomePage> {
                         } else if (value.length < 5) {
                           return 'Morate unijeti najmanje 5 karaktera.';
                         } else if (value.length > 600) {
-                          return 'Prmeašili ste maksimalan broj karaktera.';
+                          return 'Premašili ste maksimalan broj karaktera.';
                         }
 
                         return null;
@@ -437,13 +450,19 @@ class _HomePageState extends State<HomePage> {
                       name: 'vrstaTreningaId',
                       decoration:
                           const InputDecoration(labelText: 'Vrsta treninga'),
-                      initialValue: _vrsteTreningaList[0].vrstaTreningaId,
+                      initialValue: selectedVrstaTreninga,
                       items: _vrsteTreningaList.map((vrstaTreninga) {
                         return DropdownMenuItem(
                           value: vrstaTreninga.vrstaTreningaId,
                           child: Text(vrstaTreninga.naziv!),
                         );
                       }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedVrstaTreninga = value as int?;
+                        });
+                      },
+                      hint: const Text('Odaberite vrstu treninga'),
                     ),
                   ],
                 ),
@@ -518,12 +537,7 @@ class _HomePageState extends State<HomePage> {
       return false;
     }
 
-    List<String> requiredFields = [
-      'naslov',
-      'sadrzaj',
-      'datumObjave',
-      'vrstaTreningaId'
-    ];
+    List<String> requiredFields = ['naslov', 'sadrzaj', 'datumObjave'];
 
     for (String fieldName in requiredFields) {
       if (formState.fields[fieldName]?.value == null ||

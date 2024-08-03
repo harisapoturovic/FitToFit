@@ -93,6 +93,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
   Widget build(BuildContext context) {
     return MasterScreenWidget(
       title: ("Detalji o treneru"),
+      selectedIndex: 1,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: SingleChildScrollView(

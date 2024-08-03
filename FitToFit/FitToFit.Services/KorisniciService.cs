@@ -190,5 +190,35 @@ namespace FitToFit.Services
             await _context.SaveChangesAsync();
             return _mapper.Map<Model.Korisnici>(entity);
         }
+
+        public virtual async Task<Model.Korisnici> Delete(int id)
+        {
+            var set = _context.Set<Korisnici>();
+            var korisniciNovostiSet = _context.Set<KorisniciNovosti>();
+            var ocjeneSet = _context.Set<Ocjene>();
+
+            var korisnik = await set.FirstOrDefaultAsync(n => n.KorisnikId == id);
+
+            if (korisnik == null)
+            {
+                throw new InvalidOperationException("Korisnik nije pronađen");
+            }
+
+            var korisniciNovostiList = await korisniciNovostiSet
+                .Where(kn => kn.KorisnikId == id)
+                .ToListAsync();
+
+            var ocjeneList = await ocjeneSet
+                .Where(kn => kn.KorisnikId == id)
+                .ToListAsync();
+
+            korisniciNovostiSet.RemoveRange(korisniciNovostiList);
+            ocjeneSet.RemoveRange(ocjeneList);
+
+            set.Remove(korisnik);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<Model.Korisnici>(korisnik);
+        }
     }
 }
