@@ -54,6 +54,7 @@ class _RezervacijePageState extends State<RezervacijePage> {
   }
 
   void _loadData() async {
+    if (!mounted) return;
     isSearching = false;
     var aktivneRezervacije = await _rezervacijeProvider.get(filter: {
       'IsTerminiIncluded': true,
@@ -72,17 +73,20 @@ class _RezervacijePageState extends State<RezervacijePage> {
     var treninzi = await _treninziProvider.get(filter: {});
     var clanarine = await _clanarineProvider.get(filter: {});
 
-    setState(() {
-      _aktivneRezervacijeList = aktivneRezervacije.result;
-      _draftRezervacijeList = draftRezervacije.result;
-      _korisniciList = korisnici.result;
-      _treninziList = treninzi.result;
-      _clanarineList = clanarine.result;
+    if (mounted) {
+      setState(() {
+        _aktivneRezervacijeList = aktivneRezervacije.result;
+        _draftRezervacijeList = draftRezervacije.result;
+        _korisniciList = korisnici.result;
+        _treninziList = treninzi.result;
+        _clanarineList = clanarine.result;
 
-      _selectedRezervacije =
-          isActive ? _aktivneRezervacijeList : _draftRezervacijeList;
-      totalcount = isActive ? aktivneRezervacije.count : draftRezervacije.count;
-    });
+        _selectedRezervacije =
+            isActive ? _aktivneRezervacijeList : _draftRezervacijeList;
+        totalcount =
+            isActive ? aktivneRezervacije.count : draftRezervacije.count;
+      });
+    }
   }
 
   @override
@@ -421,7 +425,7 @@ class _RezervacijePageState extends State<RezervacijePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Expanded(
-              child: DropdownButtonFormField(
+              child: DropdownButtonFormField<int?>(
                 decoration: InputDecoration(
                   labelText: "Korisnici",
                   suffixIcon: _selectedKorisnik != null
@@ -430,20 +434,23 @@ class _RezervacijePageState extends State<RezervacijePage> {
                           onPressed: () {
                             setState(() {
                               _selectedKorisnik = null;
+                              _loadData();
                             });
                           },
                         )
                       : null,
                 ),
+                value: _selectedKorisnik,
                 items: _korisniciList.map((Korisnici korisnik) {
-                  return DropdownMenuItem(
+                  return DropdownMenuItem<int?>(
                     value: korisnik.korisnikId,
                     child: Text('${korisnik.ime} ${korisnik.prezime}'),
                   );
                 }).toList(),
                 onChanged: (value) {
                   setState(() {
-                    _selectedKorisnik = value as int?;
+                    _selectedKorisnik = value;
+                    _loadData();
                   });
                 },
               ),
@@ -463,6 +470,7 @@ class _RezervacijePageState extends State<RezervacijePage> {
                             onPressed: () {
                               setState(() {
                                 _selectedDate = null;
+                                _loadData();
                               });
                             },
                           )
@@ -473,6 +481,7 @@ class _RezervacijePageState extends State<RezervacijePage> {
                   onChanged: (value) {
                     setState(() {
                       _selectedDate = value;
+                      _loadData();
                     });
                   },
                 ),
@@ -480,7 +489,7 @@ class _RezervacijePageState extends State<RezervacijePage> {
             ),
             const SizedBox(width: 10),
             Expanded(
-              child: DropdownButtonFormField(
+              child: DropdownButtonFormField<int?>(
                 decoration: InputDecoration(
                   labelText: "Treninzi",
                   suffixIcon: _selectedTrening != null
@@ -489,27 +498,30 @@ class _RezervacijePageState extends State<RezervacijePage> {
                           onPressed: () {
                             setState(() {
                               _selectedTrening = null;
+                              _loadData();
                             });
                           },
                         )
                       : null,
                 ),
+                value: _selectedTrening,
                 items: _treninziList.map((Treninzi trening) {
-                  return DropdownMenuItem(
+                  return DropdownMenuItem<int?>(
                     value: trening.treningId,
                     child: Text(trening.naziv),
                   );
                 }).toList(),
                 onChanged: (value) {
                   setState(() {
-                    _selectedTrening = value as int?;
+                    _selectedTrening = value;
+                    _loadData();
                   });
                 },
               ),
             ),
             const SizedBox(width: 20),
             Expanded(
-              child: DropdownButtonFormField(
+              child: DropdownButtonFormField<int?>(
                 decoration: InputDecoration(
                   labelText: "Članarine",
                   suffixIcon: _selectedClanarina != null
@@ -518,20 +530,23 @@ class _RezervacijePageState extends State<RezervacijePage> {
                           onPressed: () {
                             setState(() {
                               _selectedClanarina = null;
+                              _loadData();
                             });
                           },
                         )
                       : null,
                 ),
+                value: _selectedClanarina,
                 items: _clanarineList.map((Clanarine clanarina) {
-                  return DropdownMenuItem(
+                  return DropdownMenuItem<int?>(
                     value: clanarina.clanarinaId,
                     child: Text(clanarina.naziv),
                   );
                 }).toList(),
                 onChanged: (value) {
                   setState(() {
-                    _selectedClanarina = value as int?;
+                    _selectedClanarina = value;
+                    _loadData();
                   });
                 },
               ),
@@ -556,7 +571,7 @@ class _RezervacijePageState extends State<RezervacijePage> {
                   child: const Text("Pretraži"),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -929,7 +944,8 @@ class _RezervacijePageState extends State<RezervacijePage> {
     return await _treninziProvider.getById(id);
   }
 
-  void _showDialog(Rezervacije rezervacija) {
+  void _showDialog(Rezervacije rezervacija) async {
+    _loadData();
     showDialog(
       context: context,
       builder: (BuildContext context) {

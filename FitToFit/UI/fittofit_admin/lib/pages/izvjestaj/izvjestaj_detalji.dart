@@ -3,9 +3,7 @@ import 'package:fittofit_admin/widgets/master_screen.dart';
 import 'package:flutter/material.dart';
 
 class IzvjestajDetaljiPage extends StatelessWidget {
-  // ignore: prefer_typing_uninitialized_variables
   var data;
-  // ignore: prefer_typing_uninitialized_variables
   var data2;
   IzvjestajDetaljiPage({Key? key, required this.data, required this.data2})
       : super(key: key);
@@ -14,6 +12,7 @@ class IzvjestajDetaljiPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MasterScreenWidget(
       title: "Izvještaj - detalji",
+      selectedIndex: 7,
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {

@@ -54,16 +54,18 @@ class _IzvjestajPageState extends State<IzvjestajPage> {
   }
 
   void _loadData() async {
+    if (!mounted) return;
     var treneri =
         await _treneriProvider.get(filter: {'IsOcjeneIncluded': true});
     var termini = await _rezervacijeStavkeProvider.getTop3Terms("desc");
     var r = await _rezervacijeStavkeProvider.getProfitForLast3Years();
-
-    setState(() {
-      _treneriList = treneri.result;
-      _terminiList = termini;
-      _profit = r;
-    });
+    if (mounted) {
+      setState(() {
+        _treneriList = treneri.result;
+        _terminiList = termini;
+        _profit = r;
+      });
+    }
     barGroup1 = makeGroupData(0, _profit.profitGod1);
     barGroup2 = makeGroupData(1, _profit.profitGod2);
     barGroup3 = makeGroupData(2, _profit.profitGod3);
@@ -72,28 +74,29 @@ class _IzvjestajPageState extends State<IzvjestajPage> {
       barGroup2,
       barGroup3,
     ];
-
-    setState(() {
-      rawBarGroups = items;
-      showingBarGroups = rawBarGroups;
-      isLoading = false;
-      data = [
-        ReportData(
-            naziv: _terminiList[0].opis,
-            vrijednost: _terminiList[0].count.toString()),
-        ReportData(
-            naziv: _terminiList[1].opis,
-            vrijednost: _terminiList[1].count.toString()),
-        ReportData(
-            naziv: _terminiList[2].opis,
-            vrijednost: _terminiList[2].count.toString())
-      ];
-      data2 = [
-        ReportData(naziv: "2022", vrijednost: _profit.profitGod1.toString()),
-        ReportData(naziv: "2023", vrijednost: _profit.profitGod2.toString()),
-        ReportData(naziv: "2024", vrijednost: _profit.profitGod3.toString())
-      ];
-    });
+    if (mounted) {
+      setState(() {
+        rawBarGroups = items;
+        showingBarGroups = rawBarGroups;
+        isLoading = false;
+        data = [
+          ReportData(
+              naziv: _terminiList[0].opis,
+              vrijednost: _terminiList[0].count.toString()),
+          ReportData(
+              naziv: _terminiList[1].opis,
+              vrijednost: _terminiList[1].count.toString()),
+          ReportData(
+              naziv: _terminiList[2].opis,
+              vrijednost: _terminiList[2].count.toString())
+        ];
+        data2 = [
+          ReportData(naziv: "2022", vrijednost: _profit.profitGod1.toString()),
+          ReportData(naziv: "2023", vrijednost: _profit.profitGod2.toString()),
+          ReportData(naziv: "2024", vrijednost: _profit.profitGod3.toString())
+        ];
+      });
+    }
   }
 
   @override
@@ -104,202 +107,214 @@ class _IzvjestajPageState extends State<IzvjestajPage> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-        title: "Izvještaj",
-        selectedIndex: 7,
-        child: Padding(
-          padding: const EdgeInsets.only(top: 100),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  SizedBox(
-                    width: 200,
-                    height: 300,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: _treneriList.map((trener) {
-                        bool isSelected = '${trener.ime} ${trener.prezime}' ==
-                            _selectedTrener;
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: TextButton(
-                            onPressed: () {
-                              setState(() {
-                                _selectedTrener = isSelected
-                                    ? null
-                                    : '${trener.ime} ${trener.prezime}';
-                                _trener = trener;
-                                ocjenaJedan = 0;
-                                ocjenaDva = 0;
-                                ocjenaTri = 0;
-                                ocjenaCetiri = 0;
-                                ocjenaPet = 0;
-                                if (_trener?.ocjenes != null) {
-                                  for (var i = 0;
-                                      i < _trener!.ocjenes!.length;
-                                      i++) {
-                                    // ignore: unrelated_type_equality_checks
-                                    if (_trener!.ocjenes![i].ocjena == 1) {
-                                      ocjenaJedan += 1;
-                                    } else if (_trener!.ocjenes![i].ocjena ==
-                                        2) {
-                                      ocjenaDva += 1;
-                                    } else if (_trener!.ocjenes![i].ocjena ==
-                                        3) {
-                                      ocjenaTri += 1;
-                                    } else if (_trener!.ocjenes![i].ocjena ==
-                                        4) {
-                                      ocjenaCetiri += 1;
-                                    } else if (_trener!.ocjenes![i].ocjena ==
-                                        5) {
-                                      ocjenaPet += 1;
+      title: "Izvještaj",
+      selectedIndex: 7,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 100),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                SizedBox(
+                  width: 200,
+                  height: 300,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: _treneriList.isEmpty
+                        ? [
+                            const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          ]
+                        : _treneriList.map((trener) {
+                            bool isSelected =
+                                '${trener.ime} ${trener.prezime}' ==
+                                    _selectedTrener;
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: TextButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _selectedTrener = isSelected
+                                        ? null
+                                        : '${trener.ime} ${trener.prezime}';
+                                    _trener = trener;
+                                    ocjenaJedan = 0;
+                                    ocjenaDva = 0;
+                                    ocjenaTri = 0;
+                                    ocjenaCetiri = 0;
+                                    ocjenaPet = 0;
+                                    if (_trener?.ocjenes != null) {
+                                      for (var i = 0;
+                                          i < _trener!.ocjenes!.length;
+                                          i++) {
+                                        // ignore: unrelated_type_equality_checks
+                                        if (_trener!.ocjenes![i].ocjena == 1) {
+                                          ocjenaJedan += 1;
+                                        } else if (_trener!
+                                                .ocjenes![i].ocjena ==
+                                            2) {
+                                          ocjenaDva += 1;
+                                        } else if (_trener!
+                                                .ocjenes![i].ocjena ==
+                                            3) {
+                                          ocjenaTri += 1;
+                                        } else if (_trener!
+                                                .ocjenes![i].ocjena ==
+                                            4) {
+                                          ocjenaCetiri += 1;
+                                        } else if (_trener!
+                                                .ocjenes![i].ocjena ==
+                                            5) {
+                                          ocjenaPet += 1;
+                                        }
+                                      }
                                     }
-                                  }
-                                }
-                                dataMap = {
-                                  "1": ocjenaJedan,
-                                  "2": ocjenaDva,
-                                  "3": ocjenaTri,
-                                  "4": ocjenaCetiri,
-                                  "5": ocjenaPet
-                                };
-                              });
-                            },
-                            style: ButtonStyle(
-                              textStyle:
-                                  MaterialStateProperty.resolveWith<TextStyle>(
-                                      (states) {
-                                if (isSelected) {
-                                  return const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    decoration: TextDecoration.underline,
-                                    fontSize: 18,
-                                  );
-                                } else {
-                                  return const TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 16,
-                                  );
-                                }
-                              }),
-                            ),
-                            child: Text('${trener.ime} ${trener.prezime}'),
-                          ),
-                        );
-                      }).toList(),
-                    ),
+                                    dataMap = {
+                                      "1": ocjenaJedan,
+                                      "2": ocjenaDva,
+                                      "3": ocjenaTri,
+                                      "4": ocjenaCetiri,
+                                      "5": ocjenaPet
+                                    };
+                                  });
+                                },
+                                style: ButtonStyle(
+                                  textStyle: MaterialStateProperty.resolveWith<
+                                      TextStyle>((states) {
+                                    if (isSelected) {
+                                      return const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        decoration: TextDecoration.underline,
+                                        fontSize: 18,
+                                      );
+                                    } else {
+                                      return const TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 16,
+                                      );
+                                    }
+                                  }),
+                                ),
+                                child: Text('${trener.ime} ${trener.prezime}'),
+                              ),
+                            );
+                          }).toList(),
                   ),
-                  //ocjene za trenere
-                  SizedBox(
-                    width: 300,
-                    height: 300,
-                    child: PieChart(
-                      dataMap: dataMap,
-                      animationDuration: const Duration(milliseconds: 800),
-                      chartLegendSpacing: 32,
-                      chartRadius: MediaQuery.of(context).size.width / 3.2,
-                      //colorList: colorList,
-                      initialAngleInDegree: 0,
-                      chartType: ChartType.disc,
-                      ringStrokeWidth: 32,
-                      centerText: _trener != null
-                          // ignore: prefer_interpolation_to_compose_strings
-                          ? "OCJENE ZA: " +
-                              _trener!.ime +
-                              ' ' +
-                              _trener!.prezime
-                          : "OCJENE ZA: ",
-                      legendOptions: const LegendOptions(
-                        showLegendsInRow: true,
-                        legendPosition: LegendPosition.top,
-                        showLegends: true,
-                        legendShape: BoxShape.circle,
-                        legendTextStyle: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      chartValuesOptions: const ChartValuesOptions(
-                        showChartValueBackground: true,
-                        showChartValues: true,
-                        showChartValuesInPercentage: false,
-                        showChartValuesOutside: false,
-                        decimalPlaces: 0,
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(width: 50),
-                  //najposjećeniji termini
-                  Padding(
-                    padding: const EdgeInsets.only(top: 50),
-                    child: SizedBox(
-                      width: 400,
-                      height: 400,
-                      child: PieChart(
-                        dataMap: {
-                          _terminiList[0].opis: double.tryParse(
-                                  _terminiList[0].count.toString()) ??
-                              0.0,
-                          _terminiList[1].opis: double.tryParse(
-                                  _terminiList[1].count.toString()) ??
-                              0.0,
-                          _terminiList[2].opis: double.tryParse(
-                                  _terminiList[2].count.toString()) ??
-                              0.0
-                        },
-                        animationDuration: const Duration(milliseconds: 800),
-                        chartLegendSpacing: 32,
-                        chartRadius: MediaQuery.of(context).size.width / 3.2,
-                        //colorList: colorList,
-                        initialAngleInDegree: 0,
-                        chartType: ChartType.ring,
-                        ringStrokeWidth: 32,
-                        centerText: "TOP 3 NAJPOSJEĆENIJA TERMINA",
-                        legendOptions: const LegendOptions(
-                          showLegendsInRow: false,
-                          legendPosition: LegendPosition.right,
-                          showLegends: true,
-                          legendShape: BoxShape.circle,
-                          legendTextStyle: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        chartValuesOptions: const ChartValuesOptions(
-                          showChartValueBackground: true,
-                          showChartValues: true,
-                          showChartValuesInPercentage: false,
-                          showChartValuesOutside: true,
-                          decimalPlaces: 0,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 30),
-                  BarChartSample2()
-                ],
-              ),
-              const SizedBox(height: 50),
-              ElevatedButton(
-                onPressed: () async {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (builder) =>
-                          IzvjestajDetaljiPage(data: data, data2: data2),
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.grey,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-                  textStyle: const TextStyle(
-                      fontSize: 16.0, fontWeight: FontWeight.bold),
                 ),
-                child: const Text('Generiši PDF'),
+                SizedBox(
+                  width: 300,
+                  height: 300,
+                  child: _trener != null && dataMap.isNotEmpty
+                      ? PieChart(
+                          dataMap: dataMap,
+                          animationDuration: const Duration(milliseconds: 800),
+                          chartLegendSpacing: 32,
+                          chartRadius: MediaQuery.of(context).size.width / 3.2,
+                          initialAngleInDegree: 0,
+                          chartType: ChartType.disc,
+                          ringStrokeWidth: 32,
+                          centerText: _trener != null
+                              ? "OCJENE ZA: " +
+                                  _trener!.ime +
+                                  ' ' +
+                                  _trener!.prezime
+                              : "OCJENE ZA: ",
+                          legendOptions: const LegendOptions(
+                            showLegendsInRow: true,
+                            legendPosition: LegendPosition.top,
+                            showLegends: true,
+                            legendShape: BoxShape.circle,
+                            legendTextStyle: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          chartValuesOptions: const ChartValuesOptions(
+                            showChartValueBackground: true,
+                            showChartValues: true,
+                            showChartValuesInPercentage: false,
+                            showChartValuesOutside: false,
+                            decimalPlaces: 0,
+                          ),
+                        )
+                      : const Center(child: Text("Nema ocjena")),
+                ),
+                const SizedBox(width: 50),
+                Padding(
+                  padding: const EdgeInsets.only(top: 50),
+                  child: SizedBox(
+                    width: 400,
+                    height: 400,
+                    child: _terminiList.length >= 3
+                        ? PieChart(
+                            dataMap: {
+                              _terminiList[0].opis: double.tryParse(
+                                      _terminiList[0].count.toString()) ??
+                                  0.0,
+                              _terminiList[1].opis: double.tryParse(
+                                      _terminiList[1].count.toString()) ??
+                                  0.0,
+                              _terminiList[2].opis: double.tryParse(
+                                      _terminiList[2].count.toString()) ??
+                                  0.0
+                            },
+                            animationDuration:
+                                const Duration(milliseconds: 800),
+                            chartLegendSpacing: 32,
+                            chartRadius:
+                                MediaQuery.of(context).size.width / 3.2,
+                            initialAngleInDegree: 0,
+                            chartType: ChartType.ring,
+                            ringStrokeWidth: 32,
+                            centerText: "TOP 3 \nNAJPOSJEĆENIJA TERMINA",
+                            legendOptions: const LegendOptions(
+                              showLegendsInRow: false,
+                              legendPosition: LegendPosition.right,
+                              showLegends: true,
+                              legendShape: BoxShape.circle,
+                              legendTextStyle: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            chartValuesOptions: const ChartValuesOptions(
+                              showChartValueBackground: true,
+                              showChartValues: true,
+                              showChartValuesInPercentage: false,
+                              showChartValuesOutside: true,
+                              decimalPlaces: 0,
+                            ),
+                          )
+                        : const Center(child: Text("Nema podataka za termine")),
+                  ),
+                ),
+                const SizedBox(width: 30),
+                BarChartSample2()
+              ],
+            ),
+            const SizedBox(height: 50),
+            ElevatedButton(
+              onPressed: () async {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (builder) =>
+                        IzvjestajDetaljiPage(data: data, data2: data2),
+                  ),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                primary: Colors.grey,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+                textStyle: const TextStyle(
+                    fontSize: 16.0, fontWeight: FontWeight.bold),
               ),
-            ],
-          ),
-        ));
+              child: const Text('Generiši PDF'),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget BarChartSample2() {

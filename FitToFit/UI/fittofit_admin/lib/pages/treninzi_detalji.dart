@@ -111,8 +111,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
     var vjezbe = await _vjezbeProvider.get(filter: {});
     var treninzi = await _treninziProvider
         .get(filter: {'IsVjezbeIncluded': true, 'naziv': data.naziv});
-
-    if (!mounted) return;
+        
     setState(() {
       odabraniTrening = data;
       _vrsteTreningaList = vrsteTreninga.result;
@@ -556,40 +555,46 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                           ],
                         ),
                         const SizedBox(height: 20),
-                        Row(
-                          children: [
-                            Container(
-                              width: 350.0,
-                              height: 150.0,
-                              child: SingleChildScrollView(
-                                child: _terminiResult.isNotEmpty
-                                    ? ListView.builder(
-                                        itemCount: _terminiResult.length,
-                                        shrinkWrap: true,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        itemBuilder: (context, index) {
-                                          return ListTile(
-                                            title: Text(
-                                              '- ${_terminiResult[index].dan}${_terminiResult[index].sat != null ? ' u ${_terminiResult[index].sat}' : ''}',
-                                              style: const TextStyle(),
-                                            ),
-                                          );
-                                        },
-                                      )
-                                    : const Text(
-                                        "Nema dostupnih termina",
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                          color:
-                                              Color.fromARGB(255, 86, 86, 86),
-                                        ),
-                                      ),
+                        Center(
+                          child: Column(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.only(bottom: 8.0),
+                                child: Text(
+                                  "TERMINI",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
+                              SizedBox(
+                                width: 350.0,
+                                height: 150.0,
+                                child: SingleChildScrollView(
+                                  child: _terminiResult.isNotEmpty
+                                      ? ListView.builder(
+                                          itemCount: _terminiResult.length,
+                                          shrinkWrap: true,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemBuilder: (context, index) {
+                                            return ListTile(
+                                              title: Text(
+                                                '- ${_terminiResult[index].dan}${_terminiResult[index].sat != null ? ' u ${_terminiResult[index].sat}' : ''}',
+                                                style: const TextStyle(),
+                                              ),
+                                            );
+                                          },
+                                        )
+                                      : const Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -610,7 +615,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                         fontSize: 15.0,
                       ),
                     ),
-                    child: const Text('Uredi objavu'),
+                    child: const Text('Uredi trening'),
                   ),
                   const SizedBox(
                     width: 10,

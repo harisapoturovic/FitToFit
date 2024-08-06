@@ -146,6 +146,7 @@ class _AkcijePageState extends State<AkcijePage> {
                                 onPressed: () {
                                   setState(() {
                                     _selectedDate = null;
+                                    _loadData();
                                   });
                                 },
                               )
@@ -156,6 +157,7 @@ class _AkcijePageState extends State<AkcijePage> {
                       onChanged: (value) {
                         setState(() {
                           _selectedDate = value;
+                          _loadData();
                         });
                       },
                     ),

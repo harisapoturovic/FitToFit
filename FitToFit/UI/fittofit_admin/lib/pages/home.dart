@@ -64,6 +64,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _loadData() async {
+    if (!mounted) return;
     isSearching = false;
     var korisnici = await _korisniciProvider.get(filter: {'isAdmin': false});
     var treneri = await _treneriProvider.get(filter: {});
@@ -180,6 +181,7 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () {
                         setState(() {
                           _selectedVrstaTreninga = null;
+                          _loadData();
                         });
                       },
                     )
@@ -195,6 +197,7 @@ class _HomePageState extends State<HomePage> {
             onChanged: (value) {
               setState(() {
                 _selectedVrstaTreninga = value as int?;
+                _loadData();
               });
             },
           ),

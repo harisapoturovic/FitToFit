@@ -76,6 +76,7 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
   }
 
   void _loadData() async {
+    if (!mounted) return;
     final korisnikid = widget.korisnik.korisnikId;
     var data = await _korisniciProvider.getById(korisnikid);
     setState(() {

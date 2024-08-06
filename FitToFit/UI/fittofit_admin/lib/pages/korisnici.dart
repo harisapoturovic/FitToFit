@@ -57,6 +57,7 @@ class _KorisniciPageState extends State<KorisniciPage> {
   }
 
   void _loadData() async {
+    if (!mounted) return;
     var data1 = await _treneriProvider.get(filter: {});
     var data2 = await _korisniciProvider.get(filter: {});
 

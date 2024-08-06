@@ -77,6 +77,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
   }
 
   void _loadData() async {
+    if (!mounted) return;
     final trenerId = widget.trener.trenerId;
     var data = await _treneriProvider.getById(trenerId);
     setState(() {

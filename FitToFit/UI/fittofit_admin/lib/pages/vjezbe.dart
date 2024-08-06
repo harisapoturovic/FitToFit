@@ -37,6 +37,7 @@ class _VjezbePageState extends State<VjezbePage> {
   }
 
   void _loadData() async {
+    if (!mounted) return;
     var vjezbe = await _vjezbeProvider.get();
     setState(() {
       _vjezbeList = vjezbe.result;

@@ -81,6 +81,7 @@ class _PonudaPageState extends State<PonudaPage> {
   }
 
   void _loadData() async {
+    if (!mounted) return;
     isSearching = false;
     var termini = await _terminiProvider
         .get(filter: {'page': page, 'pageSize': pageSize});
@@ -528,282 +529,297 @@ class _PonudaPageState extends State<PonudaPage> {
     return Container(
       color: const Color.fromARGB(255, 78, 101, 214).withOpacity(0.1),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 20),
-        child: isRaspored
-            ? Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                        labelText: "Radni dani",
-                        suffixIcon: _selectedDan != null
-                            ? IconButton(
-                                icon:
-                                    const Icon(Icons.clear, color: Colors.red),
-                                onPressed: () {
-                                  setState(() {
-                                    _selectedDan = null;
-                                  });
-                                },
-                              )
-                            : null,
-                      ),
-                      value: _selectedDan,
-                      items: radniDani.map((String dan) {
-                        return DropdownMenuItem(
-                          value: dan,
-                          child: Text(dan),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedDan = value;
-                        });
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: DropdownButtonFormField<int?>(
-                      decoration: InputDecoration(
-                        labelText: "Treninzi",
-                        suffixIcon: _selectedTrening != null
-                            ? IconButton(
-                                icon:
-                                    const Icon(Icons.clear, color: Colors.red),
-                                onPressed: () {
-                                  setState(() {
-                                    _selectedTrening = null;
-                                  });
-                                },
-                              )
-                            : null,
-                      ),
-                      value: _selectedTrening,
-                      items: _treninziList.map((Treninzi trening) {
-                        return DropdownMenuItem(
-                          value: trening.treningId,
-                          child: Text(trening.naziv),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedTrening = value;
-                        });
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: DropdownButtonFormField<int?>(
-                      decoration: InputDecoration(
-                        labelText: "Treneri",
-                        suffixIcon: _selectedTrener != null
-                            ? IconButton(
-                                icon:
-                                    const Icon(Icons.clear, color: Colors.red),
-                                onPressed: () {
-                                  setState(() {
-                                    _selectedTrener = null;
-                                  });
-                                },
-                              )
-                            : null,
-                      ),
-                      value: _selectedTrener,
-                      items: _treneriList.map((Treneri trener) {
-                        return DropdownMenuItem(
-                          value: trener.trenerId,
-                          child: Text('${trener.ime} ${trener.prezime}'),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedTrener = value;
-                        });
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: DropdownButtonFormField<int?>(
-                      decoration: InputDecoration(
-                        labelText: "Sale",
-                        suffixIcon: _selectedSala != null
-                            ? IconButton(
-                                icon:
-                                    const Icon(Icons.clear, color: Colors.red),
-                                onPressed: () {
-                                  setState(() {
-                                    _selectedSala = null;
-                                  });
-                                },
-                              )
-                            : null,
-                      ),
-                      value: _selectedSala,
-                      items: _saleList.map((Sale sala) {
-                        return DropdownMenuItem(
-                          value: sala.salaId,
-                          child: Text(sala.naziv),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedSala = value;
-                        });
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 50, right: 80),
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          await getFiltriraneTermine();
-                        },
-                        style: ElevatedButton.styleFrom(
-                          primary: const Color.fromARGB(255, 3, 59, 227),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 17),
-                          side: const BorderSide(color: Colors.white),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
+          padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 20),
+          child: isRaspored
+              ? Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          labelText: "Radni dani",
+                          suffixIcon: _selectedDan != null
+                              ? IconButton(
+                                  icon: const Icon(Icons.clear,
+                                      color: Colors.red),
+                                  onPressed: () {
+                                    setState(() {
+                                      _selectedDan = null;
+                                    });
+                                  },
+                                )
+                              : null,
                         ),
-                        child: const Text("Pretraži"),
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            : Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: DropdownButtonFormField(
-                      decoration: const InputDecoration(labelText: "Treninzi"),
-                      items: _vrsteTreningaList.map((VrsteTreninga trening) {
-                        return DropdownMenuItem(
-                          value: trening.vrstaTreningaId,
-                          child: Text(trening.naziv!),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedVrstaTr = value as int?;
-                        });
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: DropdownButtonFormField<int?>(
-                      decoration: InputDecoration(
-                        labelText: "Članarine",
-                        suffixIcon: _selectedClanarina != null
-                            ? IconButton(
-                                icon:
-                                    const Icon(Icons.clear, color: Colors.red),
-                                onPressed: () {
-                                  setState(() {
-                                    _selectedClanarina = null;
-                                  });
-                                },
-                              )
-                            : null,
-                      ),
-                      value: _selectedClanarina,
-                      items: _clanarineList.map((Clanarine clanarina) {
-                        return DropdownMenuItem(
-                          value: clanarina.clanarinaId,
-                          child: Text(clanarina.naziv),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedClanarina = value;
-                        });
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                        labelText: "Učestalost",
-                        suffixIcon: _selectedUcestalost != null
-                            ? IconButton(
-                                icon:
-                                    const Icon(Icons.clear, color: Colors.red),
-                                onPressed: () {
-                                  setState(() {
-                                    _selectedUcestalost = null;
-                                  });
-                                },
-                              )
-                            : null,
-                      ),
-                      value: _selectedUcestalost,
-                      items: ucestalost.map((String u) {
-                        return DropdownMenuItem(
-                          value: u,
-                          child: Text(u),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedUcestalost = value;
-                        });
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        labelText: "Cijena (KM)",
-                        suffixIcon: _cijenaController.text.isNotEmpty
-                            ? IconButton(
-                                icon:
-                                    const Icon(Icons.clear, color: Colors.red),
-                                onPressed: () {
-                                  setState(() {
-                                    _cijenaController.clear();
-                                  });
-                                },
-                              )
-                            : null,
-                      ),
-                      controller: _cijenaController,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 50, right: 80),
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          await getFiltriraneTermine();
+                        value: _selectedDan,
+                        items: radniDani.map((String dan) {
+                          return DropdownMenuItem(
+                            value: dan,
+                            child: Text(dan),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedDan = value;
+                          });
                         },
-                        style: ElevatedButton.styleFrom(
-                          primary: const Color.fromARGB(255, 3, 59, 227),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 17),
-                          side: const BorderSide(color: Colors.white),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                        ),
-                        child: const Text("Pretraži"),
                       ),
                     ),
-                  ),
-                ],
-              ),
-      ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: DropdownButtonFormField<int?>(
+                        decoration: InputDecoration(
+                          labelText: "Treninzi",
+                          suffixIcon: _selectedTrening != null
+                              ? IconButton(
+                                  icon: const Icon(Icons.clear,
+                                      color: Colors.red),
+                                  onPressed: () {
+                                    setState(() {
+                                      _selectedTrening = null;
+                                    });
+                                  },
+                                )
+                              : null,
+                        ),
+                        value: _selectedTrening,
+                        items: _treninziList.map((Treninzi trening) {
+                          return DropdownMenuItem(
+                            value: trening.treningId,
+                            child: Text(trening.naziv),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedTrening = value;
+                          });
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: DropdownButtonFormField<int?>(
+                        decoration: InputDecoration(
+                          labelText: "Treneri",
+                          suffixIcon: _selectedTrener != null
+                              ? IconButton(
+                                  icon: const Icon(Icons.clear,
+                                      color: Colors.red),
+                                  onPressed: () {
+                                    setState(() {
+                                      _selectedTrener = null;
+                                    });
+                                  },
+                                )
+                              : null,
+                        ),
+                        value: _selectedTrener,
+                        items: _treneriList.map((Treneri trener) {
+                          return DropdownMenuItem(
+                            value: trener.trenerId,
+                            child: Text('${trener.ime} ${trener.prezime}'),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedTrener = value;
+                          });
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: DropdownButtonFormField<int?>(
+                        decoration: InputDecoration(
+                          labelText: "Sale",
+                          suffixIcon: _selectedSala != null
+                              ? IconButton(
+                                  icon: const Icon(Icons.clear,
+                                      color: Colors.red),
+                                  onPressed: () {
+                                    setState(() {
+                                      _selectedSala = null;
+                                    });
+                                  },
+                                )
+                              : null,
+                        ),
+                        value: _selectedSala,
+                        items: _saleList.map((Sale sala) {
+                          return DropdownMenuItem(
+                            value: sala.salaId,
+                            child: Text(sala.naziv),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedSala = value;
+                          });
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 50, right: 80),
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            await getFiltriraneTermine();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: const Color.fromARGB(255, 3, 59, 227),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 17),
+                            side: const BorderSide(color: Colors.white),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          ),
+                          child: const Text("Pretraži"),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              : Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: DropdownButtonFormField<int?>(
+                        decoration: InputDecoration(
+                          labelText: "Treninzi",
+                          suffixIcon: _selectedVrstaTr != null
+                              ? IconButton(
+                                  icon: const Icon(Icons.clear,
+                                      color: Colors.red),
+                                  onPressed: () {
+                                    setState(() {
+                                      _selectedVrstaTr = null;
+                                    });
+                                  },
+                                )
+                              : null,
+                        ),
+                        value: _selectedVrstaTr,
+                        items: _vrsteTreningaList.map((VrsteTreninga trening) {
+                          return DropdownMenuItem(
+                            value: trening.vrstaTreningaId,
+                            child: Text(trening.naziv!),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedVrstaTr = value as int?;
+                          });
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: DropdownButtonFormField<int?>(
+                        decoration: InputDecoration(
+                          labelText: "Članarine",
+                          suffixIcon: _selectedClanarina != null
+                              ? IconButton(
+                                  icon: const Icon(Icons.clear,
+                                      color: Colors.red),
+                                  onPressed: () {
+                                    setState(() {
+                                      _selectedClanarina = null;
+                                    });
+                                  },
+                                )
+                              : null,
+                        ),
+                        value: _selectedClanarina,
+                        items: _clanarineList.map((Clanarine clanarina) {
+                          return DropdownMenuItem(
+                            value: clanarina.clanarinaId,
+                            child: Text(clanarina.naziv),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedClanarina = value;
+                          });
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          labelText: "Učestalost",
+                          suffixIcon: _selectedUcestalost != null
+                              ? IconButton(
+                                  icon: const Icon(Icons.clear,
+                                      color: Colors.red),
+                                  onPressed: () {
+                                    setState(() {
+                                      _selectedUcestalost = null;
+                                    });
+                                  },
+                                )
+                              : null,
+                        ),
+                        value: _selectedUcestalost,
+                        items: ucestalost.map((String u) {
+                          return DropdownMenuItem(
+                            value: u,
+                            child: Text(u),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedUcestalost = value;
+                          });
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: TextField(
+                        decoration: InputDecoration(
+                          labelText: "Cijena (KM)",
+                          suffixIcon: _cijenaController.text.isNotEmpty
+                              ? IconButton(
+                                  icon: const Icon(Icons.clear,
+                                      color: Colors.red),
+                                  onPressed: () {
+                                    setState(() {
+                                      _cijenaController.clear();
+                                    });
+                                  },
+                                )
+                              : null,
+                        ),
+                        controller: _cijenaController,
+                        keyboardType:
+                            TextInputType.number, // Ako očekujete samo brojeve
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 50, right: 80),
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            await getFiltriraneTermine();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: const Color.fromARGB(255, 3, 59, 227),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 17),
+                            side: const BorderSide(color: Colors.white),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          ),
+                          child: const Text("Pretraži"),
+                        ),
+                      ),
+                    ),
+                  ],
+                )),
     );
   }
 

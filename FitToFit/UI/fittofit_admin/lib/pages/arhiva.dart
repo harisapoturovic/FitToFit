@@ -55,6 +55,7 @@ class _ArhivaPageState extends State<ArhivaPage> {
   }
 
   void _loadData() async {
+    if (!mounted) return;
     isSearching = false;
     var arhiviraneRezervacije = await _rezervacijeProvider.get(filter: {
       'IsTerminiIncluded': true,
@@ -79,26 +80,27 @@ class _ArhivaPageState extends State<ArhivaPage> {
     var korisnici = await _korisniciProvider.get(filter: {'isAdmin': false});
     var treninzi = await _treninziProvider.get(filter: {});
     var clanarine = await _clanarineProvider.get(filter: {});
+    if (mounted) {
+      setState(() {
+        _odbijeneRezervacijeList = odbijeneRezervacije.result;
+        _arhiviraneRezervacijeList = arhiviraneRezervacije.result;
+        _ponisteneRezervacijeList = ponisteneRezervacije.result;
+        _korisniciList = korisnici.result;
+        _treninziList = treninzi.result;
+        _clanarineList = clanarine.result;
 
-    setState(() {
-      _odbijeneRezervacijeList = odbijeneRezervacije.result;
-      _arhiviraneRezervacijeList = arhiviraneRezervacije.result;
-      _ponisteneRezervacijeList = ponisteneRezervacije.result;
-      _korisniciList = korisnici.result;
-      _treninziList = treninzi.result;
-      _clanarineList = clanarine.result;
-
-      _selectedRezervacije = isArchived
-          ? _arhiviraneRezervacijeList
-          : isRefused
-              ? _odbijeneRezervacijeList
-              : _ponisteneRezervacijeList;
-      totalcount = isArchived
-          ? arhiviraneRezervacije.count
-          : isRefused
-              ? odbijeneRezervacije.count
-              : ponisteneRezervacije.count;
-    });
+        _selectedRezervacije = isArchived
+            ? _arhiviraneRezervacijeList
+            : isRefused
+                ? _odbijeneRezervacijeList
+                : _ponisteneRezervacijeList;
+        totalcount = isArchived
+            ? arhiviraneRezervacije.count
+            : isRefused
+                ? odbijeneRezervacije.count
+                : ponisteneRezervacije.count;
+      });
+    }
   }
 
   @override
@@ -377,21 +379,24 @@ class _ArhivaPageState extends State<ArhivaPage> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-             Expanded(
-              child: DropdownButtonFormField(
+            Expanded(
+              child: DropdownButtonFormField<int?>(
                 decoration: InputDecoration(
                   labelText: "Korisnici",
                   suffixIcon: _selectedKorisnik != null
                       ? IconButton(
                           icon: const Icon(Icons.clear, color: Colors.red),
                           onPressed: () {
-                            setState(() {
-                              _selectedKorisnik = null;
-                            });
+                            if (mounted) {
+                              setState(() {
+                                _selectedKorisnik = null;
+                              });
+                            }
                           },
                         )
                       : null,
                 ),
+                value: _selectedKorisnik,
                 items: _korisniciList.map((Korisnici korisnik) {
                   return DropdownMenuItem(
                     value: korisnik.korisnikId,
@@ -399,9 +404,11 @@ class _ArhivaPageState extends State<ArhivaPage> {
                   );
                 }).toList(),
                 onChanged: (value) {
-                  setState(() {
-                    _selectedKorisnik = value as int?;
-                  });
+                  if (mounted) {
+                    setState(() {
+                      _selectedKorisnik = value;
+                    });
+                  }
                 },
               ),
             ),
@@ -418,9 +425,11 @@ class _ArhivaPageState extends State<ArhivaPage> {
                         ? IconButton(
                             icon: const Icon(Icons.clear, color: Colors.red),
                             onPressed: () {
-                              setState(() {
-                                _selectedDate = null;
-                              });
+                              if (mounted) {
+                                setState(() {
+                                  _selectedDate = null;
+                                });
+                              }
                             },
                           )
                         : null,
@@ -428,29 +437,34 @@ class _ArhivaPageState extends State<ArhivaPage> {
                   format: DateFormat("yyyy-MM-dd"),
                   initialValue: _selectedDate,
                   onChanged: (value) {
-                    setState(() {
-                      _selectedDate = value;
-                    });
+                    if (mounted) {
+                      setState(() {
+                        _selectedDate = value;
+                      });
+                    }
                   },
                 ),
               ),
             ),
             const SizedBox(width: 10),
             Expanded(
-              child: DropdownButtonFormField(
+              child: DropdownButtonFormField<int?>(
                 decoration: InputDecoration(
                   labelText: "Treninzi",
                   suffixIcon: _selectedTrening != null
                       ? IconButton(
                           icon: const Icon(Icons.clear, color: Colors.red),
                           onPressed: () {
-                            setState(() {
-                              _selectedTrening = null;
-                            });
+                            if (mounted) {
+                              setState(() {
+                                _selectedTrening = null;
+                              });
+                            }
                           },
                         )
                       : null,
                 ),
+                value: _selectedTrening,
                 items: _treninziList.map((Treninzi trening) {
                   return DropdownMenuItem(
                     value: trening.treningId,
@@ -458,28 +472,33 @@ class _ArhivaPageState extends State<ArhivaPage> {
                   );
                 }).toList(),
                 onChanged: (value) {
-                  setState(() {
-                    _selectedTrening = value as int?;
-                  });
+                  if (mounted) {
+                    setState(() {
+                      _selectedTrening = value;
+                    });
+                  }
                 },
               ),
             ),
             const SizedBox(width: 20),
             Expanded(
-              child: DropdownButtonFormField(
+              child: DropdownButtonFormField<int?>(
                 decoration: InputDecoration(
                   labelText: "Članarine",
                   suffixIcon: _selectedClanarina != null
                       ? IconButton(
                           icon: const Icon(Icons.clear, color: Colors.red),
                           onPressed: () {
-                            setState(() {
-                              _selectedClanarina = null;
-                            });
+                            if (mounted) {
+                              setState(() {
+                                _selectedClanarina = null;
+                              });
+                            }
                           },
                         )
                       : null,
                 ),
+                value: _selectedClanarina,
                 items: _clanarineList.map((Clanarine clanarina) {
                   return DropdownMenuItem(
                     value: clanarina.clanarinaId,
@@ -487,9 +506,11 @@ class _ArhivaPageState extends State<ArhivaPage> {
                   );
                 }).toList(),
                 onChanged: (value) {
-                  setState(() {
-                    _selectedClanarina = value as int?;
-                  });
+                  if (mounted) {
+                    setState(() {
+                      _selectedClanarina = value;
+                    });
+                  }
                 },
               ),
             ),
@@ -499,7 +520,9 @@ class _ArhivaPageState extends State<ArhivaPage> {
                 padding: const EdgeInsets.only(left: 50, right: 80),
                 child: ElevatedButton(
                   onPressed: () async {
-                    await getFilteredReservations();
+                    if (mounted) {
+                      await getFilteredReservations();
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     primary: const Color.fromARGB(255, 3, 59, 227),
@@ -513,7 +536,7 @@ class _ArhivaPageState extends State<ArhivaPage> {
                   child: const Text("Pretraži"),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -669,7 +692,8 @@ class _ArhivaPageState extends State<ArhivaPage> {
     return await _treninziProvider.getById(id);
   }
 
-  void _showDialog(Rezervacije rezervacija) {
+  void _showDialog(Rezervacije rezervacija) async {
+    _loadData();
     showDialog(
       context: context,
       builder: (BuildContext context) {

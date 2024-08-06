@@ -83,6 +83,7 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
   }
 
   void _loadData() async {
+    if (!mounted) return;
     final korisnikid = widget.korisnik.korisnikId;
     var data = await _korisniciProvider.getById(korisnikid);
     setState(() {
@@ -655,7 +656,7 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
             return AlertDialog(
                 title: const Text('Ažuriraj korisnika'),
                 content: SingleChildScrollView(
-                    child: Container(
+                    child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.3,
                   child: Column(children: [
                     FormBuilder(

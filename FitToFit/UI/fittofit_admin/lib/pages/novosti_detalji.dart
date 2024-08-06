@@ -63,6 +63,7 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
   }
 
   void _loadData() async {
+    if (!mounted) return;
     final novostid = widget.novost.novostId;
     var data = await _novostiProvider.getById(novostid);
     var vrsteTreninga = await _vrsteTreningaProvider.get(filter: {});
