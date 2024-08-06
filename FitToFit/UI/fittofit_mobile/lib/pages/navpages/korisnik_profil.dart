@@ -189,9 +189,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     const SizedBox(height: 10),
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      _buildInfoCard('${korisnik.visina}cm', 'Visina'),
+                      _buildInfoCard('${korisnik.visina} cm', 'Visina'),
                       const SizedBox(width: 20),
-                      _buildInfoCard('${korisnik.tezina}kg', 'Težina'),
+                      _buildInfoCard('${korisnik.tezina} kg', 'Težina'),
                       const SizedBox(width: 20),
                       _buildInfoCard(
                           "${calculateAge(korisnik.datumRodjenja!)}", 'Godine'),

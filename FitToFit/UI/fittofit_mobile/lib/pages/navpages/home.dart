@@ -29,11 +29,8 @@ class _HomePageState extends State<HomePage> {
   late NovostiProvider _novostiProvider;
   late KorisniciProvider _korisniciProvider;
   late KorisniciNovostiProvider _korisniciNovostiProvider;
-  late RezervacijeProvider _rezervacijeProvider;
-  late TreninziProvider _treninziProvider;
   List<Novosti> _novostiList = [];
   List<KorisniciNovosti> _korisniciNovostiList = [];
-  List<Rezervacije> _rezervacijeList = [];
   late Korisnici korisnik;
   bool isLiked = false;
   bool isLoading = true;
@@ -51,16 +48,16 @@ class _HomePageState extends State<HomePage> {
     _novostiProvider = context.read<NovostiProvider>();
     _korisniciProvider = context.read<KorisniciProvider>();
     _korisniciNovostiProvider = context.read<KorisniciNovostiProvider>();
-    _rezervacijeProvider = context.read<RezervacijeProvider>();
-    _treninziProvider = context.read<TreninziProvider>();
     initForm();
     _loadData();
   }
 
   Future initForm() async {
-    setState(() {
-      isLoading = true;
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = true;
+      });
+    }
   }
 
   void _loadData() async {
@@ -70,19 +67,25 @@ class _HomePageState extends State<HomePage> {
         .get(filter: {'korisnickoIme': korisnickoIme, 'isAdmin': false});
     var kn = await _korisniciNovostiProvider.get();
 
-    setState(() {
-      korisnik = user.result[0];
-      _korisniciNovostiList = kn.result;
-      isLoading = false;
+    if (mounted) {
+      setState(() {
+        korisnik = user.result[0];
+        _korisniciNovostiList = kn.result;
+        isLoading = false;
+      });
+    }
+
+    var novosti = await _novostiProvider.get(filter: {
+      'page': page,
+      'pageSize': pageSize,
+      'korisnikId': korisnik.korisnikId
     });
-    
-    var novosti = await _novostiProvider
-        .get(filter: {'page': page, 'pageSize': pageSize, 'korisnikId':korisnik.korisnikId});
-        
-    setState(() {
-      _novostiList = novosti.result;
-      totalcount = novosti.count;
-    });
+    if (mounted) {
+      setState(() {
+        _novostiList = novosti.result;
+        totalcount = novosti.count;
+      });
+    }
   }
 
   @override
@@ -113,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                           leading:
                               korisnik.slika != '' && korisnik.slika != null
                                   ? CustomAvatar(
-                                      radius: 42, base64Image: korisnik.slika!)
+                                      radius: 30, base64Image: korisnik.slika!)
                                   : const CircleAvatar(
                                       radius: 40,
                                       backgroundImage:
@@ -123,7 +126,7 @@ class _HomePageState extends State<HomePage> {
                             text: TextSpan(
                               text: 'Dobrodošli, \n',
                               style: const TextStyle(
-                                fontSize: 18,
+                                fontSize: 16,
                                 fontWeight: FontWeight.normal,
                                 fontStyle: FontStyle.italic,
                                 color: Colors.black,
@@ -274,7 +277,7 @@ class _HomePageState extends State<HomePage> {
                     fontWeight: FontWeight.bold,
                   )),
               subtitle: Text(
-                  '${DateFormat('dd.MM.yyyy').format(novost.datumObjave)} | ${novost.datumObjave.hour}h'),
+                  '${DateFormat('dd.MM.yyyy').format(novost.datumObjave)} | ${novost.datumObjave.hour.toString().padLeft(2, '0')}:${novost.datumObjave.minute.toString().padLeft(2, '0')}h'),
               onTap: () {
                 if (canMarkAsRead) {
                   setState(() {
@@ -395,6 +398,7 @@ class _HomePageState extends State<HomePage> {
     isSearching = true;
     var data = await _novostiProvider.get(filter: {
       'naslov': _naslovController.text,
+      'korisnikId': korisnik.korisnikId,
       'page': page,
       'pageSize': pageSize
     });

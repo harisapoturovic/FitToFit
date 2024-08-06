@@ -303,6 +303,8 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Ovo polje je obavezno!';
+                  } else if (value[0] != value[0].toUpperCase()) {
+                    return 'Korisničko ime mora početi velikim slovom.';
                   }
                   return null;
                 }),

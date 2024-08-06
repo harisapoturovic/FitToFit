@@ -73,54 +73,84 @@ class _ReservationPageState extends State<ReservationPage> {
   }
 
   void _loadData() async {
-    var clanarine = await _clanarineProvider.get(filter: {});
-    var vrsteTreninga = await _vrsteTreningaProvider.get(filter: {});
-    var treninzi = await _treninziProvider
-        .get(filter: {'vrstaTreninga': _selectedVrstaTreninga});
-    korisnickoIme = await getUserName();
-    var user = await _korisniciProvider
-        .get(filter: {'korisnickoIme': korisnickoIme, 'isAdmin': false});
+    try {
+      var clanarine = await _clanarineProvider.get(filter: {});
+      var vrsteTreninga = await _vrsteTreningaProvider.get(filter: {});
+      var treninzi = await _treninziProvider.get(filter: {});
+      korisnickoIme = await getUserName();
+      var user = await _korisniciProvider
+          .get(filter: {'korisnickoIme': korisnickoIme, 'isAdmin': false});
 
-    setState(() {
-      _clanarineList = clanarine.result;
-      _vrsteTreningaList = vrsteTreninga.result;
-      _treninziList = treninzi.result;
-      korisnik = user.result[0];
-    });
-    if (_selectedTrening != null) {
-      var termini =
-          await _terminiProvider.get(filter: {'treningId': _selectedTrening});
-      var trening =
-          await _treninziProvider.get(filter: {'treningId': _selectedTrening});
-      var akcije = await _akcijeProvider.get(
-          filter: {'treningId': _selectedTrening, 'stateMachine': 'active'});
-      setState(() {
-        _terminiList = termini.result;
-        _trening = trening.result[0];
-        _akcijeList = akcije.result;
-      });
-    }
-    if (_selectedClanarina != null) {
-      var clanarina = await _clanarineProvider
-          .get(filter: {'clanarinaId': _selectedClanarina});
-      setState(() {
-        _clanarina = clanarina.result[0];
-      });
-    }
-    if (user != null) {
-      var rezervacije1 = await _rezervacijeProvider.get(filter: {
-        'korisnikId': korisnik.korisnikId,
-        'stateMachine': 'active'
-      });
-      var rezervacije2 = await _rezervacijeProvider.get(filter: {
-        'korisnikId': korisnik.korisnikId,
-        'stateMachine': 'active',
-        'treningId': _selectedTrening
-      });
-      setState(() {
-        _rezervacijeCount1 = rezervacije1.count;
-        _rezervacijeCount2 = rezervacije2.count;
-      });
+      if (mounted) {
+        setState(() {
+          _clanarineList = clanarine.result;
+          _vrsteTreningaList = vrsteTreninga.result;
+          _treninziList = treninzi.result;
+          korisnik = user.result[0];
+        });
+      }
+
+      if (_selectedVrstaTreninga != null) {
+        var treninzi = await _treninziProvider
+            .get(filter: {'vrstaTreninga': _selectedVrstaTreninga});
+        if (mounted) {
+          setState(() {
+            _treninziList = treninzi.result;
+          });
+        }
+      }
+
+      if (_selectedTrening != null) {
+        var termini =
+            await _terminiProvider.get(filter: {'treningId': _selectedTrening});
+        var trening = await _treninziProvider
+            .get(filter: {'treningId': _selectedTrening});
+        var akcije = await _akcijeProvider.get(
+            filter: {'treningId': _selectedTrening, 'stateMachine': 'active'});
+        if (mounted) {
+          setState(() {
+            _terminiList = termini.result;
+            _trening = trening.result[0];
+            _akcijeList = akcije.result;
+          });
+        }
+      } else {
+        if (mounted) {
+          setState(() {
+            _terminiList = [];
+          });
+        }
+      }
+
+      if (_selectedClanarina != null) {
+        var clanarina = await _clanarineProvider
+            .get(filter: {'clanarinaId': _selectedClanarina});
+        if (mounted) {
+          setState(() {
+            _clanarina = clanarina.result[0];
+          });
+        }
+      }
+
+      if (user != null) {
+        var rezervacije1 = await _rezervacijeProvider.get(filter: {
+          'korisnikId': korisnik.korisnikId,
+          'stateMachine': 'active'
+        });
+        var rezervacije2 = await _rezervacijeProvider.get(filter: {
+          'korisnikId': korisnik.korisnikId,
+          'stateMachine': 'active',
+          'treningId': _selectedTrening
+        });
+        if (mounted) {
+          setState(() {
+            _rezervacijeCount1 = rezervacije1.count;
+            _rezervacijeCount2 = rezervacije2.count;
+          });
+        }
+      }
+    } catch (e) {
+      print(e.toString());
     }
   }
 
@@ -137,12 +167,6 @@ class _ReservationPageState extends State<ReservationPage> {
         _treninziClanarineList = cjenovnik.result;
       });
     }
-  }
-
-  Future<List<Termini>> getTermineByTreningId(int treningId) async {
-    final termini =
-        await _terminiProvider.get(filter: {'treningId': treningId});
-    return termini.result;
   }
 
   Map<String, List<Termini>> _grupisiTerminePoDanu(List<Termini> terminiList) {
@@ -173,57 +197,111 @@ class _ReservationPageState extends State<ReservationPage> {
                 children: <Widget>[
                   SizedBox(
                     height: 80,
-                    child: DropdownButtonFormField(
-                      decoration: const InputDecoration(labelText: "Članarine"),
+                    child: DropdownButtonFormField<int>(
+                      decoration: InputDecoration(
+                        labelText: "Članarine",
+                        suffixIcon: _selectedClanarina != null
+                            ? IconButton(
+                                icon:
+                                    const Icon(Icons.clear, color: Colors.red),
+                                onPressed: () {
+                                  setState(() {
+                                    _selectedClanarina = null;
+                                    _loadData();
+                                  });
+                                },
+                              )
+                            : null,
+                      ),
                       items: _clanarineList.map((Clanarine clanarina) {
-                        return DropdownMenuItem(
+                        return DropdownMenuItem<int>(
                           value: clanarina.clanarinaId,
                           child: Text(clanarina.naziv),
                         );
                       }).toList(),
+                      value: _selectedClanarina,
                       onChanged: (value) {
                         setState(() {
-                          _selectedClanarina = value as int?;
+                          _selectedClanarina = value;
+                          _loadData();
                         });
                       },
                     ),
                   ),
                   SizedBox(
                     height: 80,
-                    child: DropdownButtonFormField(
-                      decoration:
-                          const InputDecoration(labelText: "Vrste treninga"),
+                    child: DropdownButtonFormField<int>(
+                      decoration: InputDecoration(
+                        labelText: "Vrste treninga",
+                        suffixIcon: _selectedVrstaTreninga != null
+                            ? IconButton(
+                                icon:
+                                    const Icon(Icons.clear, color: Colors.red),
+                                onPressed: () {
+                                  setState(() {
+                                    _selectedVrstaTreninga = null;
+                                    _selectedTrening = null;
+                                    _selectedTermini.clear();
+                                    _terminiIds.clear();
+                                    _loadData();
+                                  });
+                                },
+                              )
+                            : null,
+                      ),
                       items:
                           _vrsteTreningaList.map((VrsteTreninga vrsteTreninga) {
-                        return DropdownMenuItem(
+                        return DropdownMenuItem<int>(
                           value: vrsteTreninga.vrstaTreningaId,
                           child: Text(vrsteTreninga.naziv!),
                         );
                       }).toList(),
-                      onChanged: (value) {
+                      value: _selectedVrstaTreninga,
+                      onChanged: (int? value) {
                         setState(() {
-                          _selectedVrstaTreninga = value as int?;
+                          _selectedVrstaTreninga = value;
+                          _selectedTrening = null;
+                          _selectedTermini.clear();
+                          _terminiIds.clear();
+                          _loadData();
                         });
-                        _loadData();
                       },
                     ),
                   ),
                   SizedBox(
                     height: 80,
-                    child: DropdownButtonFormField(
-                      decoration: const InputDecoration(labelText: "Treninzi"),
+                    child: DropdownButtonFormField<int>(
+                      decoration: InputDecoration(
+                        labelText: "Treninzi",
+                        suffixIcon: _selectedTrening != null
+                            ? IconButton(
+                                icon:
+                                    const Icon(Icons.clear, color: Colors.red),
+                                onPressed: () {
+                                  setState(() {
+                                    _selectedTrening = null;
+                                    _selectedTermini.clear();
+                                    _terminiIds.clear();
+                                    _loadData();
+                                  });
+                                },
+                              )
+                            : null,
+                      ),
                       items: _treninziList.map((Treninzi trening) {
-                        return DropdownMenuItem(
+                        return DropdownMenuItem<int>(
                           value: trening.treningId,
                           child: Text(trening.naziv),
                         );
                       }).toList(),
+                      value: _selectedTrening,
                       onChanged: (value) {
-                        _terminiIds.clear();
                         setState(() {
-                          _selectedTrening = value as int?;
+                          _selectedTrening = value;
+                          _selectedTermini.clear();
+                          _terminiIds.clear();
+                          _loadData();
                         });
-                        _loadData();
                       },
                     ),
                   ),
@@ -754,6 +832,13 @@ class _ReservationPageState extends State<ReservationPage> {
                                           "Uspješno kreirana rezervacija.",
                                           Colors.green,
                                         );
+                                        setState(() {
+                                          _selectedTermini.clear();
+                                          _terminiIds.clear();
+                                          _selectedClanarina = null;
+                                          _selectedVrstaTreninga = null;
+                                          _selectedTrening = null;
+                                        });
                                       } else if (_rezervacijeCount2! != 0) {
                                         _showAlertDialog(
                                             "Greška",

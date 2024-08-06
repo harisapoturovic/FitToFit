@@ -4,11 +4,7 @@ import 'package:fittofit_mobile/providers/akcije_provider.dart';
 import 'package:fittofit_mobile/providers/vjezbe_provider.dart';
 import 'package:fittofit_mobile/utils/util.dart';
 import 'package:fittofit_mobile/widgets/master_screen_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class TreninziDetaljiPage2 extends StatefulWidget {

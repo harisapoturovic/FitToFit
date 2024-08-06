@@ -47,12 +47,14 @@ class _TrainingPageState extends State<TrainingPage> {
     var vrsteTreninga =
         await _vrsteTreningaProvider.get(filter: {'isTerminiIncluded': false});
 
-    var treninzi = await _treninziProvider.get(filter: {'isVjezbeIncluded': true});
-
-    setState(() {
-      _vrsteTreningaList = vrsteTreninga.result;
-      _treninziList = treninzi.result;
-    });
+    var treninzi =
+        await _treninziProvider.get(filter: {'isVjezbeIncluded': true});
+    if (mounted) {
+      setState(() {
+        _vrsteTreningaList = vrsteTreninga.result;
+        _treninziList = treninzi.result;
+      });
+    }
   }
 
   @override
@@ -257,7 +259,8 @@ class _TrainingPageState extends State<TrainingPage> {
     var data = await _treninziProvider.get(filter: {
       'naziv': _nazivController.text,
       'vrstaTreningaNaziv': _selectedType,
-      'namjena': _selectedNamjena
+      'namjena': _selectedNamjena,
+      'isVjezbeIncluded': true
     });
 
     setState(() {
