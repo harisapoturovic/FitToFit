@@ -118,7 +118,8 @@ class _RezervacijePageState extends State<RezervacijePage> {
                 );
               },
               style: ElevatedButton.styleFrom(
-                primary: const Color.fromARGB(255, 159, 160, 255),
+                backgroundColor: const Color.fromARGB(255, 159, 160, 255),
+                foregroundColor: Colors.white,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 textStyle: const TextStyle(
@@ -129,7 +130,8 @@ class _RezervacijePageState extends State<RezervacijePage> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              child: const Text('ARHIVA'),
+              child:
+                  const Text('ARHIVA', style: TextStyle(color: Colors.white)),
             ),
           ),
           const SizedBox(height: 50),
@@ -560,13 +562,11 @@ class _RezervacijePageState extends State<RezervacijePage> {
                     await getFilteredReservations();
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: const Color.fromARGB(255, 3, 59, 227),
+                    backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
+                    foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 17),
+                        horizontal: 20, vertical: 17),
                     side: const BorderSide(color: Colors.white),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
                   ),
                   child: const Text("Pretraži"),
                 ),
@@ -925,7 +925,8 @@ class _RezervacijePageState extends State<RezervacijePage> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             style: TextButton.styleFrom(
-              primary: Colors.blue,
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
               textStyle: const TextStyle(
                 fontSize: 16.0,
               ),

@@ -24,6 +24,12 @@ namespace FitToFit.Controllers
             return base.Insert(insert);
         }
 
+        [AllowAnonymous] 
+        public override Task<PagedResult<Korisnici>> Get([FromQuery] KorisniciSearchObject search)
+        {
+            return base.Get(search);
+        }
+
         [HttpPost("{userId}/change-password")]
         public async Task<IActionResult> ChangePassword(int userId, [FromBody] KorisniciChangePassword changePasswordModel)
         {

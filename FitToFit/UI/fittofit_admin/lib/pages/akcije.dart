@@ -4,7 +4,6 @@ import 'package:fittofit_admin/models/treninzi.dart';
 import 'package:fittofit_admin/providers/acTrening_provider.dart';
 import 'package:fittofit_admin/providers/akcije_provider.dart';
 import 'package:fittofit_admin/providers/treninzi_provider.dart';
-import 'package:fittofit_admin/utils/util.dart';
 import 'package:fittofit_admin/widgets/action_card.dart';
 import 'package:fittofit_admin/widgets/master_screen.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +37,7 @@ class _AkcijePageState extends State<AkcijePage> {
   List<int>? items;
   bool isActive = true;
   final _formKey = GlobalKey<FormBuilderState>();
+  FocusNode _nazivFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -45,9 +45,17 @@ class _AkcijePageState extends State<AkcijePage> {
     _akcijeProvider = context.read<AkcijeProvider>();
     _treninziProvider = context.read<TreninziProvider>();
     _loadData();
+    _nazivFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _nazivFocusNode.dispose();
+    super.dispose();
   }
 
   void _loadData() async {
+     if (!mounted) return;
     var aktivneAkcije = await _akcijeProvider
         .get(filter: {'IsTreninziIncluded': true, 'StateMachine': "active"});
 
@@ -84,6 +92,7 @@ class _AkcijePageState extends State<AkcijePage> {
           _showAddActionDialog();
         },
         backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
+        foregroundColor: Colors.white,
         child: const Icon(Icons.add),
       ),
       child: Column(
@@ -202,7 +211,8 @@ class _AkcijePageState extends State<AkcijePage> {
                   });
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: const Color.fromRGBO(0, 154, 231, 1),
+                  backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
+                  foregroundColor: Colors.white,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 17),
                   side: const BorderSide(color: Colors.white),
@@ -351,6 +361,9 @@ class _AkcijePageState extends State<AkcijePage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          FocusScope.of(context).requestFocus(_nazivFocusNode);
+        });
         return AlertDialog(
           title: const Text('Dodaj akciju'),
           content: Container(
@@ -366,6 +379,7 @@ class _AkcijePageState extends State<AkcijePage> {
                   children: [
                     FormBuilderTextField(
                       name: 'naziv',
+                      focusNode: _nazivFocusNode,
                       decoration: const InputDecoration(labelText: 'Naziv'),
                       onChanged: (value) {
                         setState(() {
@@ -413,48 +427,121 @@ class _AkcijePageState extends State<AkcijePage> {
                       },
                     ),
                     const SizedBox(height: 10.0),
-                    FormBuilderDateTimePicker(
-                      name: 'datumPocetka',
-                      inputType: InputType.date,
-                      decoration: const InputDecoration(
-                          labelText: 'Datum početka akcije'),
-                      format: DateFormat("yyyy-MM-dd"),
-                      initialDate: _pocetakAkcije ?? DateTime.now(),
-                      onChanged: (value) {
-                        setState(() {
-                          acTrening.datumPocetka = value ?? DateTime.now();
-                        });
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 24),
+                        backgroundColor:
+                            const Color.fromARGB(255, 208, 207, 207),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                      ),
+                      onPressed: () async {
+                        final DateTime? date = await showDatePicker(
+                          context: context,
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime.utc(2024, 12, 31),
+                        );
+                        if (date == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Datum početka je obavezan.'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        } else {
+                          setState(() {
+                            _pocetakAkcije = date;
+                          });
+                        }
                       },
-                      validator: FormBuilderValidators.compose([
-                        (value) {
-                          if (value == null) {
-                            return 'Ovo polje je obavezno!';
-                          }
-                          return null;
-                        },
-                      ]),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.calendar_month,
+                            color: Colors.white,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            "Izaberite datum početka akcije",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
                     ),
-                    FormBuilderDateTimePicker(
-                      name: 'datumZavrsetka',
-                      inputType: InputType.date,
-                      decoration: const InputDecoration(
-                          labelText: 'Datum završetka akcije'),
-                      format: DateFormat("yyyy-MM-dd"),
-                      initialDate: _zavrsetakAkcije ?? DateTime.now(),
-                      onChanged: (value) {
-                        setState(() {
-                          acTrening.datumZavrsetka = value ?? DateTime.now();
-                        });
+                    _pocetakAkcije != null
+                        ? Text(
+                            "Izabrani datum početka: $_pocetakAkcije",
+                            style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.black87,
+                                fontWeight: FontWeight.bold),
+                          )
+                        : Container(),
+                    const SizedBox(height: 10.0),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 24),
+                        backgroundColor:
+                            const Color.fromARGB(255, 208, 207, 207),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                      ),
+                      onPressed: () async {
+                        final DateTime? date = await showDatePicker(
+                          context: context,
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime.utc(2024, 12, 31),
+                        );
+                        if (date == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Datum završetka je obavezan.'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        } else {
+                          setState(() {
+                            _zavrsetakAkcije = date;
+                          });
+                        }
                       },
-                      validator: FormBuilderValidators.compose([
-                        (value) {
-                          if (value == null) {
-                            return 'Ovo polje je obavezno!';
-                          }
-                          return null;
-                        },
-                      ]),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.calendar_month,
+                            color: Colors.white,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            "Izaberite datum završetka akcije",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
                     ),
+                    _zavrsetakAkcije != null
+                        ? Text(
+                            "Izabrani datum završetka: $_zavrsetakAkcije",
+                            style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.black87,
+                                fontWeight: FontWeight.bold),
+                          )
+                        : Container(),
                     const SizedBox(height: 10.0),
                     FormBuilderDropdown(
                       name: 'items',
@@ -497,6 +584,32 @@ class _AkcijePageState extends State<AkcijePage> {
             ),
             ElevatedButton(
               onPressed: () async {
+                if (_pocetakAkcije == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Datum početka je obavezan.'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                  return;
+                }
+                if (_zavrsetakAkcije == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Datum završetka je obavezan.'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                  return;
+                }
+                String _datumPocetka = _pocetakAkcije.toString();
+                String datumVrijemeP =
+                    DateTime.parse(_datumPocetka.replaceAll(' ', 'T'))
+                        .toIso8601String();
+                String _datumZavrsetka = _zavrsetakAkcije.toString();
+                String datumVrijemeZ =
+                    DateTime.parse(_datumZavrsetka.replaceAll(' ', 'T'))
+                        .toIso8601String();
                 List<Map<String, dynamic>> items = [];
 
                 _acTreningProvider.acTrening.items.forEach((item) {
@@ -508,8 +621,8 @@ class _AkcijePageState extends State<AkcijePage> {
                 Map<String, dynamic> action = {
                   "items": items,
                   'naziv': acTrening.naziv,
-                  'datumPocetka': formatDateForJson(acTrening.datumPocetka),
-                  'datumZavrsetka': formatDateForJson(acTrening.datumZavrsetka),
+                  'datumPocetka': datumVrijemeP,
+                  'datumZavrsetka': datumVrijemeZ,
                   'iznos': acTrening.iznos
                 };
 
@@ -532,6 +645,8 @@ class _AkcijePageState extends State<AkcijePage> {
 
                 try {
                   await _akcijeProvider.insert(action);
+                  _pocetakAkcije = null;
+                  _zavrsetakAkcije = null;
                   setState(() {});
                   _showAlertDialog(
                       "Uspješan unos", "Akcija uspješno dodana.", Colors.green);
@@ -540,7 +655,8 @@ class _AkcijePageState extends State<AkcijePage> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                primary: const Color.fromRGBO(0, 154, 231, 1),
+                backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
+                foregroundColor: Colors.white,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
                 textStyle: const TextStyle(
@@ -563,9 +679,7 @@ class _AkcijePageState extends State<AkcijePage> {
 
     List<String> requiredFields = [
       'naziv',
-      'iznos',
-      'datumPocetka',
-      'datumZavrsetka'
+      'iznos'
     ];
 
     for (String fieldName in requiredFields) {
@@ -600,7 +714,8 @@ class _AkcijePageState extends State<AkcijePage> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             style: TextButton.styleFrom(
-              primary: Colors.blue,
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
               textStyle: const TextStyle(
                 fontSize: 16.0,
               ),

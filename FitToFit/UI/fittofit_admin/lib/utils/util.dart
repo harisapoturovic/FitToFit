@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,4 +19,16 @@ String formatDate(DateTime? dateTime) {
 
 String formatDateForJson(DateTime dateTime) {
   return dateTime.toIso8601String();
+}
+
+class Debouncer {
+  final Duration delay;
+  Timer? _timer;
+
+  Debouncer({required this.delay});
+
+  void run(VoidCallback action) {
+    _timer?.cancel();
+    _timer = Timer(delay, action);
+  }
 }

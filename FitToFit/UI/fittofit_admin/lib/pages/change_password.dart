@@ -24,6 +24,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   TextEditingController _newPasswordController = TextEditingController();
   TextEditingController _currentPasswordController = TextEditingController();
+  FocusNode _trenutnaFocusNode = FocusNode();
 
   Future<Korisnici?> getUserFromUserId(int userId) async {
     final user = await _korisniciProvider.getById(userId);
@@ -34,6 +35,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   void initState() {
     super.initState();
     _korisniciProvider = context.read<KorisniciProvider>();
+    _trenutnaFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _trenutnaFocusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -50,6 +58,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   }
 
   Widget _buildBody() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FocusScope.of(context).requestFocus(_trenutnaFocusNode);
+    });
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.6,
       child: FormBuilder(
@@ -77,6 +88,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         obscureText: true,
                         name: 'currentPassword',
                         controller: _currentPasswordController,
+                        focusNode: _trenutnaFocusNode,
                       ),
                       const SizedBox(
                         height: 20,
@@ -108,8 +120,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         child: ElevatedButton(
                           onPressed: _updatePassword,
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.blue.shade300,
-                            onPrimary: Colors.white,
+                            backgroundColor: Colors.blue.shade300,
+                            foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -223,7 +235,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             style: TextButton.styleFrom(
-              primary: Colors.blue,
+              backgroundColor: Colors.blue,
               textStyle: const TextStyle(
                 fontSize: 16.0,
               ),

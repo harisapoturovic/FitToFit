@@ -8,7 +8,6 @@ import 'package:fittofit_admin/providers/korisnici_provider.dart';
 import 'package:fittofit_admin/providers/treneri_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../models/treneri.dart';
 import '../widgets/master_screen.dart';
@@ -38,8 +37,9 @@ class _KorisniciPageState extends State<KorisniciPage> {
   final TextEditingController _imeTreneraController = TextEditingController();
   final TextEditingController _prezimeTreneraController =
       TextEditingController();
-  DateTime? _selectedDate;
   final _formKey = GlobalKey<FormBuilderState>();
+  DateTime? datum;
+  FocusNode _imeFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -48,6 +48,7 @@ class _KorisniciPageState extends State<KorisniciPage> {
     _treneriProvider = context.read<TreneriProvider>();
     initForm();
     _loadData();
+    _imeFocusNode = FocusNode();
   }
 
   Future initForm() async {
@@ -94,6 +95,7 @@ class _KorisniciPageState extends State<KorisniciPage> {
           _showAddTrainerDialog();
         },
         backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
+        foregroundColor: Colors.white,
         child: const Icon(Icons.add),
       ),
       child: Row(
@@ -318,6 +320,7 @@ class _KorisniciPageState extends State<KorisniciPage> {
 
   @override
   void dispose() {
+    _imeFocusNode.dispose();
     _userListController.dispose();
     _trainerListController.dispose();
     super.dispose();
@@ -350,6 +353,9 @@ class _KorisniciPageState extends State<KorisniciPage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          FocusScope.of(context).requestFocus(_imeFocusNode);
+        });
         return AlertDialog(
           title: const Text('Dodaj novog trenera'),
           content: Container(
@@ -365,6 +371,7 @@ class _KorisniciPageState extends State<KorisniciPage> {
                   children: [
                     FormBuilderTextField(
                       name: 'ime',
+                      focusNode: _imeFocusNode,
                       decoration: const InputDecoration(labelText: 'Ime'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -456,27 +463,63 @@ class _KorisniciPageState extends State<KorisniciPage> {
                       },
                     ),
                     const SizedBox(height: 10.0),
-                    FormBuilderDateTimePicker(
-                      name: 'datumZaposlenja',
-                      inputType: InputType.date,
-                      decoration:
-                          const InputDecoration(labelText: 'Datum zaposlenja'),
-                      format: DateFormat("yyyy-MM-dd"),
-                      initialDate: _selectedDate ?? DateTime.now(),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedDate = value;
-                        });
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 24),
+                        backgroundColor:
+                            const Color.fromARGB(255, 208, 207, 207),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                      ),
+                      onPressed: () async {
+                        final DateTime? date = await showDatePicker(
+                          context: context,
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime.utc(2024, 12, 31),
+                        );
+                        if (date == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Datum je obavezan.'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        } else {
+                          setState(() {
+                            datum = date;
+                          });
+                        }
                       },
-                      validator: FormBuilderValidators.compose([
-                        (value) {
-                          if (value == null) {
-                            return 'Ovo polje je obavezno!';
-                          }
-                          return null;
-                        },
-                      ]),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.calendar_month,
+                            color: Colors.white,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            "Izaberite datum zaposlenja",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
                     ),
+                    datum != null
+                        ? Text(
+                            "Izabrani datum: $datum",
+                            style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.black87,
+                                fontWeight: FontWeight.bold),
+                          )
+                        : Container(),
                     const SizedBox(height: 10.0),
                     FormBuilderTextField(
                       name: 'zvanje',
@@ -530,7 +573,8 @@ class _KorisniciPageState extends State<KorisniciPage> {
                 _dodajTrenera();
               },
               style: ElevatedButton.styleFrom(
-                primary: const Color.fromRGBO(0, 154, 231, 1),
+                backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
+                foregroundColor: Colors.white,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
                 textStyle: const TextStyle(
@@ -551,6 +595,18 @@ class _KorisniciPageState extends State<KorisniciPage> {
   }
 
   void _dodajTrenera() {
+    if (datum == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Datum je obavezan.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+    String _datum = datum.toString();
+    String datumVrijeme =
+        DateTime.parse(_datum.replaceAll(' ', 'T')).toIso8601String();
     _formKey.currentState?.saveAndValidate();
     final currentFormState = _formKey.currentState;
     if (!_areAllFieldsFilled(currentFormState)) {
@@ -568,10 +624,14 @@ class _KorisniciPageState extends State<KorisniciPage> {
       }
     }
     var request = Map.from(_formKey.currentState!.value);
-    request['datumZaposlenja'] = formatDateForJson(request['datumZaposlenja']);
+    //request['datumZaposlenja'] = formatDateForJson(request['datumZaposlenja']);
     request['slika'] = _base64Image;
+    request.addAll({
+      'datumZaposlenja': datumVrijeme,
+    });
     try {
       _treneriProvider.insert(request);
+      datum = null;
       _showAlertDialog("Uspješan unos", "Trener uspješno dodat.", Colors.green);
     } on Exception catch (e) {
       _showAlertDialog("Greška", e.toString(), Colors.red);
@@ -583,7 +643,7 @@ class _KorisniciPageState extends State<KorisniciPage> {
       return false;
     }
 
-    List<String> requiredFields = ['ime', 'prezime', 'spol', 'datumZaposlenja'];
+    List<String> requiredFields = ['ime', 'prezime', 'spol'];
 
     for (String fieldName in requiredFields) {
       if (formState.fields[fieldName]?.value == null ||
@@ -617,7 +677,8 @@ class _KorisniciPageState extends State<KorisniciPage> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             style: TextButton.styleFrom(
-              primary: Colors.blue,
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
               textStyle: const TextStyle(
                 fontSize: 16.0,
               ),

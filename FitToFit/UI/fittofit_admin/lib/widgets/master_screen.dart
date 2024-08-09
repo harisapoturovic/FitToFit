@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 
 import '../pages/korisnici.dart';
 
+// ignore: must_be_immutable
 class MasterScreenWidget extends StatefulWidget {
   Widget? child;
   String? title;
@@ -42,7 +43,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
     super.initState();
     korisnickoIme = Authorization.username ?? '';
     _korisniciProvider = context.read<KorisniciProvider>();
-    _selectedIndex = widget.selectedIndex!;
+    _selectedIndex = widget.selectedIndex ?? 0;
     _loadData();
   }
 
@@ -51,7 +52,8 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
       var korisnik = await _korisniciProvider
           .get(filter: {'isAdmin': true, 'korisnickoIme': korisnickoIme});
       setState(() {
-        odabraniKorisnik = korisnik.result[0];
+        odabraniKorisnik =
+            korisnik.result.isNotEmpty ? korisnik.result[0] : null;
       });
     }
   }
@@ -60,13 +62,17 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title ?? ""),
+        title: Text(
+          widget.title ?? '',
+          style: const TextStyle(color: Colors.white),
+        ),
         backgroundColor: const Color.fromRGBO(0, 154, 231, 1).withOpacity(0.9),
+        foregroundColor: Colors.white,
         elevation: 0,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 100.0),
-            child: korisnickoIme != ''
+            child: korisnickoIme.isNotEmpty
                 ? Row(
                     children: [
                       const Icon(Icons.person, color: Colors.white),
@@ -90,7 +96,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                             fontSize: 16,
                           ),
                         ),
-                      )
+                      ),
                     ],
                   )
                 : Container(),
@@ -99,29 +105,28 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
       ),
       body: Row(
         children: [
-          korisnickoIme != ''
+          korisnickoIme.isNotEmpty
               ? NavigationRail(
                   selectedIndex: _selectedIndex,
                   backgroundColor:
                       const Color.fromRGBO(0, 154, 231, 1).withOpacity(0.9),
                   unselectedIconTheme: const IconThemeData(
-                    color: Color.fromARGB(255, 0, 0, 0),
+                    color: Colors.white,
                   ),
                   selectedIconTheme: const IconThemeData(
-                    color: Color.fromRGBO(0, 154, 231, 1),
+                    color: Colors.white,
                   ),
                   destinations: [
                     NavigationRailDestination(
                       icon: Tooltip(
-                        message: 'Početna',
+                        message: 'Početna ',
                         textStyle: const TextStyle(
-                            fontSize: 14.0, color: Colors.white),
+                            fontSize: 12.0, color: Colors.white),
                         child: buildIcon(Icons.home, 0, 'Home', () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => HomePage(
-                                username: korisnickoIme,
-                              ),
+                              builder: (context) =>
+                                  HomePage(username: korisnickoIme),
                             ),
                           );
                         }),
@@ -132,7 +137,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                       icon: Tooltip(
                         message: 'Korisnici',
                         textStyle: const TextStyle(
-                            fontSize: 14.0, color: Colors.white),
+                            fontSize: 12.0, color: Colors.white),
                         child: buildIcon(Icons.search, 1, 'Search', () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
@@ -147,7 +152,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                       icon: Tooltip(
                         message: 'Treninzi',
                         textStyle: const TextStyle(
-                            fontSize: 14.0, color: Colors.white),
+                            fontSize: 12.0, color: Colors.white),
                         child:
                             buildIcon(Icons.fitness_center, 2, 'Training', () {
                           Navigator.of(context).push(
@@ -163,7 +168,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                       icon: Tooltip(
                         message: 'Akcije',
                         textStyle: const TextStyle(
-                            fontSize: 14.0, color: Colors.white),
+                            fontSize: 12.0, color: Colors.white),
                         child: buildIcon(Icons.local_offer, 3, 'Actions', () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
@@ -178,7 +183,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                       icon: Tooltip(
                         message: 'Rezervacije',
                         textStyle: const TextStyle(
-                            fontSize: 14.0, color: Colors.white),
+                            fontSize: 12.0, color: Colors.white),
                         child: buildIcon(Icons.event, 4, 'Reservations', () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
@@ -193,7 +198,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                       icon: Tooltip(
                         message: 'Ponuda',
                         textStyle: const TextStyle(
-                            fontSize: 14.0, color: Colors.white),
+                            fontSize: 12.0, color: Colors.white),
                         child: buildIcon(Icons.local_mall, 5, 'Ponuda', () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
@@ -208,7 +213,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                       icon: Tooltip(
                         message: 'Vježbe',
                         textStyle: const TextStyle(
-                            fontSize: 14.0, color: Colors.white),
+                            fontSize: 12.0, color: Colors.white),
                         child: buildIcon(Icons.directions_run, 6, 'Vježbe', () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
@@ -223,7 +228,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                       icon: Tooltip(
                         message: 'Izvještaj',
                         textStyle: const TextStyle(
-                            fontSize: 14.0, color: Colors.white),
+                            fontSize: 12.0, color: Colors.white),
                         child: buildIcon(Icons.report, 7, 'Izvještaj', () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
@@ -263,14 +268,17 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
         });
       },
       child: Container(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(18.0),
         decoration: BoxDecoration(
           color: (hoverIndex == index || _selectedIndex == index)
               ? const Color.fromARGB(255, 231, 230, 230)
               : Colors.transparent,
-          borderRadius: BorderRadius.circular(20.0),
+          borderRadius: BorderRadius.circular(30.0),
         ),
-        child: Icon(icon),
+        child: Icon(icon,
+            color: (hoverIndex == index || _selectedIndex == index)
+                ? Colors.black
+                : const Color.fromARGB(255, 230, 227, 227)),
       ),
     );
   }

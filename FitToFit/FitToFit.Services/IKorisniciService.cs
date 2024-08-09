@@ -20,6 +20,8 @@ namespace FitToFit.Services
         Task<Korisnici> Insert(KorisniciInsertRequest insert);
 
         Task<Korisnici> Delete(int id);
+        Task<PagedResult<Korisnici>> Get(KorisniciSearchObject search = null);
+
     }
 }
 

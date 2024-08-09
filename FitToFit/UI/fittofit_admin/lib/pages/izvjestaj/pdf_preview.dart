@@ -7,6 +7,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
+// ignore: must_be_immutable
 class PdfPreviewPage extends StatelessWidget {
   // ignore: prefer_typing_uninitialized_variables
   var data;

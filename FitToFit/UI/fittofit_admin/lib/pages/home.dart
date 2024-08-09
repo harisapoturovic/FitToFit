@@ -11,7 +11,6 @@ import 'package:fittofit_admin/providers/vrste_treninga_provider.dart';
 import 'package:fittofit_admin/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../models/treneri.dart';
 import '../widgets/master_screen.dart';
@@ -41,11 +40,13 @@ class _HomePageState extends State<HomePage> {
   int brojKorisnika = 0;
   int brojTrenera = 0;
   int brojRezervacija = 0;
-  DateTime? _selectedDate;
+
+  DateTime? datum;
   late Korisnici logiraniKorisnik;
   String korisnickoIme = '';
   final _formKey = GlobalKey<FormBuilderState>();
   bool isSearching = false;
+  FocusNode _naslovFocusNode = FocusNode();
 
   var page = 1;
   var totalcount = 0;
@@ -61,6 +62,13 @@ class _HomePageState extends State<HomePage> {
     _rezervacijeProvider = context.read<RezervacijeProvider>();
     _loadData();
     korisnickoIme = widget.username;
+    _naslovFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _naslovFocusNode.dispose();
+    super.dispose();
   }
 
   void _loadData() async {
@@ -102,6 +110,7 @@ class _HomePageState extends State<HomePage> {
             _showAddNewsDialog();
           },
           backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
+          foregroundColor: Colors.white,
           child: const Icon(Icons.add),
         ),
         child: Row(
@@ -196,7 +205,7 @@ class _HomePageState extends State<HomePage> {
             }).toList(),
             onChanged: (value) {
               setState(() {
-                _selectedVrstaTreninga = value as int?;
+                _selectedVrstaTreninga = value;
                 _loadData();
               });
             },
@@ -210,7 +219,8 @@ class _HomePageState extends State<HomePage> {
             await _getFilteredNews();
           },
           style: ElevatedButton.styleFrom(
-            primary: const Color.fromRGBO(0, 154, 231, 1),
+            backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
+            foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 17),
             side: const BorderSide(color: Colors.white),
           ),
@@ -238,7 +248,7 @@ class _HomePageState extends State<HomePage> {
   Expanded _buildDataListView() {
     return Expanded(
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 30.0),
+        margin: const EdgeInsets.symmetric(vertical: 20.0),
         child: ListView.builder(
             itemCount: _novostiList.length,
             itemBuilder: (context, index) {
@@ -386,6 +396,9 @@ class _HomePageState extends State<HomePage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          FocusScope.of(context).requestFocus(_naslovFocusNode);
+        });
         return AlertDialog(
           title: const Text('Dodaj novost'),
           content: Container(
@@ -401,6 +414,7 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     FormBuilderTextField(
                       name: 'naslov',
+                      focusNode: _naslovFocusNode,
                       decoration: const InputDecoration(labelText: 'Naslov'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -427,32 +441,69 @@ class _HomePageState extends State<HomePage> {
                       },
                     ),
                     const SizedBox(height: 10.0),
-                    FormBuilderDateTimePicker(
-                      name: 'datumObjave',
-                      inputType: InputType.date,
-                      decoration:
-                          const InputDecoration(labelText: 'Datum objave'),
-                      format: DateFormat("yyyy-MM-dd"),
-                      initialDate: _selectedDate ?? DateTime.now(),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedDate = value;
-                        });
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 24),
+                        backgroundColor:
+                            const Color.fromARGB(255, 208, 207, 207),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                      ),
+                      onPressed: () async {
+                        final DateTime? date = await showDatePicker(
+                          context: context,
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime.utc(2024, 12, 31),
+                        );
+                        if (date == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Datum je obavezan.'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        } else {
+                          setState(() {
+                            datum = date;
+                          });
+                        }
                       },
-                      validator: FormBuilderValidators.compose([
-                        (value) {
-                          if (value == null) {
-                            return 'Ovo polje je obavezno!';
-                          }
-                          return null;
-                        },
-                      ]),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.calendar_month,
+                            color: Colors.white,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            "Izaberite datum objave",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
                     ),
+                    datum != null
+                        ? Text(
+                            "Izabrani datum: $datum",
+                            style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.black87,
+                                fontWeight: FontWeight.bold),
+                          )
+                        : Container(),
                     const SizedBox(height: 10.0),
                     FormBuilderDropdown(
                       name: 'vrstaTreningaId',
-                      decoration:
-                          const InputDecoration(labelText: 'Vrsta treninga'),
+                      decoration: const InputDecoration(
+                          labelText: 'Vrsta treninga',
+                          hintText: 'Odaberite vrstu treninga'),
                       initialValue: selectedVrstaTreninga,
                       items: _vrsteTreningaList.map((vrstaTreninga) {
                         return DropdownMenuItem(
@@ -462,10 +513,9 @@ class _HomePageState extends State<HomePage> {
                       }).toList(),
                       onChanged: (value) {
                         setState(() {
-                          selectedVrstaTreninga = value as int?;
+                          selectedVrstaTreninga = value;
                         });
                       },
-                      hint: const Text('Odaberite vrstu treninga'),
                     ),
                   ],
                 ),
@@ -489,7 +539,8 @@ class _HomePageState extends State<HomePage> {
                 _dodajNovost();
               },
               style: ElevatedButton.styleFrom(
-                primary: const Color.fromRGBO(0, 154, 231, 1),
+                backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
+                foregroundColor: Colors.white,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
                 textStyle: const TextStyle(
@@ -506,6 +557,18 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _dodajNovost() {
+    if (datum == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Datum je obavezan.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+    String _datum = datum.toString();
+    String datumVrijeme =
+        DateTime.parse(_datum.replaceAll(' ', 'T')).toIso8601String();
     _formKey.currentState?.saveAndValidate();
     final currentFormState = _formKey.currentState;
     if (!_areAllFieldsFilled(currentFormState)) {
@@ -523,11 +586,15 @@ class _HomePageState extends State<HomePage> {
       }
     }
     var request = Map.from(_formKey.currentState!.value);
-    request['datumObjave'] = formatDateForJson(request['datumObjave']);
+    //request['datumObjave'] = datumVrijeme;
     request['brojLajkova'] = 0;
     request['korisnikId'] = logiraniKorisnik.korisnikId;
+    request.addAll({
+      'datumObjave': datumVrijeme,
+    });
     try {
       _novostiProvider.insert(request);
+      datum = null;
       _showAlertDialog(
           "Uspješan unos", "Novost uspješno dodana.", Colors.green);
     } on Exception catch (e) {
@@ -540,7 +607,7 @@ class _HomePageState extends State<HomePage> {
       return false;
     }
 
-    List<String> requiredFields = ['naslov', 'sadrzaj', 'datumObjave'];
+    List<String> requiredFields = ['naslov', 'sadrzaj'];
 
     for (String fieldName in requiredFields) {
       if (formState.fields[fieldName]?.value == null ||
@@ -574,7 +641,8 @@ class _HomePageState extends State<HomePage> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             style: TextButton.styleFrom(
-              primary: Colors.blue,
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
               textStyle: const TextStyle(
                 fontSize: 16.0,
               ),

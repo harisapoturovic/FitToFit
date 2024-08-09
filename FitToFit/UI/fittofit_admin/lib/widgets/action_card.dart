@@ -6,7 +6,6 @@ import 'package:fittofit_admin/providers/treninzi_provider.dart';
 import 'package:fittofit_admin/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class AkcijeCard extends StatefulWidget {
@@ -197,28 +196,27 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                 _dodajTrening(context);
                               },
                               style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.transparent),
-                                elevation: MaterialStateProperty.all<double>(0),
-                                overlayColor: MaterialStateProperty.all<Color>(
+                                backgroundColor: WidgetStateProperty.all<Color>(
                                     Colors.transparent),
-                                foregroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        const Color.fromARGB(255, 96, 96, 96)),
-                                textStyle: MaterialStateProperty.all<TextStyle>(
+                                elevation: WidgetStateProperty.all<double>(0),
+                                overlayColor: WidgetStateProperty.all<Color>(
+                                    Colors.transparent),
+                                foregroundColor: WidgetStateProperty.all<Color>(
+                                    const Color.fromARGB(255, 96, 96, 96)),
+                                textStyle: WidgetStateProperty.all<TextStyle>(
                                   const TextStyle(
                                     decoration: TextDecoration.underline,
                                   ),
                                 ),
-                                padding: MaterialStateProperty.all<
-                                    EdgeInsetsGeometry>(EdgeInsets.zero),
+                                padding:
+                                    WidgetStateProperty.all<EdgeInsetsGeometry>(
+                                        EdgeInsets.zero),
                                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                 minimumSize:
-                                    MaterialStateProperty.all<Size>(Size.zero),
+                                    WidgetStateProperty.all<Size>(Size.zero),
                               ),
-                              child: Row(
-                                children: const [
+                              child: const Row(
+                                children: [
                                   Text('Dodaj trening na akciju'),
                                   SizedBox(width: 5),
                                   Icon(Icons.add)
@@ -233,28 +231,27 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                 _confirmArchiveAction(context);
                               },
                               style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.transparent),
-                                elevation: MaterialStateProperty.all<double>(0),
-                                overlayColor: MaterialStateProperty.all<Color>(
+                                backgroundColor: WidgetStateProperty.all<Color>(
                                     Colors.transparent),
-                                foregroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        const Color.fromARGB(255, 96, 96, 96)),
-                                textStyle: MaterialStateProperty.all<TextStyle>(
+                                elevation: WidgetStateProperty.all<double>(0),
+                                overlayColor: WidgetStateProperty.all<Color>(
+                                    Colors.transparent),
+                                foregroundColor: WidgetStateProperty.all<Color>(
+                                    const Color.fromARGB(255, 96, 96, 96)),
+                                textStyle: WidgetStateProperty.all<TextStyle>(
                                   const TextStyle(
                                     decoration: TextDecoration.underline,
                                   ),
                                 ),
-                                padding: MaterialStateProperty.all<
-                                    EdgeInsetsGeometry>(EdgeInsets.zero),
+                                padding:
+                                    WidgetStateProperty.all<EdgeInsetsGeometry>(
+                                        EdgeInsets.zero),
                                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                 minimumSize:
-                                    MaterialStateProperty.all<Size>(Size.zero),
+                                    WidgetStateProperty.all<Size>(Size.zero),
                               ),
-                              child: Row(
-                                children: const [
+                              child: const Row(
+                                children: [
                                   Text('Arhiviraj akciju'),
                                   SizedBox(width: 5),
                                   Icon(Icons.history)
@@ -273,32 +270,31 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                   },
                                   style: ButtonStyle(
                                     backgroundColor:
-                                        MaterialStateProperty.all<Color>(
+                                        WidgetStateProperty.all<Color>(
                                             Colors.transparent),
                                     elevation:
-                                        MaterialStateProperty.all<double>(0),
+                                        WidgetStateProperty.all<double>(0),
                                     overlayColor:
-                                        MaterialStateProperty.all<Color>(
+                                        WidgetStateProperty.all<Color>(
                                             Colors.transparent),
-                                    foregroundColor: MaterialStateProperty.all<
+                                    foregroundColor: WidgetStateProperty.all<
                                             Color>(
                                         const Color.fromARGB(255, 96, 96, 96)),
                                     textStyle:
-                                        MaterialStateProperty.all<TextStyle>(
+                                        WidgetStateProperty.all<TextStyle>(
                                       const TextStyle(
                                         decoration: TextDecoration.underline,
                                       ),
                                     ),
-                                    padding: MaterialStateProperty.all<
+                                    padding: WidgetStateProperty.all<
                                         EdgeInsetsGeometry>(EdgeInsets.zero),
                                     tapTargetSize:
                                         MaterialTapTargetSize.shrinkWrap,
-                                    minimumSize:
-                                        MaterialStateProperty.all<Size>(
-                                            Size.zero),
+                                    minimumSize: WidgetStateProperty.all<Size>(
+                                        Size.zero),
                                   ),
-                                  child: Row(
-                                    children: const [
+                                  child: const Row(
+                                    children: [
                                       Text('Dodaj trening na akciju'),
                                       SizedBox(width: 5),
                                       Icon(Icons.add)
@@ -314,32 +310,31 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                   },
                                   style: ButtonStyle(
                                     backgroundColor:
-                                        MaterialStateProperty.all<Color>(
+                                        WidgetStateProperty.all<Color>(
                                             Colors.transparent),
                                     elevation:
-                                        MaterialStateProperty.all<double>(0),
+                                        WidgetStateProperty.all<double>(0),
                                     overlayColor:
-                                        MaterialStateProperty.all<Color>(
+                                        WidgetStateProperty.all<Color>(
                                             Colors.transparent),
-                                    foregroundColor: MaterialStateProperty.all<
+                                    foregroundColor: WidgetStateProperty.all<
                                             Color>(
                                         const Color.fromARGB(255, 96, 96, 96)),
                                     textStyle:
-                                        MaterialStateProperty.all<TextStyle>(
+                                        WidgetStateProperty.all<TextStyle>(
                                       const TextStyle(
                                         decoration: TextDecoration.underline,
                                       ),
                                     ),
-                                    padding: MaterialStateProperty.all<
+                                    padding: WidgetStateProperty.all<
                                         EdgeInsetsGeometry>(EdgeInsets.zero),
                                     tapTargetSize:
                                         MaterialTapTargetSize.shrinkWrap,
-                                    minimumSize:
-                                        MaterialStateProperty.all<Size>(
-                                            Size.zero),
+                                    minimumSize: WidgetStateProperty.all<Size>(
+                                        Size.zero),
                                   ),
-                                  child: Row(
-                                    children: const [
+                                  child: const Row(
+                                    children: [
                                       Text('Aktiviraj akciju'),
                                       SizedBox(width: 5),
                                       Icon(Icons.open_in_new)
@@ -359,7 +354,8 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                 _urediAkciju();
                               },
                               style: ElevatedButton.styleFrom(
-                                primary: Colors.green,
+                                backgroundColor: Colors.green,
+                                foregroundColor: Colors.white,
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 17),
                                 side: const BorderSide(color: Colors.white),
@@ -377,7 +373,8 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                 _confirmDeleteAction(context);
                               },
                               style: ElevatedButton.styleFrom(
-                                primary: Colors.red,
+                                backgroundColor: Colors.red,
+                                foregroundColor: Colors.white,
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 17),
                                 side: const BorderSide(color: Colors.white),
@@ -398,7 +395,8 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                     _confirmDeleteAction(context);
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    primary: Colors.red,
+                                    backgroundColor: Colors.red,
+                                    foregroundColor: Colors.white,
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 20, vertical: 17),
                                     side: const BorderSide(color: Colors.white),
@@ -473,7 +471,8 @@ class _AkcijeCardState extends State<AkcijeCard> {
                 _dodajTreningNaAkciju();
               },
               style: ElevatedButton.styleFrom(
-                primary: const Color.fromRGBO(0, 154, 231, 1),
+                backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
+                foregroundColor: Colors.white,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
                 textStyle: const TextStyle(
@@ -569,7 +568,8 @@ class _AkcijeCardState extends State<AkcijeCard> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             style: TextButton.styleFrom(
-              primary: Colors.blue,
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
               textStyle: const TextStyle(
                 fontSize: 16.0,
               ),
@@ -821,7 +821,7 @@ class _AkcijeCardState extends State<AkcijeCard> {
             return AlertDialog(
                 title: const Text('Ažuriraj akciju'),
                 content: SingleChildScrollView(
-                    child: Container(
+                    child: SizedBox(
                   height: 500,
                   width: MediaQuery.of(context).size.width * 0.3,
                   child: Column(children: [
@@ -893,52 +893,138 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                             },
                                           ),
                                           const SizedBox(height: 16),
-                                          FormBuilderDateTimePicker(
-                                            name: 'datumPocetka',
-                                            inputType: InputType.date,
-                                            decoration: const InputDecoration(
-                                                labelText: 'Datum početka'),
-                                            format: DateFormat("yyyy-MM-dd"),
-                                            initialDate:
-                                                odabranaAkcija.datumPocetka,
-                                            onChanged: (value) {
-                                              setState(() {
-                                                _pocetakAkcije = value;
-                                              });
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 12,
+                                                      horizontal: 24),
+                                              backgroundColor:
+                                                  const Color.fromARGB(
+                                                      255, 208, 207, 207),
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          12)),
+                                            ),
+                                            onPressed: () async {
+                                              final DateTime? date =
+                                                  await showDatePicker(
+                                                context: context,
+                                                firstDate: DateTime.now(),
+                                                lastDate:
+                                                    DateTime.utc(2024, 12, 31),
+                                              );
+                                              if (date == null) {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  const SnackBar(
+                                                    content: Text(
+                                                        'Datum početka je obavezan.'),
+                                                    backgroundColor: Colors.red,
+                                                  ),
+                                                );
+                                              } else {
+                                                setState(() {
+                                                  _pocetakAkcije = date;
+                                                });
+                                              }
                                             },
-                                            validator:
-                                                FormBuilderValidators.compose([
-                                              (value) {
-                                                if (value == null) {
-                                                  return 'Ovo polje je obavezno!';
-                                                }
-                                                return null;
-                                              },
-                                            ]),
+                                            child: const Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  Icons.calendar_month,
+                                                  color: Colors.white,
+                                                ),
+                                                SizedBox(
+                                                  width: 5,
+                                                ),
+                                                Text(
+                                                  "Izaberite datum početka akcije",
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                          const SizedBox(height: 16),
-                                          FormBuilderDateTimePicker(
-                                            name: 'datumZavrsetka',
-                                            inputType: InputType.date,
-                                            decoration: const InputDecoration(
-                                                labelText: 'Datum završetka'),
-                                            format: DateFormat("yyyy-MM-dd"),
-                                            initialDate:
-                                                odabranaAkcija.datumZavrsetka,
-                                            onChanged: (value) {
-                                              setState(() {
-                                                _zavrsetakAkcije = value;
-                                              });
+                                          Text(
+                                            "Izabrani datum početka: ${_pocetakAkcije ?? odabranaAkcija.datumPocetka}",
+                                            style: const TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.black87,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          const SizedBox(height: 10.0),
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 12,
+                                                      horizontal: 24),
+                                              backgroundColor:
+                                                  const Color.fromARGB(
+                                                      255, 208, 207, 207),
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          12)),
+                                            ),
+                                            onPressed: () async {
+                                              final DateTime? date =
+                                                  await showDatePicker(
+                                                context: context,
+                                                firstDate: DateTime.now(),
+                                                lastDate:
+                                                    DateTime.utc(2024, 12, 31),
+                                              );
+                                              if (date == null) {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  const SnackBar(
+                                                    content: Text(
+                                                        'Datum završetka je obavezan.'),
+                                                    backgroundColor: Colors.red,
+                                                  ),
+                                                );
+                                              } else {
+                                                setState(() {
+                                                  _zavrsetakAkcije = date;
+                                                });
+                                              }
                                             },
-                                            validator:
-                                                FormBuilderValidators.compose([
-                                              (value) {
-                                                if (value == null) {
-                                                  return 'Ovo polje je obavezno!';
-                                                }
-                                                return null;
-                                              },
-                                            ]),
+                                            child: const Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  Icons.calendar_month,
+                                                  color: Colors.white,
+                                                ),
+                                                SizedBox(
+                                                  width: 5,
+                                                ),
+                                                Text(
+                                                  "Izaberite datum završetka akcije",
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Text(
+                                            "Izabrani datum završetka: ${_zavrsetakAkcije ?? odabranaAkcija.datumZavrsetka}",
+                                            style: const TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.black87,
+                                                fontWeight: FontWeight.bold),
                                           ),
                                           const SizedBox(height: 32),
                                           ElevatedButton(
@@ -965,6 +1051,8 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                                 _akcijeProvider.update(
                                                     odabranaAkcija.akcijaId,
                                                     akcija);
+                                                _pocetakAkcije = null;
+                                                _zavrsetakAkcije = null;
                                                 _showAlertDialog(
                                                     "Uspješan edit",
                                                     "Podaci o akciji uspješno ažurirani.",
@@ -972,8 +1060,10 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                               }
                                             },
                                             style: ElevatedButton.styleFrom(
-                                              primary: const Color.fromRGBO(
-                                                  0, 154, 231, 1),
+                                              backgroundColor:
+                                                  const Color.fromRGBO(
+                                                      0, 154, 231, 1),
+                                              foregroundColor: Colors.white,
                                               padding:
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 18,

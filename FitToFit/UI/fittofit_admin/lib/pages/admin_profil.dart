@@ -123,224 +123,223 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
             child: SizedBox(
               width: 800,
               height: 650,
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(30.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ClipRect(
-                            child: userImage != null
-                                ? Container(
-                                    width: 250.0,
-                                    height: 250.0,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: const Color.fromRGBO(
-                                            0, 154, 231, 1),
-                                        width: 4.0,
-                                      ),
-                                      borderRadius:
-                                          BorderRadius.circular(200.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(30.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ClipRect(
+                          child: userImage != null
+                              ? Container(
+                                  width: 250.0,
+                                  height: 250.0,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: const Color.fromRGBO(
+                                          0, 154, 231, 1),
+                                      width: 4.0,
                                     ),
-                                    child: ClipRRect(
-                                      borderRadius:
-                                          BorderRadius.circular(200.0),
-                                      child: Image(
-                                        image: userImage!.image,
-                                        width: 250.0,
-                                        height: 250.0,
-                                        fit: BoxFit.cover,
+                                    borderRadius:
+                                        BorderRadius.circular(200.0),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius:
+                                        BorderRadius.circular(200.0),
+                                    child: Image(
+                                      image: userImage!.image,
+                                      width: 250.0,
+                                      height: 250.0,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                )
+                              : Container(
+                                  width: 250.0,
+                                  height: 250.0,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: const Color.fromRGBO(
+                                          0, 154, 231, 1),
+                                      width: 4.0,
+                                    ),
+                                    borderRadius:
+                                        BorderRadius.circular(200.0),
+                                  ),
+                                  child:
+                                      Image.asset('assets/images/user.png'),
+                                ),
+                        ),
+                        const SizedBox(height: 30),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 50),
+                          child: Row(
+                            children: [
+                              Column(
+                                children: [
+                                  Text(
+                                    '${odabraniKorisnik?.ime} ${odabraniKorisnik?.prezime}',
+                                    style: const TextStyle(
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.bold,
+                                        color:
+                                            Color.fromARGB(255, 0, 99, 181)),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    odabraniKorisnik?.email ?? '',
+                                    style: const TextStyle(
+                                        fontSize: 16.0,
+                                        color:
+                                            Color.fromARGB(255, 0, 99, 181)),
+                                  ),
+                                  const SizedBox(height: 30),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      showEditUser(odabraniKorisnik!);
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color.fromARGB(
+                                          255, 33, 65, 243),
+                                      foregroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 15, horizontal: 40),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(15),
                                       ),
+                                      textStyle: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    child: const Text('Uredi'),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ChangePasswordScreen(
+                                            userId:
+                                                odabraniKorisnik!.korisnikId,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.grey,
+                                      foregroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 15, horizontal: 30),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(15),
+                                      ),
+                                      textStyle:
+                                          const TextStyle(fontSize: 14),
+                                    ),
+                                    child: const Text('Promijeni lozinku'),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ChangeUsernameScreen(
+                                            userId:
+                                                odabraniKorisnik!.korisnikId,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.grey,
+                                      foregroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 15, horizontal: 30),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(15),
+                                      ),
+                                      textStyle:
+                                          const TextStyle(fontSize: 14),
+                                    ),
+                                    child: const Text(
+                                        'Promijeni korisničko ime'),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.only(right: 25.0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        IconButton(
+                                          onPressed: () {
+                                            Authorization.username = null;
+                                            Authorization.password = null;
+              
+                                            Provider.of<KorisniciProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .setCurrentUserId(null);
+              
+                                            Navigator.pushAndRemoveUntil(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      LoginPage()),
+                                              (route) => false,
+                                            );
+                                          },
+                                          icon: const Icon(Icons.logout),
+                                          iconSize: 30.0,
+                                        ),
+                                        const SizedBox(width: 8.0),
+                                        const Text(
+                                          'Odjavi se',
+                                          style: TextStyle(
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
                                     ),
                                   )
-                                : Container(
-                                    width: 250.0,
-                                    height: 250.0,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: const Color.fromRGBO(
-                                            0, 154, 231, 1),
-                                        width: 4.0,
-                                      ),
-                                      borderRadius:
-                                          BorderRadius.circular(200.0),
+                                ],
+                              ),
+                              const SizedBox(width: 100),
+                              Container(
+                                padding: const EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.7),
+                                      spreadRadius: 3,
+                                      blurRadius: 7,
+                                      offset: const Offset(0, 3),
                                     ),
-                                    child:
-                                        Image.asset('assets/images/user.png'),
-                                  ),
-                          ),
-                          const SizedBox(height: 30),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 50),
-                            child: Row(
-                              children: [
-                                Column(
-                                  children: [
-                                    Text(
-                                      '${odabraniKorisnik?.ime} ${odabraniKorisnik?.prezime}',
-                                      style: const TextStyle(
-                                          fontSize: 20.0,
-                                          fontWeight: FontWeight.bold,
-                                          color:
-                                              Color.fromARGB(255, 0, 99, 181)),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      odabraniKorisnik?.email ?? '',
-                                      style: const TextStyle(
-                                          fontSize: 16.0,
-                                          color:
-                                              Color.fromARGB(255, 0, 99, 181)),
-                                    ),
-                                    const SizedBox(height: 30),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        showEditUser(odabraniKorisnik!);
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        primary: const Color.fromARGB(
-                                            255, 33, 65, 243),
-                                        onPrimary: Colors.white,
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 15, horizontal: 40),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                        textStyle: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      child: const Text('Uredi'),
-                                    ),
-                                    const SizedBox(height: 20),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                ChangePasswordScreen(
-                                              userId:
-                                                  odabraniKorisnik!.korisnikId,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        primary: Colors.grey,
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 15, horizontal: 30),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                        textStyle:
-                                            const TextStyle(fontSize: 14),
-                                      ),
-                                      child: const Text('Promijeni lozinku'),
-                                    ),
-                                    const SizedBox(height: 20),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                ChangeUsernameScreen(
-                                              userId:
-                                                  odabraniKorisnik!.korisnikId,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        primary: Colors.grey,
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 15, horizontal: 30),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                        textStyle:
-                                            const TextStyle(fontSize: 14),
-                                      ),
-                                      child: const Text(
-                                          'Promijeni korisničko ime'),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 25.0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          IconButton(
-                                            onPressed: () {
-                                              Authorization.username = null;
-                                              Authorization.password = null;
-
-                                              Provider.of<KorisniciProvider>(
-                                                      context,
-                                                      listen: false)
-                                                  .setCurrentUserId(null);
-
-                                              Navigator.pushAndRemoveUntil(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (_) =>
-                                                        LoginPage()),
-                                                (route) => false,
-                                              );
-                                            },
-                                            icon: const Icon(Icons.logout),
-                                            iconSize: 30.0,
-                                          ),
-                                          const SizedBox(width: 8.0),
-                                          const Text(
-                                            'Odjavi se',
-                                            style: TextStyle(
-                                                fontSize: 16.0,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ],
-                                      ),
-                                    )
                                   ],
                                 ),
-                                const SizedBox(width: 100),
-                                Container(
-                                  padding: const EdgeInsets.all(16),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.7),
-                                        spreadRadius: 3,
-                                        blurRadius: 7,
-                                        offset: const Offset(0, 3),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Text(
-                                    "~ Detalji o adminu ~ \n\n Broj telefona:  ${odabraniKorisnik?.telefon ?? ''} \n Spol: ${odabraniKorisnik?.spol ?? ''} \n Adresa: ${odabraniKorisnik?.adresa ?? ''} \n Datum rođenja: ${odabraniKorisnik?.datumRodjenja != null ? dateFormat.format(odabraniKorisnik!.datumRodjenja!) : ''} \n Korisničko ime: ${odabraniKorisnik?.korisnickoIme ?? ''}",
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                child: Text(
+                                  "~ Detalji o adminu ~ \n\n Broj telefona:  ${odabraniKorisnik?.telefon ?? ''} \n Spol: ${odabraniKorisnik?.spol ?? ''} \n Adresa: ${odabraniKorisnik?.adresa ?? ''} \n Datum rođenja: ${odabraniKorisnik?.datumRodjenja != null ? dateFormat.format(odabraniKorisnik!.datumRodjenja!) : ''} \n Korisničko ime: ${odabraniKorisnik?.korisnickoIme ?? ''}",
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           )
@@ -373,7 +372,7 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
             return AlertDialog(
                 title: const Text('Ažuriraj podatke o adminu'),
                 content: SingleChildScrollView(
-                    child: Container(
+                    child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.3,
                   child: Column(children: [
                     FormBuilder(
@@ -583,10 +582,10 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
                                                 fontSize: 14.0,
                                               ),
                                             ),
-                                            child: Row(
+                                            child: const Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
-                                              children: const [
+                                              children: [
                                                 Icon(Icons.upload_file),
                                                 SizedBox(
                                                   height: 10,
@@ -646,8 +645,10 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
                                               }
                                             },
                                             style: ElevatedButton.styleFrom(
-                                              primary: const Color.fromRGBO(
-                                                  0, 154, 231, 1),
+                                              backgroundColor:
+                                                  const Color.fromRGBO(
+                                                      0, 154, 231, 1),
+                                              foregroundColor: Colors.white,
                                               padding:
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 18,
@@ -693,7 +694,8 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             style: TextButton.styleFrom(
-              primary: Colors.blue,
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
               textStyle: const TextStyle(
                 fontSize: 16.0,
               ),

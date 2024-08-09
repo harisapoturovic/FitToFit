@@ -52,6 +52,7 @@ class _PonudaPageState extends State<PonudaPage> {
   final _formKey = GlobalKey<FormBuilderState>();
   final _formKey2 = GlobalKey<FormBuilderState>();
   final TextEditingController _cijenaController = TextEditingController();
+  FocusNode _ucestalostFocusNode = FocusNode();
 
   var page = 1;
   var totalcount = 0;
@@ -78,6 +79,13 @@ class _PonudaPageState extends State<PonudaPage> {
     _treninziClanarineProvider = context.read<TreninziClanarineProvider>();
     _vrsteTreningaProvider = context.read<VrsteTreningaProvider>();
     _loadData();
+    _ucestalostFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _ucestalostFocusNode.dispose();
+    super.dispose();
   }
 
   void _loadData() async {
@@ -133,7 +141,8 @@ class _PonudaPageState extends State<PonudaPage> {
                 isRaspored ? _showAddTerminDialog() : _showAddStavkuDialog();
               },
               style: ElevatedButton.styleFrom(
-                primary: const Color.fromARGB(255, 159, 160, 255),
+                backgroundColor: const Color.fromARGB(255, 159, 160, 255),
+                foregroundColor: Colors.white,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 textStyle: const TextStyle(
@@ -666,13 +675,12 @@ class _PonudaPageState extends State<PonudaPage> {
                             await getFiltriraneTermine();
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: const Color.fromARGB(255, 3, 59, 227),
+                            backgroundColor:
+                                const Color.fromRGBO(0, 154, 231, 1),
+                            foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 17),
+                                horizontal: 20, vertical: 17),
                             side: const BorderSide(color: Colors.white),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
                           ),
                           child: const Text("Pretraži"),
                         ),
@@ -708,7 +716,7 @@ class _PonudaPageState extends State<PonudaPage> {
                         }).toList(),
                         onChanged: (value) {
                           setState(() {
-                            _selectedVrstaTr = value as int?;
+                            _selectedVrstaTr = value;
                           });
                         },
                       ),
@@ -793,8 +801,7 @@ class _PonudaPageState extends State<PonudaPage> {
                               : null,
                         ),
                         controller: _cijenaController,
-                        keyboardType:
-                            TextInputType.number, // Ako očekujete samo brojeve
+                        keyboardType: TextInputType.number,
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -806,13 +813,12 @@ class _PonudaPageState extends State<PonudaPage> {
                             await getFiltriraneTermine();
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: const Color.fromARGB(255, 3, 59, 227),
+                            backgroundColor:
+                                const Color.fromRGBO(0, 154, 231, 1),
+                            foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 17),
+                                horizontal: 20, vertical: 17),
                             side: const BorderSide(color: Colors.white),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
                           ),
                           child: const Text("Pretraži"),
                         ),
@@ -997,7 +1003,8 @@ class _PonudaPageState extends State<PonudaPage> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             style: TextButton.styleFrom(
-              primary: Colors.blue,
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
               textStyle: const TextStyle(
                 fontSize: 16.0,
               ),
@@ -1125,7 +1132,8 @@ class _PonudaPageState extends State<PonudaPage> {
                 _dodajTermin();
               },
               style: ElevatedButton.styleFrom(
-                primary: const Color.fromRGBO(0, 154, 231, 1),
+                backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
+                foregroundColor: Colors.white,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
                 textStyle: const TextStyle(
@@ -1188,6 +1196,9 @@ class _PonudaPageState extends State<PonudaPage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          FocusScope.of(context).requestFocus(_ucestalostFocusNode);
+        });
         return AlertDialog(
           title: const Text('Dodaj stavku'),
           content: Container(
@@ -1228,6 +1239,7 @@ class _PonudaPageState extends State<PonudaPage> {
                     const SizedBox(height: 10.0),
                     FormBuilderTextField(
                       name: 'ucestalost',
+                      focusNode: _ucestalostFocusNode,
                       decoration:
                           const InputDecoration(labelText: 'Učestalost'),
                       validator: (value) {
@@ -1276,7 +1288,8 @@ class _PonudaPageState extends State<PonudaPage> {
                 _dodajStavku();
               },
               style: ElevatedButton.styleFrom(
-                primary: const Color.fromRGBO(0, 154, 231, 1),
+                backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
+                foregroundColor: Colors.white,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
                 textStyle: const TextStyle(
@@ -1521,8 +1534,10 @@ class _PonudaPageState extends State<PonudaPage> {
                                               }
                                             },
                                             style: ElevatedButton.styleFrom(
-                                              primary: const Color.fromRGBO(
-                                                  0, 154, 231, 1),
+                                              backgroundColor:
+                                                  const Color.fromRGBO(
+                                                      0, 154, 231, 1),
+                                              foregroundColor: Colors.white,
                                               padding:
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 18,
@@ -1703,8 +1718,10 @@ class _PonudaPageState extends State<PonudaPage> {
                                               }
                                             },
                                             style: ElevatedButton.styleFrom(
-                                              primary: const Color.fromRGBO(
-                                                  0, 154, 231, 1),
+                                              backgroundColor:
+                                                  const Color.fromRGBO(
+                                                      0, 154, 231, 1),
+                                              foregroundColor: Colors.white,
                                               padding:
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 18,

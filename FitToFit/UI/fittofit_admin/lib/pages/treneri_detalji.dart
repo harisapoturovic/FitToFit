@@ -195,8 +195,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                                   labelText: "Ime",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color:
-                                          Color.fromRGBO(0, 154, 231, 1),
+                                      color: Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -220,8 +219,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                                   labelText: "Prezime",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color:
-                                          Color.fromRGBO(0, 154, 231, 1),
+                                      color: Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -249,8 +247,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                                   labelText: "E-mail",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color:
-                                          Color.fromRGBO(0, 154, 231, 1),
+                                      color: Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -274,8 +271,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                                   labelText: "Telefon",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color:
-                                          Color.fromRGBO(0, 154, 231, 1),
+                                      color: Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -303,8 +299,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                                   labelText: "Datum zaposlenja",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color:
-                                          Color.fromRGBO(0, 154, 231, 1),
+                                      color: Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -328,8 +323,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                                   labelText: "Zvanje",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color:
-                                          Color.fromRGBO(0, 154, 231, 1),
+                                      color: Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -357,8 +351,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                                   labelText: "Adresa",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color:
-                                          Color.fromRGBO(0, 154, 231, 1),
+                                      color: Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -382,8 +375,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                                   labelText: "Spol",
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color:
-                                          Color.fromRGBO(0, 154, 231, 1),
+                                      color: Color.fromRGBO(0, 154, 231, 1),
                                       width: 2.0,
                                     ),
                                   ),
@@ -413,9 +405,10 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                       showEditTrainer(odabraniTrener!);
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.green,
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 20, vertical: 17),
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 17),
                       side: const BorderSide(color: Colors.white),
                       textStyle: const TextStyle(
                         fontSize: 15.0,
@@ -435,9 +428,10 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.red,
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 20, vertical: 17),
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 17),
                       side: const BorderSide(color: Colors.white),
                       textStyle: const TextStyle(
                         fontSize: 15.0,
@@ -467,7 +461,8 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
               color: Colors.red,
             ),
           ),
-          content: const Text('Da li ste sigurni da želite izbrisati ovog trenera?'),
+          content:
+              const Text('Da li ste sigurni da želite izbrisati ovog trenera?'),
           actions: [
             TextButton(
               onPressed: () {
@@ -535,7 +530,8 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             style: TextButton.styleFrom(
-              primary: Colors.blue,
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
               textStyle: const TextStyle(
                 fontSize: 16.0,
               ),
@@ -783,10 +779,10 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                                                 fontSize: 14.0,
                                               ),
                                             ),
-                                            child: Row(
+                                            child: const Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
-                                              children: const [
+                                              children: [
                                                 Icon(Icons.upload_file),
                                                 SizedBox(
                                                   height: 10,
@@ -835,8 +831,10 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
                                               }
                                             },
                                             style: ElevatedButton.styleFrom(
-                                              primary: const Color.fromRGBO(
-                                                  0, 154, 231, 1),
+                                              backgroundColor:
+                                                  const Color.fromRGBO(
+                                                      0, 154, 231, 1),
+                                              foregroundColor: Colors.white,
                                               padding:
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 18,

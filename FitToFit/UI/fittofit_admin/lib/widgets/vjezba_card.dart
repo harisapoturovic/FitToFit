@@ -146,7 +146,7 @@ class _VjezbaCardState extends State<VjezbaCard> {
             return AlertDialog(
                 title: const Text('Ažuriraj vježbu'),
                 content: SingleChildScrollView(
-                    child: Container(
+                    child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.3,
                   child: Column(children: [
                     FormBuilder(
@@ -275,10 +275,10 @@ class _VjezbaCardState extends State<VjezbaCard> {
                                                 fontSize: 14.0,
                                               ),
                                             ),
-                                            child: Row(
+                                            child: const Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
-                                              children: const [
+                                              children: [
                                                 Icon(Icons.upload_file),
                                                 SizedBox(
                                                   height: 10,
@@ -311,8 +311,10 @@ class _VjezbaCardState extends State<VjezbaCard> {
                                               }
                                             },
                                             style: ElevatedButton.styleFrom(
-                                              primary: const Color.fromRGBO(
-                                                  0, 154, 231, 1),
+                                              backgroundColor:
+                                                  const Color.fromRGBO(
+                                                      0, 154, 231, 1),
+                                              foregroundColor: Colors.white,
                                               padding:
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 18,
@@ -358,7 +360,8 @@ class _VjezbaCardState extends State<VjezbaCard> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             style: TextButton.styleFrom(
-              primary: Colors.blue,
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
               textStyle: const TextStyle(
                 fontSize: 16.0,
               ),

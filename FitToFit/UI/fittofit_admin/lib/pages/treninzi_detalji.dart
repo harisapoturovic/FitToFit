@@ -111,7 +111,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
     var vjezbe = await _vjezbeProvider.get(filter: {});
     var treninzi = await _treninziProvider
         .get(filter: {'IsVjezbeIncluded': true, 'naziv': data.naziv});
-        
+
     setState(() {
       odabraniTrening = data;
       _vrsteTreningaList = vrsteTreninga.result;
@@ -272,28 +272,28 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                             _dodajVjezbu(context);
                           },
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
+                            backgroundColor: WidgetStateProperty.all<Color>(
                                 Colors.transparent),
-                            elevation: MaterialStateProperty.all<double>(0),
-                            overlayColor: MaterialStateProperty.all<Color>(
+                            elevation: WidgetStateProperty.all<double>(0),
+                            overlayColor: WidgetStateProperty.all<Color>(
                                 Colors.transparent),
-                            foregroundColor: MaterialStateProperty.all<Color>(
+                            foregroundColor: WidgetStateProperty.all<Color>(
                                 const Color.fromARGB(255, 96, 96, 96)),
-                            textStyle: MaterialStateProperty.all<TextStyle>(
+                            textStyle: WidgetStateProperty.all<TextStyle>(
                               const TextStyle(
                                 decoration: TextDecoration.underline,
                               ),
                             ),
                             padding:
-                                MaterialStateProperty.all<EdgeInsetsGeometry>(
+                                WidgetStateProperty.all<EdgeInsetsGeometry>(
                                     EdgeInsets.zero),
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             minimumSize:
-                                MaterialStateProperty.all<Size>(Size.zero),
+                                WidgetStateProperty.all<Size>(Size.zero),
                           ),
-                          child: Row(
+                          child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
+                            children: [
                               Text('Dodaj vježbu na trening'),
                               SizedBox(width: 5),
                               Icon(Icons.add)
@@ -607,7 +607,8 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                       showEditTrainings(odabraniTrening!);
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.green,
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 17),
                       side: const BorderSide(color: Colors.white),
@@ -629,7 +630,8 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.red,
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 17),
                       side: const BorderSide(color: Colors.white),
@@ -730,7 +732,8 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             style: TextButton.styleFrom(
-              primary: Colors.blue,
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
               textStyle: const TextStyle(
                 fontSize: 16.0,
               ),
@@ -947,8 +950,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                             }).toList(),
                                             onChanged: (value) {
                                               setState(() {
-                                                _selectedVrstaTreninga =
-                                                    value as int?;
+                                                _selectedVrstaTreninga = value;
                                               });
                                             },
                                           ),
@@ -1006,10 +1008,10 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                                 fontSize: 14.0,
                                               ),
                                             ),
-                                            child: Row(
+                                            child: const Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
-                                              children: const [
+                                              children: [
                                                 Icon(Icons.upload_file),
                                                 SizedBox(
                                                   height: 10,
@@ -1063,8 +1065,10 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                               }
                                             },
                                             style: ElevatedButton.styleFrom(
-                                              primary: const Color.fromRGBO(
-                                                  0, 154, 231, 1),
+                                              backgroundColor:
+                                                  const Color.fromRGBO(
+                                                      0, 154, 231, 1),
+                                              foregroundColor: Colors.white,
                                               padding:
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 18,
@@ -1162,7 +1166,8 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                 _dodajVjezbuNaTrening();
               },
               style: ElevatedButton.styleFrom(
-                primary: const Color.fromRGBO(0, 154, 231, 1),
+                backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
+                foregroundColor: Colors.white,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
                 textStyle: const TextStyle(

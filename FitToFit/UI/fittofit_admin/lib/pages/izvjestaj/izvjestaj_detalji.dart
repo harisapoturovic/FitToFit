@@ -2,8 +2,11 @@ import 'package:fittofit_admin/pages/izvjestaj/pdf_preview.dart';
 import 'package:fittofit_admin/widgets/master_screen.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class IzvjestajDetaljiPage extends StatelessWidget {
+  // ignore: prefer_typing_uninitialized_variables
   var data;
+  // ignore: prefer_typing_uninitialized_variables
   var data2;
   IzvjestajDetaljiPage({Key? key, required this.data, required this.data2})
       : super(key: key);
@@ -34,7 +37,7 @@ class IzvjestajDetaljiPage extends StatelessWidget {
                   children: [
                     Text(
                       'Top 3 najposjećenija termina',
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     ...data.map(
                       (e) => Padding(
@@ -60,7 +63,7 @@ class IzvjestajDetaljiPage extends StatelessWidget {
                   children: [
                     Text(
                       'Ostvareni profit po godinama',
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     ...data2.map(
                       (e) => Padding(

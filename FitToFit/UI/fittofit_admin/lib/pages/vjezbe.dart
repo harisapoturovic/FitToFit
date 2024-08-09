@@ -28,12 +28,14 @@ class _VjezbePageState extends State<VjezbePage> {
   File? _image;
   String? _base64Image;
   final _formKey = GlobalKey<FormBuilderState>();
+  FocusNode _nazivFocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
     _vjezbeProvider = context.read<VjezbeProvider>();
     _loadData();
+    _nazivFocusNode = FocusNode();
   }
 
   void _loadData() async {
@@ -42,6 +44,12 @@ class _VjezbePageState extends State<VjezbePage> {
     setState(() {
       _vjezbeList = vjezbe.result;
     });
+  }
+
+  @override
+  void dispose() {
+    _nazivFocusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -59,6 +67,7 @@ class _VjezbePageState extends State<VjezbePage> {
           _showAddVjezbuDialog();
         },
         backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
+        foregroundColor: Colors.white,
         child: const Icon(Icons.add),
       ),
       child: Column(
@@ -113,7 +122,8 @@ class _VjezbePageState extends State<VjezbePage> {
                   });
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: const Color.fromRGBO(0, 154, 231, 1),
+                  backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
+                  foregroundColor: Colors.white,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 17),
                   side: const BorderSide(color: Colors.white),
@@ -181,6 +191,9 @@ class _VjezbePageState extends State<VjezbePage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          FocusScope.of(context).requestFocus(_nazivFocusNode);
+        });
         return AlertDialog(
           title: const Text('Dodaj vježbu'),
           content: Container(
@@ -196,6 +209,7 @@ class _VjezbePageState extends State<VjezbePage> {
                   children: [
                     FormBuilderTextField(
                       name: 'naziv',
+                      focusNode: _nazivFocusNode,
                       decoration: const InputDecoration(labelText: 'Naziv'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -267,7 +281,8 @@ class _VjezbePageState extends State<VjezbePage> {
                 _dodajVjezbu();
               },
               style: ElevatedButton.styleFrom(
-                primary: const Color.fromRGBO(0, 154, 231, 1),
+                backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
+                foregroundColor: Colors.white,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
                 textStyle: const TextStyle(
@@ -322,7 +337,8 @@ class _VjezbePageState extends State<VjezbePage> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             style: TextButton.styleFrom(
-              primary: Colors.blue,
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
               textStyle: const TextStyle(
                 fontSize: 16.0,
               ),

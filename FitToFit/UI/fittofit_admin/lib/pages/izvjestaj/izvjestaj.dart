@@ -181,7 +181,7 @@ class _IzvjestajPageState extends State<IzvjestajPage> {
                                   });
                                 },
                                 style: ButtonStyle(
-                                  textStyle: MaterialStateProperty.resolveWith<
+                                  textStyle: WidgetStateProperty.resolveWith<
                                       TextStyle>((states) {
                                     if (isSelected) {
                                       return const TextStyle(
@@ -215,12 +215,8 @@ class _IzvjestajPageState extends State<IzvjestajPage> {
                           initialAngleInDegree: 0,
                           chartType: ChartType.disc,
                           ringStrokeWidth: 32,
-                          centerText: _trener != null
-                              ? "OCJENE ZA: " +
-                                  _trener!.ime +
-                                  ' ' +
-                                  _trener!.prezime
-                              : "OCJENE ZA: ",
+                          centerText:
+                              "OCJENE ZA: ${_trener != null ? '${_trener!.ime} ${_trener!.prezime}' : ''}",
                           legendOptions: const LegendOptions(
                             showLegendsInRow: true,
                             legendPosition: LegendPosition.top,
@@ -303,13 +299,16 @@ class _IzvjestajPageState extends State<IzvjestajPage> {
                 );
               },
               style: ElevatedButton.styleFrom(
-                primary: Colors.grey,
+                backgroundColor: Colors.grey,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
                 textStyle: const TextStyle(
                     fontSize: 16.0, fontWeight: FontWeight.bold),
               ),
-              child: const Text('Generiši PDF'),
+              child: const Text(
+                'Generiši PDF',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ],
         ),
@@ -328,9 +327,9 @@ class _IzvjestajPageState extends State<IzvjestajPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const <Widget>[
+                children: <Widget>[
                   Text(
                     'Profit od rezervacija po godinama',
                     style: TextStyle(color: Color(0xff77839a), fontSize: 18),
@@ -355,10 +354,10 @@ class _IzvjestajPageState extends State<IzvjestajPage> {
                           ),
                           titlesData: fl.FlTitlesData(
                             show: true,
-                            rightTitles: fl.AxisTitles(
+                            rightTitles: const fl.AxisTitles(
                               sideTitles: fl.SideTitles(showTitles: false),
                             ),
-                            topTitles: fl.AxisTitles(
+                            topTitles: const fl.AxisTitles(
                               sideTitles: fl.SideTitles(showTitles: false),
                             ),
                             bottomTitles: fl.AxisTitles(
@@ -381,7 +380,7 @@ class _IzvjestajPageState extends State<IzvjestajPage> {
                             show: false,
                           ),
                           barGroups: showingBarGroups,
-                          gridData: fl.FlGridData(show: false),
+                          gridData: const fl.FlGridData(show: false),
                         ),
                       ),
               ),

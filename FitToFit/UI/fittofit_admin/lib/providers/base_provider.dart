@@ -142,7 +142,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
   }
 
   String getQueryString(Map params,
-      {String prefix: '&', bool inRecursion: false}) {
+      {String prefix = '&', bool inRecursion = false}) {
     String query = '';
     params.forEach((key, value) {
       if (inRecursion) {
@@ -201,7 +201,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     }
   }
 
-   Future<void> changeUsername(
+  Future<void> changeUsername(
       int userId, String newUsername, String currentUsername) async {
     var url = "$_baseUrl$_endpoint/$userId/change-username";
     var uri = Uri.parse(url);

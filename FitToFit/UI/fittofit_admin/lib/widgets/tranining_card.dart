@@ -88,8 +88,8 @@ class TrainingCard extends StatelessWidget {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: const Color.fromARGB(255, 33, 65, 243),
-                    onPrimary: Colors.white,
+                    backgroundColor: const Color.fromARGB(255, 33, 65, 243),
+                    foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(
                         vertical: 12, horizontal: 40),
                     shape: RoundedRectangleBorder(

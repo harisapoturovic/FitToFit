@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../utils/util.dart';
 import 'home.dart';
 
+// ignore: must_be_immutable
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
 
@@ -151,8 +152,8 @@ class LoginPage extends StatelessWidget {
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: const Color.fromRGBO(0, 154, 231, 1),
-                          onPrimary: Colors.white,
+                          backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
+                          foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(
                               horizontal: 25, vertical: 15),
                           shape: RoundedRectangleBorder(

@@ -110,7 +110,6 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
   }
 
   FormBuilder _buildForm() {
-    final ScrollController _scrollController = ScrollController();
     return FormBuilder(
       key: _formKey,
       initialValue: _initialValue,
@@ -162,7 +161,7 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                         const SizedBox(height: 20),
                         Row(
                           children: [
-                           Expanded(
+                            Expanded(
                               child: FormBuilderTextField(
                                 style: const TextStyle(
                                     fontSize: 16,
@@ -349,7 +348,8 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                             showEditNews(odabranaNovost!);
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.green,
+                            backgroundColor: Colors.green,
+                            foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 17),
                             side: const BorderSide(color: Colors.white),
@@ -372,7 +372,8 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.red,
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 17),
                       side: const BorderSide(color: Colors.white),
@@ -473,7 +474,8 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             style: TextButton.styleFrom(
-              primary: Colors.blue,
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
               textStyle: const TextStyle(
                 fontSize: 16.0,
               ),
@@ -579,8 +581,7 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                                             }).toList(),
                                             onChanged: (value) {
                                               setState(() {
-                                                _selectedVrstaTreninga =
-                                                    value as int?;
+                                                _selectedVrstaTreninga = value;
                                               });
                                             },
                                           ),
@@ -608,7 +609,9 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                                                           odabranaNovost!
                                                               .korisnikId,
                                                       vrstaTreningaId:
-                                                          _selectedVrstaTreninga ?? odabranaNovost!.vrstaTreningaId);
+                                                          _selectedVrstaTreninga ??
+                                                              odabranaNovost!
+                                                                  .vrstaTreningaId);
 
                                                   _novostiProvider.update(
                                                       odabranaNovost!.novostId,
@@ -621,8 +624,10 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                                               }
                                             },
                                             style: ElevatedButton.styleFrom(
-                                              primary: const Color.fromRGBO(
-                                                  0, 154, 231, 1),
+                                              backgroundColor:
+                                                  const Color.fromRGBO(
+                                                      0, 154, 231, 1),
+                                              foregroundColor: Colors.white,
                                               padding:
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 18,

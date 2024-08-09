@@ -29,6 +29,7 @@ class _TreninziPageState extends State<TreninziPage> {
   final _formKey = GlobalKey<FormBuilderState>();
   File? _image;
   String? _base64Image;
+  FocusNode _nazivFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -36,6 +37,13 @@ class _TreninziPageState extends State<TreninziPage> {
     _vrsteTreningaProvider = context.read<VrsteTreningaProvider>();
     _treninziProvider = context.read<TreninziProvider>();
     _loadData();
+    _nazivFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _nazivFocusNode.dispose();
+    super.dispose();
   }
 
   void _loadData() async {
@@ -73,6 +81,7 @@ class _TreninziPageState extends State<TreninziPage> {
           _showAddTrainingsDialog();
         },
         backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
+        foregroundColor: Colors.white,
         child: const Icon(Icons.add),
       ),
       child: Column(
@@ -113,6 +122,13 @@ class _TreninziPageState extends State<TreninziPage> {
                     _treninziList = data.result;
                   });
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
+                  foregroundColor: Colors.white,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 17),
+                  side: const BorderSide(color: Colors.white),
+                ),
                 child: const Text("Pretraži"),
               ),
             ],
@@ -134,7 +150,7 @@ class _TreninziPageState extends State<TreninziPage> {
                   },
                   style: ButtonStyle(
                     textStyle:
-                        MaterialStateProperty.resolveWith<TextStyle>((states) {
+                        WidgetStateProperty.resolveWith<TextStyle>((states) {
                       if (isSelected) {
                         return const TextStyle(
                           fontWeight: FontWeight.bold,
@@ -210,6 +226,9 @@ class _TreninziPageState extends State<TreninziPage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          FocusScope.of(context).requestFocus(_nazivFocusNode);
+        });
         return AlertDialog(
           title: const Text('Dodaj trening'),
           content: Container(
@@ -225,6 +244,7 @@ class _TreninziPageState extends State<TreninziPage> {
                   children: [
                     FormBuilderTextField(
                       name: 'naziv',
+                      focusNode: _nazivFocusNode,
                       decoration: const InputDecoration(labelText: 'Naziv'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -385,7 +405,8 @@ class _TreninziPageState extends State<TreninziPage> {
                 _dodajTrening();
               },
               style: ElevatedButton.styleFrom(
-                primary: const Color.fromRGBO(0, 154, 231, 1),
+                backgroundColor: const Color.fromRGBO(0, 154, 231, 1),
+                foregroundColor: Colors.white,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
                 textStyle: const TextStyle(
@@ -477,7 +498,8 @@ class _TreninziPageState extends State<TreninziPage> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             style: TextButton.styleFrom(
-              primary: Colors.blue,
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
               textStyle: const TextStyle(
                 fontSize: 16.0,
               ),

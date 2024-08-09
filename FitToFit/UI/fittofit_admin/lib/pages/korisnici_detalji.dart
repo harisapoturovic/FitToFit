@@ -490,7 +490,8 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
                       showEditUser(odabraniKorisnik!);
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.green,
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 17),
                       side: const BorderSide(color: Colors.white),
@@ -512,7 +513,8 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.red,
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 17),
                       side: const BorderSide(color: Colors.white),
@@ -613,7 +615,8 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             style: TextButton.styleFrom(
-              primary: Colors.blue,
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
               textStyle: const TextStyle(
                 fontSize: 16.0,
               ),
@@ -913,10 +916,10 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
                                                 fontSize: 14.0,
                                               ),
                                             ),
-                                            child: Row(
+                                            child: const Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
-                                              children: const [
+                                              children: [
                                                 Icon(Icons.upload_file),
                                                 SizedBox(
                                                   height: 10,
@@ -976,8 +979,10 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
                                               }
                                             },
                                             style: ElevatedButton.styleFrom(
-                                              primary: const Color.fromRGBO(
-                                                  0, 154, 231, 1),
+                                              backgroundColor:
+                                                  const Color.fromRGBO(
+                                                      0, 154, 231, 1),
+                                              foregroundColor: Colors.white,
                                               padding:
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 18,
