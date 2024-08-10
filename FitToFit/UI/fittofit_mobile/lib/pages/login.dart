@@ -5,6 +5,7 @@ import 'package:fittofit_mobile/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key});
 
@@ -101,8 +102,9 @@ class LoginPage extends StatelessWidget {
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: const Color.fromARGB(255, 107, 189, 255),
-                            onPrimary: Colors.white,
+                            backgroundColor:
+                                const Color.fromARGB(255, 107, 189, 255),
+                            foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
                             ),
@@ -133,8 +135,9 @@ class LoginPage extends StatelessWidget {
                             );
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: const Color.fromARGB(255, 209, 173, 244),
-                            onPrimary: Colors.white,
+                            backgroundColor:
+                                const Color.fromARGB(255, 209, 173, 244),
+                            foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
                             ),

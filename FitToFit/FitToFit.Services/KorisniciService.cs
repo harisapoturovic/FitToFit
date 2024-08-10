@@ -160,6 +160,9 @@ namespace FitToFit.Services
             if (user == null)
                 throw new($"Korisnik sa ID-em {userChangeUsername.Id} nije pronađen.");
 
+            if (user.KorisnickoIme != userChangeUsername.Username)
+                throw new ("Trenutno korisničko ime je pogrešno.");
+
             user.KorisnickoIme = userChangeUsername.NewUsername;
 
             _context.Update(user);

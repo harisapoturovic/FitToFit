@@ -1,7 +1,6 @@
 import 'package:fittofit_mobile/models/korisnici.dart';
 import 'package:fittofit_mobile/models/novosti.dart';
 import 'package:fittofit_mobile/providers/korisnici_provider.dart';
-import 'package:fittofit_mobile/providers/novosti_provider.dart';
 import 'package:fittofit_mobile/widgets/master_screen_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -17,13 +16,11 @@ class NovostiDetaljiPage extends StatefulWidget {
 }
 
 class _NovostiDetaljiPage extends State<NovostiDetaljiPage> {
-  late NovostiProvider _novostiProvider;
   late KorisniciProvider _korisniciProvider;
   bool isLoading = true;
 
   @override
   void initState() {
-    _novostiProvider = context.read<NovostiProvider>();
     _korisniciProvider = context.read<KorisniciProvider>();
     super.initState();
 
@@ -47,7 +44,8 @@ class _NovostiDetaljiPage extends State<NovostiDetaljiPage> {
         child: Scaffold(
             appBar: AppBar(
                 title: const Text('Detalji o novosti'),
-                backgroundColor: Colors.deepPurple.shade300),
+                backgroundColor: Colors.deepPurple.shade300,
+                foregroundColor: Colors.white),
             body: SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
               child: isLoading ? Container() : _buildNewsDetailsCard(),
@@ -76,7 +74,7 @@ class _NovostiDetaljiPage extends State<NovostiDetaljiPage> {
             Text(
               widget.novost.naslov,
               style: const TextStyle(
-                fontSize: 24.0,
+                fontSize: 22.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -118,7 +116,7 @@ class _NovostiDetaljiPage extends State<NovostiDetaljiPage> {
             const SizedBox(height: 15),
             Text(
               widget.novost.sadrzaj!,
-              style: const TextStyle(fontSize: 18.0),
+              style: const TextStyle(fontSize: 16.0),
             ),
           ],
         ),

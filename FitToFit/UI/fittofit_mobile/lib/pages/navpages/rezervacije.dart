@@ -73,6 +73,7 @@ class _ReservationPageState extends State<ReservationPage> {
   }
 
   void _loadData() async {
+    if (!mounted) return;
     try {
       var clanarine = await _clanarineProvider.get(filter: {});
       var vrsteTreninga = await _vrsteTreningaProvider.get(filter: {});
@@ -132,22 +133,20 @@ class _ReservationPageState extends State<ReservationPage> {
         }
       }
 
-      if (user != null) {
-        var rezervacije1 = await _rezervacijeProvider.get(filter: {
-          'korisnikId': korisnik.korisnikId,
-          'stateMachine': 'active'
+      var rezervacije1 = await _rezervacijeProvider.get(filter: {
+        'korisnikId': korisnik.korisnikId,
+        'stateMachine': 'active'
+      });
+      var rezervacije2 = await _rezervacijeProvider.get(filter: {
+        'korisnikId': korisnik.korisnikId,
+        'stateMachine': 'active',
+        'treningId': _selectedTrening
+      });
+      if (mounted) {
+        setState(() {
+          _rezervacijeCount1 = rezervacije1.count;
+          _rezervacijeCount2 = rezervacije2.count;
         });
-        var rezervacije2 = await _rezervacijeProvider.get(filter: {
-          'korisnikId': korisnik.korisnikId,
-          'stateMachine': 'active',
-          'treningId': _selectedTrening
-        });
-        if (mounted) {
-          setState(() {
-            _rezervacijeCount1 = rezervacije1.count;
-            _rezervacijeCount2 = rezervacije2.count;
-          });
-        }
       }
     } catch (e) {
       print(e.toString());
@@ -187,8 +186,11 @@ class _ReservationPageState extends State<ReservationPage> {
       selectedIndex: 2,
       child: Scaffold(
           appBar: AppBar(
-              title: const Text('Rezervacije'),
-              backgroundColor: Colors.deepPurple.shade300),
+            title: const Text('Rezervacije'),
+            backgroundColor: Colors.deepPurple.shade300,
+            foregroundColor: Colors.white,
+            leading: Container(),
+          ),
           body: Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -324,7 +326,7 @@ class _ReservationPageState extends State<ReservationPage> {
                             _prikaziOdabrano();
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.blue.shade200,
+                            backgroundColor: Colors.blue.shade200,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
                             ),
@@ -400,7 +402,7 @@ class _ReservationPageState extends State<ReservationPage> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: buttonColor,
+                        backgroundColor: buttonColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
@@ -514,7 +516,8 @@ class _ReservationPageState extends State<ReservationPage> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             style: TextButton.styleFrom(
-              primary: Colors.blue,
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
               textStyle: const TextStyle(
                 fontSize: 16.0,
               ),
@@ -861,8 +864,11 @@ class _ReservationPageState extends State<ReservationPage> {
                                   },
                                   style: ButtonStyle(
                                     backgroundColor:
-                                        MaterialStateProperty.all<Color>(
+                                        WidgetStateProperty.all<Color>(
                                             Colors.green),
+                                    foregroundColor:
+                                        WidgetStateProperty.all<Color>(
+                                            Colors.white),
                                   ),
                                   child: const Text("DA"),
                                 ),
@@ -874,8 +880,11 @@ class _ReservationPageState extends State<ReservationPage> {
                                   },
                                   style: ButtonStyle(
                                     backgroundColor:
-                                        MaterialStateProperty.all<Color>(
+                                        WidgetStateProperty.all<Color>(
                                             Colors.red),
+                                    foregroundColor:
+                                        WidgetStateProperty.all<Color>(
+                                            Colors.white),
                                   ),
                                   child: const Text("NE"),
                                 ),

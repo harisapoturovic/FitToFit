@@ -43,6 +43,7 @@ class _TrainingPageState extends State<TrainingPage> {
   }
 
   void _loadData() async {
+    if (!mounted) return;
     isSearching = false;
     var vrsteTreninga =
         await _vrsteTreningaProvider.get(filter: {'isTerminiIncluded': false});
@@ -63,14 +64,17 @@ class _TrainingPageState extends State<TrainingPage> {
       selectedIndex: 1,
       child: Scaffold(
           appBar: AppBar(
-              title: const Text('Treninzi'),
-              backgroundColor: Colors.deepPurple.shade300),
+            title: const Text('Treninzi'),
+            backgroundColor: Colors.deepPurple.shade300,
+            foregroundColor: Colors.white,
+            leading: Container(),
+          ),
           body: Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: Row(
                     children: _vrsteTreningaList.map((vrsta) {
                       bool isSelected = vrsta.naziv == _selectedType;
@@ -85,7 +89,7 @@ class _TrainingPageState extends State<TrainingPage> {
                           },
                           style: ButtonStyle(
                             textStyle:
-                                MaterialStateProperty.resolveWith<TextStyle>(
+                                WidgetStateProperty.resolveWith<TextStyle>(
                               (states) {
                                 if (isSelected) {
                                   return const TextStyle(
@@ -140,17 +144,17 @@ class _TrainingPageState extends State<TrainingPage> {
                               _getFilteredTrainings();
                             },
                             style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
+                              backgroundColor: WidgetStateProperty.all<Color>(
                                   Colors.blue.shade300),
-                              foregroundColor: MaterialStateProperty.all<Color>(
+                              foregroundColor: WidgetStateProperty.all<Color>(
                                   Colors.white), // Text color
                               padding:
-                                  MaterialStateProperty.all<EdgeInsetsGeometry>(
+                                  WidgetStateProperty.all<EdgeInsetsGeometry>(
                                 const EdgeInsets.symmetric(
                                     vertical: 10.0, horizontal: 20.0),
                               ),
                               textStyle:
-                                  MaterialStateProperty.resolveWith<TextStyle>(
+                                  WidgetStateProperty.resolveWith<TextStyle>(
                                 (states) {
                                   if (isSelected) {
                                     return const TextStyle(

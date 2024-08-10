@@ -33,6 +33,7 @@ class _CjenovnikPageState extends State<CjenovnikPage> {
   }
 
   void _loadData() async {
+    if (!mounted) return;
     var vrsteTreninga =
         await _vrsteTreningaProvider.get(filter: {'IsTerminiIncluded': false});
     var cjenovnik = await _treninziClanarineProvider.get();
@@ -63,14 +64,14 @@ class _CjenovnikPageState extends State<CjenovnikPage> {
     return MasterScreenWidget(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Cjenovnik'),
-          backgroundColor: Colors.deepPurple.shade300,
-        ),
+            title: const Text('Cjenovnik'),
+            backgroundColor: Colors.deepPurple.shade300,
+            foregroundColor: Colors.white),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Row(
                 children: _vrsteTreningaList.map((vrsta) {
                   bool isSelected = vrsta.naziv == _selectedType;

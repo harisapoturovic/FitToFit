@@ -24,6 +24,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final TextEditingController _newPasswordController = TextEditingController();
   final TextEditingController _currentPasswordController =
       TextEditingController();
+  FocusNode _trenutnaFocusNode = FocusNode();
 
   Future<Korisnici?> getUserFromUserId(int userId) async {
     final user = await _korisniciProvider.getById(userId);
@@ -34,6 +35,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   void initState() {
     super.initState();
     _korisniciProvider = context.read<KorisniciProvider>();
+    _trenutnaFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _trenutnaFocusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -42,7 +50,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       child: Scaffold(
         appBar: AppBar(
             title: const Text('Izmjena lozinke'),
-            backgroundColor: Colors.deepPurple.shade300),
+            backgroundColor: Colors.deepPurple.shade300,
+            foregroundColor: Colors.white),
         body: Center(
           child: SingleChildScrollView(
             child: _buildBody(),
@@ -53,8 +62,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   }
 
   Widget _buildBody() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FocusScope.of(context).requestFocus(_trenutnaFocusNode);
+    });
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.6,
+      width: MediaQuery.of(context).size.width * 0.8,
       child: FormBuilder(
           key: _formKey,
           autovalidateMode: AutovalidateMode.always,
@@ -77,6 +89,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     obscureText: true,
                     name: 'currentPassword',
                     controller: _currentPasswordController,
+                    focusNode: _trenutnaFocusNode,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Ovo polje je obavezno!';
+                      }
+
+                      return null;
+                    },
                   ),
                   const Text(
                     'Nova lozinka',
@@ -104,8 +124,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     child: ElevatedButton(
                       onPressed: _updatePassword,
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.deepPurple.shade300,
-                        onPrimary: Colors.white,
+                        backgroundColor: Colors.deepPurple.shade300,
+                        foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -217,7 +237,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             style: TextButton.styleFrom(
-              primary: Colors.blue,
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
               textStyle: const TextStyle(
                 fontSize: 16.0,
               ),

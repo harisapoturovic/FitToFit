@@ -5,6 +5,7 @@ import 'package:fittofit_mobile/pages/navpages/treninzi.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_navigation_bar/responsive_navigation_bar.dart';
 
+// ignore: must_be_immutable
 class MasterScreenWidget extends StatefulWidget {
   Widget? child;
   String? title;
@@ -33,7 +34,7 @@ class MasterScreenWidget extends StatefulWidget {
   bool? isScrollable;
 
   MasterScreenWidget({
-    Key? key,
+    super.key,
     required this.child,
     this.title,
     this.controller,
@@ -47,7 +48,7 @@ class MasterScreenWidget extends StatefulWidget {
     this.showNavBar = true,
     this.selectedIndex,
     this.isScrollable,
-  }) : super(key: key);
+  });
 
   @override
   State<MasterScreenWidget> createState() => _MasterScreenWidgetState();

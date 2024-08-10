@@ -8,7 +8,6 @@ import 'package:fittofit_mobile/utils/util.dart';
 import 'package:fittofit_mobile/widgets/master_screen_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class RegistracijaPage extends StatefulWidget {
@@ -38,12 +37,20 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
   DateTime? _selectedDate2;
   bool usernameTaken = false;
   final debouncer = Debouncer(delay: const Duration(milliseconds: 500));
+  FocusNode _imeFocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
     _korisniciProvider = context.read<KorisniciProvider>();
     initForm();
+    _imeFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _imeFocusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -104,7 +111,8 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
       child: Scaffold(
         appBar: AppBar(
             title: const Text('Registracija'),
-            backgroundColor: Colors.deepPurple.shade300),
+            backgroundColor: Colors.deepPurple.shade300,
+            foregroundColor: Colors.white),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -117,6 +125,10 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
   }
 
   Widget _buildForm() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FocusScope.of(context).requestFocus(_imeFocusNode);
+    });
+
     return FormBuilder(
       key: _formKey,
       autovalidateMode: AutovalidateMode.always,
@@ -128,6 +140,7 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
             const SizedBox(height: 15),
             FormBuilderTextField(
               name: "ime",
+              focusNode: _imeFocusNode,
               controller: imeController,
               decoration: const InputDecoration(labelText: "Ime"),
               validator: (value) {
@@ -226,48 +239,123 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
               },
             ),
             const SizedBox(height: 15),
-            FormBuilderDateTimePicker(
-              name: 'datumRodjenja',
-              inputType: InputType.date,
-              decoration: const InputDecoration(labelText: 'Datum rođenja'),
-              format: DateFormat("yyyy-MM-dd"),
-              initialDate: _selectedDate1 ?? DateTime.now(),
-              onChanged: (value) {
-                setState(() {
-                  _selectedDate1 = value;
-                });
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                backgroundColor: const Color.fromARGB(255, 208, 207, 207),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+              ),
+              onPressed: () async {
+                final DateTime? date = await showDatePicker(
+                  context: context,
+                  firstDate: DateTime.utc(1943, 12, 31),
+                  lastDate: DateTime.now(),
+                );
+                if (date == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Datum rođenja je obavezan.'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                } else {
+                  setState(() {
+                    _selectedDate1 = date;
+                  });
+                }
               },
-              validator: FormBuilderValidators.compose([
-                (value) {
-                  if (value == null) {
-                    return 'Ovo polje je obavezno!';
-                  }
-                  return null;
-                },
-              ]),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.calendar_month,
+                    color: Colors.white,
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    "Izaberite datum rođenja",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
             ),
+            _selectedDate1 != null
+                ? Center(
+                    child: Text(
+                      "Izabrani datum rođenja: ${_selectedDate1?.day}.${_selectedDate1?.month}.${_selectedDate1?.year}.",
+                      style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.black87,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  )
+                : Container(),
             const SizedBox(height: 15),
-            FormBuilderDateTimePicker(
-              name: 'datumPocetkaTreniranja',
-              inputType: InputType.date,
-              decoration:
-                  const InputDecoration(labelText: 'Datum početka treniranja'),
-              format: DateFormat("yyyy-MM-dd"),
-              initialDate: _selectedDate2 ?? DateTime.now(),
-              onChanged: (value) {
-                setState(() {
-                  _selectedDate2 = value;
-                });
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                backgroundColor: const Color.fromARGB(255, 208, 207, 207),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+              ),
+              onPressed: () async {
+                final DateTime? date = await showDatePicker(
+                  context: context,
+                  firstDate: DateTime.now().subtract(const Duration(days: 10)),
+                  lastDate: DateTime.now().add(const Duration(days: 10)),
+                );
+                if (date == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Datum početka treniranja je obavezan.'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                } else {
+                  setState(() {
+                    _selectedDate2 = date;
+                  });
+                }
               },
-              validator: FormBuilderValidators.compose([
-                (value) {
-                  if (value == null) {
-                    return 'Ovo polje je obavezno!';
-                  }
-                  return null;
-                },
-              ]),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.calendar_month,
+                    color: Colors.white,
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    "Izaberite datum početka treniranja",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
             ),
+            _selectedDate2 != null
+                ? Center(
+                    child: Text(
+                      "Izabrani datum početka treniranja: ${_selectedDate2?.day}.${_selectedDate2?.month}.${_selectedDate2?.year}.",
+                      style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.black87,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  )
+                : Container(),
             const SizedBox(height: 15),
             FormBuilderTextField(
                 name: "visina",
@@ -371,8 +459,6 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
       'password',
       'telefon',
       'spol',
-      'datumRodjenja',
-      'datumPocetkaTreniranja',
       'visina',
       'tezina'
     ];
@@ -388,6 +474,30 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
   }
 
   void _dodajKorisnika() async {
+    if (_selectedDate1 == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Datum rođenja je obavezan.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+    if (_selectedDate2 == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Datum početka treniranja je obavezan.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+    String _datum1 = _selectedDate1.toString();
+    String datumVrijeme1 =
+        DateTime.parse(_datum1.replaceAll(' ', 'T')).toIso8601String();
+    String _datum2 = _selectedDate2.toString();
+    String datumVrijeme2 =
+        DateTime.parse(_datum2.replaceAll(' ', 'T')).toIso8601String();
     _formKey.currentState?.saveAndValidate();
     final currentFormState = _formKey.currentState;
     if (!_areAllFieldsFilled(currentFormState)) {
@@ -404,17 +514,26 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
         return;
       }
     }
+    if (usernameTaken) {
+      _showAlertDialog("Greška",
+          "Korisničko ime koje ste unijeli je već zauzeto.", Colors.red);
+      return;
+    }
     var request = Map.from(_formKey.currentState!.value);
-    String formattedDate1 = request['datumRodjenja'].toIso8601String();
-    String formattedDate2 = request['datumPocetkaTreniranja'].toIso8601String();
-    request['datumRodjenja'] = formattedDate1;
-    request['datumPocetkaTreniranja'] = formattedDate2;
+    request.addAll({
+      'datumRodjenja': datumVrijeme1,
+    });
+    request.addAll({
+      'datumPocetkaTreniranja': datumVrijeme2,
+    });
     request['slika'] = _base64Image;
     request['passwordPotvrda'] = request['password'];
     request['ulogaId'] = 1;
 
     try {
       await _korisniciProvider.insert(request);
+      _selectedDate1 = null;
+      _selectedDate2 = null;
       _showAlertDialog(
           "Uspješan unos", "Korisnik uspješno registrovan.", Colors.green);
     } on Exception catch (e) {
@@ -444,7 +563,8 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             style: TextButton.styleFrom(
-              primary: Colors.blue,
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
               textStyle: const TextStyle(
                 fontSize: 16.0,
               ),

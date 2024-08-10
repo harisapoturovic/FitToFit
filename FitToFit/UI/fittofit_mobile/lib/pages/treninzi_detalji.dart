@@ -48,7 +48,8 @@ class _TreninziDetaljiPage extends State<TreninziDetaljiPage> {
         child: Scaffold(
             appBar: AppBar(
                 title: const Text('Detalji o treningu'),
-                backgroundColor: Colors.deepPurple.shade300),
+                backgroundColor: Colors.deepPurple.shade300,
+                foregroundColor: Colors.white),
             body: SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
               child: isLoading ? Container() : _buildNewsDetailsCard(),

@@ -1,14 +1,11 @@
 import 'package:fittofit_mobile/models/korisnici.dart';
 import 'package:fittofit_mobile/models/korisniciNovosti.dart';
 import 'package:fittofit_mobile/models/novosti.dart';
-import 'package:fittofit_mobile/models/rezervacije.dart';
 import 'package:fittofit_mobile/pages/cjenovnik.dart';
 import 'package:fittofit_mobile/pages/novosti_detalji.dart';
 import 'package:fittofit_mobile/pages/raspored.dart';
 import 'package:fittofit_mobile/providers/korisnici_novosti_provider.dart';
 import 'package:fittofit_mobile/providers/korisnici_provider.dart';
-import 'package:fittofit_mobile/providers/rezervacije_provider.dart';
-import 'package:fittofit_mobile/providers/treninzi_provider.dart';
 import 'package:fittofit_mobile/utils/util.dart';
 import 'package:fittofit_mobile/widgets/custom_avatar.dart';
 import 'package:fittofit_mobile/widgets/master_screen_widget.dart';
@@ -61,6 +58,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _loadData() async {
+    if (!mounted) return;
     isSearching = false;
     korisnickoIme = await getUserName();
     var user = await _korisniciProvider
@@ -99,8 +97,11 @@ class _HomePageState extends State<HomePage> {
       selectedIndex: 0,
       child: Scaffold(
         appBar: AppBar(
-            title: const Text('Početna'),
-            backgroundColor: Colors.deepPurple.shade300),
+          title: const Text('Početna'),
+          backgroundColor: Colors.deepPurple.shade300,
+          foregroundColor: Colors.white,
+          leading: Container(),
+        ),
         body: Center(
           child: isLoading
               ? const CircularProgressIndicator()
@@ -108,53 +109,47 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Card(
-                      child: Container(
-                        height: 100,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 0),
-                        child: ListTile(
-                          leading:
-                              korisnik.slika != '' && korisnik.slika != null
-                                  ? CustomAvatar(
-                                      radius: 30, base64Image: korisnik.slika!)
-                                  : const CircleAvatar(
-                                      radius: 40,
-                                      backgroundImage:
-                                          AssetImage('assets/images/user.png'),
-                                    ),
-                          title: RichText(
-                            text: TextSpan(
-                              text: 'Dobrodošli, \n',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.normal,
-                                fontStyle: FontStyle.italic,
-                                color: Colors.black,
+                      child: ListTile(
+                        leading: korisnik.slika != '' && korisnik.slika != null
+                            ? CustomAvatar(
+                                radius: 40, base64Image: korisnik.slika!)
+                            : const CircleAvatar(
+                                radius: 40,
+                                backgroundImage:
+                                    AssetImage('assets/images/user.png'),
                               ),
-                              children: <TextSpan>[
-                                TextSpan(
-                                  text: '${korisnik.ime} ${korisnik.prezime}',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
+                        title: RichText(
+                          text: TextSpan(
+                            text: 'Dobrodošli, \n',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.normal,
+                              fontStyle: FontStyle.italic,
+                              color: Colors.black,
                             ),
-                          ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 8),
-                              Text(
-                                DateFormat('dd.MM.yyyy').format(DateTime.now()),
-                                style: const TextStyle(fontSize: 11),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: '${korisnik.ime} ${korisnik.prezime}',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ],
                           ),
                         ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 8),
+                            Text(
+                              DateFormat('dd.MM.yyyy').format(DateTime.now()),
+                              style: const TextStyle(fontSize: 11),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 5),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 30),
                       child: TextField(
@@ -194,8 +189,9 @@ class _HomePageState extends State<HomePage> {
                             );
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: const Color.fromARGB(255, 205, 151, 255),
-                            onPrimary: Colors.white,
+                            backgroundColor:
+                                const Color.fromARGB(255, 205, 151, 255),
+                            foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -222,8 +218,9 @@ class _HomePageState extends State<HomePage> {
                             );
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: const Color.fromARGB(255, 107, 189, 255),
-                            onPrimary: Colors.white,
+                            backgroundColor:
+                                const Color.fromARGB(255, 107, 189, 255),
+                            foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -380,8 +377,8 @@ class _HomePageState extends State<HomePage> {
               });
             },
             style: ElevatedButton.styleFrom(
-              primary: Colors.deepPurple.shade100,
-              onPrimary: Colors.black,
+              backgroundColor: Colors.deepPurple.shade100,
+              foregroundColor: Colors.black,
             ),
             child: Text('$i'),
           ),

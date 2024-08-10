@@ -18,6 +18,7 @@ import 'package:fittofit_mobile/providers/treneri_provider.dart';
 import 'package:fittofit_mobile/providers/treninzi_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:fittofit_mobile/models/korisnici.dart';
@@ -77,52 +78,53 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _loadData() async {
+    if (!mounted) return;
     korisnickoIme = await getUserName();
     var user = await _korisniciProvider
         .get(filter: {'korisnickoIme': korisnickoIme, 'isAdmin': false});
 
-    setState(() {
-      korisnik = user.result[0];
-      isLoading = false;
-    });
-    if (korisnik != null) {
-      var aktivneRezervacije = await _rezervacijeProvider.get(filter: {
-        'korisnikId': korisnik.korisnikId,
-        'stateMachine': 'active',
-        'isTerminiIncluded': true
-      });
-      var draftRezervacije = await _rezervacijeProvider.get(filter: {
-        'korisnikId': korisnik.korisnikId,
-        'stateMachine': 'draft',
-        'isTerminiIncluded': true
-      });
-      var arhiviraneRezervacije = await _rezervacijeProvider.get(filter: {
-        'korisnikId': korisnik.korisnikId,
-        'stateMachine': 'archived',
-        'isTerminiIncluded': true
-      });
-      var odbijeneRezervacije = await _rezervacijeProvider.get(filter: {
-        'korisnikId': korisnik.korisnikId,
-        'stateMachine': 'refused',
-        'isTerminiIncluded': true
-      });
-      var otkazaneRezervacije = await _rezervacijeProvider.get(filter: {
-        'korisnikId': korisnik.korisnikId,
-        'stateMachine': 'canceled',
-        'isTerminiIncluded': true
-      });
-
-      var ocjene = await _ocjeneProvider
-          .get(filter: {'korisnikId': korisnik.korisnikId});
+    if (mounted) {
       setState(() {
-        _aktivneRezervacijeList = aktivneRezervacije.result;
-        _draftRezervacijeList = draftRezervacije.result;
-        _arhiviraneRezervacijeList = arhiviraneRezervacije.result;
-        _odbijeneRezervacijeList = odbijeneRezervacije.result;
-        _otkazaneRezervacijeList = otkazaneRezervacije.result;
-        _ocjeneList = ocjene.result;
+        korisnik = user.result[0];
+        isLoading = false;
       });
     }
+    var aktivneRezervacije = await _rezervacijeProvider.get(filter: {
+      'korisnikId': korisnik.korisnikId,
+      'stateMachine': 'active',
+      'isTerminiIncluded': true
+    });
+    var draftRezervacije = await _rezervacijeProvider.get(filter: {
+      'korisnikId': korisnik.korisnikId,
+      'stateMachine': 'draft',
+      'isTerminiIncluded': true
+    });
+    var arhiviraneRezervacije = await _rezervacijeProvider.get(filter: {
+      'korisnikId': korisnik.korisnikId,
+      'stateMachine': 'archived',
+      'isTerminiIncluded': true
+    });
+    var odbijeneRezervacije = await _rezervacijeProvider.get(filter: {
+      'korisnikId': korisnik.korisnikId,
+      'stateMachine': 'refused',
+      'isTerminiIncluded': true
+    });
+    var otkazaneRezervacije = await _rezervacijeProvider.get(filter: {
+      'korisnikId': korisnik.korisnikId,
+      'stateMachine': 'canceled',
+      'isTerminiIncluded': true
+    });
+
+    var ocjene =
+        await _ocjeneProvider.get(filter: {'korisnikId': korisnik.korisnikId});
+    setState(() {
+      _aktivneRezervacijeList = aktivneRezervacije.result;
+      _draftRezervacijeList = draftRezervacije.result;
+      _arhiviraneRezervacijeList = arhiviraneRezervacije.result;
+      _odbijeneRezervacijeList = odbijeneRezervacije.result;
+      _otkazaneRezervacijeList = otkazaneRezervacije.result;
+      _ocjeneList = ocjene.result;
+    });
   }
 
   @override
@@ -131,8 +133,11 @@ class _ProfilePageState extends State<ProfilePage> {
       selectedIndex: 3,
       child: Scaffold(
         appBar: AppBar(
-            title: const Text('Profil'),
-            backgroundColor: Colors.deepPurple.shade300),
+          title: const Text('Profil'),
+          backgroundColor: Colors.deepPurple.shade300,
+          foregroundColor: Colors.white,
+          leading: Container(),
+        ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: isLoading
@@ -167,8 +172,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             onPressed: () =>
                                 _showEditProfileBottomSheet(context),
                             style: ElevatedButton.styleFrom(
-                              primary: Colors.lightBlue.shade300,
-                              onPrimary: Colors.white,
+                              backgroundColor: Colors.lightBlue.shade300,
+                              foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
@@ -256,7 +261,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                 (route) => false,
                               );
                             },
-                            icon: const Icon(Icons.logout, color: Color.fromRGBO(123, 123, 123, 0.965),),
+                            icon: const Icon(
+                              Icons.logout,
+                              color: Color.fromRGBO(123, 123, 123, 0.965),
+                            ),
                             iconSize: 30.0,
                           ),
                           const SizedBox(width: 8.0),
@@ -338,9 +346,15 @@ class _ProfilePageState extends State<ProfilePage> {
       },
       child: Row(
         children: [
-          Icon(icon, size: 20.0),
+          Icon(
+            icon,
+            size: 20.0,
+            color: const Color.fromARGB(255, 106, 150, 251),
+          ),
           const SizedBox(width: 16.0),
-          Text(text, style: const TextStyle(fontSize: 16)),
+          Text(text,
+              style: const TextStyle(
+                  fontSize: 16, color: Color.fromARGB(255, 106, 150, 251))),
         ],
       ),
     );
@@ -389,7 +403,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   Text(
                     'Uredi Profil',
-                    style: Theme.of(context).textTheme.headline6,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 20.0),
                   FormBuilderTextField(
@@ -400,11 +414,11 @@ class _ProfilePageState extends State<ProfilePage> {
                       border: OutlineInputBorder(),
                     ),
                     validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(context,
+                      FormBuilderValidators.required(
                           errorText: 'Ovo polje je obavezno!'),
-                      FormBuilderValidators.match(context, r'^[A-Z]',
+                      FormBuilderValidators.match(RegExp(r'^[A-Z]'),
                           errorText: 'Ime mora početi velikim slovom.'),
-                      FormBuilderValidators.match(context, r'^[A-Za-z]*$',
+                      FormBuilderValidators.match(RegExp(r'^[A-Za-z]*$'),
                           errorText: 'Ime može sadržavati samo slova.'),
                     ]),
                   ),
@@ -417,11 +431,11 @@ class _ProfilePageState extends State<ProfilePage> {
                       border: OutlineInputBorder(),
                     ),
                     validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(context,
+                      FormBuilderValidators.required(
                           errorText: 'Ovo polje je obavezno!'),
-                      FormBuilderValidators.match(context, r'^[A-Z]',
+                      FormBuilderValidators.match(RegExp(r'^[A-Z]'),
                           errorText: 'Prezime mora početi velikim slovom.'),
-                      FormBuilderValidators.match(context, r'^[A-Za-z]*$',
+                      FormBuilderValidators.match(RegExp(r'^[A-Za-z]*$'),
                           errorText: 'Prezime može sadržavati samo slova.'),
                     ]),
                   ),
@@ -434,9 +448,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       border: OutlineInputBorder(),
                     ),
                     validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.numeric(context,
+                      FormBuilderValidators.numeric(
                           errorText: 'Ovo polje može sadržavati samo brojeve.'),
-                      FormBuilderValidators.maxLength(context, 10,
+                      FormBuilderValidators.maxLength(10,
                           errorText:
                               'Broj telefona može imati maksimalno 10 cifara.'),
                     ]),
@@ -450,7 +464,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       border: OutlineInputBorder(),
                     ),
                     validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.email(context,
+                      FormBuilderValidators.email(
                           errorText: 'Unesite validnu e-mail adresu.'),
                     ]),
                   ),
@@ -463,7 +477,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       border: OutlineInputBorder(),
                     ),
                     validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.match(context, r'^[A-Z]',
+                      FormBuilderValidators.match(RegExp(r'^[A-Z]'),
                           errorText: 'Adresa mora početi velikim slovom.'),
                     ]),
                   ),
@@ -477,9 +491,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     keyboardType: TextInputType.number,
                     validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(context,
+                      FormBuilderValidators.required(
                           errorText: 'Ovo polje je obavezno!'),
-                      FormBuilderValidators.numeric(context,
+                      FormBuilderValidators.numeric(
                           errorText: 'Visina mora biti broj.'),
                     ]),
                   ),
@@ -493,9 +507,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     keyboardType: TextInputType.number,
                     validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(context,
+                      FormBuilderValidators.required(
                           errorText: 'Ovo polje je obavezno!'),
-                      FormBuilderValidators.numeric(context,
+                      FormBuilderValidators.numeric(
                           errorText: 'Težina mora biti broj.'),
                     ]),
                   ),
@@ -526,7 +540,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.lightBlue.shade500,
+                      backgroundColor: Colors.lightBlue.shade500,
+                      foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 10),
                       shape: RoundedRectangleBorder(
@@ -538,9 +553,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         fontSize: 14.0,
                       ),
                     ),
-                    child: Row(
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: [
                         Icon(Icons.upload_file),
                         SizedBox(
                           height: 10,
@@ -579,7 +594,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.lightBlue.shade700,
+                        backgroundColor: Colors.lightBlue.shade700,
+                        foregroundColor: Colors.white,
                         textStyle: const TextStyle(
                           fontSize: 14.0,
                         ),
@@ -625,7 +641,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     'Lični podaci',
                     style: Theme.of(context)
                         .textTheme
-                        .headline6
+                        .titleLarge
                         ?.copyWith(color: Colors.black),
                   ),
                 ),
@@ -684,7 +700,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
-                          primary: const Color.fromARGB(255, 248, 248, 248)),
+                          backgroundColor:
+                              const Color.fromARGB(255, 248, 248, 248)),
                       child: const Icon(
                         Icons.arrow_downward,
                         color: Colors.lightBlue,
@@ -724,7 +741,7 @@ class _ProfilePageState extends State<ProfilePage> {
       }
     }
 
-    void _cancelReservation(Rezervacije reservation) async {
+    void cancelReservation(Rezervacije reservation) async {
       try {
         await _rezervacijeProvider.cancel(reservation.rezervacijaId);
         _showAlertDialog("Uspješano otkazivanje",
@@ -757,7 +774,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: [
                       Text(
                         'Moje Rezervacije',
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                       const SizedBox(height: 16.0),
                       DropdownButton<String>(
@@ -780,10 +797,12 @@ class _ProfilePageState extends State<ProfilePage> {
                         Center(
                           child: Text(
                             'Nema rezervacija za odabrani status.',
-                            style:
-                                Theme.of(context).textTheme.bodyText2?.copyWith(
-                                      color: Colors.black54,
-                                    ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  color: Colors.black54,
+                                ),
                           ),
                         ),
                         const SizedBox(height: 16.0),
@@ -795,7 +814,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 Navigator.pop(context);
                               },
                               style: ElevatedButton.styleFrom(
-                                  primary:
+                                  backgroundColor:
                                       const Color.fromARGB(255, 248, 248, 248)),
                               child: const Icon(
                                 Icons.arrow_downward,
@@ -852,7 +871,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   '${termin.dan} u ${termin.sat ?? 'N/A'}',
                                                   style: Theme.of(context)
                                                       .textTheme
-                                                      .bodyText1,
+                                                      .bodyLarge,
                                                 ),
                                                 subtitle: const Text(
                                                     'Trening: Loading...'),
@@ -863,7 +882,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   '${termin.dan} u ${termin.sat ?? 'N/A'}',
                                                   style: Theme.of(context)
                                                       .textTheme
-                                                      .bodyText1,
+                                                      .bodyLarge,
                                                 ),
                                                 subtitle: const Text(
                                                     'Trening: Error'),
@@ -874,7 +893,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   '${termin.dan} u ${termin.sat ?? 'N/A'}',
                                                   style: Theme.of(context)
                                                       .textTheme
-                                                      .bodyText1,
+                                                      .bodyLarge,
                                                 ),
                                                 subtitle: const Text(
                                                     'Trening: Not found'),
@@ -886,7 +905,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   '${termin.dan} u ${termin.sat ?? 'N/A'}',
                                                   style: Theme.of(context)
                                                       .textTheme
-                                                      .bodyText1,
+                                                      .bodyLarge,
                                                 ),
                                                 subtitle: Text(
                                                   '${training.naziv} trening',
@@ -895,17 +914,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                             }
                                           },
                                         );
-                                      }).toList()
+                                      })
                                     ],
                                     if (selectedStatus == 'Aktivne') ...[
                                       const SizedBox(height: 8.0),
                                       ElevatedButton(
                                         onPressed: () {
-                                          _cancelReservation(reservation);
+                                          cancelReservation(reservation);
                                         },
                                         style: ElevatedButton.styleFrom(
-                                          primary: Colors.grey.shade700,
-                                          onPrimary: Colors.white,
+                                          backgroundColor: Colors.grey.shade700,
+                                          foregroundColor: Colors.white,
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(10),
@@ -930,7 +949,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 Navigator.pop(context);
                               },
                               style: ElevatedButton.styleFrom(
-                                  primary:
+                                  backgroundColor:
                                       const Color.fromARGB(255, 248, 248, 248)),
                               child: const Icon(
                                 Icons.arrow_downward,
@@ -969,7 +988,7 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               Text(
                 'Moje Ocjene',
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 16.0),
               Expanded(
@@ -1064,7 +1083,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: const Color.fromARGB(255, 248, 248, 248),
+                      backgroundColor: const Color.fromARGB(255, 248, 248, 248),
                     ),
                     child: const Icon(
                       Icons.arrow_downward,
@@ -1085,7 +1104,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _showRatingDialog(BuildContext context, Treneri trainer) {
-    final _ratingController = TextEditingController();
+    final ratingController = TextEditingController();
     String formattedDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
         .format(DateTime.now().toUtc());
     showDialog(
@@ -1097,7 +1116,7 @@ class _ProfilePageState extends State<ProfilePage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
-                controller: _ratingController,
+                controller: ratingController,
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
                   labelText: 'Ocjena (1-5)',
@@ -1115,7 +1134,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             TextButton(
               onPressed: () async {
-                final ratingValue = int.tryParse(_ratingController.text) ?? 0;
+                final ratingValue = int.tryParse(ratingController.text) ?? 0;
                 if (ratingValue >= 1 && ratingValue <= 5) {
                   try {
                     OcjeneRequest ocjena = OcjeneRequest(
@@ -1175,7 +1194,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     'Pravila korištenja',
                     style: Theme.of(context)
                         .textTheme
-                        .headline6
+                        .titleLarge
                         ?.copyWith(color: Colors.black),
                   ),
                 ),
@@ -1185,17 +1204,17 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: [
                       Text(
                         '1. Novosti',
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                       const SizedBox(height: 8.0),
                       Text(
                         'U sklopu "home" sekcije možete vidjeti novosti vezane za treninge koje ste prethodno rezervisali, te opšte novosti. \nPoželjno je da se izjasnite o dolasku na trening u adekvatno vrijeme kako bi treneri mogli pripremiti svu potrebnu opremu. \nSvoj dolazak možete potvrditi lajkanjem određene novosti. ',
-                        style: Theme.of(context).textTheme.bodyText2,
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                       const SizedBox(height: 16.0),
                       Text(
                         '2. Rezervacije',
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                       const SizedBox(height: 8.0),
                       RichText(
@@ -1203,14 +1222,14 @@ class _ProfilePageState extends State<ProfilePage> {
                           text: 'U isto vrijeme možete imati maksimalno ',
                           style: Theme.of(context)
                               .textTheme
-                              .bodyText2
+                              .bodyMedium
                               ?.copyWith(color: Colors.black),
                           children: <TextSpan>[
                             TextSpan(
                               text: '3 aktivne',
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyText2
+                                  .bodyMedium
                                   ?.copyWith(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black,
@@ -1221,14 +1240,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ' rezervacije. \nU sklopu tih rezervacija morate odabrati različite vrste treninga, dok se članarine mogu ponavljati. \nTermini koji se prikazuju odnose se na trening koji ste prethodno odabrali sa dropdown-a.\nAko je neki od termina prekrižen (X), to znači da su sva mjesta već rezervisana. \nNa jednom terminu mogu biti članovi sa različitim vrstama članarine. \nUkoliko ste odabrali dnevnu članarinu onda ćete moći rezervisati ',
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyText2
+                                  .bodyMedium
                                   ?.copyWith(color: Colors.black),
                               children: <TextSpan>[
                                 TextSpan(
                                   text: 'samo jedan termin',
                                   style: Theme.of(context)
                                       .textTheme
-                                      .bodyText2
+                                      .bodyMedium
                                       ?.copyWith(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black,
@@ -1239,14 +1258,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                       ' od ponuđenih. \nAko ste odabrali bilo koju drugu članarinu onda ćete morati rezervisati ',
                                   style: Theme.of(context)
                                       .textTheme
-                                      .bodyText2
+                                      .bodyMedium
                                       ?.copyWith(color: Colors.black),
                                   children: <TextSpan>[
                                     TextSpan(
                                       text: '2-5 termina',
                                       style: Theme.of(context)
                                           .textTheme
-                                          .bodyText2
+                                          .bodyMedium
                                           ?.copyWith(
                                             fontWeight: FontWeight.bold,
                                             color: Colors.black,
@@ -1257,7 +1276,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           ' od ponuđenih. \nKada se radi o dnevnoj članarini, taj termin možete rezervisati ako je po rasporedu sutra jer ova članarina vrijedi 24h. \nSedmičnu članarinu možete rezervisati bilo kada, ali ona se odnosi na period koji traje 7 dana od datuma kreiranja rezervacije i ističe kada prođe taj period. \nMjesečnu članarinu možete rezervisati bilo kada, a odnosi se na narednih 30 dana od datuma kreiranja rezervacije. \nRezervacija kada istekne prelazi u arhivu, te se oslobađa po jedno mjesto na tim terminima.',
                                       style: Theme.of(context)
                                           .textTheme
-                                          .bodyText2
+                                          .bodyMedium
                                           ?.copyWith(color: Colors.black),
                                     ),
                                   ],
@@ -1270,12 +1289,12 @@ class _ProfilePageState extends State<ProfilePage> {
                       const SizedBox(height: 16.0),
                       Text(
                         '3. Akcije',
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                       const SizedBox(height: 8.0),
                       Text(
                         'Ako se neki od rezervisanih treninga nalazi na akciji, za iznos (%) će se umanjiti ukupna cijena. Također, ako se trening nalazi na više akcija, sve će biti uračunato u konačnu cijenu. Da li je trening na akciji možete provjeriti pod sekcijom "Treninzi", te nakon što odaberete jedan od njih, akcije (ako postoje), će se prikazati.  ',
-                        style: Theme.of(context).textTheme.bodyText2,
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],
                   ),
@@ -1288,7 +1307,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
-                          primary: const Color.fromARGB(255, 248, 248, 248)),
+                          backgroundColor:
+                              const Color.fromARGB(255, 248, 248, 248)),
                       child: const Icon(
                         Icons.arrow_downward,
                         color: Colors.lightBlue,
@@ -1326,7 +1346,8 @@ class _ProfilePageState extends State<ProfilePage> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             style: TextButton.styleFrom(
-              primary: Colors.blue,
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
               textStyle: const TextStyle(
                 fontSize: 16.0,
               ),

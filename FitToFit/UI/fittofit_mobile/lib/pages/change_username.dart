@@ -22,6 +22,9 @@ class _ChangeUsernameScreenState extends State<ChangeUsernameScreen> {
 
   TextEditingController _newUsernameController = TextEditingController();
   TextEditingController _currentUsernameController = TextEditingController();
+  FocusNode _trenutnoFocusNode = FocusNode();
+  bool usernameTaken = false;
+  final debouncer = Debouncer(delay: const Duration(milliseconds: 500));
 
   Future<Korisnici?> getUserFromUserId(int userId) async {
     final user = await _korisniciProvider.getById(userId);
@@ -32,6 +35,38 @@ class _ChangeUsernameScreenState extends State<ChangeUsernameScreen> {
   void initState() {
     super.initState();
     _korisniciProvider = context.read<KorisniciProvider>();
+    _trenutnoFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _trenutnoFocusNode.dispose();
+    super.dispose();
+  }
+
+  Future<void> provjeriUsername(String username) async {
+    try {
+      var temp = await _korisniciProvider
+          .get(filter: {"korisnickoIme": username, "isAdmin": false});
+      if (mounted) {
+        setState(() {
+          usernameTaken = temp.count > 0;
+          if (usernameTaken) {
+            _showAlertDialog("Greška",
+                "Korisnik sa ovim username-om već postoji", Colors.red);
+          }
+        });
+      }
+    } catch (e) {
+      print('Greška pri provjeri username-a: $e');
+    }
+  }
+
+  Future<void> debouncedUsernameCheck(String username) async {
+    // Pokreće debouncing
+    debouncer.run(() async {
+      await provjeriUsername(username);
+    });
   }
 
   @override
@@ -40,7 +75,8 @@ class _ChangeUsernameScreenState extends State<ChangeUsernameScreen> {
       child: Scaffold(
         appBar: AppBar(
             title: const Text('Izmjena korisničkog imena'),
-            backgroundColor: Colors.deepPurple.shade300),
+            backgroundColor: Colors.deepPurple.shade300,
+            foregroundColor: Colors.white),
         body: Center(
           child: SingleChildScrollView(
             child: _buildBody(),
@@ -51,8 +87,11 @@ class _ChangeUsernameScreenState extends State<ChangeUsernameScreen> {
   }
 
   Widget _buildBody() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FocusScope.of(context).requestFocus(_trenutnoFocusNode);
+    });
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.9,
+      width: MediaQuery.of(context).size.width * 0.8,
       child: FormBuilder(
         key: _formKey,
         autovalidateMode: AutovalidateMode.always,
@@ -77,6 +116,13 @@ class _ChangeUsernameScreenState extends State<ChangeUsernameScreen> {
                     FormBuilderTextField(
                       name: 'currentPassword',
                       controller: _currentUsernameController,
+                      focusNode: _trenutnoFocusNode,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Ovo polje je obavezno!';
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(
                       height: 20,
@@ -89,6 +135,11 @@ class _ChangeUsernameScreenState extends State<ChangeUsernameScreen> {
                     FormBuilderTextField(
                       name: 'newUsername',
                       controller: _newUsernameController,
+                      onChanged: (val) async {
+                        if (val != null && val != '') {
+                          debouncedUsernameCheck(val);
+                        }
+                      },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
@@ -104,8 +155,8 @@ class _ChangeUsernameScreenState extends State<ChangeUsernameScreen> {
                       child: ElevatedButton(
                         onPressed: _updateUserData,
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.deepPurple.shade300,
-                          onPrimary: Colors.white,
+                          backgroundColor: Colors.deepPurple.shade300,
+                          foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -143,6 +194,12 @@ class _ChangeUsernameScreenState extends State<ChangeUsernameScreen> {
               "Molimo unesite i trenutni i novi username!", Colors.red);
           return;
         }
+      }
+
+      if (usernameTaken) {
+        _showAlertDialog("Greška",
+            "Korisničko ime koje ste unijeli je već zauzeto.", Colors.red);
+        return;
       }
 
       if (korisnik?.korisnickoIme != _currentUsernameController.text) {
@@ -222,7 +279,8 @@ class _ChangeUsernameScreenState extends State<ChangeUsernameScreen> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             style: TextButton.styleFrom(
-              primary: Colors.blue,
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
               textStyle: const TextStyle(
                 fontSize: 16.0,
               ),

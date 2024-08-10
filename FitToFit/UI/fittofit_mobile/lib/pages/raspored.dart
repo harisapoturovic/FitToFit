@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class RasporedPage extends StatefulWidget {
-  const RasporedPage({Key? key}) : super(key: key);
+  const RasporedPage({super.key});
 
   @override
   State<RasporedPage> createState() => _RasporedPageState();
@@ -37,6 +37,7 @@ class _RasporedPageState extends State<RasporedPage> {
   }
 
   void _loadData() async {
+    if (!mounted) return;
     var treninzi = await _treninziProvider.get();
     var raspored = await _terminiProvider.get();
 
@@ -71,9 +72,9 @@ class _RasporedPageState extends State<RasporedPage> {
     return MasterScreenWidget(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Raspored'),
-          backgroundColor: Colors.deepPurple.shade300,
-        ),
+            title: const Text('Raspored'),
+            backgroundColor: Colors.deepPurple.shade300,
+            foregroundColor: Colors.white),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -98,8 +99,7 @@ class _RasporedPageState extends State<RasporedPage> {
                           });
                         },
                         style: ButtonStyle(
-                          textStyle:
-                              MaterialStateProperty.resolveWith<TextStyle>(
+                          textStyle: WidgetStateProperty.resolveWith<TextStyle>(
                             (states) {
                               if (isSelected) {
                                 return const TextStyle(

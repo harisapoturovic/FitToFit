@@ -1,7 +1,6 @@
 import 'package:fittofit_mobile/models/akcije.dart';
 import 'package:fittofit_mobile/models/treninzi.dart';
 import 'package:fittofit_mobile/providers/akcije_provider.dart';
-import 'package:fittofit_mobile/providers/vjezbe_provider.dart';
 import 'package:fittofit_mobile/utils/util.dart';
 import 'package:fittofit_mobile/widgets/master_screen_widget.dart';
 import 'package:flutter/material.dart';
@@ -17,13 +16,11 @@ class TreninziDetaljiPage2 extends StatefulWidget {
 }
 
 class _TreninziDetaljiPage2State extends State<TreninziDetaljiPage2> {
-  late VjezbeProvider _vjezbeProvider;
   late AkcijeProvider _akcijeProvider;
   bool isLoading = true;
 
   @override
   void initState() {
-    _vjezbeProvider = context.read<VjezbeProvider>();
     _akcijeProvider = context.read<AkcijeProvider>();
     super.initState();
 
@@ -48,7 +45,8 @@ class _TreninziDetaljiPage2State extends State<TreninziDetaljiPage2> {
         child: Scaffold(
             appBar: AppBar(
                 title: Text('${widget.trening.naziv} :: opis'),
-                backgroundColor: Colors.deepPurple.shade300),
+                backgroundColor: Colors.deepPurple.shade300,
+                foregroundColor: Colors.white),
             body: SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
               child: isLoading ? Container() : _buildNewsDetailsCard(),
