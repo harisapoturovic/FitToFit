@@ -92,31 +92,6 @@ namespace FitToFit.Services
             return filteredQuery;
         }
 
-        //prije generalizacije
-        //public Model.Korisnici Insert(KorisniciInsertRequest request)
-        //{
-        //    var entity = new Korisnici();
-        //    _mapper.Map(request, entity);
-        //
-        //    entity.LozinkaSalt = GenerateSalt();
-        //    entity.LozinkaHash = GenerateHash(entity.LozinkaSalt, request.Password);
-        //
-        //    _context.Korisnicis.Add(entity);
-        //    _context.SaveChanges();
-        //
-        //    return _mapper.Map<Model.Korisnici>(entity);
-        //}
-
-        //public Model.Korisnici Update(int id, KorisniciUpdateRequest request)
-        //{
-        //    var entity = _context.Korisnicis.Find(id);
-        //
-        //    _mapper.Map(request, entity);
-        //
-        //    _context.SaveChanges();
-        //
-        //    return _mapper.Map<Model.Korisnici>(entity);
-        //}
         public async Task<Model.Korisnici> Login(string username, string password)
         {
             var entity = await _context.Korisnicis.Include(u=>u.Uloga).FirstOrDefaultAsync(x => x.KorisnickoIme == username);

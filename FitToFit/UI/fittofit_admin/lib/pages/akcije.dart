@@ -443,6 +443,7 @@ class _AkcijePageState extends State<AkcijePage> {
                           lastDate: DateTime.utc(2024, 12, 31),
                         );
                         if (date == null) {
+                          // ignore: use_build_context_synchronously
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text('Datum početka je obavezan.'),
@@ -501,6 +502,7 @@ class _AkcijePageState extends State<AkcijePage> {
                           lastDate: DateTime.utc(2024, 12, 31),
                         );
                         if (date == null) {
+                          // ignore: use_build_context_synchronously
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text('Datum završetka je obavezan.'),
@@ -545,7 +547,7 @@ class _AkcijePageState extends State<AkcijePage> {
                     const SizedBox(height: 10.0),
                     FormBuilderDropdown(
                       name: 'items',
-                      decoration: const InputDecoration(labelText: 'Treninzi'),
+                      decoration: const InputDecoration(labelText: 'Trening'),
                       initialValue: _selectedTraining,
                       items: _treninziList.map((trening) {
                         return DropdownMenuItem(
@@ -602,21 +604,21 @@ class _AkcijePageState extends State<AkcijePage> {
                   );
                   return;
                 }
-                String _datumPocetka = _pocetakAkcije.toString();
+                String datumPocetka = _pocetakAkcije.toString();
                 String datumVrijemeP =
-                    DateTime.parse(_datumPocetka.replaceAll(' ', 'T'))
+                    DateTime.parse(datumPocetka.replaceAll(' ', 'T'))
                         .toIso8601String();
-                String _datumZavrsetka = _zavrsetakAkcije.toString();
+                String datumZavrsetka = _zavrsetakAkcije.toString();
                 String datumVrijemeZ =
-                    DateTime.parse(_datumZavrsetka.replaceAll(' ', 'T'))
+                    DateTime.parse(datumZavrsetka.replaceAll(' ', 'T'))
                         .toIso8601String();
                 List<Map<String, dynamic>> items = [];
 
-                _acTreningProvider.acTrening.items.forEach((item) {
+                for (var item in _acTreningProvider.acTrening.items) {
                   items.add(
                     {"treningId": item.trening.treningId},
                   );
-                });
+                }
 
                 Map<String, dynamic> action = {
                   "items": items,

@@ -570,7 +570,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
             return AlertDialog(
                 title: const Text('Ažuriraj trenera'),
                 content: SingleChildScrollView(
-                    child: Container(
+                    child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.3,
                   child: Column(children: [
                     FormBuilder(

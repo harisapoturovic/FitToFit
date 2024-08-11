@@ -80,7 +80,7 @@ public class BackgroundWorkerService : BackgroundService
         Console.WriteLine($"Reservation received: {reservation.Email}, {reservation.Clanarina}");
         try
         {
-            await _emailSender.SendEmailAsync(reservation.Email, "New reservation on FitToFit!", $"You have made a new reservation for {reservation.Clanarina}.");
+            await _emailSender.SendEmailAsync(reservation.Email, "Nova rezervacija - FitToFit!", $"Poštovani, \n\nZahvaljujemo se što ste se pridružili našem centru! \nOva poruka potvrđuje da je vaša rezervacija za članarinu - {reservation.Clanarina}, uspješno kreirana. Za sve dodatne informacije ili ako imate bilo kakvih pitanja, slobodno nas kontaktirajte putem ovog emaila. \nRadujemo se što ste dio naše zajednice i nadamo se da ćete uživati u svim pogodnostima koje pružamo. \n\nLijep pozdrav!");
             Console.WriteLine("Email sent successfully!");
         }
         catch (SmtpException ex)

@@ -6,7 +6,7 @@ class CustomAvatar extends StatelessWidget {
   final double radius;
   final String base64Image;
 
-  CustomAvatar({required this.radius, required this.base64Image});
+  const CustomAvatar({required this.radius, required this.base64Image});
 
   @override
   Widget build(BuildContext context) {

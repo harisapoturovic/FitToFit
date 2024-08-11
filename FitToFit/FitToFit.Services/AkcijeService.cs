@@ -53,14 +53,6 @@ namespace FitToFit.Services
                 query = query.Where(a => a.AkcijeTreninzis.Any(at => at.TreningId == search.TreningId));
             }
 
-            //foreach (var i in query)
-            //{
-            //    if(i.DatumZavrsetka.CompareTo(DateTime.Now)>0)
-            //    {
-            //        return null; //arhivirana
-            //    }            
-            //}
-
             return base.AddFilter(query, search);
         }
 

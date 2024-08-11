@@ -24,7 +24,6 @@ namespace FitToFit.Services
             CreateMap<TreneriInsertRequest, Database.Treneri>();
             CreateMap<TreneriUpdateRequest, Database.Treneri>();
             CreateMap<Database.Treninzi, Model.Treninzi>();
-            //CreateMap<Model.Treninzi, Database.Treninzi>();
             CreateMap<TreninziInsertRequest, Database.Treninzi>();
             CreateMap<TreninziUpdateRequest, Database.Treninzi>();
             CreateMap<Database.Termini, Model.Termini>();

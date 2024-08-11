@@ -39,7 +39,7 @@ namespace FitToFit.Model.Requests
         [Compare("PasswordPotvrda", ErrorMessage = "Password do not match")]
         public string Password { get; set; }
         [Compare("Password", ErrorMessage = "Password do not match")]
-        public string PasswordPotvrda { get; set; } //radi provjere na API-ju
+        public string PasswordPotvrda { get; set; } 
         public int? UlogaId { get; set; }
     }
 }

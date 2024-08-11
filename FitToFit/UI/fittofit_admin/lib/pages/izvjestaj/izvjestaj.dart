@@ -316,6 +316,7 @@ class _IzvjestajPageState extends State<IzvjestajPage> {
     );
   }
 
+  // ignore: non_constant_identifier_names
   Widget BarChartSample2() {
     _loadData();
     return SizedBox(
@@ -443,7 +444,7 @@ class _IzvjestajPageState extends State<IzvjestajPage> {
 
     return fl.SideTitleWidget(
       axisSide: meta.axisSide,
-      space: 16, //margin top
+      space: 16,
       child: text,
     );
   }

@@ -146,8 +146,8 @@ class _TrainingPageState extends State<TrainingPage> {
                             style: ButtonStyle(
                               backgroundColor: WidgetStateProperty.all<Color>(
                                   Colors.blue.shade300),
-                              foregroundColor: WidgetStateProperty.all<Color>(
-                                  Colors.white), // Text color
+                              foregroundColor:
+                                  WidgetStateProperty.all<Color>(Colors.white),
                               padding:
                                   WidgetStateProperty.all<EdgeInsetsGeometry>(
                                 const EdgeInsets.symmetric(

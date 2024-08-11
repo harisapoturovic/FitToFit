@@ -59,7 +59,6 @@ namespace FitToFit.Services.RezervacijeStateMachine
 
             entity.StateMachine = "refused";
 
-            //set.Remove(entity);
             await _context.SaveChangesAsync();
 
             return _mapper.Map<Rezervacije>(entity);

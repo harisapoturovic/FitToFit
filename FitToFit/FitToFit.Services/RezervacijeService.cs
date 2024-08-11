@@ -91,7 +91,7 @@ namespace FitToFit.Services
 
             //RabbitMQ: API - objekat - Auxiliary
 
-            /*var korisnik = entity.Korisnik;
+            var korisnik = entity.Korisnik;
             string clanarina = _context.Clanarines.First(x => x.ClanarinaId == entity.ClanarinaId).Naziv;
             if(korisnik != null && clanarina != null)
             {
@@ -103,7 +103,7 @@ namespace FitToFit.Services
                 };
                 _messageProducer.SendingObject(reservation);
             }
-            */
+            
             var state = _baseState.CreateState("initial");
             return await state.Insert(entity);
         }
@@ -152,15 +152,6 @@ namespace FitToFit.Services
 
             return await state.Archive(id);
         }
-
-        //public async Task<Model.Rezervacije> Reactivate(int id)
-        //{
-        //    var entity = await _context.Rezervacijes.FindAsync(id);
-        //
-        //    var state = _baseState.CreateState(entity.Status);
-        //
-        //    return await state.Reactivate(id);
-        //}
 
         public async Task<List<string>> AllowedActions(int id)
         {

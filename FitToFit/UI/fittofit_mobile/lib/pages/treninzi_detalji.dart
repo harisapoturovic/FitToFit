@@ -169,13 +169,13 @@ class _TreninziDetaljiPage extends State<TreninziDetaljiPage> {
                   if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                     // Grupisanje termina po danima
                     Map<String, List<Termini>> groupedByDay = {};
-                    snapshot.data!.forEach((termin) {
+                    for (var termin in snapshot.data!) {
                       String day = termin!.dan;
                       if (!groupedByDay.containsKey(day)) {
                         groupedByDay[day] = [];
                       }
                       groupedByDay[day]!.add(termin);
-                    });
+                    }
 
                     // Prikazivanje u ListView.separated
                     return ListView.separated(

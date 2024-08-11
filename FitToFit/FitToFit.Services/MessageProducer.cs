@@ -30,7 +30,7 @@ namespace FitToFit.Services
                 using var connection = factory.CreateConnection();
                 using var channel = connection.CreateModel();
 
-                channel.QueueDeclare(queue: "training_added",
+                channel.QueueDeclare(queue: "reservation_added",
                                      durable: false,
                                      exclusive: false,
                                      autoDelete: false,
@@ -41,7 +41,7 @@ namespace FitToFit.Services
                 var body = Encoding.UTF8.GetBytes(message);
 
                 channel.BasicPublish(exchange: string.Empty,
-                                     routingKey: "training_added",
+                                     routingKey: "reservation_added",
                                      basicProperties: null,
                                      body: body);
             }

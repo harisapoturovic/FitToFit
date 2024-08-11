@@ -1368,7 +1368,7 @@ class _PonudaPageState extends State<PonudaPage> {
             return AlertDialog(
                 title: const Text('Ažuriraj termin'),
                 content: SingleChildScrollView(
-                    child: Container(
+                    child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.3,
                   child: Column(children: [
                     FormBuilder(
@@ -1410,7 +1410,7 @@ class _PonudaPageState extends State<PonudaPage> {
                                             }).toList(),
                                             onChanged: (value) {
                                               setState(() {
-                                                _selectedDan = value as String?;
+                                                _selectedDan = value;
                                               });
                                             },
                                           ),
@@ -1461,8 +1461,7 @@ class _PonudaPageState extends State<PonudaPage> {
                                             }).toList(),
                                             onChanged: (value) {
                                               setState(() {
-                                                _selectedTrening =
-                                                    value as int?;
+                                                _selectedTrening = value;
                                               });
                                             },
                                           ),
@@ -1481,7 +1480,7 @@ class _PonudaPageState extends State<PonudaPage> {
                                             }).toList(),
                                             onChanged: (value) {
                                               setState(() {
-                                                _selectedTrener = value as int?;
+                                                _selectedTrener = value;
                                               });
                                             },
                                           ),
@@ -1499,7 +1498,7 @@ class _PonudaPageState extends State<PonudaPage> {
                                             }).toList(),
                                             onChanged: (value) {
                                               setState(() {
-                                                _selectedSala = value as int?;
+                                                _selectedSala = value;
                                               });
                                             },
                                           ),
@@ -1575,7 +1574,7 @@ class _PonudaPageState extends State<PonudaPage> {
             return AlertDialog(
                 title: const Text('Ažuriraj stavku'),
                 content: SingleChildScrollView(
-                    child: Container(
+                    child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.3,
                   child: Column(children: [
                     FormBuilder(
@@ -1619,8 +1618,7 @@ class _PonudaPageState extends State<PonudaPage> {
                                             }).toList(),
                                             onChanged: (value) {
                                               setState(() {
-                                                _selectedVrstaTr =
-                                                    value as int?;
+                                                _selectedVrstaTr = value;
                                               });
                                             },
                                           ),
@@ -1639,8 +1637,7 @@ class _PonudaPageState extends State<PonudaPage> {
                                             }).toList(),
                                             onChanged: (value) {
                                               setState(() {
-                                                _selectedClanarina =
-                                                    value as int?;
+                                                _selectedClanarina = value;
                                               });
                                             },
                                           ),

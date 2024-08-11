@@ -9,6 +9,6 @@ namespace FitToFit.Model.SearchObjects
     public class VrsteTreningaSearchObject : BaseSearchObject
     {
         public string? Naziv { get; set; }
-        public string? FTS { get; set; } //full text search
+        public string? FTS { get; set; } 
     }
 }

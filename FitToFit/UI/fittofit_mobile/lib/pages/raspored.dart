@@ -196,7 +196,7 @@ class _RasporedPageState extends State<RasporedPage> {
                               }
                             },
                           ),
-                          if (item.brojClanova != null) ...[
+                          ...[
                             const SizedBox(height: 4.0),
                             Text('Broj članova: ${item.brojClanova}'),
                           ],

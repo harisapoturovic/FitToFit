@@ -12,10 +12,4 @@ class AcTreningProvider with ChangeNotifier {
     acTrening = newAcTrening;
     notifyListeners();
   }
-/*
-  AcTreningItem? findInAc(Treninzi trening) {
-    AcTreningItem? item = acTrening.items
-        .firstWhere((item) => item.trening.treningId == trening.treningId);
-    return item;
-  }*/
 }

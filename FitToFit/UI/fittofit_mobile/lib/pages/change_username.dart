@@ -20,8 +20,9 @@ class _ChangeUsernameScreenState extends State<ChangeUsernameScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   late KorisniciProvider _korisniciProvider;
 
-  TextEditingController _newUsernameController = TextEditingController();
-  TextEditingController _currentUsernameController = TextEditingController();
+  final TextEditingController _newUsernameController = TextEditingController();
+  final TextEditingController _currentUsernameController =
+      TextEditingController();
   FocusNode _trenutnoFocusNode = FocusNode();
   bool usernameTaken = false;
   final debouncer = Debouncer(delay: const Duration(milliseconds: 500));
@@ -63,7 +64,6 @@ class _ChangeUsernameScreenState extends State<ChangeUsernameScreen> {
   }
 
   Future<void> debouncedUsernameCheck(String username) async {
-    // Pokreće debouncing
     debouncer.run(() async {
       await provjeriUsername(username);
     });

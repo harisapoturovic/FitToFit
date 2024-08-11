@@ -15,8 +15,6 @@ namespace FitToFit.Model.Requests
         [Required(AllowEmptyStrings = false)]
         public string Prezime { get; set; } = null!;
 
-        //public string Spol { get; set; } = null!;
-
         public string? Telefon { get; set; } = null!;
 
         public string? Email { get; set; } = null!;

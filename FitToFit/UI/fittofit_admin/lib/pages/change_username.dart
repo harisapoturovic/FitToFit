@@ -20,8 +20,8 @@ class _ChangeUsernameScreenState extends State<ChangeUsernameScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   late KorisniciProvider _korisniciProvider;
 
-  TextEditingController _newUsernameController = TextEditingController();
-  TextEditingController _currentUsernameController = TextEditingController();
+  final TextEditingController _newUsernameController = TextEditingController();
+  final TextEditingController _currentUsernameController = TextEditingController();
   FocusNode _trenutnoFocusNode = FocusNode();
   bool usernameTaken = false;
   final debouncer = Debouncer(delay: const Duration(milliseconds: 500));
@@ -63,7 +63,6 @@ class _ChangeUsernameScreenState extends State<ChangeUsernameScreen> {
   }
 
   Future<void> debouncedUsernameCheck(String username) async {
-    // Pokreće debouncing
     debouncer.run(() async {
       await provjeriUsername(username);
     });
@@ -113,6 +112,12 @@ class _ChangeUsernameScreenState extends State<ChangeUsernameScreen> {
                       name: 'currentPassword',
                       controller: _currentUsernameController,
                       focusNode: _trenutnoFocusNode,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Ovo polje je obavezno!';
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(
                       height: 20,
@@ -166,7 +171,7 @@ class _ChangeUsernameScreenState extends State<ChangeUsernameScreen> {
   }
 
   void _updateUserData() async {
-     if (usernameTaken == true) {
+    if (usernameTaken == true) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Korisničko ime je već uzeto, unesite neko novo.'),
@@ -200,6 +205,12 @@ class _ChangeUsernameScreenState extends State<ChangeUsernameScreen> {
             "Greška",
             "Trenutni username nije validan za prijavljenog korisnika!",
             Colors.red);
+        return;
+      }
+
+      if (usernameTaken) {
+        _showAlertDialog("Greška",
+            "Korisničko ime koje ste unijeli je već zauzeto.", Colors.red);
         return;
       }
 

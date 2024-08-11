@@ -89,7 +89,7 @@ class _CjenovnikPageState extends State<CjenovnikPage> {
                         });
                       },
                       style: ButtonStyle(
-                        textStyle: MaterialStateProperty.resolveWith<TextStyle>(
+                        textStyle: WidgetStateProperty.resolveWith<TextStyle>(
                           (states) {
                             if (isSelected) {
                               return const TextStyle(

@@ -40,12 +40,6 @@ namespace FitToFit.Controllers
             return await (_service as IRezervacijeService).Archive(id);
         }
 
-        //[HttpPut("{id}/reactivate")]
-        //public virtual async Task<Model.Rezervacije> Reactivate(int id)
-        //{
-        //    return await (_service as IRezervacijeService).Reactivate(id);
-        //}
-
         [HttpGet("{id}/allowedActions")]
         public virtual async Task<List<string>> AllowedActions(int id)
         {

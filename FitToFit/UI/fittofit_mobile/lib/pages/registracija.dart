@@ -99,7 +99,6 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
   }
 
   Future<void> debouncedUsernameCheck(String username) async {
-    // Pokreće debouncing
     debouncer.run(() async {
       await provjeriUsername(username);
     });
@@ -436,7 +435,6 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
             ElevatedButton(
               onPressed: () {
                 _dodajKorisnika();
-                //Navigator.pop(context);
               },
               child: const Text('Spremi'),
             ),
@@ -492,12 +490,12 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
       );
       return;
     }
-    String _datum1 = _selectedDate1.toString();
+    String datum1 = _selectedDate1.toString();
     String datumVrijeme1 =
-        DateTime.parse(_datum1.replaceAll(' ', 'T')).toIso8601String();
-    String _datum2 = _selectedDate2.toString();
+        DateTime.parse(datum1.replaceAll(' ', 'T')).toIso8601String();
+    String datum2 = _selectedDate2.toString();
     String datumVrijeme2 =
-        DateTime.parse(_datum2.replaceAll(' ', 'T')).toIso8601String();
+        DateTime.parse(datum2.replaceAll(' ', 'T')).toIso8601String();
     _formKey.currentState?.saveAndValidate();
     final currentFormState = _formKey.currentState;
     if (!_areAllFieldsFilled(currentFormState)) {

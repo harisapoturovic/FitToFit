@@ -22,8 +22,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   late KorisniciProvider _korisniciProvider;
 
-  TextEditingController _newPasswordController = TextEditingController();
-  TextEditingController _currentPasswordController = TextEditingController();
+  final TextEditingController _newPasswordController = TextEditingController();
+  final TextEditingController _currentPasswordController = TextEditingController();
   FocusNode _trenutnaFocusNode = FocusNode();
 
   Future<Korisnici?> getUserFromUserId(int userId) async {
@@ -89,6 +89,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         name: 'currentPassword',
                         controller: _currentPasswordController,
                         focusNode: _trenutnaFocusNode,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Ovo polje je obavezno!';
+                          }
+
+                          return null;
+                        },
                       ),
                       const SizedBox(
                         height: 20,

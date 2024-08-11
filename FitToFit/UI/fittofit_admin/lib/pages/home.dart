@@ -326,6 +326,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // ignore: non_constant_identifier_names
   Dashboard() {
     return Container(
       padding: const EdgeInsets.only(top: 100),
@@ -359,7 +360,7 @@ class _HomePageState extends State<HomePage> {
                     content: brojKorisnika.toString()),
               ),
               // Second block
-              Container(
+              SizedBox(
                   width: MediaQuery.of(context).size.width * 0.22,
                   height: 200,
                   child: DashboardBlock(
@@ -375,7 +376,7 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // Third block
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width * 0.45,
                   height: 140,
                   child: DashboardBlock(
@@ -586,7 +587,6 @@ class _HomePageState extends State<HomePage> {
       }
     }
     var request = Map.from(_formKey.currentState!.value);
-    //request['datumObjave'] = datumVrijeme;
     request['brojLajkova'] = 0;
     request['korisnikId'] = logiraniKorisnik.korisnikId;
     request.addAll({
@@ -664,7 +664,7 @@ class DashboardBlock extends StatelessWidget {
   final String content;
   final Color textColor;
 
-  DashboardBlock(
+  const DashboardBlock(
       {required this.color,
       required this.title,
       required this.content,

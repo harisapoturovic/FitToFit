@@ -604,9 +604,9 @@ class _KorisniciPageState extends State<KorisniciPage> {
       );
       return;
     }
-    String _datum = datum.toString();
+    String datum_ = datum.toString();
     String datumVrijeme =
-        DateTime.parse(_datum.replaceAll(' ', 'T')).toIso8601String();
+        DateTime.parse(datum_.replaceAll(' ', 'T')).toIso8601String();
     _formKey.currentState?.saveAndValidate();
     final currentFormState = _formKey.currentState;
     if (!_areAllFieldsFilled(currentFormState)) {
@@ -624,7 +624,6 @@ class _KorisniciPageState extends State<KorisniciPage> {
       }
     }
     var request = Map.from(_formKey.currentState!.value);
-    //request['datumZaposlenja'] = formatDateForJson(request['datumZaposlenja']);
     request['slika'] = _base64Image;
     request.addAll({
       'datumZaposlenja': datumVrijeme,

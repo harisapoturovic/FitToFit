@@ -49,14 +49,14 @@ class _ReservationPageState extends State<ReservationPage> {
   List<Akcije> _akcijeList = [];
   int? _rezervacijeCount1;
   int? _rezervacijeCount2;
-  List<int> _terminiIds = [];
+  final List<int> _terminiIds = [];
   int? _selectedClanarina;
   int? _selectedVrstaTreninga;
   int? _selectedTrening;
   String? korisnickoIme = '';
   late Korisnici korisnik;
   late Clanarine _clanarina;
-  Set<String> _selectedTermini = {};
+  final Set<String> _selectedTermini = {};
 
   @override
   void initState() {
@@ -170,13 +170,13 @@ class _ReservationPageState extends State<ReservationPage> {
 
   Map<String, List<Termini>> _grupisiTerminePoDanu(List<Termini> terminiList) {
     Map<String, List<Termini>> groupedByDay = {};
-    terminiList.forEach((termin) {
+    for (var termin in terminiList) {
       String day = termin.dan;
       if (!groupedByDay.containsKey(day)) {
         groupedByDay[day] = [];
       }
       groupedByDay[day]!.add(termin);
-    });
+    }
     return groupedByDay;
   }
 

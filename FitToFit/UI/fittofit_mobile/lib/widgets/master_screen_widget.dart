@@ -9,46 +9,17 @@ import 'package:responsive_navigation_bar/responsive_navigation_bar.dart';
 class MasterScreenWidget extends StatefulWidget {
   Widget? child;
   String? title;
-
-  /// Controller for search
-  TextEditingController? controller;
-
-  /// onSubmitted event for search
-  void Function(String)? onSubmitted;
-
-  /// onClosed event for search
-  void Function()? onClosed;
-
-  /// onChanged event for search
-  void Function(String)? onChanged;
-
-  /// onCleared event for search
-  void Function()? onCleared;
-  bool? showBackArrow;
-  bool? showSearch;
   Widget? floatingActionButton;
   bool? showNavBar;
   int? selectedIndex;
 
-  /// If set to true, it makes tabs scrollable horizontally
-  bool? isScrollable;
-
-  MasterScreenWidget({
-    super.key,
-    required this.child,
-    this.title,
-    this.controller,
-    this.onSubmitted,
-    this.onClosed,
-    this.onChanged,
-    this.onCleared,
-    this.showBackArrow,
-    this.showSearch,
-    this.floatingActionButton,
-    this.showNavBar = true,
-    this.selectedIndex,
-    this.isScrollable,
-  });
+  MasterScreenWidget(
+      {super.key,
+      required this.child,
+      this.title,
+      this.floatingActionButton,
+      this.showNavBar = true,
+      this.selectedIndex});
 
   @override
   State<MasterScreenWidget> createState() => _MasterScreenWidgetState();
@@ -72,7 +43,8 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
         Positioned.fill(
           child: Opacity(
             opacity: 0.3,
-            child: Image.asset('assets/images/background.png', fit: BoxFit.cover),
+            child:
+                Image.asset('assets/images/background.png', fit: BoxFit.cover),
           ),
         ),
         Align(

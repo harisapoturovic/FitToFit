@@ -135,6 +135,7 @@ class PdfPreviewPage extends StatelessWidget {
     return pdf.save();
   }
 
+  // ignore: non_constant_identifier_names
   pw.Widget PaddedText(final String text,
       {pw.TextAlign align = pw.TextAlign.left}) {
     return pw.Padding(

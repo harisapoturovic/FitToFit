@@ -92,7 +92,6 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
   }
 
   Future<void> debouncedUsernameCheck(String username) async {
-    // Pokreće debouncing
     debouncer.run(() async {
       await provjeriUsername(username);
     });
@@ -434,16 +433,12 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
       );
       return;
     }
-    String _datum = _selectedDate.toString();
+    String datum_ = _selectedDate.toString();
     String datumVrijeme =
-        DateTime.parse(_datum.replaceAll(' ', 'T')).toIso8601String();
-    if (usernameTaken == true) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Korisničko ime je već uzeto, unesite neko novo.'),
-          backgroundColor: Colors.red,
-        ),
-      );
+        DateTime.parse(datum_.replaceAll(' ', 'T')).toIso8601String();
+    if (usernameTaken) {
+      _showAlertDialog("Greška",
+          "Korisničko ime koje ste unijeli je već zauzeto.", Colors.red);
       return;
     }
     _formKey.currentState?.saveAndValidate();
@@ -463,8 +458,6 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
       }
     }
     var request = Map.from(_formKey.currentState!.value);
-    //String formattedDate = request['datumRodjenja'].toIso8601String();
-    // request['datumRodjenja'] = formattedDate;
     request.addAll({
       'datumRodjenja': datumVrijeme,
     });

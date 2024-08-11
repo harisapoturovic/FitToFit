@@ -10,7 +10,6 @@ namespace FitToFit.Services
         Task<Rezervacije> Cancel(int id);
         Task<Rezervacije> Refuse(int id);
         Task<Rezervacije> Archive(int id);
-        //Task<Rezervacije> Reactivate(int id);
         Task<List<string>> AllowedActions(int id);
 
     }

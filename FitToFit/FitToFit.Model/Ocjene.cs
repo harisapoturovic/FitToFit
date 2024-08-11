@@ -21,6 +21,6 @@ namespace FitToFit.Model
 
         //public virtual Korisnici Korisnik { get; set; } = null!;
 
-        //public virtual Treneri Trener { get; set; } = null!; // preko ocjena necu traziti info o treneru???
+        //public virtual Treneri Trener { get; set; } = null!;
     }
 }

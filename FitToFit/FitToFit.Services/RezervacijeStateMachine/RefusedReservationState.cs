@@ -15,17 +15,5 @@ namespace FitToFit.Services.RezervacijeStateMachine
            : base(serviceProvider, context, mapper)
        {
        }
-
-        //public async override Task<Rezervacije> Reactivate(int id)
-        //{
-        //    var set = _context.Set<Database.Rezervacije>();
-        //
-        //    var entity = await set.FindAsync(id);
-        //
-        //    entity.Status = "active";
-        //
-        //    await _context.SaveChangesAsync();
-        //    return _mapper.Map<Model.Rezervacije>(entity);
-        //}
     }
 }
