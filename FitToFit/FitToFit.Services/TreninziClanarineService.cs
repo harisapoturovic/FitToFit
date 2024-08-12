@@ -9,16 +9,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TreninziClanarine = FitToFit.Database.TreninziClanarine;
 
 namespace FitToFit.Services
 {
-    public class TreninziClanarineService : BaseCRUDService<Model.TreninziClanarine, Database.TreninziClanarine, TreninziClanarineSearchObject, TreninziClanarineInsertRequest, TreninziClanarineUpdateRequest>, ITreninziClanarine
+    public class TreninziClanarineService : BaseCRUDService<Model.TreninziClanarine, TreninziClanarine, TreninziClanarineSearchObject, TreninziClanarineInsertRequest, TreninziClanarineUpdateRequest>, ITreninziClanarine
     {
         public TreninziClanarineService(Ib200048Context context, IMapper mapper) : base(context, mapper)
         {
         }
 
-        public override IQueryable<Database.TreninziClanarine> AddFilter(IQueryable<Database.TreninziClanarine> query, TreninziClanarineSearchObject? search = null)
+        public override IQueryable<TreninziClanarine> AddFilter(IQueryable<TreninziClanarine> query, TreninziClanarineSearchObject? search = null)
         {
             if (search.Cijena != null)
             {

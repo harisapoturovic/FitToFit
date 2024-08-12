@@ -126,4 +126,10 @@ app.Urls.Add("https://0.0.0.0:7058");
 
 app.MapControllers();
 
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<Ib200048Context>();
+    context.Database.Migrate();
+}
+
 app.Run();

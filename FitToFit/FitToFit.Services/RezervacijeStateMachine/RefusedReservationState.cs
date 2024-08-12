@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FitToFit.Database;
 using FitToFit.Model;
 using FitToFit.Model.Requests;
 using System;
@@ -11,7 +12,7 @@ namespace FitToFit.Services.RezervacijeStateMachine
 {
     public class RefusedReservationState : BaseState
     {
-       public RefusedReservationState(IServiceProvider serviceProvider, Database.Ib200048Context context, IMapper mapper) 
+       public RefusedReservationState(IServiceProvider serviceProvider, Ib200048Context context, IMapper mapper) 
            : base(serviceProvider, context, mapper)
        {
        }

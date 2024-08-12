@@ -7,19 +7,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Rezervacije = FitToFit.Database.Rezervacije;
 
 namespace FitToFit.Services.RezervacijeStateMachine
 {
     public class ActiveReservationState : BaseState
     {
-        public ActiveReservationState(IServiceProvider serviceProvider, Database.Ib200048Context context, IMapper mapper) 
+        public ActiveReservationState(IServiceProvider serviceProvider, Ib200048Context context, IMapper mapper) 
             : base(serviceProvider, context, mapper)
         {
         }
 
         public override async Task<Model.Rezervacije> Cancel(int id)
         {
-            var set = _context.Set<Database.Rezervacije>();
+            var set = _context.Set<Rezervacije>();
 
             var entity = await set.FindAsync(id);
 
@@ -31,7 +32,7 @@ namespace FitToFit.Services.RezervacijeStateMachine
 
         public override async Task<Model.Rezervacije> Archive(int id)
         {
-            var set = _context.Set<Database.Rezervacije>();
+            var set = _context.Set<Rezervacije>();
 
             var entity = await set.FindAsync(id);
 

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FitToFit.Database;
 using FitToFit.Model;
 using FitToFit.Model.Requests;
 using System;
@@ -6,19 +7,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Rezervacije = FitToFit.Database.Rezervacije;
 
 namespace FitToFit.Services.RezervacijeStateMachine
 {
     public class DraftReservationState : BaseState
     {
-        public DraftReservationState(IServiceProvider serviceProvider, Database.Ib200048Context context, IMapper mapper) 
+        public DraftReservationState(IServiceProvider serviceProvider, Ib200048Context context, IMapper mapper) 
             : base(serviceProvider, context, mapper)
         {
         }
 
-        public override async Task<Rezervacije> Update(int id, RezervacijeUpdateRequest request)
+        public override async Task<Model.Rezervacije> Update(int id, RezervacijeUpdateRequest request)
         {
-            var set = _context.Set<Database.Rezervacije>();
+            var set = _context.Set<Rezervacije>();
 
             var entity = await set.FindAsync(id);
 
@@ -28,9 +30,9 @@ namespace FitToFit.Services.RezervacijeStateMachine
             return _mapper.Map<Model.Rezervacije>(entity);
         }
 
-        public override async Task<Rezervacije> Activate(int id)
+        public override async Task<Model.Rezervacije> Activate(int id)
         {
-            var set = _context.Set<Database.Rezervacije>();
+            var set = _context.Set<Rezervacije>();
 
             var entity = await set.FindAsync(id);
 
@@ -51,17 +53,17 @@ namespace FitToFit.Services.RezervacijeStateMachine
             return _mapper.Map<Model.Rezervacije>(entity);
         }
 
-        public override async Task<Rezervacije> Refuse(int id)
+        public override async Task<Model.Rezervacije> Refuse(int id)
         {
-            var entity = await _context.Set<Database.Rezervacije>().FindAsync(id);
+            var entity = await _context.Set<Rezervacije>().FindAsync(id);
 
-            var set = _context.Set<Database.Rezervacije>();
+            var set = _context.Set<Rezervacije>();
 
             entity.StateMachine = "refused";
 
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<Rezervacije>(entity);
+            return _mapper.Map<Model.Rezervacije>(entity);
         }
 
         public override async Task<List<string>> AllowedActions()

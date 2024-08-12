@@ -8,17 +8,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VrsteTreninga = FitToFit.Database.VrsteTreninga;
 
 namespace FitToFit.Services
 {
-    public class VrsteTreningaService : BaseService<Model.VrsteTreninga, Database.VrsteTreninga, VrsteTreningaSearchObject>, IVrsteTreningaService
+    public class VrsteTreningaService : BaseService<Model.VrsteTreninga, VrsteTreninga, VrsteTreningaSearchObject>, IVrsteTreningaService
     {
         public VrsteTreningaService(Ib200048Context context, IMapper mapper)
             :base(context, mapper)
         {
         }
 
-        public override IQueryable<Database.VrsteTreninga> AddFilter(IQueryable<Database.VrsteTreninga> query, VrsteTreningaSearchObject? search = null)
+        public override IQueryable<VrsteTreninga> AddFilter(IQueryable<VrsteTreninga> query, VrsteTreningaSearchObject? search = null)
         {
             if (!string.IsNullOrWhiteSpace(search?.Naziv))
             {

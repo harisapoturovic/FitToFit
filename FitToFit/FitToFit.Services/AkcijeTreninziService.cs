@@ -10,10 +10,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AkcijeTreninzi = FitToFit.Database.AkcijeTreninzi;
 
 namespace FitToFit.Services
 {
-    public class AkcijeTreninziService : BaseService<Model.AkcijeTreninzi, Database.AkcijeTreninzi, BaseSearchObject>, IAkcijeTreninziService
+    public class AkcijeTreninziService : BaseService<Model.AkcijeTreninzi, AkcijeTreninzi, BaseSearchObject>, IAkcijeTreninziService
     {
         public AkcijeTreninziService(Ib200048Context context, IMapper mapper) : base(context, mapper)
         {
@@ -21,9 +22,9 @@ namespace FitToFit.Services
 
         public virtual async Task<Model.AkcijeTreninzi> Insert(AkcijeTreninziInsertRequest insert)
         {
-            var set = _context.Set<Database.AkcijeTreninzi>();
+            var set = _context.Set<AkcijeTreninzi>();
 
-            Database.AkcijeTreninzi entity = _mapper.Map<Database.AkcijeTreninzi>(insert);
+            AkcijeTreninzi entity = _mapper.Map<AkcijeTreninzi>(insert);
 
             set.Add(entity);
 
@@ -33,7 +34,7 @@ namespace FitToFit.Services
 
         public virtual async Task<Model.AkcijeTreninzi> Delete(int id)
         {
-            var set = _context.Set<Database.AkcijeTreninzi>();
+            var set = _context.Set<AkcijeTreninzi>();
 
             var entity = await set.FindAsync(id);
 

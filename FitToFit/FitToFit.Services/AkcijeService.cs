@@ -10,10 +10,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Akcije = FitToFit.Database.Akcije;
+using AkcijeTreninzi = FitToFit.Database.AkcijeTreninzi;
 
 namespace FitToFit.Services
 {
-    public class AkcijeService : BaseCRUDService<Model.Akcije, Database.Akcije, AkcijeSearchObject, AkcijeInsertRequest, AkcijeUpdateRequest>, IAkcijeService
+    public class AkcijeService : BaseCRUDService<Model.Akcije, Akcije, AkcijeSearchObject, AkcijeInsertRequest, AkcijeUpdateRequest>, IAkcijeService
     {
         public AkcijeBaseState _baseState { get; set; }
         public AkcijeService(AkcijeBaseState baseState, Ib200048Context context, IMapper mapper) : base(context, mapper)
@@ -21,7 +23,7 @@ namespace FitToFit.Services
             _baseState = baseState;
         }
 
-        public override IQueryable<Database.Akcije> AddInclude(IQueryable<Database.Akcije> query, AkcijeSearchObject search = null)
+        public override IQueryable<Akcije> AddInclude(IQueryable<Akcije> query, AkcijeSearchObject search = null)
         {
             if (search?.IsTreninziIncluded == true)
             {
@@ -31,7 +33,7 @@ namespace FitToFit.Services
             return base.AddInclude(query, search);
         }
 
-        public override IQueryable<Database.Akcije> AddFilter(IQueryable<Database.Akcije> query, AkcijeSearchObject? search = null)
+        public override IQueryable<Akcije> AddFilter(IQueryable<Akcije> query, AkcijeSearchObject? search = null)
         {
             if (!string.IsNullOrWhiteSpace(search?.Naziv))
             {
@@ -56,9 +58,9 @@ namespace FitToFit.Services
             return base.AddFilter(query, search);
         }
 
-        public override Task BeforeInsert(Database.Akcije entity, AkcijeInsertRequest insert)
+        public override Task BeforeInsert(Akcije entity, AkcijeInsertRequest insert)
         {
-            entity.AkcijeTreninzis = insert.Items.Select(item => new Database.AkcijeTreninzi
+            entity.AkcijeTreninzis = insert.Items.Select(item => new AkcijeTreninzi
             {
                 AkcijaId = entity.AkcijaId,
                 TreningId = item.TreningId,
@@ -68,9 +70,9 @@ namespace FitToFit.Services
 
         public override async Task<Model.Akcije> Insert(AkcijeInsertRequest insert)
         {
-            var set = _context.Set<Database.Akcije>();
+            var set = _context.Set<Akcije>();
 
-            Database.Akcije entity = _mapper.Map<Database.Akcije>(insert);
+            Akcije entity = _mapper.Map<Akcije>(insert);
 
             set.Add(entity);
             await BeforeInsert(entity, insert);

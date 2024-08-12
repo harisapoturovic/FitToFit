@@ -10,17 +10,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using KorisniciNovosti = FitToFit.Model.KorisniciNovosti;
+using KorisniciNovosti = FitToFit.Database.KorisniciNovosti;
 
 namespace FitToFit.Services
 {
-    public class KorisniciNovostiService : BaseCRUDService<Model.KorisniciNovosti, Database.KorisniciNovosti, KorisniciNovostiSearchObject, KorisniciNovostiInsertRequest, KorisniciNovostiInsertRequest>, IKorisniciNovostiService
+    public class KorisniciNovostiService : BaseCRUDService<Model.KorisniciNovosti, KorisniciNovosti, KorisniciNovostiSearchObject, KorisniciNovostiInsertRequest, KorisniciNovostiInsertRequest>, IKorisniciNovostiService
     {
         public KorisniciNovostiService(Ib200048Context context, IMapper mapper) : base(context, mapper)
         {
         }
 
-        public override IQueryable<Database.KorisniciNovosti> AddFilter(IQueryable<Database.KorisniciNovosti> query, KorisniciNovostiSearchObject? search = null)
+        public override IQueryable<KorisniciNovosti> AddFilter(IQueryable<KorisniciNovosti> query, KorisniciNovostiSearchObject? search = null)
         {
             if (search.korisnikId != null)
             {

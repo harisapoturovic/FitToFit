@@ -14,10 +14,12 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Rezervacije = FitToFit.Database.Rezervacije;
+using RezervacijaStavke = FitToFit.Database.RezervacijaStavke;
 
 namespace FitToFit.Services
 {
-    public class RezervacijeService : BaseCRUDService<Model.Rezervacije, Database.Rezervacije, RezervacijeSearchObject, RezervacijeInsertRequest, RezervacijeUpdateRequest>, IRezervacijeService
+    public class RezervacijeService : BaseCRUDService<Model.Rezervacije, Rezervacije, RezervacijeSearchObject, RezervacijeInsertRequest, RezervacijeUpdateRequest>, IRezervacijeService
     {
         public BaseState _baseState { get; set; }
         private readonly IMessageProducer _messageProducer;
@@ -27,7 +29,7 @@ namespace FitToFit.Services
             _messageProducer = messageProducer;
         }
 
-        public override IQueryable<Database.Rezervacije> AddInclude(IQueryable<Database.Rezervacije> query, RezervacijeSearchObject search = null)
+        public override IQueryable<Rezervacije> AddInclude(IQueryable<Rezervacije> query, RezervacijeSearchObject search = null)
         {
             if (search?.IsTerminiIncluded == true)
             {
@@ -37,7 +39,7 @@ namespace FitToFit.Services
             return base.AddInclude(query, search);
         }
 
-        public override IQueryable<Database.Rezervacije> AddFilter(IQueryable<Database.Rezervacije> query, RezervacijeSearchObject? search = null)
+        public override IQueryable<Rezervacije> AddFilter(IQueryable<Rezervacije> query, RezervacijeSearchObject? search = null)
         {
             if (search.KorisnikId != null)
             {
@@ -67,9 +69,9 @@ namespace FitToFit.Services
             return base.AddFilter(query, search);
         }
 
-        public override Task BeforeInsert(Database.Rezervacije entity, RezervacijeInsertRequest insert)
+        public override Task BeforeInsert(Rezervacije entity, RezervacijeInsertRequest insert)
         {
-            entity.RezervacijaStavkes = insert.Items.Select(item => new Database.RezervacijaStavke
+            entity.RezervacijaStavkes = insert.Items.Select(item => new RezervacijaStavke
             {
                 RezervacijaId = entity.RezervacijaId,
                 TerminId = item.TerminId,
@@ -80,9 +82,9 @@ namespace FitToFit.Services
 
         public override async Task<Model.Rezervacije> Insert(RezervacijeInsertRequest insert)
         {
-            var set = _context.Set<Database.Rezervacije>();
+            var set = _context.Set<Rezervacije>();
 
-            Database.Rezervacije entity = _mapper.Map<Database.Rezervacije>(insert);
+            Rezervacije entity = _mapper.Map<Rezervacije>(insert);
 
             set.Add(entity);
             await BeforeInsert(entity, insert);

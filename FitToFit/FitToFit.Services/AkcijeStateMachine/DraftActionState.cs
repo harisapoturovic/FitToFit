@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FitToFit.Database;
 using FitToFit.Model;
 using FitToFit.Model.Requests;
 using System;
@@ -6,19 +7,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Akcije = FitToFit.Database.Akcije;
 
 namespace FitToFit.Services.AkcijeStateMachine
 {
     public class DraftActionState : AkcijeBaseState
     {
-        public DraftActionState(IServiceProvider serviceProvider, Database.Ib200048Context context, IMapper mapper) 
+        public DraftActionState(IServiceProvider serviceProvider, Ib200048Context context, IMapper mapper) 
             : base(serviceProvider, context, mapper)
         {
         }
 
-        public override async Task<Akcije> Update(int id, AkcijeUpdateRequest request)
+        public override async Task<Model.Akcije> Update(int id, AkcijeUpdateRequest request)
         {
-            var set = _context.Set<Database.Akcije>();
+            var set = _context.Set<Akcije>();
 
             var entity = await set.FindAsync(id);
 
@@ -35,9 +37,9 @@ namespace FitToFit.Services.AkcijeStateMachine
             return _mapper.Map<Model.Akcije>(entity);
         }
 
-        public override async Task<Akcije> Activate(int id)
+        public override async Task<Model.Akcije> Activate(int id)
         {
-            var set = _context.Set<Database.Akcije>();
+            var set = _context.Set<Akcije>();
 
             var entity = await set.FindAsync(id);
 

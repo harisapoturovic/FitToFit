@@ -9,16 +9,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Termini = FitToFit.Database.Termini;
 
 namespace FitToFit.Services
 {
-    public class TerminiService : BaseCRUDService<Model.Termini, Database.Termini, TerminiSearchObject, TerminiInsertRequest, TerminiUpdateRequest>, ITerminiService
+    public class TerminiService : BaseCRUDService<Model.Termini, Termini, TerminiSearchObject, TerminiInsertRequest, TerminiUpdateRequest>, ITerminiService
     {
         public TerminiService(Ib200048Context context, IMapper mapper) : base(context, mapper)
         {
         }
 
-        public override IQueryable<Database.Termini> AddFilter(IQueryable<Database.Termini> query, TerminiSearchObject? search = null)
+        public override IQueryable<Termini> AddFilter(IQueryable<Termini> query, TerminiSearchObject? search = null)
         {
             if (!string.IsNullOrWhiteSpace(search?.Dan))
             {

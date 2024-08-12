@@ -9,6 +9,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using Akcije = FitToFit.Database.Akcije;
 
 namespace FitToFit.Services.AkcijeStateMachine
 {
@@ -25,7 +26,7 @@ namespace FitToFit.Services.AkcijeStateMachine
             _serviceProvider = serviceProvider;
         }
 
-        public virtual Task<Model.Akcije> Insert(Database.Akcije entity)
+        public virtual Task<Model.Akcije> Insert(Akcije entity)
         {
             throw new UserException("Not allowed");
         }

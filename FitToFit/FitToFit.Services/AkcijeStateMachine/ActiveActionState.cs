@@ -7,19 +7,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Akcije = FitToFit.Database.Akcije;
 
 namespace FitToFit.Services.AkcijeStateMachine
 {
     public class ActiveActionState : AkcijeBaseState
     {
-        public ActiveActionState(IServiceProvider serviceProvider, Database.Ib200048Context context, IMapper mapper) 
+        public ActiveActionState(IServiceProvider serviceProvider, Ib200048Context context, IMapper mapper) 
             : base(serviceProvider, context, mapper)
         {
         }
 
         public override async Task<Model.Akcije> Archive(int id)
         {
-            var set = _context.Set<Database.Akcije>();
+            var set = _context.Set<Akcije>();
 
             var entity = await set.FindAsync(id);
 

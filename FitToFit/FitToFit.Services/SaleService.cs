@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FitToFit.Services
 {
-    public class SaleService : BaseService<Model.Sale, Database.Sale, BaseSearchObject>, ISaleService
+    public class SaleService : BaseService<Model.Sale, Sale, BaseSearchObject>, ISaleService
     {
         public SaleService(Ib200048Context context, IMapper mapper)
             : base(context, mapper)

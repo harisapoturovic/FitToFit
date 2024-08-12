@@ -8,10 +8,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RezervacijaStavke = FitToFit.Database.RezervacijaStavke;
+using Termini = FitToFit.Database.Termini;
+using Treninzi = FitToFit.Database.Treninzi;
+using Rezervacije = FitToFit.Database.Rezervacije;
 
 namespace FitToFit.Services
 {
-    public class RezervacijaStavkeService : BaseService<Model.RezervacijaStavke, Database.RezervacijaStavke, BaseSearchObject>, IRezervacijaStavkeService
+    public class RezervacijaStavkeService : BaseService<Model.RezervacijaStavke, RezervacijaStavke, BaseSearchObject>, IRezervacijaStavkeService
     {
         public RezervacijaStavkeService(Ib200048Context context, IMapper mapper)
             : base(context, mapper)
@@ -20,9 +24,9 @@ namespace FitToFit.Services
 
         public virtual async Task<List<Model.OdabraniTermini>> GetTop3Terms(string? order=null)
         {
-            var query = _context.Set<Database.RezervacijaStavke>().AsQueryable();
+            var query = _context.Set<RezervacijaStavke>().AsQueryable();
             var list = await query.ToListAsync();
-            List<Database.RezervacijaStavke> top3Terms;
+            List<RezervacijaStavke> top3Terms;
 
             if (order == "desc")
             {
@@ -42,7 +46,7 @@ namespace FitToFit.Services
                     .SelectMany(g => g)
                     .ToList();
             }
-            var query2 = _context.Set<Database.Termini>().AsQueryable();
+            var query2 = _context.Set<Termini>().AsQueryable();
             var termini = await query2.ToListAsync();
             var top3Termini = termini.Where(t => top3Terms.Select(tt => tt.TerminId).Contains(t.TerminId));
 
@@ -51,7 +55,7 @@ namespace FitToFit.Services
             {
                 var count = top3Terms.Count(tt => tt.TerminId == termin.TerminId);
 
-                var trening = await _context.Set<Database.Treninzi>().FindAsync(termin.TreningId);
+                var trening = await _context.Set<Treninzi>().FindAsync(termin.TreningId);
                 if (trening != null)
                 {
                     var opis = $"{termin.Dan} {termin.Sat} - {trening.Naziv}"; 
@@ -64,7 +68,7 @@ namespace FitToFit.Services
 
         public virtual async Task<Model.Profit> GetProfitForLast3Years()
         {
-            var query = _context.Set<Database.Rezervacije>().AsQueryable();
+            var query = _context.Set<Rezervacije>().AsQueryable();
             var list = await query.ToListAsync();
             var godina1=list.Where(x=>x.Datum.Year.Equals(2022));
             var godina2 = list.Where(x => x.Datum.Year.Equals(2023));

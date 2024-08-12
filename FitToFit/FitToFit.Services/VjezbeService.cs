@@ -10,16 +10,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vjezbe = FitToFit.Database.Vjezbe;
 
 namespace FitToFit.Services
 {
-    public class VjezbeService : BaseCRUDService<Model.Vjezbe, Database.Vjezbe, VjezbeSearchObject, VjezbeInsertRequest, VjezbeUpdateRequest>, IVjezbeService
+    public class VjezbeService : BaseCRUDService<Model.Vjezbe, Vjezbe, VjezbeSearchObject, VjezbeInsertRequest, VjezbeUpdateRequest>, IVjezbeService
     {
         public VjezbeService(Ib200048Context context, IMapper mapper) : base(context, mapper)
         {
         }
 
-        public override IQueryable<Database.Vjezbe> AddFilter(IQueryable<Database.Vjezbe> query, VjezbeSearchObject? search = null)
+        public override IQueryable<Vjezbe> AddFilter(IQueryable<Vjezbe> query, VjezbeSearchObject? search = null)
         {
             if (!string.IsNullOrWhiteSpace(search?.Naziv))
             {

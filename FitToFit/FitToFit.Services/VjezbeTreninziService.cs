@@ -10,10 +10,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TreninziVjezbe = FitToFit.Database.TreninziVjezbe;
 
 namespace FitToFit.Services
 {
-    public class VjezbeTreninziService : BaseService<Model.TreninziVjezbe, Database.TreninziVjezbe, BaseSearchObject>, IVjezbeTreninziService
+    public class VjezbeTreninziService : BaseService<Model.TreninziVjezbe, TreninziVjezbe, BaseSearchObject>, IVjezbeTreninziService
     {
         public VjezbeTreninziService(Ib200048Context context, IMapper mapper) : base(context, mapper)
         {
@@ -21,9 +22,9 @@ namespace FitToFit.Services
 
         public virtual async Task<Model.TreninziVjezbe> Insert(VjezbeTreninziInsertRequest insert)
         {
-            var set = _context.Set<Database.TreninziVjezbe>();
+            var set = _context.Set<TreninziVjezbe>();
 
-            Database.TreninziVjezbe entity = _mapper.Map<Database.TreninziVjezbe>(insert);
+            TreninziVjezbe entity = _mapper.Map<TreninziVjezbe>(insert);
 
             set.Add(entity);
 
@@ -33,7 +34,7 @@ namespace FitToFit.Services
 
         public virtual async Task<Model.TreninziVjezbe> Delete(int id)
         {
-            var set = _context.Set<Database.TreninziVjezbe>();
+            var set = _context.Set<TreninziVjezbe>();
 
             var entity = await set.FindAsync(id);
 

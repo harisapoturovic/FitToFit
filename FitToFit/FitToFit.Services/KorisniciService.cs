@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace FitToFit.Services
 {
-    public class KorisniciService : BaseCRUDService<Model.Korisnici, Database.Korisnici, KorisniciSearchObject, KorisniciInsertRequest, KorisniciUpdateRequest>, IKorisniciService
+    public class KorisniciService : BaseCRUDService<Model.Korisnici, Korisnici, KorisniciSearchObject, KorisniciInsertRequest, KorisniciUpdateRequest>, IKorisniciService
     {
         public KorisniciService(Ib200048Context context, IMapper mapper)
             :base(context, mapper)

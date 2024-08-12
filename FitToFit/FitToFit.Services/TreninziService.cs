@@ -11,10 +11,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
+using Treninzi = FitToFit.Database.Treninzi;
+using TreninziVjezbe = FitToFit.Database.TreninziVjezbe;
 
 namespace FitToFit.Services
 {
-    public class TreninziService : BaseCRUDService<Model.Treninzi, Database.Treninzi, TreninziSearchObject, TreninziInsertRequest, TreninziUpdateRequest>, ITreninziService
+    public class TreninziService : BaseCRUDService<Model.Treninzi, Treninzi, TreninziSearchObject, TreninziInsertRequest, TreninziUpdateRequest>, ITreninziService
     {
         private readonly IMessageProducer _messageProducer;
         public TreninziService(Ib200048Context context, IMapper mapper, IMessageProducer messageProducer) : base(context, mapper)
@@ -22,7 +24,7 @@ namespace FitToFit.Services
             _messageProducer = messageProducer;
         }
 
-        public override IQueryable<Database.Treninzi> AddInclude(IQueryable<Database.Treninzi> query, TreninziSearchObject search = null)
+        public override IQueryable<Treninzi> AddInclude(IQueryable<Treninzi> query, TreninziSearchObject search = null)
         {
             if (search?.IsTerminiIncluded == true)
             {
@@ -36,7 +38,7 @@ namespace FitToFit.Services
             return base.AddInclude(query, search);
         }
 
-        public override IQueryable<Database.Treninzi> AddFilter(IQueryable<Database.Treninzi> query, TreninziSearchObject? search = null)
+        public override IQueryable<Treninzi> AddFilter(IQueryable<Treninzi> query, TreninziSearchObject? search = null)
         {
             if (!string.IsNullOrWhiteSpace(search?.Naziv))
             {
@@ -67,9 +69,9 @@ namespace FitToFit.Services
         }
 
 
-        public override Task BeforeInsert(Database.Treninzi entity, TreninziInsertRequest insert)
+        public override Task BeforeInsert(Treninzi entity, TreninziInsertRequest insert)
         {
-            entity.TreninziVjezbes = insert.Items.Select(item => new Database.TreninziVjezbe
+            entity.TreninziVjezbes = insert.Items.Select(item => new TreninziVjezbe
             {
                 TreningId = entity.TreningId,
                 VjezbaId = item.VjezbaId,
@@ -80,9 +82,9 @@ namespace FitToFit.Services
 
         public override async Task<Model.Treninzi> Insert(TreninziInsertRequest insert)
         {
-            var set = _context.Set<Database.Treninzi>();
+            var set = _context.Set<Treninzi>();
 
-            Database.Treninzi entity = _mapper.Map<Database.Treninzi>(insert);
+            Treninzi entity = _mapper.Map<Treninzi>(insert);
 
             set.Add(entity);
             if(!insert.Items.IsNullOrEmpty())
@@ -98,8 +100,8 @@ namespace FitToFit.Services
 
         public virtual async Task<Model.Treninzi> Delete(int id)
         {
-            var set = _context.Set<Database.Treninzi>();
-            var vjezebTreninziSet = _context.Set<Database.TreninziVjezbe>();
+            var set = _context.Set<Treninzi>();
+            var vjezebTreninziSet = _context.Set<TreninziVjezbe>();
 
             var trening = await set.FirstOrDefaultAsync(n => n.TreningId == id);
 

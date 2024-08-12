@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace FitToFit.Services
 {
-    public class TreneriService : BaseCRUDService<Model.Treneri, Database.Treneri, TreneriSearchObject, TreneriInsertRequest, TreneriUpdateRequest>, ITreneriService
+    public class TreneriService : BaseCRUDService<Model.Treneri, Treneri, TreneriSearchObject, TreneriInsertRequest, TreneriUpdateRequest>, ITreneriService
     {
         public TreneriService(Ib200048Context context, IMapper mapper) : base(context, mapper)
         {
