@@ -29,7 +29,6 @@ class _TrainingPageState extends State<TrainingPage> {
     'Mršavljenje',
     'Izgradnja mišića',
     'Kondicija',
-    'Opuštanje',
     'Fleksibilnost i mobilnost',
     'Rehabilitacija i oporavak'
   ];

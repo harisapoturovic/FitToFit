@@ -90,6 +90,7 @@ class _KorisniciPageState extends State<KorisniciPage> {
     return MasterScreenWidget(
       title: "Korisnici & treneri",
       selectedIndex: 1,
+      showBackArrow: false,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _showAddTrainerDialog();
@@ -475,16 +476,12 @@ class _KorisniciPageState extends State<KorisniciPage> {
                       onPressed: () async {
                         final DateTime? date = await showDatePicker(
                           context: context,
-                          firstDate: DateTime.now(),
-                          lastDate: DateTime.utc(2024, 12, 31),
+                          firstDate: DateTime.now().subtract(const Duration(days: 10)),
+                          lastDate: DateTime.now().add(const Duration(days: 30))
                         );
                         if (date == null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Datum je obavezan.'),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
+                          _showAlertDialog("Pažnja!",
+                              "Datum zaposlenja je obavezan.", Colors.red);
                         } else {
                           setState(() {
                             datum = date;
@@ -596,12 +593,7 @@ class _KorisniciPageState extends State<KorisniciPage> {
 
   void _dodajTrenera() {
     if (datum == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Datum je obavezan.'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      _showAlertDialog("Pažnja!", "Datum zaposlenja je obavezan.", Colors.red);
       return;
     }
     String datum_ = datum.toString();

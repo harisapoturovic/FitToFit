@@ -16,6 +16,7 @@ class IzvjestajDetaljiPage extends StatelessWidget {
     return MasterScreenWidget(
       title: "Izvještaj - detalji",
       selectedIndex: 7,
+      showBackArrow: true,
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {

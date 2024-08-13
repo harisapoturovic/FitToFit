@@ -105,6 +105,7 @@ class _HomePageState extends State<HomePage> {
     return MasterScreenWidget(
         title: "Početna",
         selectedIndex: 0,
+        showBackArrow: false,
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             _showAddNewsDialog();
@@ -455,15 +456,11 @@ class _HomePageState extends State<HomePage> {
                         final DateTime? date = await showDatePicker(
                           context: context,
                           firstDate: DateTime.now(),
-                          lastDate: DateTime.utc(2024, 12, 31),
+                          lastDate: DateTime.now().add(const Duration(days: 30)),
                         );
                         if (date == null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Datum je obavezan.'),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
+                          _showAlertDialog(
+                              "Pažnja!", "Datum objave je obavezan.", Colors.red);
                         } else {
                           setState(() {
                             datum = date;
@@ -559,12 +556,7 @@ class _HomePageState extends State<HomePage> {
 
   void _dodajNovost() {
     if (datum == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Datum je obavezan.'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      _showAlertDialog("Pažnja!", "Datum objave je obavezan.", Colors.red);
       return;
     }
     String _datum = datum.toString();

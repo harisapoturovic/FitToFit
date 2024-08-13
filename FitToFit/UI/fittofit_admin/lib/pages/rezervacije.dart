@@ -99,6 +99,7 @@ class _RezervacijePageState extends State<RezervacijePage> {
     return MasterScreenWidget(
       title: "Rezervacije",
       selectedIndex: 4,
+      showBackArrow: false,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -169,7 +170,6 @@ class _RezervacijePageState extends State<RezervacijePage> {
   }
 
   Widget _buildDataListView() {
-    int counter = 1;
     return Container(
       height: 700,
       margin: const EdgeInsets.only(top: 20),
@@ -228,7 +228,6 @@ class _RezervacijePageState extends State<RezervacijePage> {
                   itemCount: _selectedRezervacije.length,
                   itemBuilder: (context, index) {
                     final e = _selectedRezervacije[index];
-                    final currentNumber = counter++;
                     return Column(
                       children: [
                         GestureDetector(
@@ -247,15 +246,6 @@ class _RezervacijePageState extends State<RezervacijePage> {
                               ),
                               title: Row(
                                 children: [
-                                  Text(
-                                    '$currentNumber',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18.0,
-                                      color: Color.fromRGBO(0, 154, 231, 1),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 40),
                                   FutureBuilder<dynamic>(
                                     future: _korisniciProvider
                                         .getById(e.korisnikId),
@@ -953,10 +943,9 @@ class _RezervacijePageState extends State<RezervacijePage> {
         return AlertDialog(
           title: const Text('Detalji o rezervaciji'),
           content: Container(
-            width: 300.0,
+            width: 400.0,
             height: 300.0,
-            padding: const EdgeInsets.all(5.0),
-            margin: const EdgeInsets.only(left: 50, right: 50, top: 30),
+            margin: const EdgeInsets.only(top: 30),
             child: SingleChildScrollView(
                 child: Card(
               margin: const EdgeInsets.all(10.0),
@@ -1012,7 +1001,7 @@ class _RezervacijePageState extends State<RezervacijePage> {
               ),
             )),
           ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 40.0),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
         );
       },
     );

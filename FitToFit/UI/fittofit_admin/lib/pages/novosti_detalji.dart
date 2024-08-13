@@ -95,6 +95,7 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
     return MasterScreenWidget(
       title: ("Detalji o objavi"),
       selectedIndex: 0,
+      showBackArrow: true,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: SingleChildScrollView(

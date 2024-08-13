@@ -95,6 +95,7 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
     return MasterScreenWidget(
       title: ("Detalji o treneru"),
       selectedIndex: 1,
+      showBackArrow: true,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: SingleChildScrollView(

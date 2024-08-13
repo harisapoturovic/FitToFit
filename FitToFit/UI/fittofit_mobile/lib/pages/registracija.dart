@@ -253,12 +253,8 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
                   lastDate: DateTime.now(),
                 );
                 if (date == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Datum rođenja je obavezan.'),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
+                  _showAlertDialog(
+                      "Pažnja!", "Datum rođenja je obavezan.", Colors.red);
                 } else {
                   setState(() {
                     _selectedDate1 = date;
@@ -312,12 +308,8 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
                   lastDate: DateTime.now().add(const Duration(days: 10)),
                 );
                 if (date == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Datum početka treniranja je obavezan.'),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
+                  _showAlertDialog("Pažnja!",
+                      "Datum početka treniranja je obavezan.", Colors.red);
                 } else {
                   setState(() {
                     _selectedDate2 = date;
@@ -473,21 +465,12 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
 
   void _dodajKorisnika() async {
     if (_selectedDate1 == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Datum rođenja je obavezan.'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      _showAlertDialog("Pažnja!", "Datum rođenja je obavezan.", Colors.red);
       return;
     }
     if (_selectedDate2 == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Datum početka treniranja je obavezan.'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      _showAlertDialog(
+          "Pažnja!", "Datum početka treniranja je obavezan.", Colors.red);
       return;
     }
     String datum1 = _selectedDate1.toString();

@@ -916,14 +916,10 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                                     DateTime.utc(2024, 12, 31),
                                               );
                                               if (date == null) {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                                  const SnackBar(
-                                                    content: Text(
-                                                        'Datum početka je obavezan.'),
-                                                    backgroundColor: Colors.red,
-                                                  ),
-                                                );
+                                                _showAlertDialog(
+                                                    "Pažnja!",
+                                                    "Datum početka akcije je obavezan.",
+                                                    Colors.red);
                                               } else {
                                                 setState(() {
                                                   _pocetakAkcije = date;
@@ -983,14 +979,10 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                                     DateTime.utc(2024, 12, 31),
                                               );
                                               if (date == null) {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                                  const SnackBar(
-                                                    content: Text(
-                                                        'Datum završetka je obavezan.'),
-                                                    backgroundColor: Colors.red,
-                                                  ),
-                                                );
+                                                _showAlertDialog(
+                                                    "Pažnja!",
+                                                    "Datum završetka akcije je obavezan.",
+                                                    Colors.red);
                                               } else {
                                                 setState(() {
                                                   _zavrsetakAkcije = date;

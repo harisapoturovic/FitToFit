@@ -101,6 +101,7 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
     return MasterScreenWidget(
       title: ("Detalji o korisniku"),
       selectedIndex: 1,
+      showBackArrow: true,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: SingleChildScrollView(

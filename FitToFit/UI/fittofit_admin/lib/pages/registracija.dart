@@ -102,6 +102,7 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
     return MasterScreenWidget(
       title: "Registracija",
       selectedIndex: 0,
+      showBackArrow: true,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Center(
@@ -279,12 +280,8 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
                             lastDate: DateTime.now(),
                           );
                           if (date == null) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Datum rođenja je obavezan.'),
-                                backgroundColor: Colors.red,
-                              ),
-                            );
+                            _showAlertDialog("Pažnja!",
+                                "Datum rođenja je obavezan.", Colors.red);
                           } else {
                             setState(() {
                               _selectedDate = date;
@@ -425,12 +422,7 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
 
   void _dodajAdmina() {
     if (_selectedDate == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Datum rođenja je obavezan.'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      _showAlertDialog("Pažnja!", "Datum rođenja je obavezan.", Colors.red);
       return;
     }
     String datum_ = _selectedDate.toString();

@@ -73,6 +73,7 @@ class _ChangeUsernameScreenState extends State<ChangeUsernameScreen> {
     return MasterScreenWidget(
       title: "Izmjena korisničkog imena",
       selectedIndex: 0,
+      showBackArrow: true,
       child: Center(
         child: SingleChildScrollView(
           child: _buildBody(),

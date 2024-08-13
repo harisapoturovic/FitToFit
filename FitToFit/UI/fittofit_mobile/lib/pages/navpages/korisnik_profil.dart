@@ -1203,7 +1203,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     padding: const EdgeInsets.all(16.0),
                     children: [
                       Text(
-                        '1. Novosti',
+                        '- Novosti',
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       const SizedBox(height: 8.0),
@@ -1213,7 +1213,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       const SizedBox(height: 16.0),
                       Text(
-                        '2. Rezervacije',
+                        '- Rezervacije',
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       const SizedBox(height: 8.0),
@@ -1288,7 +1288,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       const SizedBox(height: 16.0),
                       Text(
-                        '3. Akcije',
+                        '- Akcije',
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       const SizedBox(height: 8.0),

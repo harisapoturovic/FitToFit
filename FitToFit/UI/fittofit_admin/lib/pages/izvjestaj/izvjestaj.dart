@@ -109,6 +109,7 @@ class _IzvjestajPageState extends State<IzvjestajPage> {
     return MasterScreenWidget(
       title: "Izvještaj",
       selectedIndex: 7,
+      showBackArrow: false,
       child: Padding(
         padding: const EdgeInsets.only(top: 100),
         child: Column(
@@ -216,7 +217,7 @@ class _IzvjestajPageState extends State<IzvjestajPage> {
                           chartType: ChartType.disc,
                           ringStrokeWidth: 32,
                           centerText:
-                              "OCJENE ZA: ${_trener != null ? '${_trener!.ime} ${_trener!.prezime}' : ''}",
+                              "OCJENE ZA: \n${_trener != null ? '${_trener!.ime} ${_trener!.prezime}' : ''}",
                           legendOptions: const LegendOptions(
                             showLegendsInRow: true,
                             legendPosition: LegendPosition.top,

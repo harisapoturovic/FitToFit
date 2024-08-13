@@ -137,6 +137,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
     return MasterScreenWidget(
       title: ("Detalji o treningu"),
       selectedIndex: 2,
+      showBackArrow: true,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: SingleChildScrollView(

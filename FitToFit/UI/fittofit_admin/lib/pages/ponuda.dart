@@ -125,6 +125,7 @@ class _PonudaPageState extends State<PonudaPage> {
     return MasterScreenWidget(
       title: "Ponuda",
       selectedIndex: 5,
+      showBackArrow: false,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -238,7 +239,6 @@ class _PonudaPageState extends State<PonudaPage> {
   }
 
   Widget _buildDataListView() {
-    int counter = 1;
     return Container(
       height: 700,
       margin: const EdgeInsets.only(top: 20),
@@ -260,7 +260,6 @@ class _PonudaPageState extends State<PonudaPage> {
                   itemCount: _selectedList.length,
                   itemBuilder: (context, index) {
                     final e = _selectedList[index];
-                    final currentNumber = counter++;
                     return Column(
                       children: [
                         ListTile(
@@ -273,15 +272,6 @@ class _PonudaPageState extends State<PonudaPage> {
                           title: isRaspored
                               ? Row(
                                   children: [
-                                    Text(
-                                      '$currentNumber.',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18.0,
-                                        color: Color.fromRGBO(0, 154, 231, 1),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 40),
                                     Text(
                                       e.dan + ' u ' + e.sat,
                                       style: const TextStyle(
@@ -398,15 +388,6 @@ class _PonudaPageState extends State<PonudaPage> {
                                 )
                               : Row(
                                   children: [
-                                    Text(
-                                      '$currentNumber.',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18.0,
-                                        color: Color.fromRGBO(0, 154, 231, 1),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 40),
                                     FutureBuilder<dynamic>(
                                       future: _vrsteTreningaProvider
                                           .getById(e.vrstaTreningaId),

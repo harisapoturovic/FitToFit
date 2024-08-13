@@ -76,6 +76,7 @@ class _TreninziPageState extends State<TreninziPage> {
     return MasterScreenWidget(
       title: "Treninzi",
       selectedIndex: 2,
+      showBackArrow: false,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _showAddTrainingsDialog();

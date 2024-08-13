@@ -79,9 +79,11 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
     if (!mounted) return;
     final korisnikid = widget.korisnik.korisnikId;
     var data = await _korisniciProvider.getById(korisnikid);
-    setState(() {
-      odabraniKorisnik = data;
-    });
+    if (mounted) {
+      setState(() {
+        odabraniKorisnik = data;
+      });
+    }
   }
 
   @override
@@ -94,6 +96,7 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
     return MasterScreenWidget(
       title: ("Moj profil"),
       selectedIndex: 0,
+      showBackArrow: true,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: SingleChildScrollView(
@@ -138,16 +141,14 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
                                   height: 250.0,
                                   decoration: BoxDecoration(
                                     border: Border.all(
-                                      color: const Color.fromRGBO(
-                                          0, 154, 231, 1),
+                                      color:
+                                          const Color.fromRGBO(0, 154, 231, 1),
                                       width: 4.0,
                                     ),
-                                    borderRadius:
-                                        BorderRadius.circular(200.0),
+                                    borderRadius: BorderRadius.circular(200.0),
                                   ),
                                   child: ClipRRect(
-                                    borderRadius:
-                                        BorderRadius.circular(200.0),
+                                    borderRadius: BorderRadius.circular(200.0),
                                     child: Image(
                                       image: userImage!.image,
                                       width: 250.0,
@@ -161,15 +162,13 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
                                   height: 250.0,
                                   decoration: BoxDecoration(
                                     border: Border.all(
-                                      color: const Color.fromRGBO(
-                                          0, 154, 231, 1),
+                                      color:
+                                          const Color.fromRGBO(0, 154, 231, 1),
                                       width: 4.0,
                                     ),
-                                    borderRadius:
-                                        BorderRadius.circular(200.0),
+                                    borderRadius: BorderRadius.circular(200.0),
                                   ),
-                                  child:
-                                      Image.asset('assets/images/user.png'),
+                                  child: Image.asset('assets/images/user.png'),
                                 ),
                         ),
                         const SizedBox(height: 30),
@@ -184,16 +183,14 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
                                     style: const TextStyle(
                                         fontSize: 20.0,
                                         fontWeight: FontWeight.bold,
-                                        color:
-                                            Color.fromARGB(255, 0, 99, 181)),
+                                        color: Color.fromARGB(255, 0, 99, 181)),
                                   ),
                                   const SizedBox(height: 8),
                                   Text(
                                     odabraniKorisnik?.email ?? '',
                                     style: const TextStyle(
                                         fontSize: 16.0,
-                                        color:
-                                            Color.fromARGB(255, 0, 99, 181)),
+                                        color: Color.fromARGB(255, 0, 99, 181)),
                                   ),
                                   const SizedBox(height: 30),
                                   ElevatedButton(
@@ -207,8 +204,7 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 15, horizontal: 40),
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(15),
+                                        borderRadius: BorderRadius.circular(15),
                                       ),
                                       textStyle: const TextStyle(
                                           fontSize: 16,
@@ -235,11 +231,9 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 15, horizontal: 30),
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(15),
+                                        borderRadius: BorderRadius.circular(15),
                                       ),
-                                      textStyle:
-                                          const TextStyle(fontSize: 14),
+                                      textStyle: const TextStyle(fontSize: 14),
                                     ),
                                     child: const Text('Promijeni lozinku'),
                                   ),
@@ -262,18 +256,15 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 15, horizontal: 30),
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(15),
+                                        borderRadius: BorderRadius.circular(15),
                                       ),
-                                      textStyle:
-                                          const TextStyle(fontSize: 14),
+                                      textStyle: const TextStyle(fontSize: 14),
                                     ),
-                                    child: const Text(
-                                        'Promijeni korisničko ime'),
+                                    child:
+                                        const Text('Promijeni korisničko ime'),
                                   ),
                                   Padding(
-                                    padding:
-                                        const EdgeInsets.only(right: 25.0),
+                                    padding: const EdgeInsets.only(right: 25.0),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
@@ -281,17 +272,16 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
                                           onPressed: () {
                                             Authorization.username = null;
                                             Authorization.password = null;
-              
+
                                             Provider.of<KorisniciProvider>(
                                                     context,
                                                     listen: false)
                                                 .setCurrentUserId(null);
-              
+
                                             Navigator.pushAndRemoveUntil(
                                               context,
                                               MaterialPageRoute(
-                                                  builder: (_) =>
-                                                      LoginPage()),
+                                                  builder: (_) => LoginPage()),
                                               (route) => false,
                                             );
                                           },

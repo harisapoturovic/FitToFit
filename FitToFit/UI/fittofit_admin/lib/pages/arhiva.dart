@@ -113,6 +113,7 @@ class _ArhivaPageState extends State<ArhivaPage> {
     return MasterScreenWidget(
       title: "Arhiva",
       selectedIndex: 4,
+      showBackArrow: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -155,7 +156,6 @@ class _ArhivaPageState extends State<ArhivaPage> {
   }
 
   Widget _buildDataListView() {
-    int counter = 1;
     return Container(
       height: 700,
       margin: const EdgeInsets.only(top: 20),
@@ -238,7 +238,6 @@ class _ArhivaPageState extends State<ArhivaPage> {
                   itemCount: _selectedRezervacije.length,
                   itemBuilder: (context, index) {
                     final e = _selectedRezervacije[index];
-                    final currentNumber = counter++;
                     return Column(
                       children: [
                         GestureDetector(
@@ -257,15 +256,6 @@ class _ArhivaPageState extends State<ArhivaPage> {
                               ),
                               title: Row(
                                 children: [
-                                  Text(
-                                    '$currentNumber',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18.0,
-                                      color: Color.fromRGBO(0, 154, 231, 1),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 40),
                                   FutureBuilder<dynamic>(
                                     future: _korisniciProvider
                                         .getById(e.korisnikId),

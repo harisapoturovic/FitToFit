@@ -62,6 +62,7 @@ class _VjezbePageState extends State<VjezbePage> {
     return MasterScreenWidget(
       title: "Vježbe",
       selectedIndex: 6,
+      showBackArrow: false,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _showAddVjezbuDialog();

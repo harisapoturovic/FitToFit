@@ -55,7 +55,7 @@ class _AkcijePageState extends State<AkcijePage> {
   }
 
   void _loadData() async {
-     if (!mounted) return;
+    if (!mounted) return;
     var aktivneAkcije = await _akcijeProvider
         .get(filter: {'IsTreninziIncluded': true, 'StateMachine': "active"});
 
@@ -87,6 +87,7 @@ class _AkcijePageState extends State<AkcijePage> {
     return MasterScreenWidget(
       title: "Akcije",
       selectedIndex: 3,
+      showBackArrow: false,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _showAddActionDialog();
@@ -443,13 +444,8 @@ class _AkcijePageState extends State<AkcijePage> {
                           lastDate: DateTime.utc(2024, 12, 31),
                         );
                         if (date == null) {
-                          // ignore: use_build_context_synchronously
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Datum početka je obavezan.'),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
+                          _showAlertDialog("Pažnja!",
+                              "Datum početka akcije je obavezan.", Colors.red);
                         } else {
                           setState(() {
                             _pocetakAkcije = date;
@@ -502,13 +498,10 @@ class _AkcijePageState extends State<AkcijePage> {
                           lastDate: DateTime.utc(2024, 12, 31),
                         );
                         if (date == null) {
-                          // ignore: use_build_context_synchronously
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Datum završetka je obavezan.'),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
+                          _showAlertDialog(
+                              "Pažnja!",
+                              "Datum završetka akcije je obavezan.",
+                              Colors.red);
                         } else {
                           setState(() {
                             _zavrsetakAkcije = date;
@@ -587,21 +580,13 @@ class _AkcijePageState extends State<AkcijePage> {
             ElevatedButton(
               onPressed: () async {
                 if (_pocetakAkcije == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Datum početka je obavezan.'),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
+                  _showAlertDialog("Pažnja!",
+                      "Datum početka akcije je obavezan.", Colors.red);
                   return;
                 }
                 if (_zavrsetakAkcije == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Datum završetka je obavezan.'),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
+                  _showAlertDialog("Pažnja!",
+                      "Datum završetka akcije je obavezan.", Colors.red);
                   return;
                 }
                 String datumPocetka = _pocetakAkcije.toString();
@@ -679,10 +664,7 @@ class _AkcijePageState extends State<AkcijePage> {
       return false;
     }
 
-    List<String> requiredFields = [
-      'naziv',
-      'iznos'
-    ];
+    List<String> requiredFields = ['naziv', 'iznos'];
 
     for (String fieldName in requiredFields) {
       if (formState.fields[fieldName]?.value == null ||
