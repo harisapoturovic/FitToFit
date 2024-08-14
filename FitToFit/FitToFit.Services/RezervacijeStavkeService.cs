@@ -8,16 +8,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using RezervacijaStavke = FitToFit.Database.RezervacijaStavke;
-using Termini = FitToFit.Database.Termini;
-using Treninzi = FitToFit.Database.Treninzi;
-using Rezervacije = FitToFit.Database.Rezervacije;
+using FitToFit.Services.Database;
+using RezervacijaStavke = FitToFit.Services.Database.RezervacijaStavke;
+using Termini = FitToFit.Services.Database.Termini;
+using Treninzi = FitToFit.Services.Database.Treninzi;
+using Rezervacije = FitToFit.Services.Database.Rezervacije;
 
 namespace FitToFit.Services
 {
     public class RezervacijaStavkeService : BaseService<Model.RezervacijaStavke, RezervacijaStavke, BaseSearchObject>, IRezervacijaStavkeService
     {
-        public RezervacijaStavkeService(Ib200048Context context, IMapper mapper)
+        public RezervacijaStavkeService(_200048Context context, IMapper mapper)
             : base(context, mapper)
         {
         }

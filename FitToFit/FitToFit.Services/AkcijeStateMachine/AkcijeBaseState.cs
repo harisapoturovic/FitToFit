@@ -9,17 +9,18 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using Akcije = FitToFit.Database.Akcije;
+using FitToFit.Services.Database;
+using Akcije = FitToFit.Services.Database.Akcije;
 
 namespace FitToFit.Services.AkcijeStateMachine
 {
     public class AkcijeBaseState
     {
-        protected Ib200048Context _context;
+        protected _200048Context _context;
         protected IMapper _mapper { get; set; }
         public IServiceProvider _serviceProvider { get; set; }
 
-        public AkcijeBaseState(IServiceProvider serviceProvider, Ib200048Context context, IMapper mapper)
+        public AkcijeBaseState(IServiceProvider serviceProvider, _200048Context context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;

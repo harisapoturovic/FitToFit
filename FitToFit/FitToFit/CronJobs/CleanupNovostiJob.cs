@@ -1,13 +1,14 @@
 ﻿using FitToFit.Database;
+using FitToFit.Services.Database;
 using Quartz;
 
 namespace FitToFit.CronJobs
 {
     public class CleanupNovostiJob : IJob
     {
-        private readonly Ib200048Context _context;
+        private readonly _200048Context _context;
 
-        public CleanupNovostiJob(Ib200048Context context)
+        public CleanupNovostiJob(_200048Context context)
         {
             _context = context;
         }

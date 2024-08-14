@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace FitToFit.Database;
+namespace FitToFit.Services.Database;
 
-public partial class Ib200048Context : DbContext
+public partial class _200048Context : DbContext
 {
-    public Ib200048Context()
+    public _200048Context()
     {
     }
 
-    public Ib200048Context(DbContextOptions<Ib200048Context> options)
+    public _200048Context(DbContextOptions<_200048Context> options)
         : base(options)
     {
     }
@@ -28,6 +28,8 @@ public partial class Ib200048Context : DbContext
     public virtual DbSet<Novosti> Novostis { get; set; }
 
     public virtual DbSet<Ocjene> Ocjenes { get; set; }
+
+    public virtual DbSet<Placanja> Placanjas { get; set; }
 
     public virtual DbSet<RezervacijaStavke> RezervacijaStavkes { get; set; }
 
@@ -51,14 +53,12 @@ public partial class Ib200048Context : DbContext
 
     public virtual DbSet<VrsteTreninga> VrsteTreningas { get; set; }
 
-    /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=200048; user=sa; Password=QWEasd123!; TrustServerCertificate=True;");
-    */
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        SeedData(modelBuilder);
-
         modelBuilder.Entity<Akcije>(entity =>
         {
             entity.HasKey(e => e.AkcijaId).HasName("PK__Akcija__3499D633EFF61050");
@@ -77,6 +77,10 @@ public partial class Ib200048Context : DbContext
             entity.HasKey(e => e.AkcijaTreningId).HasName("PK__AkcijeTr__C8E3F84AE22F4CA7");
 
             entity.ToTable("AkcijeTreninzi");
+
+            entity.HasIndex(e => e.AkcijaId, "IX_AkcijeTreninzi_AkcijaID");
+
+            entity.HasIndex(e => e.TreningId, "IX_AkcijeTreninzi_TreningID");
 
             entity.Property(e => e.AkcijaTreningId).HasColumnName("AkcijaTreningID");
             entity.Property(e => e.AkcijaId).HasColumnName("AkcijaID");
@@ -109,6 +113,8 @@ public partial class Ib200048Context : DbContext
 
             entity.ToTable("Korisnici");
 
+            entity.HasIndex(e => e.UlogaId, "IX_Korisnici_UlogaID");
+
             entity.Property(e => e.KorisnikId).HasColumnName("KorisnikID");
             entity.Property(e => e.DatumPocetkaTreniranja).HasColumnType("datetime");
             entity.Property(e => e.DatumRodjenja).HasColumnType("datetime");
@@ -134,6 +140,10 @@ public partial class Ib200048Context : DbContext
             entity.HasKey(e => e.KorisniciNovostiId).HasName("PK__Korisnic__6213B3FD0E5E5AF9");
 
             entity.ToTable("KorisniciNovosti");
+
+            entity.HasIndex(e => e.KorisnikId, "IX_KorisniciNovosti_KorisnikID");
+
+            entity.HasIndex(e => e.NovostId, "IX_KorisniciNovosti_NovostID");
 
             entity.Property(e => e.KorisniciNovostiId).HasColumnName("KorisniciNovostiID");
             entity.Property(e => e.IsLiked)
@@ -162,6 +172,10 @@ public partial class Ib200048Context : DbContext
 
             entity.ToTable("Novosti");
 
+            entity.HasIndex(e => e.KorisnikId, "IX_Novosti_KorisnikID");
+
+            entity.HasIndex(e => e.VrstaTreningaId, "IX_Novosti_VrstaTreningaID");
+
             entity.Property(e => e.NovostId).HasColumnName("NovostID");
             entity.Property(e => e.DatumObjave).HasColumnType("datetime");
             entity.Property(e => e.KorisnikId).HasColumnName("KorisnikID");
@@ -184,6 +198,10 @@ public partial class Ib200048Context : DbContext
 
             entity.ToTable("Ocjene");
 
+            entity.HasIndex(e => e.KorisnikId, "IX_Ocjene_KorisnikID");
+
+            entity.HasIndex(e => e.TrenerId, "IX_Ocjene_TrenerID");
+
             entity.Property(e => e.OcjenaId).HasColumnName("OcjenaID");
             entity.Property(e => e.Datum).HasColumnType("datetime");
             entity.Property(e => e.KorisnikId).HasColumnName("KorisnikID");
@@ -200,11 +218,30 @@ public partial class Ib200048Context : DbContext
                 .HasConstraintName("FK__Ocjene__TrenerID__6754599E");
         });
 
+        modelBuilder.Entity<Placanja>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Placanja__3214EC07412640F1");
+
+            entity.ToTable("Placanja");
+
+            entity.Property(e => e.DatumPlacanja).HasColumnType("datetime");
+            entity.Property(e => e.Iznos).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.TransactionId).HasMaxLength(255);
+
+            entity.HasOne(d => d.Korisnik).WithMany(p => p.Placanjas)
+                .HasForeignKey(d => d.KorisnikId)
+                .HasConstraintName("FK_Placanja_Korisnici");
+        });
+
         modelBuilder.Entity<RezervacijaStavke>(entity =>
         {
             entity.HasKey(e => e.RezervacijaStavkeId).HasName("PK__Rezervac__D01610F9786F69C9");
 
             entity.ToTable("RezervacijaStavke");
+
+            entity.HasIndex(e => e.RezervacijaId, "IX_RezervacijaStavke_RezervacijaID");
+
+            entity.HasIndex(e => e.TerminId, "IX_RezervacijaStavke_TerminID");
 
             entity.Property(e => e.RezervacijaStavkeId).HasColumnName("RezervacijaStavkeID");
             entity.Property(e => e.RezervacijaId).HasColumnName("RezervacijaID");
@@ -227,6 +264,10 @@ public partial class Ib200048Context : DbContext
 
             entity.ToTable("Rezervacije");
 
+            entity.HasIndex(e => e.ClanarinaId, "IX_Rezervacije_ClanarinaID");
+
+            entity.HasIndex(e => e.KorisnikId, "IX_Rezervacije_KorisnikID");
+
             entity.Property(e => e.RezervacijaId).HasColumnName("RezervacijaID");
             entity.Property(e => e.ClanarinaId).HasColumnName("ClanarinaID");
             entity.Property(e => e.Datum).HasColumnType("datetime");
@@ -243,6 +284,10 @@ public partial class Ib200048Context : DbContext
                 .HasForeignKey(d => d.KorisnikId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Rezervaci__Koris__04E4BC85");
+
+            entity.HasOne(d => d.Placanje).WithMany(p => p.Rezervacijes)
+                .HasForeignKey(d => d.PlacanjeId)
+                .HasConstraintName("FK_Rezervacije_Placanja");
         });
 
         modelBuilder.Entity<Sale>(entity =>
@@ -261,6 +306,12 @@ public partial class Ib200048Context : DbContext
             entity.HasKey(e => e.TerminId).HasName("PK__Termini__42126CB592978185");
 
             entity.ToTable("Termini");
+
+            entity.HasIndex(e => e.SalaId, "IX_Termini_SalaID");
+
+            entity.HasIndex(e => e.TrenerId, "IX_Termini_TrenerID");
+
+            entity.HasIndex(e => e.TreningId, "IX_Termini_TreningID");
 
             entity.Property(e => e.TerminId).HasColumnName("TerminID");
             entity.Property(e => e.Dan).HasMaxLength(50);
@@ -306,6 +357,8 @@ public partial class Ib200048Context : DbContext
 
             entity.ToTable("Treninzi");
 
+            entity.HasIndex(e => e.VrstaId, "IX_Treninzi_VrstaID");
+
             entity.Property(e => e.TreningId).HasColumnName("TreningID");
             entity.Property(e => e.CijenaPoTerminu).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Namjena).HasMaxLength(50);
@@ -325,6 +378,10 @@ public partial class Ib200048Context : DbContext
             entity.HasKey(e => e.TreningClanarinaId).HasName("PK__Treninzi__6F8C55C168A7ED12");
 
             entity.ToTable("TreninziClanarine");
+
+            entity.HasIndex(e => e.ClanarinaId, "IX_TreninziClanarine_ClanarinaID");
+
+            entity.HasIndex(e => e.VrstaTreningaId, "IX_TreninziClanarine_VrstaTreningaID");
 
             entity.Property(e => e.TreningClanarinaId).HasColumnName("TreningClanarinaID");
             entity.Property(e => e.ClanarinaId).HasColumnName("ClanarinaID");
@@ -346,6 +403,10 @@ public partial class Ib200048Context : DbContext
             entity.HasKey(e => e.TreningVjezbaId).HasName("PK__Treninzi__AC7E6707E7245F04");
 
             entity.ToTable("TreninziVjezbe");
+
+            entity.HasIndex(e => e.TreningId, "IX_TreninziVjezbe_TreningID");
+
+            entity.HasIndex(e => e.VjezbaId, "IX_TreninziVjezbe_VjezbaID");
 
             entity.Property(e => e.TreningVjezbaId).HasColumnName("TreningVjezbaID");
             entity.Property(e => e.Trajanje).HasColumnType("decimal(18, 2)");

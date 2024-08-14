@@ -9,17 +9,18 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using Rezervacije = FitToFit.Database.Rezervacije;
+using FitToFit.Services.Database;
+using Rezervacije = FitToFit.Services.Database.Rezervacije;
 
 namespace FitToFit.Services.RezervacijeStateMachine
 {
     public class BaseState
     {
-        protected Ib200048Context _context;
+        protected _200048Context _context;
         protected IMapper _mapper { get; set; }
         public IServiceProvider _serviceProvider { get; set; }
 
-        public BaseState(IServiceProvider serviceProvider, Ib200048Context context, IMapper mapper)
+        public BaseState(IServiceProvider serviceProvider, _200048Context context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;

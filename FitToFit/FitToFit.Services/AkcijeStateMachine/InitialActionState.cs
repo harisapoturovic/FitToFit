@@ -2,18 +2,19 @@
 using FitToFit.Database;
 using FitToFit.Model;
 using FitToFit.Model.Requests;
+using FitToFit.Services.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Akcije = FitToFit.Database.Akcije;
+using Akcije = FitToFit.Services.Database.Akcije;
 
 namespace FitToFit.Services.AkcijeStateMachine
 {
     public class InitialActionState : AkcijeBaseState
     {
-        public InitialActionState(IServiceProvider serviceProvider, Ib200048Context context, IMapper mapper) 
+        public InitialActionState(IServiceProvider serviceProvider, _200048Context context, IMapper mapper) 
             : base(serviceProvider, context, mapper)
         {
         }

@@ -10,13 +10,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using KorisniciNovosti = FitToFit.Database.KorisniciNovosti;
+using FitToFit.Services.Database;
+using KorisniciNovosti = FitToFit.Services.Database.KorisniciNovosti;
 
 namespace FitToFit.Services
 {
     public class KorisniciNovostiService : BaseCRUDService<Model.KorisniciNovosti, KorisniciNovosti, KorisniciNovostiSearchObject, KorisniciNovostiInsertRequest, KorisniciNovostiInsertRequest>, IKorisniciNovostiService
     {
-        public KorisniciNovostiService(Ib200048Context context, IMapper mapper) : base(context, mapper)
+        public KorisniciNovostiService(_200048Context context, IMapper mapper) : base(context, mapper)
         {
         }
 

@@ -23,6 +23,8 @@ namespace FitToFit.Model
 
         public DateTime? DatumIsteka { get; set; }
 
+        public int? PlacanjeId { get; set; }
+
         //public virtual Korisnici Korisnik { get; set; } = null!; 
 
         public virtual ICollection<RezervacijaStavke> RezervacijaStavkes { get; set; } = new List<RezervacijaStavke>();

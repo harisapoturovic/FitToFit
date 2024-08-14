@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FitToFit.Database;
+namespace FitToFit.Services.Database;
 
 public partial class TreninziVjezbe
 {

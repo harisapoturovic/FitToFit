@@ -16,6 +16,7 @@ using FitToFit.Model.Requests;
 using Quartz;
 using FitToFit.CronJob;
 using FitToFit.CronJobs;
+using FitToFit.Services.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,7 +38,8 @@ builder.Services.AddTransient<IVjezbeTreninziService, VjezbeTreninziService>();
 builder.Services.AddTransient<IRezervacijaStavkeService, RezervacijaStavkeService>();
 builder.Services.AddTransient<IKorisniciNovostiService, KorisniciNovostiService>();
 builder.Services.AddTransient<IOcjeneService, OcjeneService>();
-builder.Services.AddDbContext<Ib200048Context>(options =>
+builder.Services.AddTransient<IPlacanjaService, PlacanjaService>();
+builder.Services.AddDbContext<_200048Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddTransient<AkcijeBaseState>();
@@ -98,7 +100,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<Ib200048Context>(options =>
+builder.Services.AddDbContext<_200048Context>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddAutoMapper(typeof(IKorisniciService));
@@ -128,7 +130,7 @@ app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<Ib200048Context>();
+    var context = scope.ServiceProvider.GetRequiredService<_200048Context>();
     context.Database.Migrate();
 }
 

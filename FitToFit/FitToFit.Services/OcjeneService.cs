@@ -7,12 +7,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FitToFit.Services.Database;
 
 namespace FitToFit.Services
 {
     public class OcjeneService : BaseCRUDService<Model.Ocjene, Ocjene, OcjeneSearchObject, OcjeneInsertRequest, OcjeneInsertRequest>, IOcjeneService
     {
-        public OcjeneService(Ib200048Context context, IMapper mapper)
+        public OcjeneService(_200048Context context, IMapper mapper)
             : base(context, mapper)
         {
         }

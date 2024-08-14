@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
 using FitToFit.Database;
 using FitToFit.Model.SearchObjects;
+using FitToFit.Services.Database;
 
 namespace FitToFit.Services
 {
     public class BaseCRUDService<T, Tdb, Tsearch, Tinsert, Tupdate> : BaseService<T, Tdb, Tsearch> where T : class where Tdb : class where Tsearch : BaseSearchObject
     {
-        public BaseCRUDService(Ib200048Context context, IMapper mapper) : base(context, mapper)
+        public BaseCRUDService(_200048Context context, IMapper mapper) : base(context, mapper)
         {
         }
 

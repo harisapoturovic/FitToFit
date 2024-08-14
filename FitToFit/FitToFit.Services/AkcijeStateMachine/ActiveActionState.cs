@@ -7,13 +7,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Akcije = FitToFit.Database.Akcije;
+using FitToFit.Services.Database;
+using Akcije = FitToFit.Services.Database.Akcije;
 
 namespace FitToFit.Services.AkcijeStateMachine
 {
     public class ActiveActionState : AkcijeBaseState
     {
-        public ActiveActionState(IServiceProvider serviceProvider, Ib200048Context context, IMapper mapper) 
+        public ActiveActionState(IServiceProvider serviceProvider, _200048Context context, IMapper mapper) 
             : base(serviceProvider, context, mapper)
         {
         }

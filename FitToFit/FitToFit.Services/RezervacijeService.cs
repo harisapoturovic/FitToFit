@@ -14,8 +14,9 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using Rezervacije = FitToFit.Database.Rezervacije;
-using RezervacijaStavke = FitToFit.Database.RezervacijaStavke;
+using FitToFit.Services.Database;
+using Rezervacije = FitToFit.Services.Database.Rezervacije;
+using RezervacijaStavke = FitToFit.Services.Database.RezervacijaStavke;
 
 namespace FitToFit.Services
 {
@@ -23,7 +24,7 @@ namespace FitToFit.Services
     {
         public BaseState _baseState { get; set; }
         private readonly IMessageProducer _messageProducer;
-        public RezervacijeService(BaseState baseState, Ib200048Context context, IMapper mapper, IMessageProducer messageProducer) : base(context, mapper)
+        public RezervacijeService(BaseState baseState, _200048Context context, IMapper mapper, IMessageProducer messageProducer) : base(context, mapper)
         {
             _baseState = baseState;
             _messageProducer = messageProducer;

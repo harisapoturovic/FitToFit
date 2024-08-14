@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FitToFit.Database;
+namespace FitToFit.Services.Database;
 
 public partial class Korisnici
 {
@@ -42,6 +42,8 @@ public partial class Korisnici
     public virtual ICollection<Novosti> Novostis { get; set; } = new List<Novosti>();
 
     public virtual ICollection<Ocjene> Ocjenes { get; set; } = new List<Ocjene>();
+
+    public virtual ICollection<Placanja> Placanjas { get; set; } = new List<Placanja>();
 
     public virtual ICollection<Rezervacije> Rezervacijes { get; set; } = new List<Rezervacije>();
 

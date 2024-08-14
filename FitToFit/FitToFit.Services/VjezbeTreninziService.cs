@@ -10,13 +10,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TreninziVjezbe = FitToFit.Database.TreninziVjezbe;
+using FitToFit.Services.Database;
+using TreninziVjezbe = FitToFit.Services.Database.TreninziVjezbe;
 
 namespace FitToFit.Services
 {
     public class VjezbeTreninziService : BaseService<Model.TreninziVjezbe, TreninziVjezbe, BaseSearchObject>, IVjezbeTreninziService
     {
-        public VjezbeTreninziService(Ib200048Context context, IMapper mapper) : base(context, mapper)
+        public VjezbeTreninziService(_200048Context context, IMapper mapper) : base(context, mapper)
         {
         }
 

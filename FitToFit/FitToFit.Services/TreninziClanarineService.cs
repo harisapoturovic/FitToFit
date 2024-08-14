@@ -9,13 +9,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TreninziClanarine = FitToFit.Database.TreninziClanarine;
+using FitToFit.Services.Database;
+using TreninziClanarine = FitToFit.Services.Database.TreninziClanarine;
 
 namespace FitToFit.Services
 {
     public class TreninziClanarineService : BaseCRUDService<Model.TreninziClanarine, TreninziClanarine, TreninziClanarineSearchObject, TreninziClanarineInsertRequest, TreninziClanarineUpdateRequest>, ITreninziClanarine
     {
-        public TreninziClanarineService(Ib200048Context context, IMapper mapper) : base(context, mapper)
+        public TreninziClanarineService(_200048Context context, IMapper mapper) : base(context, mapper)
         {
         }
 

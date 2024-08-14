@@ -2,6 +2,7 @@
 using FitToFit.Database;
 using FitToFit.Model;
 using FitToFit.Model.Requests;
+using FitToFit.Services.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace FitToFit.Services.AkcijeStateMachine
 {
     public class ArchivedActionState : AkcijeBaseState
     {
-        public ArchivedActionState(IServiceProvider serviceProvider, Ib200048Context context, IMapper mapper) 
+        public ArchivedActionState(IServiceProvider serviceProvider, _200048Context context, IMapper mapper) 
             : base(serviceProvider, context, mapper)
         {
         }

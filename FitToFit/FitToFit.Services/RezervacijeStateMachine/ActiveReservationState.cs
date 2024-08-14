@@ -7,13 +7,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Rezervacije = FitToFit.Database.Rezervacije;
+using FitToFit.Services.Database;
+using Rezervacije = FitToFit.Services.Database.Rezervacije;
 
 namespace FitToFit.Services.RezervacijeStateMachine
 {
     public class ActiveReservationState : BaseState
     {
-        public ActiveReservationState(IServiceProvider serviceProvider, Ib200048Context context, IMapper mapper) 
+        public ActiveReservationState(IServiceProvider serviceProvider, _200048Context context, IMapper mapper) 
             : base(serviceProvider, context, mapper)
         {
         }

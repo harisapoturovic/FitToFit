@@ -10,13 +10,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AkcijeTreninzi = FitToFit.Database.AkcijeTreninzi;
+using FitToFit.Services.Database;
+using AkcijeTreninzi = FitToFit.Services.Database.AkcijeTreninzi;
 
 namespace FitToFit.Services
 {
     public class AkcijeTreninziService : BaseService<Model.AkcijeTreninzi, AkcijeTreninzi, BaseSearchObject>, IAkcijeTreninziService
     {
-        public AkcijeTreninziService(Ib200048Context context, IMapper mapper) : base(context, mapper)
+        public AkcijeTreninziService(_200048Context context, IMapper mapper) : base(context, mapper)
         {
         }
 

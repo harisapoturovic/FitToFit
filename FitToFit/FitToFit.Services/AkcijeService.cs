@@ -10,15 +10,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Akcije = FitToFit.Database.Akcije;
-using AkcijeTreninzi = FitToFit.Database.AkcijeTreninzi;
+using FitToFit.Services.Database;
+using Akcije = FitToFit.Services.Database.Akcije;
+using AkcijeTreninzi = FitToFit.Services.Database.AkcijeTreninzi;
 
 namespace FitToFit.Services
 {
     public class AkcijeService : BaseCRUDService<Model.Akcije, Akcije, AkcijeSearchObject, AkcijeInsertRequest, AkcijeUpdateRequest>, IAkcijeService
     {
         public AkcijeBaseState _baseState { get; set; }
-        public AkcijeService(AkcijeBaseState baseState, Ib200048Context context, IMapper mapper) : base(context, mapper)
+        public AkcijeService(AkcijeBaseState baseState, _200048Context context, IMapper mapper) : base(context, mapper)
         {
             _baseState = baseState;
         }

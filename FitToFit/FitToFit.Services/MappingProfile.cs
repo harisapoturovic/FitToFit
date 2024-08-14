@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FitToFit.Database;
 using FitToFit.Model.Requests;
+using FitToFit.Services.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,6 +59,9 @@ namespace FitToFit.Services
             CreateMap<Ocjene, Model.Ocjene>();
             CreateMap<Model.Ocjene, Ocjene>();
             CreateMap<OcjeneInsertRequest, Ocjene>();
+            CreateMap<Placanja, Model.Placanja>();
+            CreateMap<PlacanjaInsertRequest, Placanja>();
+            CreateMap<PlacanjaUpdateRequest, Placanja>();
         }
     }
 }

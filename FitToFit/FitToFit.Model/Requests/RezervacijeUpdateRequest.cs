@@ -14,5 +14,6 @@ namespace FitToFit.Model.Requests
 
         public string? StateMachine { get; set; } = null!;
         public decimal? Iznos { get; set; } = null!;
+        public int? PlacanjeId { get; set; }
     }
 }

@@ -11,15 +11,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
-using Treninzi = FitToFit.Database.Treninzi;
-using TreninziVjezbe = FitToFit.Database.TreninziVjezbe;
+using FitToFit.Services.Database;
+using Treninzi = FitToFit.Services.Database.Treninzi;
+using TreninziVjezbe = FitToFit.Services.Database.TreninziVjezbe;
 
 namespace FitToFit.Services
 {
     public class TreninziService : BaseCRUDService<Model.Treninzi, Treninzi, TreninziSearchObject, TreninziInsertRequest, TreninziUpdateRequest>, ITreninziService
     {
         private readonly IMessageProducer _messageProducer;
-        public TreninziService(Ib200048Context context, IMapper mapper, IMessageProducer messageProducer) : base(context, mapper)
+        public TreninziService(_200048Context context, IMapper mapper, IMessageProducer messageProducer) : base(context, mapper)
         {
             _messageProducer = messageProducer;
         }

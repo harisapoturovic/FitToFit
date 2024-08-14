@@ -9,14 +9,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FitToFit.Services.Database;
 
 namespace FitToFit.Services
 {
     public class BaseService<T, Tdb, Tsearch> : IService<T, Tsearch> where T : class where Tdb : class where Tsearch : BaseSearchObject
     {
-        protected Ib200048Context _context;
+        protected _200048Context _context;
         protected IMapper _mapper { get; set; }
-        public BaseService(Ib200048Context context, IMapper mapper)
+        public BaseService(_200048Context context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;

@@ -2,18 +2,19 @@
 using FitToFit.Database;
 using FitToFit.Model;
 using FitToFit.Model.Requests;
+using FitToFit.Services.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Rezervacije = FitToFit.Database.Rezervacije;
+using Rezervacije = FitToFit.Services.Database.Rezervacije;
 
 namespace FitToFit.Services.RezervacijeStateMachine
 {
     public class InitialReservationState : BaseState
     {
-        public InitialReservationState(IServiceProvider serviceProvider, Ib200048Context context, IMapper mapper) 
+        public InitialReservationState(IServiceProvider serviceProvider, _200048Context context, IMapper mapper) 
             : base(serviceProvider, context, mapper)
         {
         }

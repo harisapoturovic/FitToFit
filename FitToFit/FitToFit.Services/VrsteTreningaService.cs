@@ -8,13 +8,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using VrsteTreninga = FitToFit.Database.VrsteTreninga;
+using FitToFit.Services.Database;
+using VrsteTreninga = FitToFit.Services.Database.VrsteTreninga;
 
 namespace FitToFit.Services
 {
     public class VrsteTreningaService : BaseService<Model.VrsteTreninga, VrsteTreninga, VrsteTreningaSearchObject>, IVrsteTreningaService
     {
-        public VrsteTreningaService(Ib200048Context context, IMapper mapper)
+        public VrsteTreningaService(_200048Context context, IMapper mapper)
             :base(context, mapper)
         {
         }

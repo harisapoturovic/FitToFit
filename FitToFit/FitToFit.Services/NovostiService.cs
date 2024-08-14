@@ -9,12 +9,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using FitToFit.Services.Database;
 
 namespace FitToFit.Services
 {
     public class NovostiService : BaseCRUDService<Model.Novosti, Novosti, NovostiSearchObject, NovostiInsertRequest, NovostiUpdateRequest>, INovostiService
     {
-        public NovostiService(Ib200048Context context, IMapper mapper)
+        public NovostiService(_200048Context context, IMapper mapper)
             : base(context, mapper)
         {
         }

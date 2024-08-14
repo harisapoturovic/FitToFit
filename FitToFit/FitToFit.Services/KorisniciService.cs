@@ -9,12 +9,13 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using FitToFit.Services.Database;
 
 namespace FitToFit.Services
 {
     public class KorisniciService : BaseCRUDService<Model.Korisnici, Korisnici, KorisniciSearchObject, KorisniciInsertRequest, KorisniciUpdateRequest>, IKorisniciService
     {
-        public KorisniciService(Ib200048Context context, IMapper mapper)
+        public KorisniciService(_200048Context context, IMapper mapper)
             :base(context, mapper)
         {
         }
