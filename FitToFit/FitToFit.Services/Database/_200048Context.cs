@@ -29,8 +29,6 @@ public partial class _200048Context : DbContext
 
     public virtual DbSet<Ocjene> Ocjenes { get; set; }
 
-    public virtual DbSet<Placanja> Placanjas { get; set; }
-
     public virtual DbSet<RezervacijaStavke> RezervacijaStavkes { get; set; }
 
     public virtual DbSet<Rezervacije> Rezervacijes { get; set; }
@@ -218,21 +216,6 @@ public partial class _200048Context : DbContext
                 .HasConstraintName("FK__Ocjene__TrenerID__6754599E");
         });
 
-        modelBuilder.Entity<Placanja>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__Placanja__3214EC07412640F1");
-
-            entity.ToTable("Placanja");
-
-            entity.Property(e => e.DatumPlacanja).HasColumnType("datetime");
-            entity.Property(e => e.Iznos).HasColumnType("decimal(18, 2)");
-            entity.Property(e => e.TransactionId).HasMaxLength(255);
-
-            entity.HasOne(d => d.Korisnik).WithMany(p => p.Placanjas)
-                .HasForeignKey(d => d.KorisnikId)
-                .HasConstraintName("FK_Placanja_Korisnici");
-        });
-
         modelBuilder.Entity<RezervacijaStavke>(entity =>
         {
             entity.HasKey(e => e.RezervacijaStavkeId).HasName("PK__Rezervac__D01610F9786F69C9");
@@ -284,10 +267,6 @@ public partial class _200048Context : DbContext
                 .HasForeignKey(d => d.KorisnikId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Rezervaci__Koris__04E4BC85");
-
-            entity.HasOne(d => d.Placanje).WithMany(p => p.Rezervacijes)
-                .HasForeignKey(d => d.PlacanjeId)
-                .HasConstraintName("FK_Rezervacije_Placanja");
         });
 
         modelBuilder.Entity<Sale>(entity =>

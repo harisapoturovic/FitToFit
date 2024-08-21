@@ -23,7 +23,7 @@ namespace FitToFit.Model
 
         public DateTime? DatumIsteka { get; set; }
 
-        public int? PlacanjeId { get; set; }
+        public string? BrojTransakcije { get; set; }
 
         //public virtual Korisnici Korisnik { get; set; } = null!; 
 

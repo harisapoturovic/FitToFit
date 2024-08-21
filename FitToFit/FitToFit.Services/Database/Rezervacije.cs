@@ -19,13 +19,11 @@ public partial class Rezervacije
 
     public DateTime? DatumIsteka { get; set; }
 
-    public int? PlacanjeId { get; set; }
+    public string? BrojTransakcije { get; set; }
 
     public virtual Clanarine Clanarina { get; set; } = null!;
 
     public virtual Korisnici Korisnik { get; set; } = null!;
-
-    public virtual Placanja? Placanje { get; set; }
 
     public virtual ICollection<RezervacijaStavke> RezervacijaStavkes { get; set; } = new List<RezervacijaStavke>();
 }

@@ -7,7 +7,7 @@ part of 'vjezbe.dart';
 // **************************************************************************
 
 Vjezbe _$VjezbeFromJson(Map<String, dynamic> json) => Vjezbe(
-      vjezbaId: json['vjezbaId'] as int,
+      vjezbaId: (json['vjezbaId'] as num).toInt(),
       naziv: json['naziv'] as String,
       opis: json['opis'] as String?,
       slika: json['slika'] as String?,

@@ -8,9 +8,9 @@ part of 'akcijeTreninzi.dart';
 
 AkcijeTreninzi _$AkcijeTreninziFromJson(Map<String, dynamic> json) =>
     AkcijeTreninzi(
-      akcijaTreningId: json['akcijaTreningId'] as int,
-      akcijaId: json['akcijaId'] as int,
-      treningId: json['treningId'] as int,
+      akcijaTreningId: (json['akcijaTreningId'] as num).toInt(),
+      akcijaId: (json['akcijaId'] as num).toInt(),
+      treningId: (json['treningId'] as num).toInt(),
       trening: json['trening'] == null
           ? null
           : Treninzi.fromJson(json['trening'] as Map<String, dynamic>),

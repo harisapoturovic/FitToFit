@@ -59,9 +59,6 @@ namespace FitToFit.Services
             CreateMap<Ocjene, Model.Ocjene>();
             CreateMap<Model.Ocjene, Ocjene>();
             CreateMap<OcjeneInsertRequest, Ocjene>();
-            CreateMap<Placanja, Model.Placanja>();
-            CreateMap<PlacanjaInsertRequest, Placanja>();
-            CreateMap<PlacanjaUpdateRequest, Placanja>();
         }
     }
 }

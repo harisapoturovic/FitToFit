@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:fittofit_mobile/models/akcije.dart';
 import 'package:fittofit_mobile/models/clanarine.dart';
 import 'package:fittofit_mobile/models/korisnici.dart';
@@ -18,8 +20,11 @@ import 'package:fittofit_mobile/providers/vrste_treninga_provider.dart';
 import 'package:fittofit_mobile/utils/util.dart';
 import 'package:fittofit_mobile/widgets/master_screen_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_stripe/flutter_stripe.dart' as sp;
+import 'package:http/http.dart' as http;
 
 class ReservationPage extends StatefulWidget {
   final int selectedIndex;
@@ -57,6 +62,10 @@ class _ReservationPageState extends State<ReservationPage> {
   late Korisnici korisnik;
   late Clanarine _clanarina;
   final Set<String> _selectedTermini = {};
+
+  bool isLoading = true;
+  int iznos = 0;
+  Map<String, dynamic>? paymentIntent;
 
   @override
   void initState() {
@@ -532,7 +541,81 @@ class _ReservationPageState extends State<ReservationPage> {
     );
   }
 
+  int calculateAmount() {
+    return iznos = (uracunajAkciju().toInt() * 100);
+  }
+
+  Future<Map<String, dynamic>> makePaymentIntent() async {
+    await dotenv.load(fileName: "assets/.env");
+
+    String stripeSK = dotenv.env['STRIPE_SECRET_KEY']!;
+    String secretKey =
+        String.fromEnvironment("STRIPE_SECRET_KEY", defaultValue: stripeSK);
+
+    final body = {
+      'amount': calculateAmount().toString(),
+      'currency': 'BAM',
+      'payment_method_types[]': 'card',
+    };
+
+    final headers = {
+      'Authorization': 'Bearer $secretKey',
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
+
+    final response = await http.post(
+      Uri.parse("https://api.stripe.com/v1/payment_intents"),
+      headers: headers,
+      body: body,
+    );
+
+    return jsonDecode(response.body);
+  }
+
+  Future<void> displayPaymentSheet() async {
+    try {
+      await sp.Stripe.instance.presentPaymentSheet();
+      await saveData();
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: Colors.red[400],
+        padding: const EdgeInsets.all(15),
+        content: const Text(
+          "Transakcija otkazana",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 17,
+            fontWeight: FontWeight.w500,
+            letterSpacing: 0.5,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ));
+    }
+  }
+
+  Future<void> makePayment() async {
+    try {
+      paymentIntent = await makePaymentIntent();
+      await sp.Stripe.instance.initPaymentSheet(
+        paymentSheetParameters: sp.SetupPaymentSheetParameters(
+          merchantDisplayName: 'Kreiranje rezervacije',
+          paymentIntentClientSecret: paymentIntent!['client_secret'],
+          style: ThemeMode.dark,
+        ),
+      );
+      await displayPaymentSheet();
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
   void _prikaziOdabrano() {
+    String? _selectedPaymentMethod = 'uCentru';
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -557,340 +640,151 @@ class _ReservationPageState extends State<ReservationPage> {
                           brojClanovaSnapshot.connectionState ==
                               ConnectionState.waiting
                       ? const Center(child: CircularProgressIndicator())
-                      : Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              "Članarina: ${_clanarina.naziv}",
-                              style: const TextStyle(fontSize: 16.0),
-                            ),
-                            Text(
-                              "Trening: ${_trening.naziv}",
-                              style: const TextStyle(fontSize: 16.0),
-                            ),
-                            Text(
-                              "Učestalost: ${_terminiIds.length}x",
-                              style: const TextStyle(fontSize: 16.0),
-                            ),
-                            const SizedBox(height: 10),
-                            const Text(
-                              "Termini:",
-                              style: TextStyle(
-                                  fontSize: 16.0, fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              termineSnapshot.data ?? '',
-                              style: const TextStyle(fontSize: 16.0),
-                            ),
-                            const SizedBox(height: 10),
-                            const Text(
-                              "Broj ljudi na odabranim terminima:",
-                              style: TextStyle(
-                                  fontSize: 16.0, fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              brojClanovaSnapshot.data ?? '',
-                              style: const TextStyle(fontSize: 16.0),
-                            ),
-                            const SizedBox(height: 10),
-                            _treninziClanarineList.isNotEmpty
-                                ? Text(
-                                    "Ukupno za platiti: ${uracunajAkciju()}KM",
-                                    style: const TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.bold),
-                                  )
-                                : const Text(''),
-                            const SizedBox(height: 10),
-                            const Text("Da li želite potvrditi rezervaciju?",
-                                style: TextStyle(
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.bold)),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                      : StatefulBuilder(
+                          builder:
+                              (BuildContext context, StateSetter setState) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                ElevatedButton(
-                                  onPressed: () async {
-                                    Navigator.pop(context);
-                                    int korisnikId = korisnik.korisnikId;
-                                    int clanarinaId = _selectedClanarina ?? 0;
-                                    List<int> terminIds = _terminiIds;
-                                    DateTime now = DateTime.now();
-                                    DateTime datumIsteka;
-
-                                    if (_selectedClanarina == 1) {
-                                      // Mjesečna članarina
-                                      datumIsteka =
-                                          now.add(const Duration(days: 30));
-                                    } else if (_selectedClanarina == 2) {
-                                      // Sedmična članarina
-                                      datumIsteka =
-                                          now.add(const Duration(days: 7));
-                                    } else if (_selectedClanarina == 3) {
-                                      // Dnevna članarina
-                                      datumIsteka =
-                                          now.add(const Duration(hours: 24));
-                                    } else {
-                                      datumIsteka = now;
-                                    }
-
-                                    String formattedDate = DateFormat(
-                                            "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-                                        .format(now.toUtc());
-                                    String formattedDatumIsteka = DateFormat(
-                                            "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-                                        .format(datumIsteka.toUtc());
-
-                                    List<RezervacijeItem> items = terminIds
-                                        .map((terminId) =>
-                                            RezervacijeItem(terminId: terminId))
-                                        .toList();
-
-                                    if (_selectedClanarina != null &&
-                                        _selectedClanarina != 0 &&
-                                        _selectedTrening != null) {
-                                      if (_treninziClanarineList.isEmpty) {
-                                        _showAlertDialog(
-                                          "Greška",
-                                          'Za odabranu članarinu "Dnevna" morate uzeti samo jedan termin, a za preostale članarine više od jednog termina.',
-                                          Colors.red,
-                                        );
-                                        return;
-                                      }
-
-                                      DateTime convertToDateTime(
-                                          String dan, String? sat) {
-                                        Map<String, int> daysOfWeek = {
-                                          'Ponedjeljak': DateTime.monday,
-                                          'Utorak': DateTime.tuesday,
-                                          'Srijeda': DateTime.wednesday,
-                                          'Četvrtak': DateTime.thursday,
-                                          'Petak': DateTime.friday,
-                                          'Subota': DateTime.saturday,
-                                          'Nedjelja': DateTime.sunday,
-                                        };
-
-                                        DateTime now = DateTime.now();
-                                        int dayOfWeek =
-                                            daysOfWeek[dan] ?? DateTime.monday;
-
-                                        DateTime date = now.add(Duration(
-                                            days:
-                                                (dayOfWeek - now.weekday + 7) %
-                                                    7));
-                                        if (sat != null) {
-                                          String cleanedSat = sat.replaceAll(
-                                              RegExp(r'[^\d:]'), '');
-
-                                          List<String> timeParts =
-                                              cleanedSat.split(':');
-
-                                          if (timeParts.length == 2) {
-                                            try {
-                                              int hour =
-                                                  int.parse(timeParts[0]);
-                                              int minute =
-                                                  int.parse(timeParts[1]);
-
-                                              date = DateTime(
-                                                  date.year,
-                                                  date.month,
-                                                  date.day,
-                                                  hour,
-                                                  minute);
-                                            } catch (e) {
-                                              print(
-                                                  'Greška pri parsiranju vremena: $e');
-                                            }
-                                          }
-                                        }
-
-                                        return date;
-                                      }
-
-                                      if (_selectedClanarina == 3) {
-                                        DateTime tomorrow =
-                                            now.add(const Duration(days: 1));
-
-                                        List<Future<Termini>> terminFutures =
-                                            terminIds
-                                                .map((terminId) =>
-                                                    fetchTermin(terminId))
-                                                .toList();
-                                        List<Termini> termini =
-                                            await Future.wait(terminFutures);
-
-                                        bool allTerminiAreTomorrow =
-                                            termini.every((termin) {
-                                          DateTime terminDate =
-                                              convertToDateTime(
-                                                  termin.dan, termin.sat);
-                                          return terminDate.year ==
-                                                  tomorrow.year &&
-                                              terminDate.month ==
-                                                  tomorrow.month &&
-                                              terminDate.day == tomorrow.day;
-                                        });
-
-                                        if (!allTerminiAreTomorrow) {
-                                          _showAlertDialog(
-                                            "Greška",
-                                            'Za dnevnu članarinu možete odabrati samo termine koji su zakazani za sutra.',
-                                            Colors.red,
-                                          );
-                                          return;
-                                        }
-
-                                        if (terminIds.length > 1) {
-                                          _showAlertDialog(
-                                            "Greška",
-                                            'Za dnevnu članarinu možete odabrati samo jedan termin.',
-                                            Colors.red,
-                                          );
-                                          return;
-                                        }
-                                      } else if (_selectedClanarina == 2) {
-                                        DateTime sevenDaysFromNow =
-                                            now.add(const Duration(days: 7));
-
-                                        List<Future<Termini>> terminFutures =
-                                            terminIds
-                                                .map((terminId) =>
-                                                    fetchTermin(terminId))
-                                                .toList();
-                                        List<Termini> termini =
-                                            await Future.wait(terminFutures);
-
-                                        bool allTerminiAreWithinSevenDays =
-                                            termini.every((termin) {
-                                          DateTime terminDate =
-                                              convertToDateTime(
-                                                  termin.dan, termin.sat);
-                                          return terminDate.isAfter(now) &&
-                                              terminDate
-                                                  .isBefore(sevenDaysFromNow);
-                                        });
-
-                                        if (!allTerminiAreWithinSevenDays) {
-                                          _showAlertDialog(
-                                            "Greška",
-                                            'Za sedmičnu članarinu možete odabrati samo termine unutar narednih 7 dana.',
-                                            Colors.red,
-                                          );
-                                          return;
-                                        }
-                                      } else if (_selectedClanarina == 1) {
-                                        DateTime thirtyDaysFromNow =
-                                            now.add(const Duration(days: 30));
-
-                                        List<Future<Termini>> terminFutures =
-                                            terminIds
-                                                .map((terminId) =>
-                                                    fetchTermin(terminId))
-                                                .toList();
-                                        List<Termini> termini =
-                                            await Future.wait(terminFutures);
-
-                                        bool allTerminiAreWithinThirtyDays =
-                                            termini.every((termin) {
-                                          DateTime terminDate =
-                                              convertToDateTime(
-                                                  termin.dan, termin.sat);
-                                          return terminDate.isAfter(now) &&
-                                              terminDate
-                                                  .isBefore(thirtyDaysFromNow);
-                                        });
-
-                                        if (!allTerminiAreWithinThirtyDays) {
-                                          _showAlertDialog(
-                                            "Greška",
-                                            'Za mjesečnu članarinu možete odabrati samo termine unutar narednih 30 dana.',
-                                            Colors.red,
-                                          );
-                                          return;
-                                        }
-                                      }
-
-                                      double finalnaCijena = uracunajAkciju();
-
-                                      RezervacijeRequest request =
-                                          RezervacijeRequest(
-                                        datum: formattedDate,
-                                        korisnikId: korisnikId,
-                                        clanarinaId: clanarinaId,
-                                        iznos: finalnaCijena,
-                                        items: items,
-                                        datumIsteka: formattedDatumIsteka,
-                                      );
-
-                                      if (_rezervacijeCount1! < 3 &&
-                                          _rezervacijeCount2! == 0 &&
-                                          provjeriClanarinu()) {
-                                        await _rezervacijeProvider
-                                            .insert(request.toJson());
-
-                                        _showAlertDialog(
-                                          "Rezervisano!",
-                                          "Uspješno kreirana rezervacija.",
-                                          Colors.green,
-                                        );
-                                        setState(() {
-                                          _selectedTermini.clear();
-                                          _terminiIds.clear();
-                                          _selectedClanarina = null;
-                                          _selectedVrstaTreninga = null;
-                                          _selectedTrening = null;
-                                        });
-                                      } else if (_rezervacijeCount2! != 0) {
-                                        _showAlertDialog(
-                                            "Greška",
-                                            "Prethodno ste rezervisali odabrani trening. Nije moguće rezervisati isti trening u sklopu više rezervacija.",
-                                            Colors.red);
-                                      } else if (_rezervacijeCount1! != 0) {
-                                        _showAlertDialog(
-                                          "Greška",
-                                          "Napravili ste maksimalan broj rezervacija. Otkažite neku od njih ili sačekajte da istekne neka od prethodno rezervisanih.",
-                                          Colors.red,
-                                        );
-                                      }
-                                    } else {
-                                      _showAlertDialog(
-                                        "Greška",
-                                        "Morate odabrati članarinu i neki od treninga.",
-                                        Colors.red,
-                                      );
-                                    }
-                                  },
-                                  style: ButtonStyle(
-                                    backgroundColor:
-                                        WidgetStateProperty.all<Color>(
-                                            Colors.green),
-                                    foregroundColor:
-                                        WidgetStateProperty.all<Color>(
-                                            Colors.white),
-                                  ),
-                                  child: const Text("DA"),
+                                Text(
+                                  "Članarina: ${_clanarina.naziv}",
+                                  style: const TextStyle(fontSize: 16.0),
                                 ),
-                                const SizedBox(width: 20),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    _terminiIds.clear();
-                                    Navigator.pop(context);
-                                  },
-                                  style: ButtonStyle(
-                                    backgroundColor:
-                                        WidgetStateProperty.all<Color>(
-                                            Colors.red),
-                                    foregroundColor:
-                                        WidgetStateProperty.all<Color>(
-                                            Colors.white),
-                                  ),
-                                  child: const Text("NE"),
+                                Text(
+                                  "Trening: ${_trening.naziv}",
+                                  style: const TextStyle(fontSize: 16.0),
                                 ),
+                                Text(
+                                  "Učestalost: ${_terminiIds.length}x",
+                                  style: const TextStyle(fontSize: 16.0),
+                                ),
+                                const SizedBox(height: 10),
+                                const Text(
+                                  "Termini:",
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  termineSnapshot.data ?? '',
+                                  style: const TextStyle(fontSize: 16.0),
+                                ),
+                                const SizedBox(height: 10),
+                                const Text(
+                                  "Broj ljudi na odabranim terminima:",
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  brojClanovaSnapshot.data ?? '',
+                                  style: const TextStyle(fontSize: 16.0),
+                                ),
+                                const SizedBox(height: 10),
+                                _treninziClanarineList.isNotEmpty
+                                    ? Text(
+                                        "Ukupno za platiti: ${uracunajAkciju()}KM",
+                                        style: const TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    : const Text(''),
+                                const SizedBox(height: 10),
+                                const Text("Odaberite način plaćanja:",
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold)),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: ListTile(
+                                        title: const Text('Plaćanje u centru'),
+                                        leading: Radio<String>(
+                                          value: 'uCentru',
+                                          groupValue: _selectedPaymentMethod,
+                                          onChanged: (String? value) {
+                                            setState(() {
+                                              _selectedPaymentMethod = value;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: ListTile(
+                                        title: const Text('Plaćanje online'),
+                                        leading: Radio<String>(
+                                          value: 'online',
+                                          groupValue: _selectedPaymentMethod,
+                                          onChanged: (String? value) async {
+                                            setState(() {
+                                              _selectedPaymentMethod = value;
+                                            });
+                                            setState(() {
+                                              isLoading = true;
+                                            });
+                                            await makePayment();
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                if (_selectedPaymentMethod == 'uCentru')
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        "Da li želite potvrditi rezervaciju?",
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          ElevatedButton(
+                                            onPressed: () async {
+                                              Navigator.pop(context);
+                                              saveData();
+                                            },
+                                            style: ButtonStyle(
+                                              backgroundColor:
+                                                  WidgetStateProperty.all<
+                                                      Color>(Colors.green),
+                                              foregroundColor:
+                                                  WidgetStateProperty.all<
+                                                      Color>(Colors.white),
+                                            ),
+                                            child: const Text("DA"),
+                                          ),
+                                          const SizedBox(width: 20),
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              _terminiIds.clear();
+                                              Navigator.pop(context);
+                                            },
+                                            style: ButtonStyle(
+                                              backgroundColor:
+                                                  WidgetStateProperty.all<
+                                                      Color>(Colors.red),
+                                              foregroundColor:
+                                                  WidgetStateProperty.all<
+                                                      Color>(Colors.white),
+                                            ),
+                                            child: const Text("NE"),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                               ],
-                            ),
-                          ],
+                            );
+                          },
                         ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
@@ -918,5 +812,214 @@ class _ReservationPageState extends State<ReservationPage> {
       iznos -= iznos * (discountPercentage / 100);
     }
     return double.parse(iznos.toStringAsFixed(2));
+  }
+
+  saveData() async {
+    int korisnikId = korisnik.korisnikId;
+    int clanarinaId = _selectedClanarina ?? 0;
+    List<int> terminIds = _terminiIds;
+    DateTime now = DateTime.now();
+    DateTime datumIsteka;
+
+    if (_selectedClanarina == 1) {
+      // Mjesečna članarina
+      datumIsteka = now.add(const Duration(days: 30));
+    } else if (_selectedClanarina == 2) {
+      // Sedmična članarina
+      datumIsteka = now.add(const Duration(days: 7));
+    } else if (_selectedClanarina == 3) {
+      // Dnevna članarina
+      datumIsteka = now.add(const Duration(hours: 24));
+    } else {
+      datumIsteka = now;
+    }
+
+    String formattedDate =
+        DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(now.toUtc());
+    String formattedDatumIsteka =
+        DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(datumIsteka.toUtc());
+
+    List<RezervacijeItem> items = terminIds
+        .map((terminId) => RezervacijeItem(terminId: terminId))
+        .toList();
+
+    if (_selectedClanarina != null &&
+        _selectedClanarina != 0 &&
+        _selectedTrening != null) {
+      if (_treninziClanarineList.isEmpty) {
+        _showAlertDialog(
+          "Greška",
+          'Za odabranu članarinu "Dnevna" morate uzeti samo jedan termin, a za preostale članarine više od jednog termina.',
+          Colors.red,
+        );
+        return;
+      }
+
+      DateTime convertToDateTime(String dan, String? sat) {
+        Map<String, int> daysOfWeek = {
+          'Ponedjeljak': DateTime.monday,
+          'Utorak': DateTime.tuesday,
+          'Srijeda': DateTime.wednesday,
+          'Četvrtak': DateTime.thursday,
+          'Petak': DateTime.friday,
+          'Subota': DateTime.saturday,
+          'Nedjelja': DateTime.sunday,
+        };
+
+        DateTime now = DateTime.now();
+        int dayOfWeek = daysOfWeek[dan] ?? DateTime.monday;
+
+        DateTime date =
+            now.add(Duration(days: (dayOfWeek - now.weekday + 7) % 7));
+        if (sat != null) {
+          String cleanedSat = sat.replaceAll(RegExp(r'[^\d:]'), '');
+
+          List<String> timeParts = cleanedSat.split(':');
+
+          if (timeParts.length == 2) {
+            try {
+              int hour = int.parse(timeParts[0]);
+              int minute = int.parse(timeParts[1]);
+
+              date = DateTime(date.year, date.month, date.day, hour, minute);
+            } catch (e) {
+              print('Greška pri parsiranju vremena: $e');
+            }
+          }
+        }
+
+        return date;
+      }
+
+      if (_selectedClanarina == 3) {
+        DateTime tomorrow = now.add(const Duration(days: 1));
+
+        List<Future<Termini>> terminFutures =
+            terminIds.map((terminId) => fetchTermin(terminId)).toList();
+        List<Termini> termini = await Future.wait(terminFutures);
+
+        bool allTerminiAreTomorrow = termini.every((termin) {
+          DateTime terminDate = convertToDateTime(termin.dan, termin.sat);
+          return terminDate.year == tomorrow.year &&
+              terminDate.month == tomorrow.month &&
+              terminDate.day == tomorrow.day;
+        });
+
+        if (!allTerminiAreTomorrow) {
+          _showAlertDialog(
+            "Greška",
+            'Za dnevnu članarinu možete odabrati samo termine koji su zakazani za sutra.',
+            Colors.red,
+          );
+          return;
+        }
+
+        if (terminIds.length > 1) {
+          _showAlertDialog(
+            "Greška",
+            'Za dnevnu članarinu možete odabrati samo jedan termin.',
+            Colors.red,
+          );
+          return;
+        }
+      } else if (_selectedClanarina == 2) {
+        DateTime sevenDaysFromNow = now.add(const Duration(days: 7));
+
+        List<Future<Termini>> terminFutures =
+            terminIds.map((terminId) => fetchTermin(terminId)).toList();
+        List<Termini> termini = await Future.wait(terminFutures);
+
+        bool allTerminiAreWithinSevenDays = termini.every((termin) {
+          DateTime terminDate = convertToDateTime(termin.dan, termin.sat);
+          return terminDate.isAfter(now) &&
+              terminDate.isBefore(sevenDaysFromNow);
+        });
+
+        if (!allTerminiAreWithinSevenDays) {
+          _showAlertDialog(
+            "Greška",
+            'Za sedmičnu članarinu možete odabrati samo termine unutar narednih 7 dana.',
+            Colors.red,
+          );
+          return;
+        }
+      } else if (_selectedClanarina == 1) {
+        DateTime thirtyDaysFromNow = now.add(const Duration(days: 30));
+
+        List<Future<Termini>> terminFutures =
+            terminIds.map((terminId) => fetchTermin(terminId)).toList();
+        List<Termini> termini = await Future.wait(terminFutures);
+
+        bool allTerminiAreWithinThirtyDays = termini.every((termin) {
+          DateTime terminDate = convertToDateTime(termin.dan, termin.sat);
+          return terminDate.isAfter(now) &&
+              terminDate.isBefore(thirtyDaysFromNow);
+        });
+
+        if (!allTerminiAreWithinThirtyDays) {
+          _showAlertDialog(
+            "Greška",
+            'Za mjesečnu članarinu možete odabrati samo termine unutar narednih 30 dana.',
+            Colors.red,
+          );
+          return;
+        }
+      }
+
+      double finalnaCijena = uracunajAkciju();
+
+      RezervacijeRequest request = RezervacijeRequest(
+          datum: formattedDate,
+          korisnikId: korisnikId,
+          clanarinaId: clanarinaId,
+          iznos: finalnaCijena,
+          items: items,
+          datumIsteka: formattedDatumIsteka,
+          brojTransakcije: paymentIntent?['id']);
+
+      if (_rezervacijeCount1! < 3 &&
+          _rezervacijeCount2! == 0 &&
+          provjeriClanarinu()) {
+        await _rezervacijeProvider.insert(request.toJson());
+        if (paymentIntent != null) {
+          _showAlertDialog(
+            "Rezervisano!",
+            "Uspješno obavljena transakcija i kreirana rezervacija.",
+            Colors.green,
+          );
+        } else {
+          _showAlertDialog(
+            "Rezervisano!",
+            "Uspješno kreirana rezervacija.",
+            Colors.green,
+          );
+        }
+        setState(() {
+          _selectedTermini.clear();
+          _terminiIds.clear();
+          _selectedClanarina = null;
+          _selectedVrstaTreninga = null;
+          _selectedTrening = null;
+          paymentIntent = null;
+        });
+      } else if (_rezervacijeCount2! != 0) {
+        _showAlertDialog(
+            "Greška",
+            "Prethodno ste rezervisali odabrani trening. Nije moguće rezervisati isti trening u sklopu više rezervacija.",
+            Colors.red);
+      } else if (_rezervacijeCount1! != 0) {
+        _showAlertDialog(
+          "Greška",
+          "Napravili ste maksimalan broj rezervacija. Otkažite neku od njih ili sačekajte da istekne neka od prethodno rezervisanih.",
+          Colors.red,
+        );
+      }
+    } else {
+      _showAlertDialog(
+        "Greška",
+        "Morate odabrati članarinu i neki od treninga.",
+        Colors.red,
+      );
+    }
   }
 }

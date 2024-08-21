@@ -7,11 +7,11 @@ part of 'ocjene.dart';
 // **************************************************************************
 
 Ocjene _$OcjeneFromJson(Map<String, dynamic> json) => Ocjene(
-      ocjenaId: json['ocjenaId'] as int,
+      ocjenaId: (json['ocjenaId'] as num).toInt(),
       datum: DateTime.parse(json['datum'] as String),
-      ocjena: json['ocjena'] as int,
-      korisnikId: json['korisnikId'] as int,
-      trenerId: json['trenerId'] as int,
+      ocjena: (json['ocjena'] as num).toInt(),
+      korisnikId: (json['korisnikId'] as num).toInt(),
+      trenerId: (json['trenerId'] as num).toInt(),
     );
 
 Map<String, dynamic> _$OcjeneToJson(Ocjene instance) => <String, dynamic>{

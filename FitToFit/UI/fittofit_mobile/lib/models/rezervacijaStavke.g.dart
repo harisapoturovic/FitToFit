@@ -8,9 +8,9 @@ part of 'rezervacijaStavke.dart';
 
 RezervacijaStavke _$RezervacijaStavkeFromJson(Map<String, dynamic> json) =>
     RezervacijaStavke(
-      rezervacijaStavkeId: json['rezervacijaStavkeId'] as int,
-      rezervacijaId: json['rezervacijaId'] as int,
-      terminId: json['terminId'] as int,
+      rezervacijaStavkeId: (json['rezervacijaStavkeId'] as num).toInt(),
+      rezervacijaId: (json['rezervacijaId'] as num).toInt(),
+      terminId: (json['terminId'] as num).toInt(),
       termin: json['termin'] == null
           ? null
           : Termini.fromJson(json['termin'] as Map<String, dynamic>),

@@ -7,7 +7,7 @@ part of 'korisnici.dart';
 // **************************************************************************
 
 Korisnici _$KorisniciFromJson(Map<String, dynamic> json) => Korisnici(
-      korisnikId: json['korisnikId'] as int,
+      korisnikId: (json['korisnikId'] as num).toInt(),
       ime: json['ime'] as String,
       prezime: json['prezime'] as String,
       spol: json['spol'] as String,
@@ -24,7 +24,7 @@ Korisnici _$KorisniciFromJson(Map<String, dynamic> json) => Korisnici(
       tezina: json['tezina'] as String?,
       korisnickoIme: json['korisnickoIme'] as String,
       slika: json['slika'] as String?,
-      ulogaId: json['ulogaId'] as int?,
+      ulogaId: (json['ulogaId'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$KorisniciToJson(Korisnici instance) => <String, dynamic>{

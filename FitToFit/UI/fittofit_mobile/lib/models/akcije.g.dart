@@ -7,11 +7,11 @@ part of 'akcije.dart';
 // **************************************************************************
 
 Akcije _$AkcijeFromJson(Map<String, dynamic> json) => Akcije(
-      akcijaId: json['akcijaId'] as int,
+      akcijaId: (json['akcijaId'] as num).toInt(),
       naziv: json['naziv'] as String,
       datumPocetka: DateTime.parse(json['datumPocetka'] as String),
       datumZavrsetka: DateTime.parse(json['datumZavrsetka'] as String),
-      iznos: json['iznos'] as int,
+      iznos: (json['iznos'] as num).toInt(),
       stateMachine: json['stateMachine'] as String?,
       akcijeTreninzis: (json['akcijeTreninzis'] as List<dynamic>?)
           ?.map((e) => AkcijeTreninzi.fromJson(e as Map<String, dynamic>))

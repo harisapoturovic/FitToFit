@@ -12,6 +12,7 @@ class Rezervacije {
   int korisnikId;
   int clanarinaId;
   DateTime? datumIsteka;
+  String? brojTransakcije;
   List<RezervacijaStavke>? rezervacijaStavkes = [];
 
   Rezervacije(
@@ -22,7 +23,8 @@ class Rezervacije {
       required this.korisnikId,
       required this.clanarinaId,
       this.rezervacijaStavkes,
-      this.datumIsteka});
+      this.datumIsteka,
+      this.brojTransakcije});
 
   factory Rezervacije.fromJson(Map<String, dynamic> json) =>
       _$RezervacijeFromJson(json);

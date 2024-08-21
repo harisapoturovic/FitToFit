@@ -8,7 +8,7 @@ part of 'odabraniTermini.dart';
 
 OdabraniTermini _$OdabraniTerminiFromJson(Map<String, dynamic> json) =>
     OdabraniTermini(
-      count: json['count'] as int,
+      count: (json['count'] as num).toInt(),
       opis: json['opis'] as String,
     );
 

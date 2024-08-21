@@ -7,7 +7,7 @@ part of 'treneri.dart';
 // **************************************************************************
 
 Treneri _$TreneriFromJson(Map<String, dynamic> json) => Treneri(
-      trenerId: json['trenerId'] as int,
+      trenerId: (json['trenerId'] as num).toInt(),
       ime: json['ime'] as String,
       prezime: json['prezime'] as String,
       spol: json['spol'] as String,

@@ -43,8 +43,6 @@ public partial class Korisnici
 
     public virtual ICollection<Ocjene> Ocjenes { get; set; } = new List<Ocjene>();
 
-    public virtual ICollection<Placanja> Placanjas { get; set; } = new List<Placanja>();
-
     public virtual ICollection<Rezervacije> Rezervacijes { get; set; } = new List<Rezervacije>();
 
     public virtual Uloge? Uloga { get; set; }

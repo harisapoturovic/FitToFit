@@ -17,6 +17,8 @@ namespace FitToFit.Model.Requests
         public decimal? Iznos { get; set; }
 
         public DateTime DatumIsteka { get; set; }
+
+        public string? BrojTransakcije { get; set; }
         public List<RezervacijaStavkeInsertRequest>? Items { get; set; }
     }
 }

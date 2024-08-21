@@ -7,15 +7,15 @@ part of 'treninzi.dart';
 // **************************************************************************
 
 Treninzi _$TreninziFromJson(Map<String, dynamic> json) => Treninzi(
-      treningId: json['treningId'] as int,
+      treningId: (json['treningId'] as num).toInt(),
       naziv: json['naziv'] as String,
       opis: json['opis'] as String,
-      maxBrojClanova: json['maxBrojClanova'] as int,
+      maxBrojClanova: (json['maxBrojClanova'] as num).toInt(),
       cijenaPoTerminu: (json['cijenaPoTerminu'] as num).toDouble(),
       trajanje: json['trajanje'] as String,
       prosjecnaPotrosnjaKalorija:
           (json['prosjecnaPotrosnjaKalorija'] as num).toDouble(),
-      vrstaId: json['vrstaId'] as int,
+      vrstaId: (json['vrstaId'] as num).toInt(),
       namjena: json['namjena'] as String,
       slika: json['slika'] as String?,
       terminis: (json['terminis'] as List<dynamic>)

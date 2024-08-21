@@ -8,9 +8,9 @@ part of 'korisniciNovosti.dart';
 
 KorisniciNovosti _$KorisniciNovostiFromJson(Map<String, dynamic> json) =>
     KorisniciNovosti(
-      korisniciNovostiId: json['korisniciNovostiId'] as int,
-      korisnikId: json['korisnikId'] as int,
-      novostId: json['novostId'] as int,
+      korisniciNovostiId: (json['korisniciNovostiId'] as num).toInt(),
+      korisnikId: (json['korisnikId'] as num).toInt(),
+      novostId: (json['novostId'] as num).toInt(),
       isLiked: json['isLiked'] as bool,
       isRead: json['isRead'] as bool,
     );
