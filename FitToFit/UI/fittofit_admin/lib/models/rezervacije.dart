@@ -10,7 +10,8 @@ class Rezervacije {
   String? stateMachine;
   double? iznos;
   int korisnikId;
-  int clanarinaId;  
+  int clanarinaId;
+  String? brojTransakcije;
   List<RezervacijaStavke>? rezervacijaStavkes = [];
 
   Rezervacije(
@@ -20,6 +21,7 @@ class Rezervacije {
       this.iznos,
       required this.korisnikId,
       required this.clanarinaId,
+      this.brojTransakcije,
       this.rezervacijaStavkes});
 
   factory Rezervacije.fromJson(Map<String, dynamic> json) =>

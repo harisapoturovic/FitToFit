@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using FitToFit.Database;
 using FitToFit.Model;
 using FitToFit.Model.Requests;
 using FitToFit.Services.Database;
@@ -8,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using _200048Context = FitToFit.Services.Database._200048Context;
 using Akcije = FitToFit.Services.Database.Akcije;
 
 namespace FitToFit.Services.AkcijeStateMachine

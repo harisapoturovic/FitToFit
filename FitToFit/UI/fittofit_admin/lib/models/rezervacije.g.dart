@@ -7,12 +7,13 @@ part of 'rezervacije.dart';
 // **************************************************************************
 
 Rezervacije _$RezervacijeFromJson(Map<String, dynamic> json) => Rezervacije(
-      rezervacijaId: json['rezervacijaId'] as int,
+      rezervacijaId: (json['rezervacijaId'] as num).toInt(),
       datum: DateTime.parse(json['datum'] as String),
       stateMachine: json['stateMachine'] as String?,
       iznos: (json['iznos'] as num?)?.toDouble(),
-      korisnikId: json['korisnikId'] as int,
-      clanarinaId: json['clanarinaId'] as int,
+      korisnikId: (json['korisnikId'] as num).toInt(),
+      clanarinaId: (json['clanarinaId'] as num).toInt(),
+      brojTransakcije: json['brojTransakcije'] as String?,
       rezervacijaStavkes: (json['rezervacijaStavkes'] as List<dynamic>?)
           ?.map((e) => RezervacijaStavke.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -26,5 +27,6 @@ Map<String, dynamic> _$RezervacijeToJson(Rezervacije instance) =>
       'iznos': instance.iznos,
       'korisnikId': instance.korisnikId,
       'clanarinaId': instance.clanarinaId,
+      'brojTransakcije': instance.brojTransakcije,
       'rezervacijaStavkes': instance.rezervacijaStavkes,
     };

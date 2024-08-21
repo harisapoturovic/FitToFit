@@ -1,5 +1,4 @@
-﻿using FitToFit.Database;
-using FitToFit.Services;
+﻿using FitToFit.Services;
 using FitToFit.Services.Database;
 using Quartz;
 

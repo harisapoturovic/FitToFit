@@ -7,7 +7,7 @@ part of 'clanarine.dart';
 // **************************************************************************
 
 Clanarine _$ClanarineFromJson(Map<String, dynamic> json) => Clanarine(
-      clanarinaId: json['clanarinaId'] as int,
+      clanarinaId: (json['clanarinaId'] as num).toInt(),
       naziv: json['naziv'] as String,
       rezervacijes: (json['rezervacijes'] as List<dynamic>?)
           ?.map((e) => Rezervacije.fromJson(e as Map<String, dynamic>))

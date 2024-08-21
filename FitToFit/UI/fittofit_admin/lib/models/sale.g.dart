@@ -7,7 +7,7 @@ part of 'sale.dart';
 // **************************************************************************
 
 Sale _$SaleFromJson(Map<String, dynamic> json) => Sale(
-      salaId: json['salaId'] as int,
+      salaId: (json['salaId'] as num).toInt(),
       naziv: json['naziv'] as String,
       velicina: json['velicina'] as String?,
       slika: json['slika'] as String?,

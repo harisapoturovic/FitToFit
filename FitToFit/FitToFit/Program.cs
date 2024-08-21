@@ -1,5 +1,4 @@
 using FitToFit.Services;
-using FitToFit.Database;
 using FitToFit.Services.RezervacijeStateMachine;
 using FitToFit.Services.AkcijeStateMachine;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +16,7 @@ using Quartz;
 using FitToFit.CronJob;
 using FitToFit.CronJobs;
 using FitToFit.Services.Database;
+using _200048Context = FitToFit.Services.Database._200048Context;
 
 var builder = WebApplication.CreateBuilder(args);
 

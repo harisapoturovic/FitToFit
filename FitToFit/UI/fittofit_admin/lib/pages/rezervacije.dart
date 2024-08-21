@@ -985,6 +985,18 @@ class _RezervacijePageState extends State<RezervacijePage> {
                         );
                       }),
                   const SizedBox(
+                    height: 20,
+                  ),
+                  rezervacija.brojTransakcije != null
+                      ? const Text(
+                          'Rezervacija plaćena online!',
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red),
+                        )
+                      : const Text(''),
+                  const SizedBox(
                     height: 50,
                   ),
                   Row(

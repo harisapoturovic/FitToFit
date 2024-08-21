@@ -7,14 +7,14 @@ part of 'novosti.dart';
 // **************************************************************************
 
 Novosti _$NovostiFromJson(Map<String, dynamic> json) => Novosti(
-      novostId: json['novostId'] as int,
+      novostId: (json['novostId'] as num).toInt(),
       naslov: json['naslov'] as String,
       sadrzaj: json['sadrzaj'] as String?,
       isLiked: json['isLiked'] as bool?,
-      brojLajkova: json['brojLajkova'] as int,
+      brojLajkova: (json['brojLajkova'] as num).toInt(),
       datumObjave: DateTime.parse(json['datumObjave'] as String),
-      korisnikId: json['korisnikId'] as int,
-      vrstaTreningaId: json['vrstaTreningaId'] as int?,
+      korisnikId: (json['korisnikId'] as num).toInt(),
+      vrstaTreningaId: (json['vrstaTreningaId'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$NovostiToJson(Novosti instance) => <String, dynamic>{

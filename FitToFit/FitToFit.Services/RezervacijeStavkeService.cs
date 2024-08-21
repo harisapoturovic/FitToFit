@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using FitToFit.Model;
 using FitToFit.Model.SearchObjects;
-using FitToFit.Database;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,6 +12,7 @@ using RezervacijaStavke = FitToFit.Services.Database.RezervacijaStavke;
 using Termini = FitToFit.Services.Database.Termini;
 using Treninzi = FitToFit.Services.Database.Treninzi;
 using Rezervacije = FitToFit.Services.Database.Rezervacije;
+using _200048Context = FitToFit.Services.Database._200048Context;
 
 namespace FitToFit.Services
 {

@@ -2,7 +2,6 @@
 using FitToFit.Model;
 using FitToFit.Model.Requests;
 using FitToFit.Model.SearchObjects;
-using FitToFit.Database;
 using FitToFit.Services.RezervacijeStateMachine;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -14,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using FitToFit.Services.Database;
 using Treninzi = FitToFit.Services.Database.Treninzi;
 using TreninziVjezbe = FitToFit.Services.Database.TreninziVjezbe;
+using _200048Context = FitToFit.Services.Database._200048Context;
 
 namespace FitToFit.Services
 {

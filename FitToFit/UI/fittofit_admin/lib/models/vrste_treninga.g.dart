@@ -8,7 +8,7 @@ part of 'vrste_treninga.dart';
 
 VrsteTreninga _$VrsteTreningaFromJson(Map<String, dynamic> json) =>
     VrsteTreninga(
-      json['vrstaTreningaId'] as int?,
+      (json['vrstaTreningaId'] as num?)?.toInt(),
       json['naziv'] as String?,
       json['opis'] as String?,
     );

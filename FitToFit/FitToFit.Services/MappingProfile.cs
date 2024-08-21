@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using FitToFit.Database;
 using FitToFit.Model.Requests;
 using FitToFit.Services.Database;
 using System;

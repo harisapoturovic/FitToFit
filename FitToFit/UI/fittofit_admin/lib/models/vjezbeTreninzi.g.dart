@@ -8,10 +8,10 @@ part of 'vjezbeTreninzi.dart';
 
 VjezbeTreninzi _$VjezbeTreninziFromJson(Map<String, dynamic> json) =>
     VjezbeTreninzi(
-      treningVjezbaId: json['treningVjezbaId'] as int,
+      treningVjezbaId: (json['treningVjezbaId'] as num).toInt(),
       trajanje: (json['trajanje'] as num).toDouble(),
-      vjezbaId: json['vjezbaId'] as int,
-      treningId: json['treningId'] as int,
+      vjezbaId: (json['vjezbaId'] as num).toInt(),
+      treningId: (json['treningId'] as num).toInt(),
       trening: json['trening'] == null
           ? null
           : Treninzi.fromJson(json['trening'] as Map<String, dynamic>),

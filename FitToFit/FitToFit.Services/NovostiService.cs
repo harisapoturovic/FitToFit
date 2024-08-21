@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using FitToFit.Model.Requests;
 using FitToFit.Model.SearchObjects;
-using FitToFit.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using FitToFit.Services.Database;
+using _200048Context = FitToFit.Services.Database._200048Context;
 
 namespace FitToFit.Services
 {

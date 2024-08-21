@@ -3,7 +3,6 @@ using EasyNetQ;
 using FitToFit.Model;
 using FitToFit.Model.Requests;
 using FitToFit.Model.SearchObjects;
-using FitToFit.Database;
 using FitToFit.Services.RezervacijeStateMachine;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -17,6 +16,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using FitToFit.Services.Database;
 using Rezervacije = FitToFit.Services.Database.Rezervacije;
 using RezervacijaStavke = FitToFit.Services.Database.RezervacijaStavke;
+using _200048Context = FitToFit.Services.Database._200048Context;
 
 namespace FitToFit.Services
 {

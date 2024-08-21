@@ -1,5 +1,4 @@
-﻿using FitToFit.Database;
-using FitToFit.Services.Database;
+﻿using FitToFit.Services.Database;
 using Quartz;
 
 namespace FitToFit.CronJobs

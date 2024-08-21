@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using FitToFit.Model;
 using FitToFit.Model.Requests;
-using FitToFit.Database;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -11,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FitToFit.Services.Database;
 using Rezervacije = FitToFit.Services.Database.Rezervacije;
+using _200048Context = FitToFit.Services.Database._200048Context;
 
 namespace FitToFit.Services.RezervacijeStateMachine
 {

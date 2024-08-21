@@ -1,5 +1,4 @@
-﻿using FitToFit.Database;
-using FitToFit.Services.Database;
+﻿using FitToFit.Services.Database;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace FitToFit.Database
+namespace FitToFit.Services.Database
 {
-    public partial class Ib200048Context
+    public partial class _200048Context
     {
         private void SeedData(ModelBuilder modelBuilder)
         {

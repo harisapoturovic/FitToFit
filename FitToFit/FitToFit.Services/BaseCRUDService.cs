@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using FitToFit.Database;
 using FitToFit.Model.SearchObjects;
 using FitToFit.Services.Database;
+using _200048Context = FitToFit.Services.Database._200048Context;
 
 namespace FitToFit.Services
 {
