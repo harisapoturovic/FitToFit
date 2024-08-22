@@ -10,10 +10,17 @@ namespace FitToFit.Controllers
     [Route("[controller]")]
     public class VjezbeController : BaseCRUDController<Model.Vjezbe, VjezbeSearchObject, VjezbeInsertRequest, VjezbeUpdateRequest>
     {
+        private readonly IVjezbeService _vjezbeService;
         public VjezbeController(ILogger<BaseController<Vjezbe, VjezbeSearchObject>> logger, IVjezbeService service)
             : base(logger, service)
         {
+            _vjezbeService = service;
+        }
 
-        }       
+        [HttpGet("Recommend/{korisnikId}")]
+        public async Task<PagedResult<Model.Vjezbe>> Recommend(int korisnikId)
+        {
+            return await _vjezbeService.Recommend(korisnikId);
+        }
     }
 }

@@ -9,6 +9,7 @@ import 'package:fittofit_mobile/models/rezervacije.dart';
 import 'package:fittofit_mobile/models/search_result.dart';
 import 'package:fittofit_mobile/models/treneri.dart';
 import 'package:fittofit_mobile/models/treninzi.dart';
+import 'package:fittofit_mobile/models/vjezbe.dart';
 import 'package:fittofit_mobile/pages/change_password.dart';
 import 'package:fittofit_mobile/pages/change_username.dart';
 import 'package:fittofit_mobile/pages/login.dart';
@@ -16,6 +17,7 @@ import 'package:fittofit_mobile/providers/ocjene_provider.dart';
 import 'package:fittofit_mobile/providers/rezervacije_provider.dart';
 import 'package:fittofit_mobile/providers/treneri_provider.dart';
 import 'package:fittofit_mobile/providers/treninzi_provider.dart';
+import 'package:fittofit_mobile/providers/vjezbe_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -42,6 +44,7 @@ class _ProfilePageState extends State<ProfilePage> {
   late TreninziProvider _treninziProvider;
   late OcjeneProvider _ocjeneProvider;
   late TreneriProvider _treneriProvider;
+  late VjezbeProvider _vjezbeProvider;
   late Korisnici korisnik;
   List<Rezervacije> _aktivneRezervacijeList = [];
   List<Rezervacije> _draftRezervacijeList = [];
@@ -67,6 +70,7 @@ class _ProfilePageState extends State<ProfilePage> {
     _treninziProvider = context.read<TreninziProvider>();
     _ocjeneProvider = context.read<OcjeneProvider>();
     _treneriProvider = context.read<TreneriProvider>();
+    _vjezbeProvider = context.read<VjezbeProvider>();
     initForm();
     _loadData();
   }
@@ -141,144 +145,159 @@ class _ProfilePageState extends State<ProfilePage> {
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: isLoading
-              ? const CircularProgressIndicator()
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: Row(children: [
-                        const SizedBox(width: 30),
-                        korisnik.slika != '' && korisnik.slika != null
-                            ? CustomAvatar(
-                                radius: 42, base64Image: korisnik.slika!)
-                            : const CircleAvatar(
-                                radius: 40,
-                                backgroundImage:
-                                    AssetImage('assets/images/user.png'),
-                              ),
-                        const SizedBox(width: 30),
-                        Column(children: [
-                          Text(
-                            '${korisnik.ime} ${korisnik.prezime}',
-                            style: const TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 5),
-                          ElevatedButton(
-                            onPressed: () =>
-                                _showEditProfileBottomSheet(context),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.lightBlue.shade300,
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              elevation: 3,
-                            ),
-                            child: const Padding(
-                              padding: EdgeInsets.all(6),
-                              child: Text(
-                                "Uredi",
-                                style: TextStyle(
-                                  fontSize: 14,
+              ? const Center(child: CircularProgressIndicator())
+              : SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: Row(
+                          children: [
+                            const SizedBox(width: 30),
+                            korisnik.slika != '' && korisnik.slika != null
+                                ? CustomAvatar(
+                                    radius: 42, base64Image: korisnik.slika!)
+                                : const CircleAvatar(
+                                    radius: 40,
+                                    backgroundImage:
+                                        AssetImage('assets/images/user.png'),
+                                  ),
+                            const SizedBox(width: 30),
+                            Column(
+                              children: [
+                                Text(
+                                  '${korisnik.ime} ${korisnik.prezime}',
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
                                 ),
+                                const SizedBox(height: 5),
+                                ElevatedButton(
+                                  onPressed: () =>
+                                      _showEditProfileBottomSheet(context),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.lightBlue.shade300,
+                                    foregroundColor: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    elevation: 3,
+                                  ),
+                                  child: const Padding(
+                                    padding: EdgeInsets.all(6),
+                                    child: Text(
+                                      "Uredi",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _buildInfoCard('${korisnik.visina} cm', 'Visina'),
+                          const SizedBox(width: 20),
+                          _buildInfoCard('${korisnik.tezina} kg', 'Težina'),
+                          const SizedBox(width: 20),
+                          _buildInfoCard(
+                              "${calculateAge(korisnik.datumRodjenja!)}",
+                              'Godine'),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Container(
+                        padding: const EdgeInsets.all(16.0),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildLink(context, Icons.person, 'Lični podaci'),
+                            const Divider(),
+                            _buildLink(
+                                context, Icons.bookmark, 'Moje rezervacije'),
+                            const Divider(),
+                            _buildLink(context, Icons.star, 'Moje ocjene'),
+                            const Divider(),
+                            _buildLink(
+                                context, Icons.policy, 'Pravila korištenja'),
+                            const Divider(),
+                            _buildLink(context, Icons.sports_gymnastics,
+                                'Predložene vježbe'),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      Container(
+                        padding: const EdgeInsets.all(16.0),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildLink(context, Icons.person_outline,
+                                'Promijeni korisničko ime'),
+                            const Divider(),
+                            _buildLink(context, Icons.password_outlined,
+                                'Promijeni lozinku')
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 25.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                Authorization.username = null;
+                                Authorization.password = null;
+
+                                Provider.of<KorisniciProvider>(context,
+                                        listen: false)
+                                    .setCurrentUserId(null);
+
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => LoginPage()),
+                                  (route) => false,
+                                );
+                              },
+                              icon: const Icon(
+                                Icons.logout,
+                                color: Color.fromRGBO(123, 123, 123, 0.965),
                               ),
+                              iconSize: 30.0,
                             ),
-                          )
-                        ]),
-                      ]),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      _buildInfoCard('${korisnik.visina} cm', 'Visina'),
-                      const SizedBox(width: 20),
-                      _buildInfoCard('${korisnik.tezina} kg', 'Težina'),
-                      const SizedBox(width: 20),
-                      _buildInfoCard(
-                          "${calculateAge(korisnik.datumRodjenja!)}", 'Godine'),
-                    ]),
-                    const SizedBox(height: 10),
-                    Container(
-                      padding: const EdgeInsets.all(16.0),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildLink(context, Icons.person, 'Lični podaci'),
-                          const Divider(),
-                          _buildLink(
-                              context, Icons.bookmark, 'Moje rezervacije'),
-                          const Divider(),
-                          _buildLink(context, Icons.star, 'Moje ocjene'),
-                          const Divider(),
-                          _buildLink(
-                              context, Icons.policy, 'Pravila korištenja'),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-                    Container(
-                      padding: const EdgeInsets.all(16.0),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildLink(context, Icons.person_outline,
-                              'Promijeni korisničko ime'),
-                          const Divider(),
-                          _buildLink(context, Icons.password_outlined,
-                              'Promijeni lozinku')
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 25.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              Authorization.username = null;
-                              Authorization.password = null;
-
-                              Provider.of<KorisniciProvider>(context,
-                                      listen: false)
-                                  .setCurrentUserId(null);
-
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(builder: (_) => LoginPage()),
-                                (route) => false,
-                              );
-                            },
-                            icon: const Icon(
-                              Icons.logout,
-                              color: Color.fromRGBO(123, 123, 123, 0.965),
+                            const SizedBox(width: 8.0),
+                            const Text(
+                              'Odjavi se',
+                              style: TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey),
                             ),
-                            iconSize: 30.0,
-                          ),
-                          const SizedBox(width: 8.0),
-                          const Text(
-                            'Odjavi se',
-                            style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    )
-                  ],
+                    ],
+                  ),
                 ),
         ),
       ),
@@ -326,6 +345,8 @@ class _ProfilePageState extends State<ProfilePage> {
           _showRatingsBottomSheet(context);
         } else if (text == 'Pravila korištenja') {
           _showTermsOfServiceBottomSheet(context);
+        } else if (text == 'Predložene vježbe') {
+          _showRecommendedExercisesBottomSheet(context);
         } else if (text == 'Promijeni lozinku') {
           Navigator.of(context).push(
             MaterialPageRoute(
@@ -615,101 +636,108 @@ class _ProfilePageState extends State<ProfilePage> {
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(16.0)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  blurRadius: 10,
-                  offset: const Offset(0, -4),
+        return ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.90,
+          ),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(16.0)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 10,
+                      offset: const Offset(0, -4),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 16.0, horizontal: 20.0),
-                  child: Text(
-                    'Lični podaci',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge
-                        ?.copyWith(color: Colors.black),
-                  ),
-                ),
-                const SizedBox(height: 16.0),
-                ListTile(
-                  title: Text('Ime: ${korisnik.ime}'),
-                  leading: const Icon(Icons.person),
-                ),
-                ListTile(
-                  title: Text('Prezime: ${korisnik.prezime}'),
-                  leading: const Icon(Icons.person_outline),
-                ),
-                ListTile(
-                  title: Text('Spol: ${korisnik.spol}'),
-                  leading: const Icon(Icons.male),
-                ),
-                ListTile(
-                  title: Text('Telefon: ${korisnik.telefon}'),
-                  leading: const Icon(Icons.phone),
-                ),
-                ListTile(
-                  title: Text('Email: ${korisnik.email}'),
-                  leading: const Icon(Icons.email),
-                ),
-                ListTile(
-                  title: Text('Adresa: ${korisnik.adresa}'),
-                  leading: const Icon(Icons.home),
-                ),
-                ListTile(
-                  title: Text('Visina: ${korisnik.visina} cm'),
-                  leading: const Icon(Icons.height),
-                ),
-                ListTile(
-                  title: Text('Težina: ${korisnik.tezina} kg'),
-                  leading: const Icon(Icons.width_full),
-                ),
-                ListTile(
-                  title: Text(
-                      'Datum rođenja: ${DateFormat('dd.MM.yyyy').format(korisnik.datumRodjenja!)}'),
-                  leading: const Icon(Icons.cake),
-                ),
-                ListTile(
-                    title: Text(
-                        'Datum početka treninranja: ${DateFormat('dd.MM.yyyy').format(korisnik.datumPocetkaTreniranja!)}'),
-                    leading: const Icon(Icons.accessibility)),
-                ListTile(
-                  title: Text('Korisničko ime: ${korisnik.korisnickoIme}'),
-                  leading: const Icon(Icons.person_pin),
-                ),
-                const SizedBox(height: 16.0),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Center(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              const Color.fromARGB(255, 248, 248, 248)),
-                      child: const Icon(
-                        Icons.arrow_downward,
-                        color: Colors.lightBlue,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 16.0, horizontal: 20.0),
+                      child: Text(
+                        'Lični podaci',
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge
+                            ?.copyWith(color: Colors.black),
                       ),
                     ),
-                  ),
+                    const SizedBox(height: 16.0),
+                    ListTile(
+                      title: Text('Ime: ${korisnik.ime}'),
+                      leading: const Icon(Icons.person),
+                    ),
+                    ListTile(
+                      title: Text('Prezime: ${korisnik.prezime}'),
+                      leading: const Icon(Icons.person_outline),
+                    ),
+                    ListTile(
+                      title: Text('Spol: ${korisnik.spol}'),
+                      leading: const Icon(Icons.male),
+                    ),
+                    ListTile(
+                      title: Text('Telefon: ${korisnik.telefon}'),
+                      leading: const Icon(Icons.phone),
+                    ),
+                    ListTile(
+                      title: Text('Email: ${korisnik.email}'),
+                      leading: const Icon(Icons.email),
+                    ),
+                    ListTile(
+                      title: Text('Adresa: ${korisnik.adresa}'),
+                      leading: const Icon(Icons.home),
+                    ),
+                    ListTile(
+                      title: Text('Visina: ${korisnik.visina} cm'),
+                      leading: const Icon(Icons.height),
+                    ),
+                    ListTile(
+                      title: Text('Težina: ${korisnik.tezina} kg'),
+                      leading: const Icon(Icons.width_full),
+                    ),
+                    ListTile(
+                      title: Text(
+                          'Datum rođenja: ${DateFormat('dd.MM.yyyy').format(korisnik.datumRodjenja!)}'),
+                      leading: const Icon(Icons.cake),
+                    ),
+                    ListTile(
+                      title: Text(
+                          'Datum početka treniranja: ${DateFormat('dd.MM.yyyy').format(korisnik.datumPocetkaTreniranja!)}'),
+                      leading: const Icon(Icons.accessibility),
+                    ),
+                    ListTile(
+                      title: Text('Korisničko ime: ${korisnik.korisnickoIme}'),
+                      leading: const Icon(Icons.person_pin),
+                    ),
+                    const SizedBox(height: 16.0),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Center(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  const Color.fromARGB(255, 248, 248, 248)),
+                          child: const Icon(
+                            Icons.arrow_downward,
+                            color: Colors.lightBlue,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         );
@@ -760,14 +788,12 @@ class _ProfilePageState extends State<ProfilePage> {
           builder: (context, setState) {
             final reservations = getFilteredReservations();
 
-            return SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
+            return ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.80,
+              ),
+              child: SingleChildScrollView(
+                child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -824,122 +850,115 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                       ] else ...[
-                        const SizedBox(height: 16.0),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: reservations.length,
-                          itemBuilder: (context, index) {
-                            final reservation = reservations[index];
-                            return Container(
-                              margin: const EdgeInsets.only(bottom: 8.0),
-                              decoration: BoxDecoration(
-                                color: Colors.grey[100],
-                                borderRadius: BorderRadius.circular(8.0),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
-                                    spreadRadius: 1,
-                                    blurRadius: 5,
-                                    offset: const Offset(0, 2),
+                        ...reservations.map((reservation) {
+                          return Container(
+                            margin: const EdgeInsets.only(bottom: 8.0),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8.0),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  spreadRadius: 1,
+                                  blurRadius: 5,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${DateFormat('dd.MM.yyyy').format(reservation.datum)} - ${DateFormat('dd.MM.yyyy').format(reservation.datumIsteka!)}',
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
                                   ),
+                                  if (reservation.rezervacijaStavkes !=
+                                      null) ...[
+                                    ...reservation.rezervacijaStavkes!
+                                        .map((item) {
+                                      final termin = item.termin;
+                                      return FutureBuilder<Treninzi?>(
+                                        future: getTrainingByTrainingId(
+                                            termin!.treningId),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return ListTile(
+                                              title: Text(
+                                                '${termin.dan} u ${termin.sat ?? 'N/A'}',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge,
+                                              ),
+                                              subtitle: const Text(
+                                                  'Trening: Loading...'),
+                                            );
+                                          } else if (snapshot.hasError) {
+                                            return ListTile(
+                                              title: Text(
+                                                '${termin.dan} u ${termin.sat ?? 'N/A'}',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge,
+                                              ),
+                                              subtitle:
+                                                  const Text('Trening: Error'),
+                                            );
+                                          } else if (!snapshot.hasData) {
+                                            return ListTile(
+                                              title: Text(
+                                                '${termin.dan} u ${termin.sat ?? 'N/A'}',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge,
+                                              ),
+                                              subtitle: const Text(
+                                                  'Trening: Not found'),
+                                            );
+                                          } else {
+                                            final training = snapshot.data!;
+                                            return ListTile(
+                                              title: Text(
+                                                '${termin.dan} u ${termin.sat ?? 'N/A'}',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge,
+                                              ),
+                                              subtitle: Text(
+                                                '${training.naziv} trening',
+                                              ),
+                                            );
+                                          }
+                                        },
+                                      );
+                                    })
+                                  ],
+                                  if (selectedStatus == 'Aktivne') ...[
+                                    const SizedBox(height: 8.0),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        cancelReservation(reservation);
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.grey.shade700,
+                                        foregroundColor: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        elevation: 3,
+                                      ),
+                                      child: const Text('Otkaži'),
+                                    ),
+                                  ],
                                 ],
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '${DateFormat('dd.MM.yyyy').format(reservation.datum)} - ${DateFormat('dd.MM.yyyy').format(reservation.datumIsteka!)}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium,
-                                    ),
-                                    if (reservation.rezervacijaStavkes !=
-                                        null) ...[
-                                      ...reservation.rezervacijaStavkes!
-                                          .map((item) {
-                                        final termin = item.termin;
-                                        return FutureBuilder<Treninzi?>(
-                                          future: getTrainingByTrainingId(
-                                              termin!.treningId),
-                                          builder: (context, snapshot) {
-                                            if (snapshot.connectionState ==
-                                                ConnectionState.waiting) {
-                                              return ListTile(
-                                                title: Text(
-                                                  '${termin.dan} u ${termin.sat ?? 'N/A'}',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyLarge,
-                                                ),
-                                                subtitle: const Text(
-                                                    'Trening: Loading...'),
-                                              );
-                                            } else if (snapshot.hasError) {
-                                              return ListTile(
-                                                title: Text(
-                                                  '${termin.dan} u ${termin.sat ?? 'N/A'}',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyLarge,
-                                                ),
-                                                subtitle: const Text(
-                                                    'Trening: Error'),
-                                              );
-                                            } else if (!snapshot.hasData) {
-                                              return ListTile(
-                                                title: Text(
-                                                  '${termin.dan} u ${termin.sat ?? 'N/A'}',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyLarge,
-                                                ),
-                                                subtitle: const Text(
-                                                    'Trening: Not found'),
-                                              );
-                                            } else {
-                                              final training = snapshot.data!;
-                                              return ListTile(
-                                                title: Text(
-                                                  '${termin.dan} u ${termin.sat ?? 'N/A'}',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyLarge,
-                                                ),
-                                                subtitle: Text(
-                                                  '${training.naziv} trening',
-                                                ),
-                                              );
-                                            }
-                                          },
-                                        );
-                                      })
-                                    ],
-                                    if (selectedStatus == 'Aktivne') ...[
-                                      const SizedBox(height: 8.0),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          cancelReservation(reservation);
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.grey.shade700,
-                                          foregroundColor: Colors.white,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          elevation: 3,
-                                        ),
-                                        child: const Text('Otkaži'),
-                                      ),
-                                    ],
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
+                            ),
+                          );
+                        }).toList(),
                         const SizedBox(height: 16.0),
                         Padding(
                           padding: const EdgeInsets.all(16.0),
@@ -980,119 +999,139 @@ class _ProfilePageState extends State<ProfilePage> {
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Moje Ocjene',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(height: 16.0),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: _ocjeneList.length,
-                  itemBuilder: (context, index) {
-                    final rating = _ocjeneList[index];
-
-                    return FutureBuilder<Treneri?>(
-                      future: getTrainerByTrainerId(rating.trenerId),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const ListTile(
-                            title: Text('Loading...'),
-                          );
-                        } else if (snapshot.hasError) {
-                          return const ListTile(
-                            title: Text('Error fetching trainer details'),
-                          );
-                        } else if (snapshot.hasData && snapshot.data != null) {
-                          final trainer = snapshot.data!;
-                          final trainerName =
-                              '${trainer.ime} ${trainer.prezime}';
-                          return ListTile(
-                            title: Text('$trainerName - ${rating.ocjena}'),
-                            subtitle: Text(
-                              DateFormat('dd.MM.yyyy').format(rating.datum),
-                            ),
-                          );
-                        } else {
-                          return const ListTile(
-                            title: Text('No trainer data available'),
-                          );
-                        }
-                      },
-                    );
-                  },
+        return ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.80,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Moje Ocjene',
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
-              ),
-              const SizedBox(height: 16.0),
-              FutureBuilder<SearchResult<Treneri>>(
-                future: _fetchAvailableTrainers(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return const Text('Error fetching trainers');
-                  } else if (snapshot.hasData && snapshot.data != null) {
-                    final trainers = snapshot.data!;
-                    final ratedTrainerIds =
-                        _ocjeneList.map((e) => e.trenerId).toSet();
-
-                    final availableTrainers = trainers.result
-                        .where((trainer) =>
-                            !ratedTrainerIds.contains(trainer.trenerId))
-                        .toList();
-
-                    return Column(
+                const SizedBox(height: 16.0),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
                       children: [
-                        DropdownButtonFormField<Treneri>(
-                          decoration: const InputDecoration(
-                            labelText: 'Odaberi trenera',
-                            border: OutlineInputBorder(),
-                          ),
-                          items: availableTrainers.map((trainer) {
-                            return DropdownMenuItem<Treneri>(
-                              value: trainer,
-                              child: Text('${trainer.ime} ${trainer.prezime}'),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: _ocjeneList.length,
+                          itemBuilder: (context, index) {
+                            final rating = _ocjeneList[index];
+                            return FutureBuilder<Treneri?>(
+                              future: getTrainerByTrainerId(rating.trenerId),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const ListTile(
+                                    title: Text('Loading...'),
+                                  );
+                                } else if (snapshot.hasError) {
+                                  return const ListTile(
+                                    title:
+                                        Text('Error fetching trainer details'),
+                                  );
+                                } else if (snapshot.hasData &&
+                                    snapshot.data != null) {
+                                  final trainer = snapshot.data!;
+                                  final trainerName =
+                                      '${trainer.ime} ${trainer.prezime}';
+                                  return ListTile(
+                                    title:
+                                        Text('$trainerName - ${rating.ocjena}'),
+                                    subtitle: Text(
+                                      DateFormat('dd.MM.yyyy')
+                                          .format(rating.datum),
+                                    ),
+                                  );
+                                } else {
+                                  return const ListTile(
+                                    title: Text('No trainer data available'),
+                                  );
+                                }
+                              },
                             );
-                          }).toList(),
-                          onChanged: (selectedTrainer) {
-                            if (selectedTrainer != null) {
-                              _showRatingDialog(context, selectedTrainer);
-                            }
                           },
-                          hint: const Text('Odaberi trenera'),
                         ),
                         const SizedBox(height: 16.0),
+                        FutureBuilder<SearchResult<Treneri>>(
+                          future: _fetchAvailableTrainers(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            } else if (snapshot.hasError) {
+                              return const Text('Error fetching trainers');
+                            } else if (snapshot.hasData &&
+                                snapshot.data != null) {
+                              final trainers = snapshot.data!;
+                              final ratedTrainerIds =
+                                  _ocjeneList.map((e) => e.trenerId).toSet();
+                              final availableTrainers = trainers.result
+                                  .where((trainer) => !ratedTrainerIds
+                                      .contains(trainer.trenerId))
+                                  .toList();
+
+                              return Column(
+                                children: [
+                                  DropdownButtonFormField<Treneri>(
+                                    decoration: const InputDecoration(
+                                      labelText: 'Odaberi trenera',
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    items: availableTrainers.map((trainer) {
+                                      return DropdownMenuItem<Treneri>(
+                                        value: trainer,
+                                        child: Text(
+                                            '${trainer.ime} ${trainer.prezime}'),
+                                      );
+                                    }).toList(),
+                                    onChanged: (selectedTrainer) {
+                                      if (selectedTrainer != null) {
+                                        _showRatingDialog(
+                                            context, selectedTrainer);
+                                      }
+                                    },
+                                    hint: const Text('Odaberi trenera'),
+                                  ),
+                                  const SizedBox(height: 16.0),
+                                ],
+                              );
+                            } else {
+                              return const Text('Svi treneri već ocijenjeni');
+                            }
+                          },
+                        ),
                       ],
-                    );
-                  } else {
-                    return const Text('Svi treneri već ocijenjeni');
-                  }
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Center(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 248, 248, 248),
-                    ),
-                    child: const Icon(
-                      Icons.arrow_downward,
-                      color: Colors.lightBlue,
                     ),
                   ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            const Color.fromARGB(255, 248, 248, 248),
+                      ),
+                      child: const Icon(
+                        Icons.arrow_downward,
+                        color: Colors.lightBlue,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -1168,160 +1207,261 @@ class _ProfilePageState extends State<ProfilePage> {
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return Padding(
+        return Container(
           padding: const EdgeInsets.all(16.0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(16.0)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  blurRadius: 10,
-                  offset: const Offset(0, -4),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius:
+                const BorderRadius.vertical(top: Radius.circular(16.0)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 10,
+                offset: const Offset(0, -4),
+              ),
+            ],
+          ),
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.80,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 16.0, horizontal: 20.0),
+                child: Text(
+                  'Pravila korištenja',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(color: Colors.black),
                 ),
-              ],
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 16.0, horizontal: 20.0),
-                  child: Text(
-                    'Pravila korištenja',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge
-                        ?.copyWith(color: Colors.black),
-                  ),
-                ),
-                Expanded(
-                  child: ListView(
-                    padding: const EdgeInsets.all(16.0),
-                    children: [
-                      Text(
-                        '- Novosti',
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      const SizedBox(height: 8.0),
-                      Text(
-                        'U sklopu "home" sekcije možete vidjeti novosti vezane za treninge koje ste prethodno rezervisali, te opšte novosti. \nPoželjno je da se izjasnite o dolasku na trening u adekvatno vrijeme kako bi treneri mogli pripremiti svu potrebnu opremu. \nSvoj dolazak možete potvrditi lajkanjem određene novosti. ',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                      const SizedBox(height: 16.0),
-                      Text(
-                        '- Rezervacije',
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      const SizedBox(height: 8.0),
-                      RichText(
-                        text: TextSpan(
-                          text: 'U isto vrijeme možete imati maksimalno ',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(color: Colors.black),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: '3 aktivne',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                            ),
-                            TextSpan(
-                              text:
-                                  ' rezervacije. \nU sklopu tih rezervacija morate odabrati različite vrste treninga, dok se članarine mogu ponavljati. \nTermini koji se prikazuju odnose se na trening koji ste prethodno odabrali sa dropdown-a.\nAko je neki od termina prekrižen (X), to znači da su sva mjesta već rezervisana. \nNa jednom terminu mogu biti članovi sa različitim vrstama članarine. \nUkoliko ste odabrali dnevnu članarinu onda ćete moći rezervisati ',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(color: Colors.black),
-                              children: <TextSpan>[
-                                TextSpan(
-                                  text: 'samo jedan termin',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                      ),
-                                ),
-                                TextSpan(
-                                  text:
-                                      ' od ponuđenih. \nAko ste odabrali bilo koju drugu članarinu onda ćete morati rezervisati ',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(color: Colors.black),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                      text: '2-5 termina',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
-                                          ),
-                                    ),
-                                    TextSpan(
-                                      text:
-                                          ' od ponuđenih. \nKada se radi o dnevnoj članarini, taj termin možete rezervisati ako je po rasporedu sutra jer ova članarina vrijedi 24h. \nSedmičnu članarinu možete rezervisati bilo kada, ali ona se odnosi na period koji traje 7 dana od datuma kreiranja rezervacije i ističe kada prođe taj period. \nMjesečnu članarinu možete rezervisati bilo kada, a odnosi se na narednih 30 dana od datuma kreiranja rezervacije. \nRezervacija kada istekne prelazi u arhivu, te se oslobađa po jedno mjesto na tim terminima.',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(color: Colors.black),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 16.0),
-                      Text(
-                        '- Akcije',
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      const SizedBox(height: 8.0),
-                      Text(
-                        'Ako se neki od rezervisanih treninga nalazi na akciji, za iznos (%) će se umanjiti ukupna cijena. Također, ako se trening nalazi na više akcija, sve će biti uračunato u konačnu cijenu. Da li je trening na akciji možete provjeriti pod sekcijom "Treninzi", te nakon što odaberete jedan od njih, akcije (ako postoje), će se prikazati.  ',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
+              ),
+              Expanded(
+                child: ListView(
                   padding: const EdgeInsets.all(16.0),
-                  child: Center(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              const Color.fromARGB(255, 248, 248, 248)),
-                      child: const Icon(
-                        Icons.arrow_downward,
-                        color: Colors.lightBlue,
+                  children: [
+                    Text(
+                      '- Novosti',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    const SizedBox(height: 8.0),
+                    Text(
+                      'U sklopu "home" sekcije možete vidjeti novosti vezane za treninge koje ste prethodno rezervisali, te opšte novosti. \nPoželjno je da se izjasnite o dolasku na trening u adekvatno vrijeme kako bi treneri mogli pripremiti svu potrebnu opremu. \nSvoj dolazak možete potvrditi lajkanjem određene novosti.',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    const SizedBox(height: 16.0),
+                    Text(
+                      '- Rezervacije',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    const SizedBox(height: 8.0),
+                    RichText(
+                      text: TextSpan(
+                        text: 'U isto vrijeme možete imati maksimalno ',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(color: Colors.black),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: '3 aktivne',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                          ),
+                          TextSpan(
+                            text:
+                                ' rezervacije. \nU sklopu tih rezervacija morate odabrati različite vrste treninga, dok se članarine mogu ponavljati. \nTermini koji se prikazuju odnose se na trening koji ste prethodno odabrali sa dropdown-a.\nAko je neki od termina prekrižen (X), to znači da su sva mjesta već rezervisana. \nNa jednom terminu mogu biti članovi sa različitim vrstama članarine. \nUkoliko ste odabrali dnevnu članarinu onda ćete moći rezervisati ',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(color: Colors.black),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: 'samo jedan termin',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                              ),
+                              TextSpan(
+                                text:
+                                    ' od ponuđenih. \nAko ste odabrali bilo koju drugu članarinu onda ćete morati rezervisati ',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(color: Colors.black),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: '2-5 termina',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                        ),
+                                  ),
+                                  TextSpan(
+                                    text:
+                                        ' od ponuđenih. \nKada se radi o dnevnoj članarini, taj termin možete rezervisati ako je po rasporedu sutra jer ova članarina vrijedi 24h. \nSedmičnu članarinu možete rezervisati bilo kada, ali ona se odnosi na period koji traje 7 dana od datuma kreiranja rezervacije i ističe kada prođe taj period. \nMjesečnu članarinu možete rezervisati bilo kada, a odnosi se na narednih 30 dana od datuma kreiranja rezervacije. \nRezervacija kada istekne prelazi u arhivu, te se oslobađa po jedno mjesto na tim terminima.',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(color: Colors.black),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
+                    ),
+                    const SizedBox(height: 16.0),
+                    Text(
+                      '- Akcije',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    const SizedBox(height: 8.0),
+                    Text(
+                      'Ako se neki od rezervisanih treninga nalazi na akciji, za iznos (%) će se umanjiti ukupna cijena. Također, ako se trening nalazi na više akcija, sve će biti uračunato u konačnu cijenu. Da li je trening na akciji možete provjeriti pod sekcijom "Treninzi", te nakon što odaberete jedan od njih, akcije (ako postoje), će se prikazati.',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Center(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            const Color.fromARGB(255, 248, 248, 248)),
+                    child: const Icon(
+                      Icons.arrow_downward,
+                      color: Colors.lightBlue,
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       },
     );
+  }
+
+  void _showRecommendedExercisesBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.all(16.0),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
+          ),
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.75,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 16.0, horizontal: 20.0),
+                child: Text(
+                  'Predložene vježbe',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(color: Colors.black),
+                ),
+              ),
+              const Text(
+                'Vježbe koje možete samostalno izvoditi kod kuće',
+                style: TextStyle(fontStyle: FontStyle.italic),
+              ),
+              const SizedBox(height: 16.0),
+              Expanded(
+                child: FutureBuilder<List<Vjezbe>>(
+                  future: _fetchRecommendedExercises(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(
+                          child: Text('Došlo je do greške: ${snapshot.error}'));
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Center(
+                          child: Text(
+                              'Nema predloženih vježbi jer prethodno niste kreirali nijednu rezervaciju.'));
+                    } else {
+                      final exercises = snapshot.data!;
+                      return ListView.builder(
+                        itemCount: exercises.length,
+                        itemBuilder: (context, index) {
+                          final exercise = exercises[index];
+                          return ListTile(
+                            title: Text(
+                              exercise.naziv,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            subtitle: Text(exercise.opis ?? ''),
+                          );
+                        },
+                      );
+                    }
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Center(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            const Color.fromARGB(255, 248, 248, 248)),
+                    child: const Icon(
+                      Icons.arrow_downward,
+                      color: Colors.lightBlue,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<List<Vjezbe>> _fetchRecommendedExercises() async {
+    try {
+      var result =
+          await _vjezbeProvider.getRecommendedExercises(korisnik.korisnikId);
+      return result.result;
+    } catch (e) {
+      print('Error fetching recommended exercises: $e');
+      return [];
+    }
   }
 
   void _showAlertDialog(String naslov, String poruka, Color boja) {
