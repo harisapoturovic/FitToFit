@@ -61,8 +61,42 @@ class _HomePageState extends State<HomePage> {
     _treneriProvider = context.read<TreneriProvider>();
     _rezervacijeProvider = context.read<RezervacijeProvider>();
     _loadData();
+    _novostiProvider.addListener(() {
+      _reloadNovostiList();
+      setTotalItems();
+    });
     korisnickoIme = widget.username;
     _naslovFocusNode = FocusNode();
+  }
+
+  void setTotalItems() async {
+    var novostiResult = await _novostiProvider
+        .get(filter: {'page': page, 'pageSize': pageSize});
+
+    if (mounted) {
+      setState(() {
+        totalcount = novostiResult.count;
+      });
+
+      int totalPages = (totalcount / pageSize).ceil();
+
+      if (page >= totalPages && totalPages > 0) {
+        setState(() {
+          page--;
+        });
+      }
+      _reloadNovostiList();
+    }
+  }
+
+  void _reloadNovostiList() async {
+    var novosti = await _novostiProvider
+        .get(filter: {'page': page, 'pageSize': pageSize});
+    if (mounted) {
+      setState(() {
+        _novostiList = novosti.result;
+      });
+    }
   }
 
   @override
@@ -456,11 +490,12 @@ class _HomePageState extends State<HomePage> {
                         final DateTime? date = await showDatePicker(
                           context: context,
                           firstDate: DateTime.now(),
-                          lastDate: DateTime.now().add(const Duration(days: 30)),
+                          lastDate:
+                              DateTime.now().add(const Duration(days: 30)),
                         );
                         if (date == null) {
-                          _showAlertDialog(
-                              "Pažnja!", "Datum objave je obavezan.", Colors.red);
+                          _showAlertDialog("Pažnja!",
+                              "Datum objave je obavezan.", Colors.red);
                         } else {
                           setState(() {
                             datum = date;

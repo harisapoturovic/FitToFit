@@ -52,6 +52,70 @@ class _ArhivaPageState extends State<ArhivaPage> {
     _treninziProvider = context.read<TreninziProvider>();
     _clanarineProvider = context.read<ClanarineProvider>();
     _loadData();
+    _rezervacijeProvider.addListener(() {
+      _reloadRezervacijeList();
+      setTotalItems();
+    });
+  }
+
+  void setTotalItems() async {
+    var novostiResult = await _rezervacijeProvider
+        .get(filter: {'page': page, 'pageSize': pageSize});
+
+    if (mounted) {
+      setState(() {
+        totalcount = novostiResult.count;
+      });
+
+      int totalPages = (totalcount / pageSize).ceil();
+
+      if (page >= totalPages && totalPages > 0) {
+        setState(() {
+          page--;
+        });
+      }
+      _reloadRezervacijeList();
+    }
+  }
+
+  void _reloadRezervacijeList() async {
+    var arhiviraneRezervacije = await _rezervacijeProvider.get(filter: {
+      'IsTerminiIncluded': true,
+      'StateMachine': "archived",
+      'page': page,
+      'pageSize': pageSize
+    });
+
+    var odbijeneRezervacije = await _rezervacijeProvider.get(filter: {
+      'IsTerminiIncluded': true,
+      'StateMachine': "refused",
+      'page': page,
+      'pageSize': pageSize
+    });
+
+    var ponisteneRezervacije = await _rezervacijeProvider.get(filter: {
+      'IsTerminiIncluded': true,
+      'StateMachine': "canceled",
+      'page': page,
+      'pageSize': pageSize
+    });
+    if (mounted) {
+      setState(() {
+        _odbijeneRezervacijeList = odbijeneRezervacije.result;
+        _arhiviraneRezervacijeList = arhiviraneRezervacije.result;
+        _ponisteneRezervacijeList = ponisteneRezervacije.result;
+        _selectedRezervacije = isArchived
+            ? _arhiviraneRezervacijeList
+            : isRefused
+                ? _odbijeneRezervacijeList
+                : _ponisteneRezervacijeList;
+        totalcount = isArchived
+            ? arhiviraneRezervacije.count
+            : isRefused
+                ? odbijeneRezervacije.count
+                : ponisteneRezervacije.count;
+      });
+    }
   }
 
   void _loadData() async {
@@ -689,10 +753,9 @@ class _ArhivaPageState extends State<ArhivaPage> {
         return AlertDialog(
           title: const Text('Detalji o rezervaciji'),
           content: Container(
-            width: 300.0,
+            width: 400.0,
             height: 300.0,
-            padding: const EdgeInsets.all(5.0),
-            margin: const EdgeInsets.only(left: 50, right: 50, top: 30),
+            margin: const EdgeInsets.only(top: 30),
             child: SingleChildScrollView(
                 child: Card(
               margin: const EdgeInsets.all(10.0),
@@ -748,7 +811,7 @@ class _ArhivaPageState extends State<ArhivaPage> {
               ),
             )),
           ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 40.0),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
         );
       },
     );

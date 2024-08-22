@@ -351,10 +351,16 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
             FormBuilderTextField(
                 name: "visina",
                 controller: visinaController,
-                decoration: const InputDecoration(labelText: "Visina"),
+                decoration: const InputDecoration(labelText: "Visina (cm)"),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Ovo polje je obavezno!';
+                  }
+                  if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                    return 'Ovo polje može sadržavati samo brojeve.';
+                  }
+                  if (value.length != 3) {
+                    return 'Možete unijeti samo 3 cifre.';
                   }
                   return null;
                 }),
@@ -362,10 +368,16 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
             FormBuilderTextField(
                 name: "tezina",
                 controller: tezinaController,
-                decoration: const InputDecoration(labelText: "Težina"),
+                decoration: const InputDecoration(labelText: "Težina (kg)"),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Ovo polje je obavezno!';
+                  }
+                  if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                    return 'Ovo polje može sadržavati samo brojeve.';
+                  }
+                  if (value.length < 2 || value.length > 3) {
+                    return 'Možete unijeti 2 il 3 cifre.';
                   }
                   return null;
                 }),

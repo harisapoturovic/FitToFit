@@ -54,7 +54,7 @@ class _ReservationPageState extends State<ReservationPage> {
   List<Akcije> _akcijeList = [];
   int? _rezervacijeCount1;
   int? _rezervacijeCount2;
-  final List<int> _terminiIds = [];
+  List<int> _terminiIds = [];
   int? _selectedClanarina;
   int? _selectedVrstaTreninga;
   int? _selectedTrening;
@@ -643,62 +643,62 @@ class _ReservationPageState extends State<ReservationPage> {
                       : StatefulBuilder(
                           builder:
                               (BuildContext context, StateSetter setState) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  "Članarina: ${_clanarina.naziv}",
-                                  style: const TextStyle(fontSize: 16.0),
-                                ),
-                                Text(
-                                  "Trening: ${_trening.naziv}",
-                                  style: const TextStyle(fontSize: 16.0),
-                                ),
-                                Text(
-                                  "Učestalost: ${_terminiIds.length}x",
-                                  style: const TextStyle(fontSize: 16.0),
-                                ),
-                                const SizedBox(height: 10),
-                                const Text(
-                                  "Termini:",
-                                  style: TextStyle(
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  termineSnapshot.data ?? '',
-                                  style: const TextStyle(fontSize: 16.0),
-                                ),
-                                const SizedBox(height: 10),
-                                const Text(
-                                  "Broj ljudi na odabranim terminima:",
-                                  style: TextStyle(
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  brojClanovaSnapshot.data ?? '',
-                                  style: const TextStyle(fontSize: 16.0),
-                                ),
-                                const SizedBox(height: 10),
-                                _treninziClanarineList.isNotEmpty
-                                    ? Text(
-                                        "Ukupno za platiti: ${uracunajAkciju()}KM",
-                                        style: const TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.bold),
-                                      )
-                                    : const Text(''),
-                                const SizedBox(height: 10),
-                                const Text("Odaberite način plaćanja:",
+                            return SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    "Članarina: ${_clanarina.naziv}",
+                                    style: const TextStyle(fontSize: 16.0),
+                                  ),
+                                  Text(
+                                    "Trening: ${_trening.naziv}",
+                                    style: const TextStyle(fontSize: 16.0),
+                                  ),
+                                  Text(
+                                    "Učestalost: ${_terminiIds.length}x",
+                                    style: const TextStyle(fontSize: 16.0),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  const Text(
+                                    "Termini:",
                                     style: TextStyle(
                                         fontSize: 16.0,
-                                        fontWeight: FontWeight.bold)),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: ListTile(
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    termineSnapshot.data ?? '',
+                                    style: const TextStyle(fontSize: 16.0),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  const Text(
+                                    "Broj ljudi na odabranim terminima:",
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    brojClanovaSnapshot.data ?? '',
+                                    style: const TextStyle(fontSize: 16.0),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  _treninziClanarineList.isNotEmpty
+                                      ? Text(
+                                          "Ukupno za platiti: ${uracunajAkciju()}KM",
+                                          style: const TextStyle(
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.bold),
+                                        )
+                                      : const Text(''),
+                                  const SizedBox(height: 10),
+                                  const Text("Odaberite način plaćanja:",
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.bold)),
+                                  Column(
+                                    children: [
+                                      ListTile(
                                         title: const Text('Plaćanje u centru'),
                                         leading: Radio<String>(
                                           value: 'uCentru',
@@ -710,9 +710,7 @@ class _ReservationPageState extends State<ReservationPage> {
                                           },
                                         ),
                                       ),
-                                    ),
-                                    Expanded(
-                                      child: ListTile(
+                                      ListTile(
                                         title: const Text('Plaćanje online'),
                                         leading: Radio<String>(
                                           value: 'online',
@@ -728,61 +726,61 @@ class _ReservationPageState extends State<ReservationPage> {
                                           },
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 10),
-                                if (_selectedPaymentMethod == 'uCentru')
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        "Da li želite potvrditi rezervaciju?",
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          ElevatedButton(
-                                            onPressed: () async {
-                                              Navigator.pop(context);
-                                              saveData();
-                                            },
-                                            style: ButtonStyle(
-                                              backgroundColor:
-                                                  WidgetStateProperty.all<
-                                                      Color>(Colors.green),
-                                              foregroundColor:
-                                                  WidgetStateProperty.all<
-                                                      Color>(Colors.white),
-                                            ),
-                                            child: const Text("DA"),
-                                          ),
-                                          const SizedBox(width: 20),
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              _terminiIds.clear();
-                                              Navigator.pop(context);
-                                            },
-                                            style: ButtonStyle(
-                                              backgroundColor:
-                                                  WidgetStateProperty.all<
-                                                      Color>(Colors.red),
-                                              foregroundColor:
-                                                  WidgetStateProperty.all<
-                                                      Color>(Colors.white),
-                                            ),
-                                            child: const Text("NE"),
-                                          ),
-                                        ],
-                                      ),
                                     ],
                                   ),
-                              ],
+                                  const SizedBox(height: 10),
+                                  if (_selectedPaymentMethod == 'uCentru')
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          "Da li želite potvrditi rezervaciju?",
+                                          style: TextStyle(
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            ElevatedButton(
+                                              onPressed: () async {
+                                                Navigator.pop(context);
+                                                saveData();
+                                              },
+                                              style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty.all<
+                                                        Color>(Colors.green),
+                                                foregroundColor:
+                                                    MaterialStateProperty.all<
+                                                        Color>(Colors.white),
+                                              ),
+                                              child: const Text("DA"),
+                                            ),
+                                            const SizedBox(width: 20),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                _terminiIds.clear();
+                                                Navigator.pop(context);
+                                              },
+                                              style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty.all<
+                                                        Color>(Colors.red),
+                                                foregroundColor:
+                                                    MaterialStateProperty.all<
+                                                        Color>(Colors.white),
+                                              ),
+                                              child: const Text("NE"),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                ],
+                              ),
                             );
                           },
                         ),
@@ -849,7 +847,7 @@ class _ReservationPageState extends State<ReservationPage> {
       if (_treninziClanarineList.isEmpty) {
         _showAlertDialog(
           "Greška",
-          'Za odabranu članarinu "Dnevna" morate uzeti samo jedan termin, a za preostale članarine više od jednog termina.',
+          'Za odabranu članarinu "Dnevna" morate uzeti samo jedan termin, a za preostale članarine 2-5 termina.',
           Colors.red,
         );
         return;
@@ -997,6 +995,8 @@ class _ReservationPageState extends State<ReservationPage> {
         setState(() {
           _selectedTermini.clear();
           _terminiIds.clear();
+          _terminiList.clear();
+          _terminiIds = [];
           _selectedClanarina = null;
           _selectedVrstaTreninga = null;
           _selectedTrening = null;

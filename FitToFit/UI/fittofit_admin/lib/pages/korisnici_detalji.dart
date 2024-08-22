@@ -74,6 +74,22 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
     _korisniciProvider = context.read<KorisniciProvider>();
     initForm();
     _loadData();
+    _korisniciProvider.addListener(() {
+      // ignore: unnecessary_null_comparison
+      if (widget.korisnik != null) {
+        _updateKorisnik();
+      }
+    });
+  }
+
+  void _updateKorisnik() async {
+    var data = await _korisniciProvider.getById(widget.korisnik.korisnikId);
+
+    if (mounted) {
+      setState(() {
+        odabraniKorisnik = data;
+      });
+    }
   }
 
   Future initForm() async {
@@ -810,11 +826,12 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
                                                   value.isEmpty) {
                                                 return 'Ovo polje je obavezno';
                                               }
-                                              final heightRegex = RegExp(
-                                                  r'^\d+(\s*\d*)?\s*(cm|m)$');
-                                              if (!heightRegex
+                                              if (!RegExp(r'^[0-9]+$')
                                                   .hasMatch(value)) {
-                                                return 'Unesite validnu vrijednost za visinu.';
+                                                return 'Ovo polje može sadržavati samo brojeve.';
+                                              }
+                                              if (value.length != 3) {
+                                                return 'Možete unijeti samo 3 cifre.';
                                               }
                                               return null;
                                             },
@@ -835,11 +852,13 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
                                                   value.isEmpty) {
                                                 return 'Ovo polje je obavezno';
                                               }
-                                              final heightRegex =
-                                                  RegExp(r'^\d+(\.\d+)?\s*kg$');
-                                              if (!heightRegex
+                                              if (!RegExp(r'^[0-9]+$')
                                                   .hasMatch(value)) {
-                                                return 'Unesite validnu vrijednost za težinu.';
+                                                return 'Ovo polje može sadržavati samo brojeve.';
+                                              }
+                                              if (value.length < 2 ||
+                                                  value.length > 3) {
+                                                return 'Možete unijeti 2 ili 3 cifre.';
                                               }
                                               return null;
                                             },

@@ -45,7 +45,29 @@ class _AkcijePageState extends State<AkcijePage> {
     _akcijeProvider = context.read<AkcijeProvider>();
     _treninziProvider = context.read<TreninziProvider>();
     _loadData();
+    _akcijeProvider.addListener(() {
+      _reloadAkcijeList();
+    });
     _nazivFocusNode = FocusNode();
+  }
+
+  void _reloadAkcijeList() async {
+    var aktivneAkcije = await _akcijeProvider
+        .get(filter: {'IsTreninziIncluded': true, 'StateMachine': "active"});
+
+    var arhiviraneAkcije = await _akcijeProvider
+        .get(filter: {'IsTreninziIncluded': true, 'StateMachine': "archived"});
+
+    var draftAkcije = await _akcijeProvider
+        .get(filter: {'IsTreninziIncluded': true, 'StateMachine': "draft"});
+    if (mounted) {
+      setState(() {
+        _aktivneAkcijeList = aktivneAkcije.result;
+        _arhiviraneAkcijeList = arhiviraneAkcije.result;
+        _draftAkcijeList = draftAkcije.result;
+        _selectedAkcije = _draftAkcijeList;
+      });
+    }
   }
 
   @override
@@ -634,6 +656,7 @@ class _AkcijePageState extends State<AkcijePage> {
                   await _akcijeProvider.insert(action);
                   _pocetakAkcije = null;
                   _zavrsetakAkcije = null;
+                  _selectedTraining = null;
                   setState(() {});
                   _showAlertDialog(
                       "Uspješan unos", "Akcija uspješno dodana.", Colors.green);

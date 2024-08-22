@@ -54,6 +54,22 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
     _vrsteTreningaProvider = context.read<VrsteTreningaProvider>();
     initForm();
     _loadData();
+    _korisniciProvider.addListener(() {
+      // ignore: unnecessary_null_comparison
+      if (widget.novost != null) {
+        _updateNovost();
+      }
+    });
+  }
+
+  void _updateNovost() async {
+    var data = await _novostiProvider.getById(widget.novost.novostId);
+
+    if (mounted) {
+      setState(() {
+        odabranaNovost = data;
+      });
+    }
   }
 
   Future initForm() async {

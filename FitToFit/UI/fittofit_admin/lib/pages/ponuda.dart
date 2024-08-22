@@ -79,7 +79,37 @@ class _PonudaPageState extends State<PonudaPage> {
     _treninziClanarineProvider = context.read<TreninziClanarineProvider>();
     _vrsteTreningaProvider = context.read<VrsteTreningaProvider>();
     _loadData();
+    _terminiProvider.addListener(() {
+      _reloadTerminiList();
+    });
+    _treninziClanarineProvider.addListener(() {
+      _reloadTCList();
+    });
     _ucestalostFocusNode = FocusNode();
+  }
+
+  void _reloadTerminiList() async {
+    var termini = await _terminiProvider
+        .get(filter: {'page': page, 'pageSize': pageSize});
+    if (mounted) {
+      setState(() {
+        _terminiList = termini.result;
+        _selectedList = _terminiList;
+        totalcount = termini.count;
+      });
+    }
+  }
+
+  void _reloadTCList() async {
+    var treninziClanarine = await _treninziClanarineProvider
+        .get(filter: {'page': page, 'pageSize': pageSize});
+    if (mounted) {
+      setState(() {
+        _treninziClanarineList = treninziClanarine.result;
+        _selectedList = _treninziClanarineList;
+        totalcount = treninziClanarine.count;
+      });
+    }
   }
 
   @override

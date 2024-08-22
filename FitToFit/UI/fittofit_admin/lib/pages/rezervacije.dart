@@ -51,6 +51,56 @@ class _RezervacijePageState extends State<RezervacijePage> {
     _treninziProvider = context.read<TreninziProvider>();
     _clanarineProvider = context.read<ClanarineProvider>();
     _loadData();
+    _rezervacijeProvider.addListener(() {
+      _reloadRezervacijeList();
+      setTotalItems();
+    });
+  }
+
+  void setTotalItems() async {
+    var novostiResult = await _rezervacijeProvider
+        .get(filter: {'page': page, 'pageSize': pageSize});
+
+    if (mounted) {
+      setState(() {
+        totalcount = novostiResult.count;
+      });
+
+      int totalPages = (totalcount / pageSize).ceil();
+
+      if (page >= totalPages && totalPages > 0) {
+        setState(() {
+          page--;
+        });
+      }
+      _reloadRezervacijeList();
+    }
+  }
+
+  void _reloadRezervacijeList() async {
+    var aktivneRezervacije = await _rezervacijeProvider.get(filter: {
+      'IsTerminiIncluded': true,
+      'StateMachine': "active",
+      'page': page,
+      'pageSize': pageSize
+    });
+
+    var draftRezervacije = await _rezervacijeProvider.get(filter: {
+      'IsTerminiIncluded': true,
+      'StateMachine': "draft",
+      'page': page,
+      'pageSize': pageSize
+    });
+    if (mounted) {
+      setState(() {
+        _aktivneRezervacijeList = aktivneRezervacije.result;
+        _draftRezervacijeList = draftRezervacije.result;
+        _selectedRezervacije =
+            isActive ? _aktivneRezervacijeList : _draftRezervacijeList;
+        totalcount =
+            isActive ? aktivneRezervacije.count : draftRezervacije.count;
+      });
+    }
   }
 
   void _loadData() async {

@@ -37,7 +37,19 @@ class _TreninziPageState extends State<TreninziPage> {
     _vrsteTreningaProvider = context.read<VrsteTreningaProvider>();
     _treninziProvider = context.read<TreninziProvider>();
     _loadData();
+    _treninziProvider.addListener(() {
+      _reloadTreninziList();
+    });
     _nazivFocusNode = FocusNode();
+  }
+
+  void _reloadTreninziList() async {
+    var treninzi = await _treninziProvider.get(filter: {});
+    if (mounted) {
+      setState(() {
+        _treninziList = treninzi.result;
+      });
+    }
   }
 
   @override

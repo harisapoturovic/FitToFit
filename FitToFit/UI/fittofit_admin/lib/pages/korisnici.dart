@@ -48,7 +48,31 @@ class _KorisniciPageState extends State<KorisniciPage> {
     _treneriProvider = context.read<TreneriProvider>();
     initForm();
     _loadData();
+    _treneriProvider.addListener(() {
+      _reloadTreneriList();
+    });
+    _korisniciProvider.addListener(() {
+      _reloadKorisniciList();
+    });
     _imeFocusNode = FocusNode();
+  }
+
+  void _reloadTreneriList() async {
+    var treneri = await _treneriProvider.get(filter: {});
+    if (mounted) {
+      setState(() {
+        treneriResult = treneri;
+      });
+    }
+  }
+
+  void _reloadKorisniciList() async {
+    var korisnici = await _korisniciProvider.get(filter: {});
+    if (mounted) {
+      setState(() {
+        korisniciResult = korisnici;
+      });
+    }
   }
 
   Future initForm() async {
@@ -475,10 +499,11 @@ class _KorisniciPageState extends State<KorisniciPage> {
                       ),
                       onPressed: () async {
                         final DateTime? date = await showDatePicker(
-                          context: context,
-                          firstDate: DateTime.now().subtract(const Duration(days: 10)),
-                          lastDate: DateTime.now().add(const Duration(days: 30))
-                        );
+                            context: context,
+                            firstDate: DateTime.now()
+                                .subtract(const Duration(days: 10)),
+                            lastDate:
+                                DateTime.now().add(const Duration(days: 30)));
                         if (date == null) {
                           _showAlertDialog("Pažnja!",
                               "Datum zaposlenja je obavezan.", Colors.red);

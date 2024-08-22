@@ -67,6 +67,18 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
     _korisniciProvider = context.read<KorisniciProvider>();
     initForm();
     _loadData();
+    _korisniciProvider.addListener(() {
+      _reloadKorisniciList();
+    });
+  }
+
+  void _reloadKorisniciList() async {
+    var data = await _korisniciProvider.getById(widget.korisnik.korisnikId);
+    if (mounted) {
+      setState(() {
+        odabraniKorisnik = data;
+      });
+    }
   }
 
   Future initForm() async {

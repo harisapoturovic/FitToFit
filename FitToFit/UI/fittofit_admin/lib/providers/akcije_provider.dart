@@ -24,6 +24,7 @@ class AkcijeProvider extends BaseProvider<Akcije> {
       Response response = await http.put(uri, headers: headers);
       if (isValidResponse(response)) {
         var data = jsonDecode(response.body);
+        notifyListeners();
         return fromJson(data);
       } else {
         throw Exception('Unknown error');
@@ -42,6 +43,7 @@ class AkcijeProvider extends BaseProvider<Akcije> {
       Response response = await http.put(uri, headers: headers);
       if (isValidResponse(response)) {
         var data = jsonDecode(response.body);
+        notifyListeners();
         return fromJson(data);
       } else {
         throw Exception('Unknown error');

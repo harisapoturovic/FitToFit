@@ -35,7 +35,19 @@ class _VjezbePageState extends State<VjezbePage> {
     super.initState();
     _vjezbeProvider = context.read<VjezbeProvider>();
     _loadData();
+    _vjezbeProvider.addListener(() {
+      _reloadVjezbeList();
+    });
     _nazivFocusNode = FocusNode();
+  }
+
+  void _reloadVjezbeList() async {
+    var vjezbe = await _vjezbeProvider.get();
+    if (mounted) {
+      setState(() {
+        _vjezbeList = vjezbe.result;
+      });
+    }
   }
 
   void _loadData() async {

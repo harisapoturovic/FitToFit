@@ -70,44 +70,41 @@ class _CjenovnikPageState extends State<CjenovnikPage> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: Row(
-                children: _vrsteTreningaList.map((vrsta) {
-                  bool isSelected = vrsta.naziv == _selectedType;
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: TextButton(
-                      onPressed: () async {
-                        setState(() {
-                          _selectedType = isSelected ? null : vrsta.naziv;
-                        });
-                        var data = await _treninziClanarineProvider
-                            .get(filter: {'vrstaTreningaNaziv': _selectedType});
-                        setState(() {
-                          _list = data.result;
-                        });
-                      },
-                      style: ButtonStyle(
-                        textStyle: WidgetStateProperty.resolveWith<TextStyle>(
-                          (states) {
-                            if (isSelected) {
-                              return const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  decoration: TextDecoration.underline,
-                                  fontSize: 18);
-                            } else {
-                              return const TextStyle(
-                                  fontWeight: FontWeight.normal, fontSize: 16);
-                            }
-                          },
-                        ),
+            Row(
+              children: _vrsteTreningaList.map((vrsta) {
+                bool isSelected = vrsta.naziv == _selectedType;
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: TextButton(
+                    onPressed: () async {
+                      setState(() {
+                        _selectedType = isSelected ? null : vrsta.naziv;
+                      });
+                      var data = await _treninziClanarineProvider
+                          .get(filter: {'vrstaTreningaNaziv': _selectedType});
+                      setState(() {
+                        _list = data.result;
+                      });
+                    },
+                    style: ButtonStyle(
+                      textStyle: WidgetStateProperty.resolveWith<TextStyle>(
+                        (states) {
+                          if (isSelected) {
+                            return const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline,
+                                fontSize: 18);
+                          } else {
+                            return const TextStyle(
+                                fontWeight: FontWeight.normal, fontSize: 16);
+                          }
+                        },
                       ),
-                      child: Text(vrsta.naziv!),
                     ),
-                  );
-                }).toList(),
-              ),
+                    child: Text(vrsta.naziv!),
+                  ),
+                );
+              }).toList(),
             ),
             Expanded(
               child: ListView.builder(

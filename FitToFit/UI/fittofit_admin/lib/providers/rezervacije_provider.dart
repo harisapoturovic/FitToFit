@@ -24,6 +24,7 @@ class RezervacijeProvider extends BaseProvider<Rezervacije>
       Response response = await http.put(uri, headers: headers);
       if (isValidResponse(response)) {
         var data = jsonDecode(response.body);
+        notifyListeners();
         return fromJson(data);
       } else {
         throw Exception('Unknown error');
@@ -42,6 +43,7 @@ class RezervacijeProvider extends BaseProvider<Rezervacije>
       Response response = await http.put(uri, headers: headers);
       if (isValidResponse(response)) {
         var data = jsonDecode(response.body);
+        notifyListeners();
         return fromJson(data);
       } else {
         throw Exception('Unknown error');
@@ -60,6 +62,7 @@ class RezervacijeProvider extends BaseProvider<Rezervacije>
       Response response = await http.put(uri, headers: headers);
       if (isValidResponse(response)) {
         var data = jsonDecode(response.body);
+        notifyListeners();
         return fromJson(data);
       } else {
         throw Exception('Unknown error');
@@ -78,6 +81,7 @@ class RezervacijeProvider extends BaseProvider<Rezervacije>
       Response response = await http.put(uri, headers: headers);
       if (isValidResponse(response)) {
         var data = jsonDecode(response.body);
+        notifyListeners();
         return fromJson(data);
       } else {
         throw Exception('Unknown error');
