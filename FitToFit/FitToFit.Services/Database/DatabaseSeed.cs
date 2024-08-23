@@ -31,7 +31,6 @@ namespace FitToFit.Services.Database
             SeedRezervacije(modelBuilder);
             SeedRezervacijeStavke(modelBuilder);
             SeedKorisniciNovosti(modelBuilder);
-
         }
 
         private void SeedKorisniciNovosti(ModelBuilder modelBuilder)
@@ -433,7 +432,8 @@ namespace FitToFit.Services.Database
                     KorisnikId = 2,
                     ClanarinaId = 1,
                     Iznos = 25,
-                    StateMachine = "refused"
+                    StateMachine = "refused",
+                    BrojTransakcije = null
                 },
                 new Rezervacije()
                 {
@@ -443,7 +443,8 @@ namespace FitToFit.Services.Database
                     KorisnikId = 1,
                     ClanarinaId = 2,
                     Iznos = 5,
-                    StateMachine = "canceled"
+                    StateMachine = "canceled",
+                    BrojTransakcije = null
                 },
                 new Rezervacije()
                 {
@@ -453,7 +454,8 @@ namespace FitToFit.Services.Database
                     KorisnikId = 3,
                     ClanarinaId = 1,
                     Iznos = 30,
-                    StateMachine = "archived"
+                    StateMachine = "archived",
+                    BrojTransakcije = null
                 },
                 new Rezervacije()
                 {
@@ -463,7 +465,8 @@ namespace FitToFit.Services.Database
                     KorisnikId = 4,
                     ClanarinaId = 1,
                     Iznos = 30,
-                    StateMachine = "archived"
+                    StateMachine = "archived",
+                    BrojTransakcije = null
                 },
                 new Rezervacije()
                 {
@@ -473,7 +476,8 @@ namespace FitToFit.Services.Database
                     KorisnikId = 5,
                     ClanarinaId = 1,
                     Iznos = 40,
-                    StateMachine = "archived"
+                    StateMachine = "archived",
+                    BrojTransakcije = null
                 },
                 new Rezervacije()
                 {
@@ -483,7 +487,8 @@ namespace FitToFit.Services.Database
                     KorisnikId = 6,
                     ClanarinaId = 1,
                     Iznos = 45,
-                    StateMachine = "archived"
+                    StateMachine = "archived",
+                    BrojTransakcije = null
                 },
                 new Rezervacije()
                 {
@@ -493,7 +498,8 @@ namespace FitToFit.Services.Database
                     KorisnikId = 7,
                     ClanarinaId = 1,
                     Iznos = 50,
-                    StateMachine = "archived"
+                    StateMachine = "archived",
+                    BrojTransakcije = null
                 },
                 new Rezervacije()
                 {
@@ -503,7 +509,8 @@ namespace FitToFit.Services.Database
                     KorisnikId = 8,
                     ClanarinaId = 1,
                     Iznos = 35,
-                    StateMachine = "archived"
+                    StateMachine = "archived",
+                    BrojTransakcije = null
                 },
                 new Rezervacije()
                 {
@@ -513,7 +520,8 @@ namespace FitToFit.Services.Database
                     KorisnikId = 5,
                     ClanarinaId = 1,
                     Iznos = 40,
-                    StateMachine = "active"
+                    StateMachine = "active",
+                    BrojTransakcije = null
                 },
                 new Rezervacije()
                 {
@@ -523,7 +531,8 @@ namespace FitToFit.Services.Database
                     KorisnikId = 1,
                     ClanarinaId = 1,
                     Iznos = 45,
-                    StateMachine = "active"
+                    StateMachine = "active",
+                    BrojTransakcije = null
                 },
                 new Rezervacije()
                 {
@@ -533,7 +542,8 @@ namespace FitToFit.Services.Database
                     KorisnikId = 2,
                     ClanarinaId = 2,
                     Iznos = 15,
-                    StateMachine = "active"
+                    StateMachine = "active",
+                    BrojTransakcije = null
                 },
                 new Rezervacije()
                 {
@@ -543,7 +553,8 @@ namespace FitToFit.Services.Database
                     KorisnikId = 3,
                     ClanarinaId = 1,
                     Iznos = 3,
-                    StateMachine = "active"
+                    StateMachine = "active",
+                    BrojTransakcije = null
                 },
                 new Rezervacije()
                 {
@@ -553,7 +564,8 @@ namespace FitToFit.Services.Database
                     KorisnikId = 4,
                     ClanarinaId = 2,
                     Iznos = 10,
-                    StateMachine = "draft"
+                    StateMachine = "draft",
+                    BrojTransakcije = null
                 },
                 new Rezervacije()
                 {
@@ -563,7 +575,8 @@ namespace FitToFit.Services.Database
                     KorisnikId = 9,
                     ClanarinaId = 1,
                     Iznos = 30,
-                    StateMachine = "draft"
+                    StateMachine = "draft",
+                    BrojTransakcije = null
                 });
         }
 
@@ -1547,6 +1560,153 @@ namespace FitToFit.Services.Database
                     Trajanje = 4,
                     TreningId = 11,
                     VjezbaId = 1
+                },
+                new TreninziVjezbe()
+                {
+                    TreningVjezbaId = 31,
+                    Trajanje = 4,
+                    TreningId = 1,
+                    VjezbaId = 5
+                },
+                new TreninziVjezbe()
+                {
+                    TreningVjezbaId = 32,
+                    Trajanje = 5,
+                    TreningId = 9,
+                    VjezbaId = 20,
+                },
+                new TreninziVjezbe()
+                {
+                    TreningVjezbaId = 33,
+                    Trajanje = 4,
+                    TreningId = 2,
+                    VjezbaId = 13,
+                },
+                new TreninziVjezbe()
+                {
+                    TreningVjezbaId = 34,
+                    Trajanje = 4,
+                    TreningId = 4,
+                    VjezbaId = 20
+                },
+                new TreninziVjezbe()
+                {
+                    TreningVjezbaId = 35,
+                    Trajanje = 4,
+                    TreningId = 4,
+                    VjezbaId = 9
+                },
+                new TreninziVjezbe()
+                {
+                    TreningVjezbaId = 36,
+                    Trajanje = 5,
+                    TreningId = 10,
+                    VjezbaId = 8
+                },
+                new TreninziVjezbe()
+                {
+                    TreningVjezbaId = 37,
+                    Trajanje = 3,
+                    TreningId = 10,
+                    VjezbaId = 12
+                },
+                new TreninziVjezbe()
+                {
+                    TreningVjezbaId = 38,
+                    Trajanje = 4,
+                    TreningId = 3,
+                    VjezbaId = 21,
+                },
+                new TreninziVjezbe()
+                {
+                    TreningVjezbaId = 39,
+                    Trajanje = 4,
+                    TreningId = 5,
+                    VjezbaId = 2
+                },
+                new TreninziVjezbe()
+                {
+                    TreningVjezbaId = 40,
+                    Trajanje = 5,
+                    TreningId = 5,
+                    VjezbaId = 6
+                },
+                new TreninziVjezbe()
+                {
+                    TreningVjezbaId = 41,
+                    Trajanje = 5,
+                    TreningId = 6,
+                    VjezbaId = 14
+                },
+                new TreninziVjezbe()
+                {
+                    TreningVjezbaId = 42,
+                    Trajanje = 3,
+                    TreningId = 6,
+                    VjezbaId = 21
+                },
+                new TreninziVjezbe()
+                {
+                    TreningVjezbaId = 43,
+                    Trajanje = 3,
+                    TreningId = 6,
+                    VjezbaId = 5
+                },
+                new TreninziVjezbe()
+                {
+                    TreningVjezbaId = 44,
+                    Trajanje = 5,
+                    TreningId = 8,
+                    VjezbaId = 3
+                },
+                new TreninziVjezbe()
+                {
+                    TreningVjezbaId = 45,
+                    Trajanje = 5,
+                    TreningId = 8,
+                    VjezbaId = 4
+                },
+                new TreninziVjezbe()
+                {
+                    TreningVjezbaId = 46,
+                    Trajanje = 4,
+                    TreningId = 7,
+                    VjezbaId = 7
+                },
+                new TreninziVjezbe()
+                {
+                    TreningVjezbaId = 47,
+                    Trajanje = 4,
+                    TreningId = 7,
+                    VjezbaId = 9
+                },
+                new TreninziVjezbe()
+                {
+                    TreningVjezbaId = 48,
+                    Trajanje = 5,
+                    TreningId = 7,
+                    VjezbaId = 14
+                },
+                new TreninziVjezbe()
+                {
+                    TreningVjezbaId = 49,
+                    Trajanje = 5,
+                    TreningId = 11,
+                    VjezbaId = 3
+                },
+                new TreninziVjezbe()
+                {
+                    TreningVjezbaId = 50,
+                    Trajanje = 4,
+                    TreningId = 11,
+                    VjezbaId = 4
+                },
+                new TreninziVjezbe()
+                {
+                    TreningVjezbaId = 51,
+                    Trajanje = 4,
+                    TreningId = 11,
+                    VjezbaId = 20
                 });
         }
 
@@ -2011,7 +2171,7 @@ namespace FitToFit.Services.Database
                    NovostId = 1,
                    Naslov = "Kruzni trening u 16h",
                    Sadrzaj = "Zbog nepredviđenih okolnosti, današnji trening moramo pomjeriti u 16h. Svi koji na trening dolaze u 13h, ako su slobodni, mogu doći na ovaj novi termin. Hvala na razumijevanju!",
-                   DatumObjave = new DateTime(2024, 8, 12),
+                   DatumObjave = new DateTime(2024, 8, 20),
                    IsLiked = false,
                    IsRead = false,
                    BrojLajkova = 0,
@@ -2023,7 +2183,7 @@ namespace FitToFit.Services.Database
                    NovostId = 2,
                    Naslov = "Pilates u 10h",
                    Sadrzaj = "Izmjena termina.",
-                   DatumObjave = new DateTime(2024, 8, 12),
+                   DatumObjave = new DateTime(2024, 8, 19),
                    IsLiked = false,
                    IsRead = false,
                    BrojLajkova = 0,
@@ -2035,7 +2195,7 @@ namespace FitToFit.Services.Database
                    NovostId = 3,
                    Naslov = "Kako održati motivaciju tokom ljeta?",
                    Sadrzaj = "Ljeto je savršeno vrijeme za vježbanje na otvorenom i uživanje u aktivnostima na suncu. Međutim, visoke temperature mogu smanjiti vašu motivaciju. Savladajte izazove ljetnog vježbanja uz naše savjete kako održati motivaciju. Preporučujemo rane jutarnje ili kasne večernje treninge kako biste izbjegli najtoplije dijelove dana. Pridružite se našim grupnim vježbama na otvorenom ili isprobajte naše specijalne ljetne fitness izazove koji će vas inspirisati da ostanete aktivni i fit.",
-                   DatumObjave = new DateTime(2024, 8, 1),
+                   DatumObjave = new DateTime(2024, 8, 18),
                    IsLiked = false,
                    IsRead = false,
                    BrojLajkova = 0,
@@ -2047,7 +2207,7 @@ namespace FitToFit.Services.Database
                    NovostId = 4,
                    Naslov = "Novi Grupni Programi",
                    Sadrzaj = "Predstavljamo naše nove grupne programe koji kombinuju snagu, fleksibilnost i zabavu. Naši stručni instruktori vode raznolike grupne treninge kao što su HIIT (visokointenzivni intervalni treninzi), pilates, body pump i još mnogo toga. Grupni treninzi su odličan način da se motivišete uz podršku drugih članova. Ovi programi su dizajnirani da izazovu vaše tijelo i omoguće vam da dostignete svoje fitness ciljeve u dinamičnoj i prijateljskoj atmosferi.",
-                   DatumObjave = new DateTime(2024, 8, 5),
+                   DatumObjave = new DateTime(2024, 8, 15),
                    IsLiked = false,
                    IsRead = false,
                    BrojLajkova = 0,
@@ -2059,7 +2219,7 @@ namespace FitToFit.Services.Database
                    NovostId = 5,
                    Naslov = "Najava nove zaposlenice",
                    Sadrzaj = "Sa velikim zadovoljstvom vas obavještavamo da se našem timu pridružila nova zaposlenica, Medina Turkić. Medina će zauzeti poziciju trenerice i svojim bogatim iskustvom doprinijeti našem centru. Medina je diplomirala na DIF-u, gdje je stekla zvanje magistrice sporta i zdravlja. Uvereni smo da će Medina svojom posvećenošću, entuzijazmom i profesionalizmom značajno doprinijeti našem kolektivu i pomoći nam da postignemo još veće uspjehe. Molimo vas da pružite toplu dobrodošlicu Medini i pomognete joj da se što prije integriše u naš tim. Radujemo se zajedničkom radu i novim postignućima.",
-                   DatumObjave = new DateTime(2024, 8, 7),
+                   DatumObjave = new DateTime(2024, 8, 17),
                    IsLiked = false,
                    IsRead = false,
                    BrojLajkova = 0,
@@ -2089,13 +2249,25 @@ namespace FitToFit.Services.Database
                    BrojLajkova = 0,
                    KorisnikId = 11,
                    VrstaTreningaId = null
+               },
+               new Novosti()
+               {
+                   NovostId = 8,
+                   Naslov = "Advanced trening u 19h",
+                   Sadrzaj = "Molimo sve one koji su rezervisali ovaj trening da se izjasne o dolasku.",
+                   DatumObjave = new DateTime(2024, 8, 23),
+                   IsLiked = false,
+                   IsRead = false,
+                   BrojLajkova = 0,
+                   KorisnikId = 10,
+                   VrstaTreningaId = 3
                });
         }
 
         private void SeedKorisnici(ModelBuilder modelBuilder)
         {
-            string hash = "lAEMdP1nh+gWkwrFPAkXHCRWetM=";
-            string salt = "/cUa7YeHrqxXjuVE/9xQug==";
+            string hash = "lC0njRakwHnzGX84ENFBeKvDvdE=";
+            string salt = "7lw6ULAmd2KhTybM2m0/1A==";
             var slikaKorisnika = Convert.FromBase64String("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");
             var slikaAdmina = Convert.FromBase64String("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");
 
@@ -2113,7 +2285,7 @@ namespace FitToFit.Services.Database
                   DatumPocetkaTreniranja = new DateTime(2024, 5, 20),
                   Visina = "178",
                   Tezina = "70",
-                  KorisnickoIme = "HarisaP00",
+                  KorisnickoIme = "mobile",
                   LozinkaHash = hash,
                   LozinkaSalt = salt,
                   Slika = slikaKorisnika,
@@ -2274,8 +2446,8 @@ namespace FitToFit.Services.Database
               new Korisnici()
               {
                   KorisnikId = 10,
-                  Ime = "Admin",
-                  Prezime = "Admin",
+                  Ime = "AdminTest",
+                  Prezime = "AdminTest",
                   Spol = "Muški",
                   Telefon = "063431223",
                   Email = "Admin@gmail.com",
@@ -2290,14 +2462,14 @@ namespace FitToFit.Services.Database
               new Korisnici()
               {
                   KorisnikId = 11,
-                  Ime = "Admin2",
-                  Prezime = "Admin2",
+                  Ime = "Admin",
+                  Prezime = "Admin",
                   Spol = "Muški",
                   Telefon = "063431223",
                   Email = "Admin2@gmail.com",
                   Adresa = "Stolac",
                   DatumRodjenja = new DateTime(1999, 3, 7),
-                  KorisnickoIme = "admin2",
+                  KorisnickoIme = "desktop",
                   LozinkaHash = hash,
                   LozinkaSalt = salt,
                   Slika = slikaAdmina,

@@ -65,7 +65,7 @@ class _AkcijePageState extends State<AkcijePage> {
         _aktivneAkcijeList = aktivneAkcije.result;
         _arhiviraneAkcijeList = arhiviraneAkcije.result;
         _draftAkcijeList = draftAkcije.result;
-        _selectedAkcije = _draftAkcijeList;
+        _selectedAkcije = _aktivneAkcijeList;
       });
     }
   }
