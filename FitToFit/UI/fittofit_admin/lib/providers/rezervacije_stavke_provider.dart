@@ -15,9 +15,9 @@ class RezervacijeStavkeProvider extends BaseProvider<RezervacijaStavke> {
     return RezervacijaStavke.fromJson(data);
   }
 
-  Future<List<OdabraniTermini>> getTop3Terms(String order) async {
+  Future<List<OdabraniTermini>> getTop3Termina(String order) async {
     var url =
-        "${BaseProvider.baseUrl}RezervacijaStavke/getTop3Terms?order=$order";
+        "${BaseProvider.baseUrl}RezervacijaStavke/getTop3Termina?order=$order";
     var uri = Uri.parse(url);
     var headers = createHeaders();
     Response response = await http.get(uri, headers: headers);

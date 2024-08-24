@@ -62,13 +62,13 @@ object value = builder.Services.AddQuartz(q =>
     q.ScheduleJob<CleanupRezervacijeJob>(trigger => trigger
         .WithIdentity("cleanupRezervacijeTrigger")
         .StartNow()
-        .WithCronSchedule("0 0 * * * ?")); //svaki sat
-    //.WithCronSchedule("0 * * * * ?"));  svake minute
+        .WithCronSchedule("0 */10 * * * ?")); //svakih 10 minuta
+    //.WithCronSchedule("0 0 * * * ?"));  svaki sat
 
     q.ScheduleJob<CleanupNovostiJob>(trigger => trigger
         .WithIdentity("cleanupNovostiTrigger")
         .StartNow()
-        .WithCronSchedule("0 0 * * * ?"));
+        .WithCronSchedule("0 */10 * * * ?"));
 });
 builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 

@@ -93,30 +93,6 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
     _vjezbeProvider = context.read<VjezbeProvider>();
     initForm();
     _loadData();
-    _treninziProvider.addListener(() {
-      _reloadTreninziList();
-    });
-    _vjezbeProvider.addListener(() {
-      _reloadVjezbeList();
-    });
-  }
-
-  void _reloadTreninziList() async {
-    var treninzi = await _treninziProvider.get(filter: {});
-    if (mounted) {
-      setState(() {
-        _treninziList = treninzi.result;
-      });
-    }
-  }
-
-  void _reloadVjezbeList() async {
-    var vjezbe = await _vjezbeProvider.get();
-    if (mounted) {
-      setState(() {
-        _vjezbeList = vjezbe.result;
-      });
-    }
   }
 
   Future initForm() async {

@@ -80,6 +80,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
+      notifyListeners();
       return fromJson(data);
     } else {
       throw Exception("Unknown error");
@@ -96,6 +97,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
+      notifyListeners();
       return fromJson(data);
     } else {
       throw Exception("Unknown error");

@@ -1,4 +1,6 @@
+import 'package:fittofit_admin/models/korisnici.dart';
 import 'package:fittofit_admin/pages/registracija.dart';
+import 'package:fittofit_admin/providers/korisnici_provider.dart';
 import 'package:fittofit_admin/providers/novosti_provider.dart';
 import 'package:fittofit_admin/providers/treneri_provider.dart';
 import 'package:flutter/material.dart';
@@ -16,11 +18,13 @@ class LoginPage extends StatelessWidget {
 
   late NovostiProvider _novostiProvider;
   late TreneriProvider _treneriProvider;
+  late KorisniciProvider _korisniciProvider;
 
   @override
   Widget build(BuildContext context) {
     _novostiProvider = context.read<NovostiProvider>();
     _treneriProvider = context.read<TreneriProvider>();
+    _korisniciProvider = context.read<KorisniciProvider>();
     return Scaffold(
       backgroundColor: const Color.fromRGBO(0, 154, 231, 1).withOpacity(0.9),
       body: Stack(
@@ -127,21 +131,44 @@ class LoginPage extends StatelessWidget {
 
                           Authorization.username = username;
                           Authorization.password = password;
+                          print("login proceed $username $password");
 
                           try {
                             await _novostiProvider.get();
                             await _treneriProvider.get();
 
-                            print("login proceed $username $password");
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    HomePage(username: username)));
+                            var data = await _korisniciProvider.get(filter: {
+                              "korisnickoIme": username,
+                              "isUlogeIncluded": true
+                            });
+                            Korisnici admin = data.result[0];
+                            if (admin.ulogaId == 2) {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      HomePage(username: username)));
+                            } else {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                        title: const Text("Greška"),
+                                        content: const Text(
+                                            "Korisnik je registrovan, ali nema permisije za pristup desktop aplikaciji."),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                              child: const Text("OK"))
+                                        ],
+                                      ));
+                            }
                           } on Exception catch (e) {
                             showDialog(
                                 context: context,
                                 builder: (BuildContext context) => AlertDialog(
-                                      title: const Text("Error"),
-                                      content: Text(e.toString()),
+                                      title: Text("$e"),
+                                      content: const Text(
+                                          "Niste ispravno unijeli korisničko ime ili lozinku, ili još niste registrovani."),
                                       actions: [
                                         TextButton(
                                             onPressed: () =>

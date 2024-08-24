@@ -1,3 +1,4 @@
+import 'package:fittofit_mobile/models/korisnici.dart';
 import 'package:fittofit_mobile/pages/navpages/home.dart';
 import 'package:fittofit_mobile/pages/registracija.dart';
 import 'package:fittofit_mobile/providers/korisnici_provider.dart';
@@ -72,25 +73,63 @@ class LoginPage extends StatelessWidget {
                             Authorization.password = password;
 
                             try {
-                              await _korisniciProvider.get(filter: {
-                                'username': username,
-                              });
-
                               await setUserName(username);
+                              var data = await _korisniciProvider.get(filter: {
+                                "korisnickoIme": username,
+                                "isUlogeIncluded": true
+                              });
+                              if (data.result.isNotEmpty) {
+                                Korisnici korisnik = data.result[0];
 
-                              // ignore: use_build_context_synchronously
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const HomePage(selectedIndex: 0),
-                                ),
-                              );
+                                if (korisnik.ulogaId == 1) {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const HomePage(selectedIndex: 0),
+                                    ),
+                                  );
+                                } else {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        AlertDialog(
+                                      title: const Text("Greška"),
+                                      content: const Text(
+                                          "Korisnik je registrovan, ali nema permisije za pristup mobilnoj aplikaciji."),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                          child: const Text("OK"),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+                              } else {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                    title: const Text("Greška"),
+                                    content: const Text(
+                                        "Niste ispravno unijeli korisničko ime ili lozinku, ili još niste registrovani."),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: const Text("OK"),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
                             } on Exception catch (e) {
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) => AlertDialog(
-                                  title: const Text("Error"),
-                                  content: Text(e.toString()),
+                                  title: Text("$e"),
+                                  content:
+                                      const Text("Korisnik nije pronađen."),
                                   actions: [
                                     TextButton(
                                       onPressed: () => Navigator.pop(context),

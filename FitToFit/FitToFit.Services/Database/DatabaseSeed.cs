@@ -454,7 +454,7 @@ namespace FitToFit.Services.Database
                     KorisnikId = 3,
                     ClanarinaId = 1,
                     Iznos = 30,
-                    StateMachine = "archived",
+                    StateMachine = "active",
                     BrojTransakcije = null
                 },
                 new Rezervacije()
@@ -2243,7 +2243,7 @@ namespace FitToFit.Services.Database
                    NovostId = 7,
                    Naslov = "Savjeti za Sigurno Vježbanje u Centru",
                    Sadrzaj = "Vaša sigurnost je naš prioritet. Nudimo vam savjete kako da vježbate sigurno i efikasno u našem fitness centru. Pravilno zagrijavanje i istezanje prije vježbanja smanjuje rizik od povreda. Takođe, pratite uputstva naših instruktora i koristite opremu prema preporukama kako biste maksimalno iskoristili svaki trening. Naš tim je uvijek tu da vam pruži podršku i odgovori na vaša pitanja.",
-                   DatumObjave = new DateTime(2024, 8, 10),
+                   DatumObjave = new DateTime(2024, 7, 10),
                    IsLiked = false,
                    IsRead = false,
                    BrojLajkova = 0,
@@ -2279,7 +2279,7 @@ namespace FitToFit.Services.Database
                   Prezime = "Poturović",
                   Spol = "Ženski",
                   Telefon = "063448922",
-                  Email = "poturovicharisa@gmail.com",
+                  Email = "poturovicharisa200@gmail.com",
                   Adresa = "Stolac",
                   DatumRodjenja = new DateTime(2000, 12, 22),
                   DatumPocetkaTreniranja = new DateTime(2024, 5, 20),

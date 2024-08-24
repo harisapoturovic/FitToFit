@@ -26,7 +26,7 @@ namespace FitToFit.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<T> GetById(int id)
+        public async virtual Task<T> GetById(int id)
         {
             return await _service.GetById(id);
         }

@@ -74,22 +74,6 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
     _korisniciProvider = context.read<KorisniciProvider>();
     initForm();
     _loadData();
-    _korisniciProvider.addListener(() {
-      // ignore: unnecessary_null_comparison
-      if (widget.korisnik != null) {
-        _updateKorisnik();
-      }
-    });
-  }
-
-  void _updateKorisnik() async {
-    var data = await _korisniciProvider.getById(widget.korisnik.korisnikId);
-
-    if (mounted) {
-      setState(() {
-        odabraniKorisnik = data;
-      });
-    }
   }
 
   Future initForm() async {

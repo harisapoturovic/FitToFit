@@ -73,6 +73,52 @@ class _ProfilePageState extends State<ProfilePage> {
     _vjezbeProvider = context.read<VjezbeProvider>();
     initForm();
     _loadData();
+    _korisniciProvider.addListener(() {
+      _reloadKorisnik();
+    });
+    _rezervacijeProvider.addListener(() {
+      _reloadRezervacije();
+    });
+  }
+
+  void _reloadKorisnik() async {
+    korisnickoIme = await getUserName();
+    var user =
+        await _korisniciProvider.get(filter: {'korisnickoIme': korisnickoIme});
+
+    if (mounted) {
+      setState(() {
+        korisnik = user.result[0];
+        isLoading = false;
+      });
+    }
+  }
+
+  void _reloadRezervacije() async {
+    korisnickoIme = await getUserName();
+    var user =
+        await _korisniciProvider.get(filter: {'korisnickoIme': korisnickoIme});
+
+    if (mounted) {
+      setState(() {
+        korisnik = user.result[0];
+        isLoading = false;
+      });
+    }
+    var aktivneRezervacije = await _rezervacijeProvider.get(filter: {
+      'korisnikId': korisnik.korisnikId,
+      'stateMachine': 'active',
+      'isTerminiIncluded': true
+    });
+    var otkazaneRezervacije = await _rezervacijeProvider.get(filter: {
+      'korisnikId': korisnik.korisnikId,
+      'stateMachine': 'canceled',
+      'isTerminiIncluded': true
+    });
+    setState(() {
+      _aktivneRezervacijeList = aktivneRezervacije.result;
+      _otkazaneRezervacijeList = otkazaneRezervacije.result;
+    });
   }
 
   Future initForm() async {
@@ -84,8 +130,8 @@ class _ProfilePageState extends State<ProfilePage> {
   void _loadData() async {
     if (!mounted) return;
     korisnickoIme = await getUserName();
-    var user = await _korisniciProvider
-        .get(filter: {'korisnickoIme': korisnickoIme, 'isAdmin': false});
+    var user =
+        await _korisniciProvider.get(filter: {'korisnickoIme': korisnickoIme});
 
     if (mounted) {
       setState(() {

@@ -22,6 +22,7 @@ class RezervacijeProvider extends BaseProvider<Rezervacije> {
 
       if (isValidResponse(response)) {
         var data = jsonDecode(response.body);
+        notifyListeners();
         return fromJson(data);
       } else {
         throw Exception(

@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
   late KorisniciNovostiProvider _korisniciNovostiProvider;
   List<Novosti> _novostiList = [];
   List<KorisniciNovosti> _korisniciNovostiList = [];
-  late Korisnici korisnik;
+  Korisnici? korisnik;
   bool isLiked = false;
   bool isLoading = true;
   bool isSearching = false;
@@ -59,30 +59,53 @@ class _HomePageState extends State<HomePage> {
 
   void _loadData() async {
     if (!mounted) return;
-    isSearching = false;
-    korisnickoIme = await getUserName();
-    var user = await _korisniciProvider
-        .get(filter: {'korisnickoIme': korisnickoIme, 'isAdmin': false});
-    var kn = await _korisniciNovostiProvider.get();
 
-    if (mounted) {
-      setState(() {
-        korisnik = user.result[0];
-        _korisniciNovostiList = kn.result;
-        isLoading = false;
-      });
-    }
-
-    var novosti = await _novostiProvider.get(filter: {
-      'page': page,
-      'pageSize': pageSize,
-      'korisnikId': korisnik.korisnikId
+    setState(() {
+      isSearching = false;
     });
-    if (mounted) {
-      setState(() {
-        _novostiList = novosti.result;
-        totalcount = novosti.count;
-      });
+
+    try {
+      korisnickoIme = await getUserName();
+      var user = await _korisniciProvider
+          .get(filter: {'korisnickoIme': korisnickoIme});
+      var kn = await _korisniciNovostiProvider.get();
+
+      if (user.result.isNotEmpty) {
+        setState(() {
+          korisnik = user.result[0];
+          _korisniciNovostiList = kn.result;
+          isLoading = false;
+        });
+
+        var novosti = await _novostiProvider.get(filter: {
+          'page': page,
+          'pageSize': pageSize,
+          'korisnikId': korisnik?.korisnikId
+        });
+
+        if (mounted) {
+          setState(() {
+            _novostiList = novosti.result;
+            totalcount = novosti.count;
+          });
+        }
+      } else {
+        if (mounted) {
+          setState(() {
+            korisnik = null;
+            _korisniciNovostiList = [];
+            _novostiList = [];
+            isLoading = false;
+          });
+        }
+      }
+    } catch (e) {
+      print('Error loading data: $e');
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
@@ -94,7 +117,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-      selectedIndex: 0,
+      selectedIndex: widget.selectedIndex,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Početna'),
@@ -108,48 +131,51 @@ class _HomePageState extends State<HomePage> {
               : Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    Card(
-                      child: ListTile(
-                        leading: korisnik.slika != '' && korisnik.slika != null
-                            ? CustomAvatar(
-                                radius: 40, base64Image: korisnik.slika!)
-                            : const CircleAvatar(
-                                radius: 40,
-                                backgroundImage:
-                                    AssetImage('assets/images/user.png'),
+                    if (korisnik != null) ...[
+                      Card(
+                        child: ListTile(
+                          leading:
+                              korisnik!.slika != '' && korisnik!.slika != null
+                                  ? CustomAvatar(
+                                      radius: 40, base64Image: korisnik!.slika!)
+                                  : const CircleAvatar(
+                                      radius: 40,
+                                      backgroundImage:
+                                          AssetImage('assets/images/user.png'),
+                                    ),
+                          title: RichText(
+                            text: TextSpan(
+                              text: 'Dobrodošli, \n',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.normal,
+                                fontStyle: FontStyle.italic,
+                                color: Colors.black,
                               ),
-                        title: RichText(
-                          text: TextSpan(
-                            text: 'Dobrodošli, \n',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.normal,
-                              fontStyle: FontStyle.italic,
-                              color: Colors.black,
-                            ),
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: '${korisnik.ime} ${korisnik.prezime}',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: '${korisnik!.ime} ${korisnik!.prezime}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
+                              ],
+                            ),
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 8),
+                              Text(
+                                DateFormat('dd.MM.yyyy').format(DateTime.now()),
+                                style: const TextStyle(fontSize: 11),
                               ),
                             ],
                           ),
                         ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 8),
-                            Text(
-                              DateFormat('dd.MM.yyyy').format(DateTime.now()),
-                              style: const TextStyle(fontSize: 11),
-                            ),
-                          ],
-                        ),
                       ),
-                    ),
-                    const SizedBox(height: 5),
+                      const SizedBox(height: 5),
+                    ],
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 30),
                       child: TextField(
@@ -250,11 +276,20 @@ class _HomePageState extends State<HomePage> {
     KorisniciNovosti? korisniciNovosti = _korisniciNovostiList.firstWhere(
       (kn) =>
           kn.novostId == novost.novostId &&
-          kn.korisnikId == korisnik.korisnikId,
+          kn.korisnikId == korisnik?.korisnikId,
+      orElse: () => KorisniciNovosti(
+        korisniciNovostiId: 0,
+        korisnikId: korisnik?.korisnikId ?? 0,
+        novostId: novost.novostId,
+        isLiked: false,
+        isRead: false,
+      ),
     );
+
     novost.isRead = korisniciNovosti.isRead;
     novost.isLiked = korisniciNovosti.isLiked;
     bool canMarkAsRead = !novost.isRead!;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
       child: Column(
@@ -395,7 +430,7 @@ class _HomePageState extends State<HomePage> {
     isSearching = true;
     var data = await _novostiProvider.get(filter: {
       'naslov': _naslovController.text,
-      'korisnikId': korisnik.korisnikId,
+      'korisnikId': korisnik?.korisnikId,
       'page': page,
       'pageSize': pageSize
     });

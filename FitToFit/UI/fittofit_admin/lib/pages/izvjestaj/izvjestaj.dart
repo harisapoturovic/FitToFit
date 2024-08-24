@@ -57,7 +57,7 @@ class _IzvjestajPageState extends State<IzvjestajPage> {
     if (!mounted) return;
     var treneri =
         await _treneriProvider.get(filter: {'IsOcjeneIncluded': true});
-    var termini = await _rezervacijeStavkeProvider.getTop3Terms("desc");
+    var termini = await _rezervacijeStavkeProvider.getTop3Termina("desc");
     var r = await _rezervacijeStavkeProvider.getProfitForLast3Years();
     if (mounted) {
       setState(() {

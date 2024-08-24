@@ -68,22 +68,6 @@ class _TreneriDetaljiPageState extends State<TreneriDetaljiPage> {
     _treneriProvider = context.read<TreneriProvider>();
     initForm();
     _loadData();
-    _treneriProvider.addListener(() {
-      // ignore: unnecessary_null_comparison
-      if (widget.trener != null) {
-        _updateTrener();
-      }
-    });
-  }
-
-  void _updateTrener() async {
-    var data = await _treneriProvider.getById(widget.trener.trenerId);
-
-    if (mounted) {
-      setState(() {
-        odabraniTrener = data;
-      });
-    }
   }
 
   Future initForm() async {

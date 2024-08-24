@@ -84,11 +84,6 @@ namespace FitToFit.Services
             {
                 filteredQuery = filteredQuery.Where(x => x.UlogaId.Equals(2));
             }
-            else
-            {
-                filteredQuery = filteredQuery.Where(x => x.UlogaId.Equals(1));
-            }
-
 
             return filteredQuery;
         }

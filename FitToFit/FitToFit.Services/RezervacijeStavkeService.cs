@@ -23,7 +23,7 @@ namespace FitToFit.Services
         {
         }
 
-        public virtual async Task<List<Model.OdabraniTermini>> GetTop3Terms(string? order=null)
+        public virtual async Task<List<Model.OdabraniTermini>> getTop3Termina(string? order=null)
         {
             var query = _context.Set<RezervacijaStavke>().AsQueryable();
             var list = await query.ToListAsync();

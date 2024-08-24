@@ -2,6 +2,7 @@ using FitToFit.Model;
 using FitToFit.Model.Requests;
 using FitToFit.Model.SearchObjects;
 using FitToFit.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FitToFit.Controllers
@@ -14,6 +15,12 @@ namespace FitToFit.Controllers
             :base(logger, service)
         {
           
+        }
+
+        [AllowAnonymous]
+        public override Task<PagedResult<Treneri>> Get([FromQuery] TreneriSearchObject search)
+        {
+            return base.Get(search);
         }
 
     }

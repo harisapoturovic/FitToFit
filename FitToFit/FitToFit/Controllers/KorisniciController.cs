@@ -30,6 +30,12 @@ namespace FitToFit.Controllers
             return base.Get(search);
         }
 
+        [AllowAnonymous]
+        public override Task<Korisnici> GetById(int id)
+        {
+            return base.GetById(id);
+        }
+
         [HttpPost("{userId}/change-password")]
         public async Task<IActionResult> ChangePassword(int userId, [FromBody] KorisniciChangePassword changePasswordModel)
         {
