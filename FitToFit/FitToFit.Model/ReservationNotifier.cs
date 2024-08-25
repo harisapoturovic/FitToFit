@@ -11,8 +11,8 @@ namespace FitToFit.Model
         public ReservationNotifier()
         {
         }
-        public int Id { get; set; }
         public string Email { get; set; }
-        public string Clanarina { get; set; }
+        public string Subject { get; set; }
+        public string Content { get; set; }
     }
 }

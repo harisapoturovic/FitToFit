@@ -25,7 +25,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   sp.Stripe.publishableKey =
-      const String.fromEnvironment('STRIPE_PUBLISHABLE_KEY', defaultValue: "");
+      const String.fromEnvironment('STRIPE_PUBLISHABLE_KEY', defaultValue: "pk_test_51PnjR5Rum3JuFfOBmRLxQ7Lje6AsBK8iBU5omkXhC55I3UgjC9ZD9AjnOyofza3KQaOMgMuHCOoG7iqdGKzrroFh008IjgEvie");
   runApp(
     MultiProvider(
       providers: [

@@ -1,4 +1,5 @@
 ﻿using EasyNetQ;
+using Newtonsoft.Json;
 using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace FitToFit.Services
 {
     public class MessageProducer : IMessageProducer
     {
-        private readonly string _host = Environment.GetEnvironmentVariable("RABBITMQ_HOST") ?? "localhost"; 
+        private readonly string _host = Environment.GetEnvironmentVariable("RABBITMQ_HOST") ?? "rabbitmq"; 
         private readonly string _username = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME") ?? "guest";
         private readonly string _password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD") ?? "guest";
         private readonly string _virtualhost = Environment.GetEnvironmentVariable("RABBITMQ_VIRTUALHOST") ?? "/";
@@ -52,14 +53,30 @@ namespace FitToFit.Services
         }
         public void SendingObject<T>(T obj)
         {
-            var host = _host;
-            var username = _username;
-            var password = _password;
-            var virtualhost = _virtualhost;
-        
-            using var bus = RabbitHutch.CreateBus($"host={host};virtualHost={virtualhost};username={username};password={password}");
-        
-            bus.PubSub.Publish(obj);
+            var factory = new ConnectionFactory
+            {
+                HostName = _host,
+                UserName = _username,
+                Password = _password,
+                VirtualHost = _virtualhost,
+            };
+
+            factory.ClientProvidedName = "Rabbit Test";
+
+            IConnection connection = factory.CreateConnection();
+            IModel channel = connection.CreateModel();
+
+            string exchangeName = "ReservationAddedExchange";
+            string routingKey = "reservation_added_queue";
+            string queueName = "ReservationAdded";
+
+            channel.ExchangeDeclare(exchangeName, ExchangeType.Direct);
+            channel.QueueDeclare(queueName, true, false, false, null);
+            channel.QueueBind(queueName, exchangeName, routingKey, null);
+
+            string emailModelJson = JsonConvert.SerializeObject(obj);
+            byte[] messageBodyBytes = Encoding.UTF8.GetBytes(emailModelJson);
+            channel.BasicPublish(exchangeName, routingKey, null, messageBodyBytes);
         }
     }
 }

@@ -65,7 +65,7 @@ services:
       - PASS=snkzsribuyucusac
       - MAIL_PORT=587
     ports:
-      - 7265:7265
+      - 5265:5265
     networks:
       - fittofitnet
     depends_on:
