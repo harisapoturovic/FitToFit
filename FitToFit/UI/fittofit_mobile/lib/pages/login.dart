@@ -150,7 +150,7 @@ class LoginPage extends StatelessWidget {
                             elevation: 3,
                           ),
                           child: const Padding(
-                            padding: EdgeInsets.all(16.0),
+                            padding: EdgeInsets.all(12.0),
                             child: Text(
                               "Prijava",
                               style: TextStyle(
@@ -159,7 +159,7 @@ class LoginPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 30),
+                        const SizedBox(height: 20),
                         const Text("Nemate korisnički račun?",
                             style: TextStyle(
                                 color: Color.fromARGB(255, 105, 105, 105))),
@@ -183,7 +183,7 @@ class LoginPage extends StatelessWidget {
                             elevation: 3,
                           ),
                           child: const Padding(
-                            padding: EdgeInsets.all(16.0),
+                            padding: EdgeInsets.all(12.0),
                             child: Text(
                               "Registracija",
                               style: TextStyle(

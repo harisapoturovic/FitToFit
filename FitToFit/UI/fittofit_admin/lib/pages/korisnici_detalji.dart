@@ -701,12 +701,12 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
                                                     value.isEmpty) {
                                                   return 'Ovo polje je obavezno!';
                                                 }
-                                                if (!RegExp(r'^[A-Z]')
+                                                if (!RegExp(r'^[A-Z-ŠĐČĆŽ]')
                                                     .hasMatch(value)) {
                                                   return 'Ime mora početi velikim slovom.';
                                                 }
 
-                                                if (!RegExp(r'^[A-Za-z]*$')
+                                                if (!RegExp(r'^[a-zA-ZšđčćžŠĐČĆŽ]+$')
                                                     .hasMatch(value)) {
                                                   return 'Ime može sadržavati samo slova.';
                                                 }
@@ -726,12 +726,12 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
                                                   value.isEmpty) {
                                                 return 'Ovo polje je obavezno!';
                                               }
-                                              if (!RegExp(r'^[A-Z]')
+                                              if (!RegExp(r'^[A-Z-ŠĐČĆŽ]')
                                                   .hasMatch(value)) {
                                                 return 'Prezime mora početi velikim slovom.';
                                               }
 
-                                              if (!RegExp(r'^[A-Za-z]*$')
+                                              if (!RegExp(r'^[a-zA-ZšđčćžŠĐČĆŽ]+$')
                                                   .hasMatch(value)) {
                                                 return 'Prezime može sadržavati samo slova.';
                                               }

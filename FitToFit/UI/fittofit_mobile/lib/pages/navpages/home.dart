@@ -224,7 +224,7 @@ class _HomePageState extends State<HomePage> {
                             elevation: 3,
                           ),
                           child: const Padding(
-                            padding: EdgeInsets.all(20.0),
+                            padding: EdgeInsets.all(10.0),
                             child: Text(
                               "Cjenovnik",
                               style: TextStyle(
@@ -233,7 +233,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
-                        const SizedBox(width: 30),
+                        const SizedBox(width: 20),
                         ElevatedButton(
                           onPressed: () {
                             Navigator.push(
@@ -253,7 +253,7 @@ class _HomePageState extends State<HomePage> {
                             elevation: 3,
                           ),
                           child: const Padding(
-                            padding: EdgeInsets.all(20),
+                            padding: EdgeInsets.all(10),
                             child: Text(
                               "Raspored",
                               style: TextStyle(
@@ -264,7 +264,7 @@ class _HomePageState extends State<HomePage> {
                         )
                       ],
                     ),
-                    const SizedBox(height: 20)
+                    const SizedBox(height: 30)
                   ],
                 ),
         ),

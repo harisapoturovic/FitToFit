@@ -76,9 +76,6 @@ class _ProfilePageState extends State<ProfilePage> {
     _korisniciProvider.addListener(() {
       _reloadKorisnik();
     });
-    _rezervacijeProvider.addListener(() {
-      _reloadRezervacije();
-    });
   }
 
   void _reloadKorisnik() async {
@@ -92,33 +89,6 @@ class _ProfilePageState extends State<ProfilePage> {
         isLoading = false;
       });
     }
-  }
-
-  void _reloadRezervacije() async {
-    korisnickoIme = await getUserName();
-    var user =
-        await _korisniciProvider.get(filter: {'korisnickoIme': korisnickoIme});
-
-    if (mounted) {
-      setState(() {
-        korisnik = user.result[0];
-        isLoading = false;
-      });
-    }
-    var aktivneRezervacije = await _rezervacijeProvider.get(filter: {
-      'korisnikId': korisnik.korisnikId,
-      'stateMachine': 'active',
-      'isTerminiIncluded': true
-    });
-    var otkazaneRezervacije = await _rezervacijeProvider.get(filter: {
-      'korisnikId': korisnik.korisnikId,
-      'stateMachine': 'canceled',
-      'isTerminiIncluded': true
-    });
-    setState(() {
-      _aktivneRezervacijeList = aktivneRezervacije.result;
-      _otkazaneRezervacijeList = otkazaneRezervacije.result;
-    });
   }
 
   Future initForm() async {
@@ -483,9 +453,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(
                           errorText: 'Ovo polje je obavezno!'),
-                      FormBuilderValidators.match(RegExp(r'^[A-Z]'),
+                      FormBuilderValidators.match(RegExp(r'^[A-Z-ŠĐČĆŽ]'),
                           errorText: 'Ime mora početi velikim slovom.'),
-                      FormBuilderValidators.match(RegExp(r'^[A-Za-z]*$'),
+                      FormBuilderValidators.match(
+                          RegExp(r'^[a-zA-ZšđčćžŠĐČĆŽ]+$'),
                           errorText: 'Ime može sadržavati samo slova.'),
                     ]),
                   ),
@@ -500,9 +471,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(
                           errorText: 'Ovo polje je obavezno!'),
-                      FormBuilderValidators.match(RegExp(r'^[A-Z]'),
+                      FormBuilderValidators.match(RegExp(r'^[A-Z-ŠĐČĆŽ]'),
                           errorText: 'Prezime mora početi velikim slovom.'),
-                      FormBuilderValidators.match(RegExp(r'^[A-Za-z]*$'),
+                      FormBuilderValidators.match(
+                          RegExp(r'^[a-zA-ZšđčćžŠĐČĆŽ]+$'),
                           errorText: 'Prezime može sadržavati samo slova.'),
                     ]),
                   ),
@@ -583,10 +555,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   const SizedBox(height: 16.0),
                   ElevatedButton(
                     onPressed: () async {
-                      FilePickerResult? result =
-                          await FilePicker.platform.pickFiles(
-                        type: FileType.image,
-                      );
+                      FilePickerResult? result = await FilePicker.platform
+                          .pickFiles(
+                              type: FileType.image, compressionQuality: 0);
 
                       if (result != null && result.files.isNotEmpty) {
                         PlatformFile file = result.files.first;

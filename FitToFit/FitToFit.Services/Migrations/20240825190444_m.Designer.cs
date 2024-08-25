@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FitToFit.Services.Migrations
 {
     [DbContext(typeof(_200048Context))]
-    [Migration("20240823130211_m")]
+    [Migration("20240825190444_m")]
     partial class m
     {
         /// <inheritdoc />
@@ -343,7 +343,7 @@ namespace FitToFit.Services.Migrations
                             Adresa = "Stolac",
                             DatumPocetkaTreniranja = new DateTime(2024, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DatumRodjenja = new DateTime(2000, 12, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "poturovicharisa@gmail.com",
+                            Email = "poturovicharisa200@gmail.com",
                             Ime = "Harisa",
                             KorisnickoIme = "mobile",
                             LozinkaHash = "lC0njRakwHnzGX84ENFBeKvDvdE=",
@@ -943,24 +943,12 @@ namespace FitToFit.Services.Migrations
                         {
                             NovostId = 7,
                             BrojLajkova = 0,
-                            DatumObjave = new DateTime(2024, 8, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumObjave = new DateTime(2024, 7, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsLiked = false,
                             IsRead = false,
                             KorisnikId = 11,
                             Naslov = "Savjeti za Sigurno Vježbanje u Centru",
                             Sadrzaj = "Vaša sigurnost je naš prioritet. Nudimo vam savjete kako da vježbate sigurno i efikasno u našem fitness centru. Pravilno zagrijavanje i istezanje prije vježbanja smanjuje rizik od povreda. Takođe, pratite uputstva naših instruktora i koristite opremu prema preporukama kako biste maksimalno iskoristili svaki trening. Naš tim je uvijek tu da vam pruži podršku i odgovori na vaša pitanja."
-                        },
-                        new
-                        {
-                            NovostId = 8,
-                            BrojLajkova = 0,
-                            DatumObjave = new DateTime(2024, 8, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsLiked = false,
-                            IsRead = false,
-                            KorisnikId = 10,
-                            Naslov = "Advanced trening u 19h",
-                            Sadrzaj = "Molimo sve one koji su rezervisali ovaj trening da se izjasne o dolasku.",
-                            VrstaTreningaId = 3
                         });
                 });
 
@@ -1397,7 +1385,7 @@ namespace FitToFit.Services.Migrations
                             DatumIsteka = new DateTime(2024, 4, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Iznos = 30m,
                             KorisnikId = 3,
-                            StateMachine = "archived"
+                            StateMachine = "active"
                         },
                         new
                         {

@@ -2249,18 +2249,6 @@ namespace FitToFit.Services.Database
                    BrojLajkova = 0,
                    KorisnikId = 11,
                    VrstaTreningaId = null
-               },
-               new Novosti()
-               {
-                   NovostId = 8,
-                   Naslov = "Advanced trening u 19h",
-                   Sadrzaj = "Molimo sve one koji su rezervisali ovaj trening da se izjasne o dolasku.",
-                   DatumObjave = new DateTime(2024, 8, 23),
-                   IsLiked = false,
-                   IsRead = false,
-                   BrojLajkova = 0,
-                   KorisnikId = 10,
-                   VrstaTreningaId = 3
                });
         }
 

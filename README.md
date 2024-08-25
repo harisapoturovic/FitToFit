@@ -19,3 +19,4 @@ Datum: Trenutni/nadolazeći
 CVC: Trocifreni broj 
 
 NOTE: RabbitMQ komunikacija se uspostavlja kada korisnik uspješno kreira rezervaciju (u pozadini se šalje mail datom korisniku).
+U slučaju da se mail ne pošalje, pokušati sa restartovanjem containera za Auxiliary.

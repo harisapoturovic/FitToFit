@@ -545,8 +545,9 @@ class _ReservationPageState extends State<ReservationPage> {
   }
 
   Future<Map<String, dynamic>> makePaymentIntent() async {
-    String secretKey =
-        const String.fromEnvironment("STRIPE_SECRET_KEY", defaultValue: "sk_test_51PnjR5Rum3JuFfOB3Viuai90sm9cG2Phf41MneR5nZ66M7cEjZg3kHw3mqUFt6dYfhlKOKjy2aAmhSO4XlETc5su00F1IKf7m6");
+    String secretKey = const String.fromEnvironment("STRIPE_SECRET_KEY",
+        defaultValue:
+            "sk_test_51PnjR5Rum3JuFfOB3Viuai90sm9cG2Phf41MneR5nZ66M7cEjZg3kHw3mqUFt6dYfhlKOKjy2aAmhSO4XlETc5su00F1IKf7m6");
 
     final body = {
       'amount': calculateAmount().toString(),
@@ -699,9 +700,10 @@ class _ReservationPageState extends State<ReservationPage> {
                                         leading: Radio<String>(
                                           value: 'uCentru',
                                           groupValue: _selectedPaymentMethod,
-                                          onChanged: (String? value) {
+                                          onChanged: (String? value) async {
                                             setState(() {
                                               _selectedPaymentMethod = value;
+                                              isLoading = true;
                                             });
                                           },
                                         ),
@@ -714,11 +716,23 @@ class _ReservationPageState extends State<ReservationPage> {
                                           onChanged: (String? value) async {
                                             setState(() {
                                               _selectedPaymentMethod = value;
-                                            });
-                                            setState(() {
                                               isLoading = true;
                                             });
+                                            String? validationError =
+                                                await validateReservation();
+                                            if (validationError != null) {
+                                              _showAlertDialog("Greška",
+                                                  validationError, Colors.red);
+                                              setState(() {
+                                                isLoading = false;
+                                              });
+                                              return;
+                                            }
+
                                             await makePayment();
+                                            setState(() {
+                                              isLoading = false;
+                                            });
                                           },
                                         ),
                                       ),
@@ -743,7 +757,19 @@ class _ReservationPageState extends State<ReservationPage> {
                                             ElevatedButton(
                                               onPressed: () async {
                                                 Navigator.pop(context);
-                                                saveData();
+                                                String? validationError =
+                                                    await validateReservation();
+                                                if (validationError != null) {
+                                                  _showAlertDialog(
+                                                      "Greška",
+                                                      validationError,
+                                                      Colors.red);
+                                                  setState(() {
+                                                    isLoading = false;
+                                                  });
+                                                  return;
+                                                }
+                                                await saveData();
                                               },
                                               style: ButtonStyle(
                                                 backgroundColor:
@@ -808,45 +834,26 @@ class _ReservationPageState extends State<ReservationPage> {
     return double.parse(iznos.toStringAsFixed(2));
   }
 
-  saveData() async {
-    int korisnikId = korisnik.korisnikId;
+  Future<String?> validateReservation() async {
     int clanarinaId = _selectedClanarina ?? 0;
     List<int> terminIds = _terminiIds;
     DateTime now = DateTime.now();
+    // ignore: unused_local_variable
     DateTime datumIsteka;
 
-    if (_selectedClanarina == 1) {
-      // Mjesečna članarina
+    if (clanarinaId == 1) {
       datumIsteka = now.add(const Duration(days: 30));
-    } else if (_selectedClanarina == 2) {
-      // Sedmična članarina
+    } else if (clanarinaId == 2) {
       datumIsteka = now.add(const Duration(days: 7));
-    } else if (_selectedClanarina == 3) {
-      // Dnevna članarina
+    } else if (clanarinaId == 3) {
       datumIsteka = now.add(const Duration(hours: 24));
     } else {
       datumIsteka = now;
     }
 
-    String formattedDate =
-        DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(now.toUtc());
-    String formattedDatumIsteka =
-        DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(datumIsteka.toUtc());
-
-    List<RezervacijeItem> items = terminIds
-        .map((terminId) => RezervacijeItem(terminId: terminId))
-        .toList();
-
-    if (_selectedClanarina != null &&
-        _selectedClanarina != 0 &&
-        _selectedTrening != null) {
+    if (clanarinaId != 0 && _selectedTrening != null) {
       if (_treninziClanarineList.isEmpty) {
-        _showAlertDialog(
-          "Greška",
-          'Za odabranu članarinu "Dnevna" morate uzeti samo jedan termin, a za preostale članarine 2-5 termina.',
-          Colors.red,
-        );
-        return;
+        return 'Za odabranu članarinu "Dnevna" morate uzeti samo jedan termin, a za preostale članarine 2-5 termina.';
       }
 
       DateTime convertToDateTime(String dan, String? sat) {
@@ -885,11 +892,10 @@ class _ReservationPageState extends State<ReservationPage> {
         return date;
       }
 
-      if (_selectedClanarina == 3) {
+      if (clanarinaId == 3) {
         DateTime tomorrow = now.add(const Duration(days: 1));
-
         List<Future<Termini>> terminFutures =
-            terminIds.map((terminId) => fetchTermin(terminId)).toList();
+            terminIds.map((id) => fetchTermin(id)).toList();
         List<Termini> termini = await Future.wait(terminFutures);
 
         bool allTerminiAreTomorrow = termini.every((termin) {
@@ -900,27 +906,16 @@ class _ReservationPageState extends State<ReservationPage> {
         });
 
         if (!allTerminiAreTomorrow) {
-          _showAlertDialog(
-            "Greška",
-            'Za dnevnu članarinu možete odabrati samo termine koji su zakazani za sutra.',
-            Colors.red,
-          );
-          return;
+          return 'Za dnevnu članarinu možete odabrati samo termine koji su zakazani za sutra.';
         }
 
         if (terminIds.length > 1) {
-          _showAlertDialog(
-            "Greška",
-            'Za dnevnu članarinu možete odabrati samo jedan termin.',
-            Colors.red,
-          );
-          return;
+          return 'Za dnevnu članarinu možete odabrati samo jedan termin.';
         }
-      } else if (_selectedClanarina == 2) {
+      } else if (clanarinaId == 2) {
         DateTime sevenDaysFromNow = now.add(const Duration(days: 7));
-
         List<Future<Termini>> terminFutures =
-            terminIds.map((terminId) => fetchTermin(terminId)).toList();
+            terminIds.map((id) => fetchTermin(id)).toList();
         List<Termini> termini = await Future.wait(terminFutures);
 
         bool allTerminiAreWithinSevenDays = termini.every((termin) {
@@ -930,18 +925,12 @@ class _ReservationPageState extends State<ReservationPage> {
         });
 
         if (!allTerminiAreWithinSevenDays) {
-          _showAlertDialog(
-            "Greška",
-            'Za sedmičnu članarinu možete odabrati samo termine unutar narednih 7 dana.',
-            Colors.red,
-          );
-          return;
+          return 'Za sedmičnu članarinu možete odabrati samo termine unutar narednih 7 dana.';
         }
-      } else if (_selectedClanarina == 1) {
+      } else if (clanarinaId == 1) {
         DateTime thirtyDaysFromNow = now.add(const Duration(days: 30));
-
         List<Future<Termini>> terminFutures =
-            terminIds.map((terminId) => fetchTermin(terminId)).toList();
+            terminIds.map((id) => fetchTermin(id)).toList();
         List<Termini> termini = await Future.wait(terminFutures);
 
         bool allTerminiAreWithinThirtyDays = termini.every((termin) {
@@ -951,71 +940,94 @@ class _ReservationPageState extends State<ReservationPage> {
         });
 
         if (!allTerminiAreWithinThirtyDays) {
-          _showAlertDialog(
-            "Greška",
-            'Za mjesečnu članarinu možete odabrati samo termine unutar narednih 30 dana.',
-            Colors.red,
-          );
-          return;
+          return 'Za mjesečnu članarinu možete odabrati samo termine unutar narednih 30 dana.';
         }
       }
-
-      double finalnaCijena = uracunajAkciju();
-
-      RezervacijeRequest request = RezervacijeRequest(
-          datum: formattedDate,
-          korisnikId: korisnikId,
-          clanarinaId: clanarinaId,
-          iznos: finalnaCijena,
-          items: items,
-          datumIsteka: formattedDatumIsteka,
-          brojTransakcije: paymentIntent?['id']);
 
       if (_rezervacijeCount1! < 3 &&
           _rezervacijeCount2! == 0 &&
           provjeriClanarinu()) {
-        await _rezervacijeProvider.insert(request.toJson());
-        if (paymentIntent != null) {
-          _showAlertDialog(
-            "Rezervisano!",
-            "Uspješno obavljena transakcija i kreirana rezervacija.",
-            Colors.green,
-          );
-        } else {
-          _showAlertDialog(
-            "Rezervisano!",
-            "Uspješno kreirana rezervacija.",
-            Colors.green,
-          );
-        }
-        setState(() {
-          _selectedTermini.clear();
-          _terminiIds.clear();
-          _terminiList.clear();
-          _terminiIds = [];
-          _selectedClanarina = null;
-          _selectedVrstaTreninga = null;
-          _selectedTrening = null;
-          paymentIntent = null;
-        });
+        return null;
       } else if (_rezervacijeCount2! != 0) {
-        _showAlertDialog(
-            "Greška",
-            "Prethodno ste rezervisali odabrani trening. Nije moguće rezervisati isti trening u sklopu više rezervacija.",
-            Colors.red);
+        return "Prethodno ste rezervisali odabrani trening. Nije moguće rezervisati isti trening u sklopu više rezervacija.";
       } else if (_rezervacijeCount1! != 0) {
-        _showAlertDialog(
-          "Greška",
-          "Napravili ste maksimalan broj rezervacija. Otkažite neku od njih ili sačekajte da istekne neka od prethodno rezervisanih.",
-          Colors.red,
-        );
+        return "Napravili ste maksimalan broj rezervacija. Otkažite neku od njih ili sačekajte da istekne neka od prethodno rezervisanih.";
       }
     } else {
+      return "Morate odabrati članarinu i neki od treninga.";
+    }
+
+    return null;
+  }
+
+  Future<void> saveData() async {
+    int korisnikId = korisnik.korisnikId;
+    int clanarinaId = _selectedClanarina ?? 0;
+    List<int> terminIds = _terminiIds;
+    DateTime now = DateTime.now();
+    DateTime datumIsteka;
+
+    if (clanarinaId == 1) {
+      datumIsteka = now.add(const Duration(days: 30));
+    } else if (clanarinaId == 2) {
+      datumIsteka = now.add(const Duration(days: 7));
+    } else if (clanarinaId == 3) {
+      datumIsteka = now.add(const Duration(hours: 24));
+    } else {
+      datumIsteka = now;
+    }
+
+    String formattedDate =
+        DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(now.toUtc());
+    String formattedDatumIsteka =
+        DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(datumIsteka.toUtc());
+
+    List<RezervacijeItem> items = terminIds
+        .map((terminId) => RezervacijeItem(terminId: terminId))
+        .toList();
+
+    RezervacijeRequest request = RezervacijeRequest(
+        datum: formattedDate,
+        korisnikId: korisnikId,
+        clanarinaId: clanarinaId,
+        iznos: uracunajAkciju(),
+        items: items,
+        datumIsteka: formattedDatumIsteka,
+        brojTransakcije: paymentIntent?['id']);
+
+    if (_rezervacijeCount1! < 3 &&
+        _rezervacijeCount2! == 0 &&
+        provjeriClanarinu()) {
+      await _rezervacijeProvider.insert(request.toJson());
+      if (paymentIntent != null) {
+        _showAlertDialog(
+            "Rezervisano!",
+            "Uspješno obavljena transakcija i kreirana rezervacija.",
+            Colors.green);
+      } else {
+        _showAlertDialog(
+            "Rezervisano!", "Uspješno kreirana rezervacija.", Colors.green);
+      }
+      setState(() {
+        _selectedTermini.clear();
+        _terminiIds.clear();
+        _terminiList.clear();
+        _terminiIds = [];
+        _selectedClanarina = null;
+        _selectedVrstaTreninga = null;
+        _selectedTrening = null;
+        paymentIntent = null;
+      });
+    } else if (_rezervacijeCount2! != 0) {
       _showAlertDialog(
-        "Greška",
-        "Morate odabrati članarinu i neki od treninga.",
-        Colors.red,
-      );
+          "Greška",
+          "Prethodno ste rezervisali odabrani trening. Nije moguće rezervisati isti trening u sklopu više rezervacija.",
+          Colors.red);
+    } else if (_rezervacijeCount1! != 0) {
+      _showAlertDialog(
+          "Greška",
+          "Napravili ste maksimalan broj rezervacija. Otkažite neku od njih ili sačekajte da istekne neka od prethodno rezervisanih.",
+          Colors.red);
     }
   }
 }

@@ -146,11 +146,11 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
                 if (value == null || value.isEmpty) {
                   return 'Ovo polje je obavezno!';
                 }
-                if (!RegExp(r'^[A-Z]').hasMatch(value)) {
+                if (!RegExp(r'^[A-Z-ŠĐČĆŽ]').hasMatch(value)) {
                   return 'Ime mora početi velikim slovom.';
                 }
 
-                if (!RegExp(r'^[A-Za-z]*$').hasMatch(value)) {
+                if (!RegExp(r'^[a-zA-ZšđčćžŠĐČĆŽ]+$').hasMatch(value)) {
                   return 'Ime može sadržavati samo slova.';
                 }
 
@@ -166,11 +166,11 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
                 if (value == null || value.isEmpty) {
                   return 'Ovo polje je obavezno!';
                 }
-                if (!RegExp(r'^[A-Z]').hasMatch(value)) {
+                if (!RegExp(r'^[A-Z-ŠĐČĆŽ]').hasMatch(value)) {
                   return 'Prezime mora početi velikim slovom.';
                 }
 
-                if (!RegExp(r'^[A-Za-z]*$').hasMatch(value)) {
+                if (!RegExp(r'^[a-zA-ZšđčćžŠĐČĆŽ]+$').hasMatch(value)) {
                   return 'Prezime može sadržavati samo slova.';
                 }
                 return null;
