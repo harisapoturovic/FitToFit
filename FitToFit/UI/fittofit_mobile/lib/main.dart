@@ -18,18 +18,14 @@ import 'package:fittofit_mobile/providers/vjezbe_provider.dart';
 import 'package:fittofit_mobile/providers/vjezbe_treninzi_provider.dart';
 import 'package:fittofit_mobile/providers/vrste_treninga_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_stripe/flutter_stripe.dart' as sp;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: "assets/.env");
-
-  String stripePK = dotenv.env['STRIPE_PUBLISHABLE_KEY']!;
 
   sp.Stripe.publishableKey =
-      String.fromEnvironment('STRIPE_PUBLISHABLE_KEY', defaultValue: stripePK);
+      const String.fromEnvironment('STRIPE_PUBLISHABLE_KEY', defaultValue: "");
   runApp(
     MultiProvider(
       providers: [

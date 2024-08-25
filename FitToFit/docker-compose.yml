@@ -1,0 +1,78 @@
+version: '3'
+services:
+#mssql docker
+  fittofit-sql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    restart: unless-stopped
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=QWEasd123!
+      - MSSQL_PID=Developer
+    ports:
+      - 1401:1433
+    expose:
+      - 1433
+    networks:
+      - fittofitnet
+    
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: unless-stopped
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    networks:
+      - fittofitnet
+  
+  fittofit-api:
+    restart: unless-stopped
+    build:
+      context: .
+    environment:
+      - ConnectionStrings:DefaultConnection=Server=fittofit-sql,1433;Database=200048;User=sa;Password=QWEasd123!;ConnectRetryCount=0; TrustServerCertificate=True
+      - ASPNETCORE_ENVIRONMENT=Development
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USERNAME=guest
+      - RABBITMQ_PASSWORD=guest
+      - RABBITMQ_VIRTUALHOST=/
+    ports:
+      - 5058:5058
+    networks:
+      - fittofitnet
+    links:
+      - fittofit-sql
+    depends_on:
+      - fittofit-sql
+      - rabbitmq
+
+  auxiliary:
+    restart: unless-stopped
+    build:
+      context: ./FitToFit.Auxiliary
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USERNAME=guest
+      - RABBITMQ_PASSWORD=guest
+      - RABBITMQ_VIRTUALHOST=/
+      - SERVER_ADDRESS=smtp.gmail.com
+      - MAIL=fit.korisnik@gmail.com
+      - PASS=snkzsribuyucusac
+      - MAIL_PORT=587
+    ports:
+      - 7265:7265
+    networks:
+      - fittofitnet
+    depends_on:
+      - rabbitmq
+      - fittofit-sql
+      - fittofit-api
+ 
+networks:
+  fittofitnet:
+    driver: bridge 

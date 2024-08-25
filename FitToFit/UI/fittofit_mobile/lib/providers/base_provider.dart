@@ -19,7 +19,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
   BaseProvider(String endpoint) {
     _endpoint = endpoint;
     _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "https://192.168.88.227:7058/");
+        defaultValue: "http://192.168.88.227:5058/");
 
     client.badCertificateCallback = (cert, host, port) => true;
     http = IOClient(client);

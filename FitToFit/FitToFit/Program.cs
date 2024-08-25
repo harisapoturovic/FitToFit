@@ -116,14 +116,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
 app.UseAuthentication();    
 app.UseAuthorization();
 
 // Specify the URLs to listen on
 app.Urls.Add("http://0.0.0.0:5058");
-app.Urls.Add("https://0.0.0.0:7058");
+//app.Urls.Add("https://0.0.0.0:7058");
 
 app.MapControllers();
 

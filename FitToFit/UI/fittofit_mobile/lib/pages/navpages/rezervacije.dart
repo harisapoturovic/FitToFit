@@ -20,7 +20,6 @@ import 'package:fittofit_mobile/providers/vrste_treninga_provider.dart';
 import 'package:fittofit_mobile/utils/util.dart';
 import 'package:fittofit_mobile/widgets/master_screen_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_stripe/flutter_stripe.dart' as sp;
@@ -546,11 +545,8 @@ class _ReservationPageState extends State<ReservationPage> {
   }
 
   Future<Map<String, dynamic>> makePaymentIntent() async {
-    await dotenv.load(fileName: "assets/.env");
-
-    String stripeSK = dotenv.env['STRIPE_SECRET_KEY']!;
     String secretKey =
-        String.fromEnvironment("STRIPE_SECRET_KEY", defaultValue: stripeSK);
+        const String.fromEnvironment("STRIPE_SECRET_KEY", defaultValue: "sk_test_51PnjR5Rum3JuFfOB3Viuai90sm9cG2Phf41MneR5nZ66M7cEjZg3kHw3mqUFt6dYfhlKOKjy2aAmhSO4XlETc5su00F1IKf7m6");
 
     final body = {
       'amount': calculateAmount().toString(),

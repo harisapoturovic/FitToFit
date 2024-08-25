@@ -1,10 +1,10 @@
 ﻿using EasyNetQ;
-using FitToFit.Model;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using FitToFit.Auxiliary;
 using System.Text;
 using System.Net.Mail;
+using FitToFit.Auxiliary.Models;
 
 public class BackgroundWorkerService : BackgroundService
 {
