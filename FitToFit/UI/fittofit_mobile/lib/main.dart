@@ -7,6 +7,7 @@ import 'package:fittofit_mobile/providers/korisnici_novosti_provider.dart';
 import 'package:fittofit_mobile/providers/korisnici_provider.dart';
 import 'package:fittofit_mobile/providers/novosti_provider.dart';
 import 'package:fittofit_mobile/providers/ocjene_provider.dart';
+import 'package:fittofit_mobile/providers/recommender_provider.dart';
 import 'package:fittofit_mobile/providers/rezervacije_provider.dart';
 import 'package:fittofit_mobile/providers/rezervacije_stavke_provider.dart';
 import 'package:fittofit_mobile/providers/sale_provider.dart';
@@ -24,8 +25,10 @@ import 'package:flutter_stripe/flutter_stripe.dart' as sp;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  sp.Stripe.publishableKey =
-      const String.fromEnvironment('STRIPE_PUBLISHABLE_KEY', defaultValue: "pk_test_51PnjR5Rum3JuFfOBmRLxQ7Lje6AsBK8iBU5omkXhC55I3UgjC9ZD9AjnOyofza3KQaOMgMuHCOoG7iqdGKzrroFh008IjgEvie");
+  sp.Stripe.publishableKey = const String.fromEnvironment(
+      'STRIPE_PUBLISHABLE_KEY',
+      defaultValue:
+          "pk_test_51PnjR5Rum3JuFfOBmRLxQ7Lje6AsBK8iBU5omkXhC55I3UgjC9ZD9AjnOyofza3KQaOMgMuHCOoG7iqdGKzrroFh008IjgEvie");
   runApp(
     MultiProvider(
       providers: [
@@ -46,7 +49,8 @@ void main() async {
         ChangeNotifierProvider(create: (_) => VjezbeTreninziProvider()),
         ChangeNotifierProvider(create: (_) => RezervacijeStavkeProvider()),
         ChangeNotifierProvider(create: (_) => KorisniciNovostiProvider()),
-        ChangeNotifierProvider(create: (_) => OcjeneProvider())
+        ChangeNotifierProvider(create: (_) => OcjeneProvider()),
+        ChangeNotifierProvider(create: (_) => RecommenderProvider()),
       ],
       child: const MyApp(),
     ),

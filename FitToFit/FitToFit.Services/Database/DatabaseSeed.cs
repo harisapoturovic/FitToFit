@@ -291,7 +291,7 @@ namespace FitToFit.Services.Database
                {
                    RezervacijaStavkeId = 2,
                    RezervacijaId = 1,
-                   TerminId = 5
+                   TerminId = 20
                },
                 new RezervacijaStavke()
                 {
@@ -303,7 +303,7 @@ namespace FitToFit.Services.Database
                {
                    RezervacijaStavkeId = 4,
                    RezervacijaId = 2,
-                   TerminId = 8
+                   TerminId = 29
                },
                 new RezervacijaStavke()
                 {
@@ -399,7 +399,7 @@ namespace FitToFit.Services.Database
                 {
                     RezervacijaStavkeId = 20,
                     RezervacijaId = 12,
-                    TerminId = 35
+                    TerminId = 21
                 },
                new RezervacijaStavke()
                {
@@ -418,6 +418,78 @@ namespace FitToFit.Services.Database
                    RezervacijaStavkeId = 23,
                    RezervacijaId = 14,
                    TerminId = 28
+               },
+               new RezervacijaStavke()
+               {
+                   RezervacijaStavkeId = 24,
+                   RezervacijaId = 1,
+                   TerminId = 30
+               },
+               new RezervacijaStavke()
+               {
+                   RezervacijaStavkeId = 25,
+                   RezervacijaId = 2,
+                   TerminId = 21
+               },
+               new RezervacijaStavke()
+               {
+                   RezervacijaStavkeId = 26,
+                   RezervacijaId = 2,
+                   TerminId = 38
+               },
+                new RezervacijaStavke()
+                {
+                    RezervacijaStavkeId = 27,
+                    RezervacijaId = 3,
+                    TerminId = 22
+                },
+               new RezervacijaStavke()
+               {
+                   RezervacijaStavkeId = 28,
+                   RezervacijaId = 4,
+                   TerminId = 26
+               },
+                new RezervacijaStavke()
+                {
+                    RezervacijaStavkeId = 29,
+                    RezervacijaId = 5,
+                    TerminId = 15
+                },
+               new RezervacijaStavke()
+               {
+                   RezervacijaStavkeId = 30,
+                   RezervacijaId = 6,
+                   TerminId = 18
+               },
+               new RezervacijaStavke()
+               {
+                   RezervacijaStavkeId = 31,
+                   RezervacijaId = 7,
+                   TerminId = 21
+               },
+               new RezervacijaStavke()
+               {
+                   RezervacijaStavkeId = 32,
+                   RezervacijaId = 7,
+                   TerminId = 38
+               },
+                new RezervacijaStavke()
+                {
+                    RezervacijaStavkeId = 33,
+                    RezervacijaId = 14,
+                    TerminId = 35
+                },
+               new RezervacijaStavke()
+               {
+                   RezervacijaStavkeId = 34,
+                   RezervacijaId = 14,
+                   TerminId = 4
+               },
+               new RezervacijaStavke()
+               {
+                   RezervacijaStavkeId = 35,
+                   RezervacijaId = 1,
+                   TerminId = 33
                });
         }
 

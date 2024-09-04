@@ -27,6 +27,8 @@ public partial class Treninzi
 
     public virtual ICollection<AkcijeTreninzi> AkcijeTreninzis { get; set; } = new List<AkcijeTreninzi>();
 
+    public virtual ICollection<Recommender> Recommenders { get; set; } = new List<Recommender>();
+
     public virtual ICollection<Termini> Terminis { get; set; } = new List<Termini>();
 
     public virtual ICollection<TreninziVjezbe> TreninziVjezbes { get; set; } = new List<TreninziVjezbe>();

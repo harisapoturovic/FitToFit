@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FitToFit.Services.Migrations
 {
     [DbContext(typeof(_200048Context))]
-    [Migration("20240825190444_m")]
+    [Migration("20240903193741_m")]
     partial class m
     {
         /// <inheritdoc />
@@ -1147,6 +1147,35 @@ namespace FitToFit.Services.Migrations
                         });
                 });
 
+            modelBuilder.Entity("FitToFit.Services.Database.Recommender", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CoTreningId1")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CoTreningId2")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CoTreningId3")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TreningId")
+                        .HasColumnType("int")
+                        .HasColumnName("TreningID");
+
+                    b.HasKey("Id")
+                        .HasName("PK__Recommen__3214EC075B82CBF2");
+
+                    b.HasIndex("TreningId");
+
+                    b.ToTable("Recommender", (string)null);
+                });
+
             modelBuilder.Entity("FitToFit.Services.Database.RezervacijaStavke", b =>
                 {
                     b.Property<int>("RezervacijaStavkeId")
@@ -1184,7 +1213,7 @@ namespace FitToFit.Services.Migrations
                         {
                             RezervacijaStavkeId = 2,
                             RezervacijaId = 1,
-                            TerminId = 5
+                            TerminId = 20
                         },
                         new
                         {
@@ -1196,7 +1225,7 @@ namespace FitToFit.Services.Migrations
                         {
                             RezervacijaStavkeId = 4,
                             RezervacijaId = 2,
-                            TerminId = 8
+                            TerminId = 29
                         },
                         new
                         {
@@ -1292,7 +1321,7 @@ namespace FitToFit.Services.Migrations
                         {
                             RezervacijaStavkeId = 20,
                             RezervacijaId = 12,
-                            TerminId = 35
+                            TerminId = 21
                         },
                         new
                         {
@@ -1311,6 +1340,78 @@ namespace FitToFit.Services.Migrations
                             RezervacijaStavkeId = 23,
                             RezervacijaId = 14,
                             TerminId = 28
+                        },
+                        new
+                        {
+                            RezervacijaStavkeId = 24,
+                            RezervacijaId = 1,
+                            TerminId = 30
+                        },
+                        new
+                        {
+                            RezervacijaStavkeId = 25,
+                            RezervacijaId = 2,
+                            TerminId = 21
+                        },
+                        new
+                        {
+                            RezervacijaStavkeId = 26,
+                            RezervacijaId = 2,
+                            TerminId = 38
+                        },
+                        new
+                        {
+                            RezervacijaStavkeId = 27,
+                            RezervacijaId = 3,
+                            TerminId = 22
+                        },
+                        new
+                        {
+                            RezervacijaStavkeId = 28,
+                            RezervacijaId = 4,
+                            TerminId = 26
+                        },
+                        new
+                        {
+                            RezervacijaStavkeId = 29,
+                            RezervacijaId = 5,
+                            TerminId = 15
+                        },
+                        new
+                        {
+                            RezervacijaStavkeId = 30,
+                            RezervacijaId = 6,
+                            TerminId = 18
+                        },
+                        new
+                        {
+                            RezervacijaStavkeId = 31,
+                            RezervacijaId = 7,
+                            TerminId = 21
+                        },
+                        new
+                        {
+                            RezervacijaStavkeId = 32,
+                            RezervacijaId = 7,
+                            TerminId = 38
+                        },
+                        new
+                        {
+                            RezervacijaStavkeId = 33,
+                            RezervacijaId = 14,
+                            TerminId = 35
+                        },
+                        new
+                        {
+                            RezervacijaStavkeId = 34,
+                            RezervacijaId = 14,
+                            TerminId = 4
+                        },
+                        new
+                        {
+                            RezervacijaStavkeId = 35,
+                            RezervacijaId = 1,
+                            TerminId = 33
                         });
                 });
 
@@ -3272,6 +3373,17 @@ namespace FitToFit.Services.Migrations
                     b.Navigation("Trener");
                 });
 
+            modelBuilder.Entity("FitToFit.Services.Database.Recommender", b =>
+                {
+                    b.HasOne("FitToFit.Services.Database.Treninzi", "Trening")
+                        .WithMany("Recommenders")
+                        .HasForeignKey("TreningId")
+                        .IsRequired()
+                        .HasConstraintName("FK__Recommend__Treni__71D1E811");
+
+                    b.Navigation("Trening");
+                });
+
             modelBuilder.Entity("FitToFit.Services.Database.RezervacijaStavke", b =>
                 {
                     b.HasOne("FitToFit.Services.Database.Rezervacije", "Rezervacija")
@@ -3439,6 +3551,8 @@ namespace FitToFit.Services.Migrations
             modelBuilder.Entity("FitToFit.Services.Database.Treninzi", b =>
                 {
                     b.Navigation("AkcijeTreninzis");
+
+                    b.Navigation("Recommenders");
 
                     b.Navigation("Terminis");
 

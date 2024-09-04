@@ -29,6 +29,8 @@ public partial class _200048Context : DbContext
 
     public virtual DbSet<Ocjene> Ocjenes { get; set; }
 
+    public virtual DbSet<Recommender> Recommenders { get; set; }
+
     public virtual DbSet<RezervacijaStavke> RezervacijaStavkes { get; set; }
 
     public virtual DbSet<Rezervacije> Rezervacijes { get; set; }
@@ -211,6 +213,20 @@ public partial class _200048Context : DbContext
                 .HasForeignKey(d => d.TrenerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Ocjene__TrenerID__6754599E");
+        });
+
+        modelBuilder.Entity<Recommender>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Recommen__3214EC075B82CBF2");
+
+            entity.ToTable("Recommender");
+
+            entity.Property(e => e.TreningId).HasColumnName("TreningID");
+
+            entity.HasOne(d => d.Trening).WithMany(p => p.Recommenders)
+                .HasForeignKey(d => d.TreningId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Recommend__Treni__71D1E811");
         });
 
         modelBuilder.Entity<RezervacijaStavke>(entity =>

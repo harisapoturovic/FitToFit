@@ -38,6 +38,7 @@ builder.Services.AddTransient<IVjezbeTreninziService, VjezbeTreninziService>();
 builder.Services.AddTransient<IRezervacijaStavkeService, RezervacijaStavkeService>();
 builder.Services.AddTransient<IKorisniciNovostiService, KorisniciNovostiService>();
 builder.Services.AddTransient<IOcjeneService, OcjeneService>();
+builder.Services.AddTransient<IRecommenderService, RecommenderService>();
 builder.Services.AddDbContext<_200048Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -116,7 +117,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseAuthentication();    
+app.UseAuthentication();
 app.UseAuthorization();
 
 // Specify the URLs to listen on
@@ -128,7 +129,20 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<_200048Context>();
-    context.Database.Migrate();
+    if (!context.Database.CanConnect())
+    {
+        context.Database.Migrate();
+
+        var recommenderService = scope.ServiceProvider.GetRequiredService<IRecommenderService>();
+        try
+        {
+            await recommenderService.TrainTreninziModelAsync();
+        }
+        catch (Exception)
+        {
+
+        }
+    }
 }
 
 app.Run();

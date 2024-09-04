@@ -315,6 +315,27 @@ namespace FitToFit.Services.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Recommender",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TreningID = table.Column<int>(type: "int", nullable: false),
+                    CoTreningId1 = table.Column<int>(type: "int", nullable: false),
+                    CoTreningId2 = table.Column<int>(type: "int", nullable: false),
+                    CoTreningId3 = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Recommen__3214EC075B82CBF2", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK__Recommend__Treni__71D1E811",
+                        column: x => x.TreningID,
+                        principalTable: "Treninzi",
+                        principalColumn: "TreningID");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Termini",
                 columns: table => new
                 {
@@ -814,9 +835,9 @@ namespace FitToFit.Services.Migrations
                 values: new object[,]
                 {
                     { 1, 1, 1 },
-                    { 2, 1, 5 },
+                    { 2, 1, 20 },
                     { 3, 2, 6 },
-                    { 4, 2, 8 },
+                    { 4, 2, 29 },
                     { 5, 3, 4 },
                     { 6, 4, 7 },
                     { 7, 5, 5 },
@@ -832,10 +853,22 @@ namespace FitToFit.Services.Migrations
                     { 17, 11, 32 },
                     { 18, 11, 34 },
                     { 19, 12, 38 },
-                    { 20, 12, 35 },
+                    { 20, 12, 21 },
                     { 21, 13, 21 },
                     { 22, 13, 13 },
-                    { 23, 14, 28 }
+                    { 23, 14, 28 },
+                    { 24, 1, 30 },
+                    { 25, 2, 21 },
+                    { 26, 2, 38 },
+                    { 27, 3, 22 },
+                    { 28, 4, 26 },
+                    { 29, 5, 15 },
+                    { 30, 6, 18 },
+                    { 31, 7, 21 },
+                    { 32, 7, 38 },
+                    { 33, 14, 35 },
+                    { 34, 14, 4 },
+                    { 35, 1, 33 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -882,6 +915,11 @@ namespace FitToFit.Services.Migrations
                 name: "IX_Ocjene_TrenerID",
                 table: "Ocjene",
                 column: "TrenerID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Recommender_TreningID",
+                table: "Recommender",
+                column: "TreningID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RezervacijaStavke_RezervacijaID",
@@ -955,6 +993,9 @@ namespace FitToFit.Services.Migrations
 
             migrationBuilder.DropTable(
                 name: "Ocjene");
+
+            migrationBuilder.DropTable(
+                name: "Recommender");
 
             migrationBuilder.DropTable(
                 name: "RezervacijaStavke");

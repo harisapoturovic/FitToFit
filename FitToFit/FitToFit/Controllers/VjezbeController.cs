@@ -16,11 +16,5 @@ namespace FitToFit.Controllers
         {
             _vjezbeService = service;
         }
-
-        [HttpGet("Recommend/{korisnikId}")]
-        public async Task<PagedResult<Model.Vjezbe>> Recommend(int korisnikId)
-        {
-            return await _vjezbeService.Recommend(korisnikId);
-        }
     }
 }

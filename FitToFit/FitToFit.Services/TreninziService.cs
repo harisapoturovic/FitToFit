@@ -66,6 +66,11 @@ namespace FitToFit.Services
                 query = query.Where(x => x.TreningId.Equals(search.TreningId));
             }
 
+            if (search?.Ids != null)
+            {
+                query = query.Where(x => search.Ids.Contains(x.TreningId));
+            }
+
             return base.AddFilter(query, search);
         }
 

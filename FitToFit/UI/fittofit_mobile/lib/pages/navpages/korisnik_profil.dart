@@ -9,7 +9,6 @@ import 'package:fittofit_mobile/models/rezervacije.dart';
 import 'package:fittofit_mobile/models/search_result.dart';
 import 'package:fittofit_mobile/models/treneri.dart';
 import 'package:fittofit_mobile/models/treninzi.dart';
-import 'package:fittofit_mobile/models/vjezbe.dart';
 import 'package:fittofit_mobile/pages/change_password.dart';
 import 'package:fittofit_mobile/pages/change_username.dart';
 import 'package:fittofit_mobile/pages/login.dart';
@@ -17,7 +16,6 @@ import 'package:fittofit_mobile/providers/ocjene_provider.dart';
 import 'package:fittofit_mobile/providers/rezervacije_provider.dart';
 import 'package:fittofit_mobile/providers/treneri_provider.dart';
 import 'package:fittofit_mobile/providers/treninzi_provider.dart';
-import 'package:fittofit_mobile/providers/vjezbe_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -44,7 +42,6 @@ class _ProfilePageState extends State<ProfilePage> {
   late TreninziProvider _treninziProvider;
   late OcjeneProvider _ocjeneProvider;
   late TreneriProvider _treneriProvider;
-  late VjezbeProvider _vjezbeProvider;
   late Korisnici korisnik;
   List<Rezervacije> _aktivneRezervacijeList = [];
   List<Rezervacije> _draftRezervacijeList = [];
@@ -70,7 +67,6 @@ class _ProfilePageState extends State<ProfilePage> {
     _treninziProvider = context.read<TreninziProvider>();
     _ocjeneProvider = context.read<OcjeneProvider>();
     _treneriProvider = context.read<TreneriProvider>();
-    _vjezbeProvider = context.read<VjezbeProvider>();
     initForm();
     _loadData();
     _korisniciProvider.addListener(() {
@@ -231,7 +227,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               'Godine'),
                         ],
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 20),
                       Container(
                         padding: const EdgeInsets.all(16.0),
                         decoration: BoxDecoration(
@@ -249,10 +245,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             _buildLink(context, Icons.star, 'Moje ocjene'),
                             const Divider(),
                             _buildLink(
-                                context, Icons.policy, 'Pravila korištenja'),
-                            const Divider(),
-                            _buildLink(context, Icons.sports_gymnastics,
-                                'Predložene vježbe'),
+                                context, Icons.policy, 'Pravila korištenja')
                           ],
                         ),
                       ),
@@ -361,8 +354,6 @@ class _ProfilePageState extends State<ProfilePage> {
           _showRatingsBottomSheet(context);
         } else if (text == 'Pravila korištenja') {
           _showTermsOfServiceBottomSheet(context);
-        } else if (text == 'Predložene vježbe') {
-          _showRecommendedExercisesBottomSheet(context);
         } else if (text == 'Promijeni lozinku') {
           Navigator.of(context).push(
             MaterialPageRoute(
@@ -430,218 +421,217 @@ class _ProfilePageState extends State<ProfilePage> {
         context: context,
         isScrollControlled: true,
         builder: (BuildContext context) {
-          return Padding(
+          return Container(
+            // Increase the height of the modal bottom sheet
+            constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.9),
             padding: const EdgeInsets.all(16.0),
-            child: FormBuilder(
-              key: formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Uredi Profil',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  const SizedBox(height: 20.0),
-                  FormBuilderTextField(
-                    name: 'ime',
-                    controller: imeController,
-                    decoration: const InputDecoration(
-                      labelText: 'Ime',
-                      border: OutlineInputBorder(),
+            child: SingleChildScrollView(
+              child: FormBuilder(
+                key: formKey,
+                child: Wrap(
+                  spacing: 16.0,
+                  runSpacing: 16.0,
+                  children: [
+                    Text(
+                      'Uredi Profil',
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(
-                          errorText: 'Ovo polje je obavezno!'),
-                      FormBuilderValidators.match(RegExp(r'^[A-Z-ŠĐČĆŽ]'),
-                          errorText: 'Ime mora početi velikim slovom.'),
-                      FormBuilderValidators.match(
-                          RegExp(r'^[a-zA-ZšđčćžŠĐČĆŽ]+$'),
-                          errorText: 'Ime može sadržavati samo slova.'),
-                    ]),
-                  ),
-                  const SizedBox(height: 16.0),
-                  FormBuilderTextField(
-                    name: 'prezime',
-                    controller: prezimeController,
-                    decoration: const InputDecoration(
-                      labelText: 'Prezime',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(
-                          errorText: 'Ovo polje je obavezno!'),
-                      FormBuilderValidators.match(RegExp(r'^[A-Z-ŠĐČĆŽ]'),
-                          errorText: 'Prezime mora početi velikim slovom.'),
-                      FormBuilderValidators.match(
-                          RegExp(r'^[a-zA-ZšđčćžŠĐČĆŽ]+$'),
-                          errorText: 'Prezime može sadržavati samo slova.'),
-                    ]),
-                  ),
-                  const SizedBox(height: 16.0),
-                  FormBuilderTextField(
-                    name: 'telefon',
-                    controller: telefonController,
-                    decoration: const InputDecoration(
-                      labelText: 'Telefon',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.numeric(
-                          errorText: 'Ovo polje može sadržavati samo brojeve.'),
-                      FormBuilderValidators.maxLength(10,
-                          errorText:
-                              'Broj telefona može imati maksimalno 10 cifara.'),
-                    ]),
-                  ),
-                  const SizedBox(height: 16),
-                  FormBuilderTextField(
-                    name: 'email',
-                    controller: emailController,
-                    decoration: const InputDecoration(
-                      labelText: 'E-mail',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.email(
-                          errorText: 'Unesite validnu e-mail adresu.'),
-                    ]),
-                  ),
-                  const SizedBox(height: 16),
-                  FormBuilderTextField(
-                    name: 'adresa',
-                    controller: adresaController,
-                    decoration: const InputDecoration(
-                      labelText: 'Adresa',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.match(RegExp(r'^[A-Z]'),
-                          errorText: 'Adresa mora početi velikim slovom.'),
-                    ]),
-                  ),
-                  const SizedBox(height: 16),
-                  FormBuilderTextField(
-                    name: 'visina',
-                    controller: visinaController,
-                    decoration: const InputDecoration(
-                      labelText: 'Visina (cm)',
-                      border: OutlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.number,
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(
-                          errorText: 'Ovo polje je obavezno!'),
-                      FormBuilderValidators.numeric(
-                          errorText: 'Visina mora biti broj.'),
-                    ]),
-                  ),
-                  const SizedBox(height: 16.0),
-                  FormBuilderTextField(
-                    name: 'tezina',
-                    controller: tezinaController,
-                    decoration: const InputDecoration(
-                      labelText: 'Težina (kg)',
-                      border: OutlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.number,
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(
-                          errorText: 'Ovo polje je obavezno!'),
-                      FormBuilderValidators.numeric(
-                          errorText: 'Težina mora biti broj.'),
-                    ]),
-                  ),
-                  const SizedBox(height: 16.0),
-                  ElevatedButton(
-                    onPressed: () async {
-                      FilePickerResult? result = await FilePicker.platform
-                          .pickFiles(
-                              type: FileType.image, compressionQuality: 0);
-
-                      if (result != null && result.files.isNotEmpty) {
-                        PlatformFile file = result.files.first;
-                        File imageFile = File(file.path!);
-                        Uint8List imageBytes = await imageFile.readAsBytes();
-                        img.Image resizedImage = img.decodeImage(imageBytes)!;
-                        int maxWidth = 800;
-                        img.Image smallerImage =
-                            img.copyResize(resizedImage, width: maxWidth);
-
-                        List<int> smallerImageBytes =
-                            img.encodeJpg(smallerImage);
-
-                        String base64Image = base64Encode(smallerImageBytes);
-                        setState(() {
-                          korisnik.slika = base64Image;
-                        });
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.lightBlue.shade500,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4),
-                        side: const BorderSide(
-                            color: Color.fromRGBO(0, 154, 231, 1)),
+                    FormBuilderTextField(
+                      name: 'ime',
+                      controller: imeController,
+                      decoration: const InputDecoration(
+                        labelText: 'Ime',
+                        border: OutlineInputBorder(),
                       ),
-                      textStyle: const TextStyle(
-                        fontSize: 14.0,
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(
+                            errorText: 'Ovo polje je obavezno!'),
+                        FormBuilderValidators.match(RegExp(r'^[A-Z-ŠĐČĆŽ]'),
+                            errorText: 'Ime mora početi velikim slovom.'),
+                        FormBuilderValidators.match(
+                            RegExp(r'^[a-zA-ZšđčćžŠĐČĆŽ]+$'),
+                            errorText: 'Ime može sadržavati samo slova.'),
+                      ]),
+                    ),
+                    FormBuilderTextField(
+                      name: 'prezime',
+                      controller: prezimeController,
+                      decoration: const InputDecoration(
+                        labelText: 'Prezime',
+                        border: OutlineInputBorder(),
                       ),
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(
+                            errorText: 'Ovo polje je obavezno!'),
+                        FormBuilderValidators.match(RegExp(r'^[A-Z-ŠĐČĆŽ]'),
+                            errorText: 'Prezime mora početi velikim slovom.'),
+                        FormBuilderValidators.match(
+                            RegExp(r'^[a-zA-ZšđčćžŠĐČĆŽ]+$'),
+                            errorText: 'Prezime može sadržavati samo slova.'),
+                      ]),
                     ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.upload_file),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          'Izaberite novu sliku',
-                          textAlign: TextAlign.center,
-                        )
-                      ],
+                    FormBuilderTextField(
+                      name: 'telefon',
+                      controller: telefonController,
+                      decoration: const InputDecoration(
+                        labelText: 'Telefon',
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.numeric(
+                            errorText:
+                                'Ovo polje može sadržavati samo brojeve.'),
+                        FormBuilderValidators.maxLength(10,
+                            errorText:
+                                'Broj telefona može imati maksimalno 10 cifara.'),
+                      ]),
                     ),
-                  ),
-                  const SizedBox(height: 32),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (formKey.currentState!.saveAndValidate()) {
-                          korisnik.ime = formKey.currentState!.value['ime'];
-                          korisnik.prezime =
-                              formKey.currentState!.value['prezime'];
-                          korisnik.email = formKey.currentState!.value['email'];
-                          korisnik.telefon =
-                              formKey.currentState!.value['telefon'];
-                          korisnik.adresa =
-                              formKey.currentState!.value['adresa'];
-                          korisnik.visina =
-                              formKey.currentState!.value['visina'];
-                          korisnik.tezina =
-                              formKey.currentState!.value['tezina'];
+                    FormBuilderTextField(
+                      name: 'email',
+                      controller: emailController,
+                      decoration: const InputDecoration(
+                        labelText: 'E-mail',
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.email(
+                            errorText: 'Unesite validnu e-mail adresu.'),
+                      ]),
+                    ),
+                    FormBuilderTextField(
+                      name: 'adresa',
+                      controller: adresaController,
+                      decoration: const InputDecoration(
+                        labelText: 'Adresa',
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.match(RegExp(r'^[A-Z]'),
+                            errorText: 'Adresa mora početi velikim slovom.'),
+                      ]),
+                    ),
+                    FormBuilderTextField(
+                      name: 'visina',
+                      controller: visinaController,
+                      decoration: const InputDecoration(
+                        labelText: 'Visina (cm)',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(
+                            errorText: 'Ovo polje je obavezno!'),
+                        FormBuilderValidators.numeric(
+                            errorText: 'Visina mora biti broj.'),
+                      ]),
+                    ),
+                    FormBuilderTextField(
+                      name: 'tezina',
+                      controller: tezinaController,
+                      decoration: const InputDecoration(
+                        labelText: 'Težina (kg)',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(
+                            errorText: 'Ovo polje je obavezno!'),
+                        FormBuilderValidators.numeric(
+                            errorText: 'Težina mora biti broj.'),
+                      ]),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        FilePickerResult? result = await FilePicker.platform
+                            .pickFiles(
+                                type: FileType.image, compressionQuality: 0);
 
-                          _korisniciProvider.update(
-                              korisnik.korisnikId, korisnik);
-                          _showAlertDialog(
-                              "Uspješan edit",
-                              "Podaci o korisniku uspješno ažurirani.",
-                              Colors.green);
+                        if (result != null && result.files.isNotEmpty) {
+                          PlatformFile file = result.files.first;
+                          File imageFile = File(file.path!);
+                          Uint8List imageBytes = await imageFile.readAsBytes();
+                          img.Image resizedImage = img.decodeImage(imageBytes)!;
+                          int maxWidth = 800;
+                          img.Image smallerImage =
+                              img.copyResize(resizedImage, width: maxWidth);
+
+                          List<int> smallerImageBytes =
+                              img.encodeJpg(smallerImage);
+
+                          String base64Image = base64Encode(smallerImageBytes);
+                          setState(() {
+                            korisnik.slika = base64Image;
+                          });
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.lightBlue.shade700,
+                        backgroundColor: Colors.lightBlue.shade500,
                         foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4),
+                          side: const BorderSide(
+                              color: Color.fromRGBO(0, 154, 231, 1)),
+                        ),
                         textStyle: const TextStyle(
                           fontSize: 14.0,
                         ),
                       ),
-                      child: const Text('Spremi'),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.upload_file),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            'Izaberite novu sliku',
+                            textAlign: TextAlign.center,
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 32),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (formKey.currentState!.saveAndValidate()) {
+                            korisnik.ime = formKey.currentState!.value['ime'];
+                            korisnik.prezime =
+                                formKey.currentState!.value['prezime'];
+                            korisnik.email =
+                                formKey.currentState!.value['email'];
+                            korisnik.telefon =
+                                formKey.currentState!.value['telefon'];
+                            korisnik.adresa =
+                                formKey.currentState!.value['adresa'];
+                            korisnik.visina =
+                                formKey.currentState!.value['visina'];
+                            korisnik.tezina =
+                                formKey.currentState!.value['tezina'];
+
+                            _korisniciProvider.update(
+                                korisnik.korisnikId, korisnik);
+                            _showAlertDialog(
+                                "Uspješan edit",
+                                "Podaci o korisniku uspješno ažurirani.",
+                                Colors.green);
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.lightBlue.shade700,
+                          foregroundColor: Colors.white,
+                          textStyle: const TextStyle(
+                            fontSize: 14.0,
+                          ),
+                        ),
+                        child: const Text('Spremi'),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           );
@@ -1378,107 +1368,6 @@ class _ProfilePageState extends State<ProfilePage> {
         );
       },
     );
-  }
-
-  void _showRecommendedExercisesBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) {
-        return Container(
-          padding: const EdgeInsets.all(16.0),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
-          ),
-          constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height * 0.75,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 16.0, horizontal: 20.0),
-                child: Text(
-                  'Predložene vježbe',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge
-                      ?.copyWith(color: Colors.black),
-                ),
-              ),
-              const Text(
-                'Vježbe koje možete samostalno izvoditi kod kuće',
-                style: TextStyle(fontStyle: FontStyle.italic),
-              ),
-              const SizedBox(height: 16.0),
-              Expanded(
-                child: FutureBuilder<List<Vjezbe>>(
-                  future: _fetchRecommendedExercises(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return Center(
-                          child: Text('Došlo je do greške: ${snapshot.error}'));
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const Center(
-                          child: Text(
-                              'Nema predloženih vježbi jer prethodno niste kreirali nijednu rezervaciju.'));
-                    } else {
-                      final exercises = snapshot.data!;
-                      return ListView.builder(
-                        itemCount: exercises.length,
-                        itemBuilder: (context, index) {
-                          final exercise = exercises[index];
-                          return ListTile(
-                            title: Text(
-                              exercise.naziv,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            subtitle: Text(exercise.opis ?? ''),
-                          );
-                        },
-                      );
-                    }
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Center(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            const Color.fromARGB(255, 248, 248, 248)),
-                    child: const Icon(
-                      Icons.arrow_downward,
-                      color: Colors.lightBlue,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Future<List<Vjezbe>> _fetchRecommendedExercises() async {
-    try {
-      var result =
-          await _vjezbeProvider.getRecommendedExercises(korisnik.korisnikId);
-      return result.result;
-    } catch (e) {
-      print('Error fetching recommended exercises: $e');
-      return [];
-    }
   }
 
   void _showAlertDialog(String naslov, String poruka, Color boja) {

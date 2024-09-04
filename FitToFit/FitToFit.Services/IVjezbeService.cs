@@ -6,6 +6,5 @@ namespace FitToFit.Services
 {
     public interface IVjezbeService : ICRUDService<Model.Vjezbe, VjezbeSearchObject, VjezbeInsertRequest, VjezbeUpdateRequest>
     {
-        Task<PagedResult<Model.Vjezbe>> Recommend(int korisnikId);
     }
 }
