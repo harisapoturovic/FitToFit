@@ -41,7 +41,6 @@ class _HomePageState extends State<HomePage> {
   int brojTrenera = 0;
   int brojRezervacija = 0;
 
-  DateTime? datum;
   late Korisnici logiraniKorisnik;
   String korisnickoIme = '';
   final _formKey = GlobalKey<FormBuilderState>();
@@ -62,7 +61,7 @@ class _HomePageState extends State<HomePage> {
     _rezervacijeProvider = context.read<RezervacijeProvider>();
     _loadData();
     _novostiProvider.addListener(() {
-      _reloadNovostiList();
+      //_reloadNovostiList();
       setTotalItems();
     });
     korisnickoIme = widget.username;
@@ -80,7 +79,7 @@ class _HomePageState extends State<HomePage> {
 
       int totalPages = (totalcount / pageSize).ceil();
 
-      if (page >= totalPages && totalPages > 0) {
+      if (page > totalPages && totalPages > 0) {
         setState(() {
           page--;
         });
@@ -108,7 +107,7 @@ class _HomePageState extends State<HomePage> {
   void _loadData() async {
     if (!mounted) return;
     isSearching = false;
-    var korisnici = await _korisniciProvider.get(filter: {'isAdmin': false});
+    var korisnici = await _korisniciProvider.get(filter: {'isKorisnik': true});
     var treneri = await _treneriProvider.get(filter: {});
     var rezervacije =
         await _rezervacijeProvider.get(filter: {'StateMachine': 'active'});
@@ -477,61 +476,6 @@ class _HomePageState extends State<HomePage> {
                       },
                     ),
                     const SizedBox(height: 10.0),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 12, horizontal: 24),
-                        backgroundColor:
-                            const Color.fromARGB(255, 208, 207, 207),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                      ),
-                      onPressed: () async {
-                        final DateTime? date = await showDatePicker(
-                          context: context,
-                          firstDate: DateTime.now(),
-                          lastDate:
-                              DateTime.now().add(const Duration(days: 30)),
-                        );
-                        if (date == null) {
-                          _showAlertDialog("Pažnja!",
-                              "Datum objave je obavezan.", Colors.red);
-                        } else {
-                          setState(() {
-                            datum = date;
-                          });
-                        }
-                      },
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.calendar_month,
-                            color: Colors.white,
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            "Izaberite datum objave",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ),
-                    datum != null
-                        ? Text(
-                            "Izabrani datum: $datum",
-                            style: const TextStyle(
-                                fontSize: 16,
-                                color: Colors.black87,
-                                fontWeight: FontWeight.bold),
-                          )
-                        : Container(),
-                    const SizedBox(height: 10.0),
                     FormBuilderDropdown(
                       name: 'vrstaTreningaId',
                       decoration: const InputDecoration(
@@ -590,13 +534,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _dodajNovost() {
-    if (datum == null) {
-      _showAlertDialog("Pažnja!", "Datum objave je obavezan.", Colors.red);
-      return;
-    }
-    String _datum = datum.toString();
+    String datum = DateTime.now().toString();
     String datumVrijeme =
-        DateTime.parse(_datum.replaceAll(' ', 'T')).toIso8601String();
+        DateTime.parse(datum.replaceAll(' ', 'T')).toIso8601String();
     _formKey.currentState?.saveAndValidate();
     final currentFormState = _formKey.currentState;
     if (!_areAllFieldsFilled(currentFormState)) {
@@ -621,7 +561,6 @@ class _HomePageState extends State<HomePage> {
     });
     try {
       _novostiProvider.insert(request);
-      datum = null;
       _showAlertDialog(
           "Uspješan unos", "Novost uspješno dodana.", Colors.green);
     } on Exception catch (e) {

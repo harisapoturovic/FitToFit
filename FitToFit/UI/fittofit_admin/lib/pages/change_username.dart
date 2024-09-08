@@ -87,7 +87,7 @@ class _ChangeUsernameScreenState extends State<ChangeUsernameScreen> {
       FocusScope.of(context).requestFocus(_trenutnoFocusNode);
     });
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.9,
+      width: MediaQuery.of(context).size.width * 0.6,
       child: FormBuilder(
         key: _formKey,
         autovalidateMode: AutovalidateMode.always,

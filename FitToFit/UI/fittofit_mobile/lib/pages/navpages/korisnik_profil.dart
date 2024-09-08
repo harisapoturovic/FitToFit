@@ -422,7 +422,6 @@ class _ProfilePageState extends State<ProfilePage> {
         isScrollControlled: true,
         builder: (BuildContext context) {
           return Container(
-            // Increase the height of the modal bottom sheet
             constraints: BoxConstraints(
                 maxHeight: MediaQuery.of(context).size.height * 0.9),
             padding: const EdgeInsets.all(16.0),
@@ -447,10 +446,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(
                             errorText: 'Ovo polje je obavezno!'),
-                        FormBuilderValidators.match(RegExp(r'^[A-Z-ŠĐČĆŽ]'),
+                        FormBuilderValidators.match(r'^[A-Z-ŠĐČĆŽ]',
                             errorText: 'Ime mora početi velikim slovom.'),
-                        FormBuilderValidators.match(
-                            RegExp(r'^[a-zA-ZšđčćžŠĐČĆŽ]+$'),
+                        FormBuilderValidators.match(r'^[a-zA-ZšđčćžŠĐČĆŽ]+$',
                             errorText: 'Ime može sadržavati samo slova.'),
                       ]),
                     ),
@@ -464,10 +462,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(
                             errorText: 'Ovo polje je obavezno!'),
-                        FormBuilderValidators.match(RegExp(r'^[A-Z-ŠĐČĆŽ]'),
+                        FormBuilderValidators.match(r'^[A-Z-ŠĐČĆŽ]',
                             errorText: 'Prezime mora početi velikim slovom.'),
-                        FormBuilderValidators.match(
-                            RegExp(r'^[a-zA-ZšđčćžŠĐČĆŽ]+$'),
+                        FormBuilderValidators.match(r'^[a-zA-ZšđčćžŠĐČĆŽ]+$',
                             errorText: 'Prezime može sadržavati samo slova.'),
                       ]),
                     ),
@@ -507,7 +504,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         border: OutlineInputBorder(),
                       ),
                       validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.match(RegExp(r'^[A-Z]'),
+                        FormBuilderValidators.match(r'^[A-Z]',
                             errorText: 'Adresa mora početi velikim slovom.'),
                       ]),
                     ),
@@ -593,7 +590,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 10),
                     Center(
                       child: ElevatedButton(
                         onPressed: () {

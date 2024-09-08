@@ -70,7 +70,7 @@ class LoginPage extends StatelessWidget {
           ),
           Center(
             child: Container(
-              constraints: const BoxConstraints(maxHeight: 400, maxWidth: 400),
+              constraints: const BoxConstraints(maxHeight: 420, maxWidth: 400),
               child: Card(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0)),

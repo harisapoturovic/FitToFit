@@ -27,7 +27,7 @@ namespace FitToFit.Services.RezervacijeStateMachine
             _serviceProvider = serviceProvider;
         }
 
-        public virtual Task<Model.Rezervacije> Insert(Rezervacije entity)
+        public virtual Task<Model.Rezervacije> Insert(Rezervacije  request)
         {
             throw new UserException("Not allowed");
         }

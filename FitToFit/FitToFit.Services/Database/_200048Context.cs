@@ -269,7 +269,7 @@ public partial class _200048Context : DbContext
             entity.Property(e => e.Datum).HasColumnType("datetime");
             entity.Property(e => e.Iznos).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.KorisnikId).HasColumnName("KorisnikID");
-            entity.Property(e => e.StateMachine).HasMaxLength(50);
+            entity.Property(e => e.StateMachine).HasMaxLength(50).IsRequired(); 
 
             entity.HasOne(d => d.Clanarina).WithMany(p => p.Rezervacijes)
                 .HasForeignKey(d => d.ClanarinaId)

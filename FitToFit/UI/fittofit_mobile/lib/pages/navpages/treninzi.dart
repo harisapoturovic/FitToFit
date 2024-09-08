@@ -90,7 +90,7 @@ class _TrainingPageState extends State<TrainingPage> {
                             },
                             style: ButtonStyle(
                               textStyle:
-                                  WidgetStateProperty.resolveWith<TextStyle>(
+                                  MaterialStateProperty.resolveWith<TextStyle>(
                                 (states) {
                                   if (isSelected) {
                                     return const TextStyle(
@@ -146,17 +146,17 @@ class _TrainingPageState extends State<TrainingPage> {
                               _getFilteredTrainings();
                             },
                             style: ButtonStyle(
-                              backgroundColor: WidgetStateProperty.all<Color>(
+                              backgroundColor: MaterialStateProperty.all<Color>(
                                   Colors.blue.shade300),
-                              foregroundColor:
-                                  WidgetStateProperty.all<Color>(Colors.white),
+                              foregroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
                               padding:
-                                  WidgetStateProperty.all<EdgeInsetsGeometry>(
+                                  MaterialStateProperty.all<EdgeInsetsGeometry>(
                                 const EdgeInsets.symmetric(
                                     vertical: 10.0, horizontal: 20.0),
                               ),
                               textStyle:
-                                  WidgetStateProperty.resolveWith<TextStyle>(
+                                  MaterialStateProperty.resolveWith<TextStyle>(
                                 (states) {
                                   if (isSelected) {
                                     return const TextStyle(

@@ -182,7 +182,7 @@ class _IzvjestajPageState extends State<IzvjestajPage> {
                                   });
                                 },
                                 style: ButtonStyle(
-                                  textStyle: WidgetStateProperty.resolveWith<
+                                  textStyle: MaterialStateProperty.resolveWith<
                                       TextStyle>((states) {
                                     if (isSelected) {
                                       return const TextStyle(
@@ -241,8 +241,8 @@ class _IzvjestajPageState extends State<IzvjestajPage> {
                 Padding(
                   padding: const EdgeInsets.only(top: 50),
                   child: SizedBox(
-                    width: 400,
-                    height: 400,
+                    width: 450,
+                    height: 450,
                     child: _terminiList.length >= 3
                         ? PieChart(
                             dataMap: {

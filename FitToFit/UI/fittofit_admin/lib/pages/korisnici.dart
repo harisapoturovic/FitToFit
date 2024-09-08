@@ -67,7 +67,7 @@ class _KorisniciPageState extends State<KorisniciPage> {
   }
 
   void _reloadKorisniciList() async {
-    var korisnici = await _korisniciProvider.get(filter: {});
+    var korisnici = await _korisniciProvider.get(filter: {'isKorisnik': true});
     if (mounted) {
       setState(() {
         korisniciResult = korisnici;
@@ -84,7 +84,7 @@ class _KorisniciPageState extends State<KorisniciPage> {
   void _loadData() async {
     if (!mounted) return;
     var data1 = await _treneriProvider.get(filter: {});
-    var data2 = await _korisniciProvider.get(filter: {});
+    var data2 = await _korisniciProvider.get(filter: {'isKorisnik': true});
 
     setState(() {
       treneriResult = data1;

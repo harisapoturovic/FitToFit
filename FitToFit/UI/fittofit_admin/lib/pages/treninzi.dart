@@ -31,6 +31,14 @@ class _TreninziPageState extends State<TreninziPage> {
   String? _base64Image;
   FocusNode _nazivFocusNode = FocusNode();
 
+  List<String> namjena = [
+    'Mršavljenje',
+    'Izgradnja mišića',
+    'Kondicija',
+    'Fleksibilnost i mobilnost',
+    'Rehabilitacija i oporavak'
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -163,7 +171,7 @@ class _TreninziPageState extends State<TreninziPage> {
                   },
                   style: ButtonStyle(
                     textStyle:
-                        WidgetStateProperty.resolveWith<TextStyle>((states) {
+                        MaterialStateProperty.resolveWith<TextStyle>((states) {
                       if (isSelected) {
                         return const TextStyle(
                           fontWeight: FontWeight.bold,
@@ -352,19 +360,17 @@ class _TreninziPageState extends State<TreninziPage> {
                       },
                     ),
                     const SizedBox(height: 10.0),
-                    FormBuilderTextField(
+                    FormBuilderDropdown(
                       name: 'namjena',
-                      decoration: const InputDecoration(labelText: 'Namjena'),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Ovo polje je obavezno!';
-                        }
-                        if (!RegExp(r'^[A-Z]').hasMatch(value)) {
-                          return 'Namjena mora početi velikim slovom.';
-                        }
-
-                        return null;
-                      },
+                      decoration:
+                          const InputDecoration(labelText: 'Namjena'),
+                      initialValue: namjena[0],
+                      items: namjena.map((n) {
+                        return DropdownMenuItem(
+                          value: n,
+                          child: Text(n),
+                        );
+                      }).toList(),
                     ),
                     const SizedBox(height: 10.0),
                     FormBuilderDropdown(

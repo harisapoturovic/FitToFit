@@ -23,7 +23,7 @@ namespace FitToFit.Services.RezervacijeStateMachine
         {
             entity.StateMachine = "draft";
 
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return _mapper.Map<Model.Rezervacije>(entity);
         }
 

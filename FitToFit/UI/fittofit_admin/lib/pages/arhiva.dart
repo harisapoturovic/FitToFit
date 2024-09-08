@@ -59,12 +59,12 @@ class _ArhivaPageState extends State<ArhivaPage> {
   }
 
   void setTotalItems() async {
-    var novostiResult = await _rezervacijeProvider
+    var rezervacijeResult = await _rezervacijeProvider
         .get(filter: {'page': page, 'pageSize': pageSize});
 
     if (mounted) {
       setState(() {
-        totalcount = novostiResult.count;
+        totalcount = rezervacijeResult.count;
       });
 
       int totalPages = (totalcount / pageSize).ceil();

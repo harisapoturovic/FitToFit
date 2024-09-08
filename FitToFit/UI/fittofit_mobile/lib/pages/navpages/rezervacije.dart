@@ -17,6 +17,7 @@ import 'package:fittofit_mobile/providers/termini_provider.dart';
 import 'package:fittofit_mobile/providers/treninzi_clanarine_provider.dart';
 import 'package:fittofit_mobile/providers/treninzi_provider.dart';
 import 'package:fittofit_mobile/providers/vrste_treninga_provider.dart';
+import 'package:fittofit_mobile/stripeKeys.dart';
 import 'package:fittofit_mobile/utils/util.dart';
 import 'package:fittofit_mobile/widgets/master_screen_widget.dart';
 import 'package:flutter/material.dart';
@@ -545,9 +546,8 @@ class _ReservationPageState extends State<ReservationPage> {
   }
 
   Future<Map<String, dynamic>> makePaymentIntent() async {
-    String secretKey = const String.fromEnvironment("STRIPE_SECRET_KEY",
-        defaultValue:
-            "sk_test_51PnjR5Rum3JuFfOB3Viuai90sm9cG2Phf41MneR5nZ66M7cEjZg3kHw3mqUFt6dYfhlKOKjy2aAmhSO4XlETc5su00F1IKf7m6");
+    String secretKey =
+        const String.fromEnvironment("STRIPE_SECRET_KEY", defaultValue: secKey);
 
     final body = {
       'amount': calculateAmount().toString(),
@@ -849,6 +849,10 @@ class _ReservationPageState extends State<ReservationPage> {
       datumIsteka = now.add(const Duration(hours: 24));
     } else {
       datumIsteka = now;
+    }
+
+    if (_terminiIds.isEmpty) {
+      return 'Molimo da ponovo odaberete željene termine jer su prethodno odabrani izbrisani.';
     }
 
     if (clanarinaId != 0 && _selectedTrening != null) {

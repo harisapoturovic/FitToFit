@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using FitToFit.Services.Database;
 using Termini = FitToFit.Services.Database.Termini;
 using _200048Context = FitToFit.Services.Database._200048Context;
+using RezervacijaStavke = FitToFit.Services.Database.RezervacijaStavke;
 
 namespace FitToFit.Services
 {
@@ -58,6 +59,29 @@ namespace FitToFit.Services
             }
 
             return base.AddFilter(query, search);
+        }
+
+        public virtual async Task<Model.Termini> Delete(int id)
+        {
+            var set = _context.Set<Termini>();
+            var rezervacijaStavkeSet = _context.Set<RezervacijaStavke>();
+
+            var termin = await set.FirstOrDefaultAsync(n => n.TerminId == id);
+
+            if (termin == null)
+            {
+                throw new InvalidOperationException("Termin nije pronađen");
+            }
+
+            var rezervacijaStavkeList = await rezervacijaStavkeSet
+                .Where(rs => rs.TerminId==id)
+                .ToListAsync();
+
+            rezervacijaStavkeSet.RemoveRange(rezervacijaStavkeList);
+            set.Remove(termin);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<Model.Termini>(termin);
         }
     }
 }

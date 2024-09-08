@@ -422,7 +422,7 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
                                 enabled: false,
                               ),
                             ),
-                            const SizedBox(width: 30),
+                            const SizedBox(width: 20),
                             Expanded(
                               child: FormBuilderTextField(
                                 style: const TextStyle(
@@ -446,11 +446,7 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
                                 enabled: false,
                               ),
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          children: [
+                            const SizedBox(width: 20),
                             Expanded(
                               child: FormBuilderTextField(
                                 style: const TextStyle(
@@ -475,7 +471,7 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
                               ),
                             ),
                           ],
-                        ),
+                        )
                       ],
                     ),
                   ),
@@ -706,7 +702,8 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
                                                   return 'Ime mora početi velikim slovom.';
                                                 }
 
-                                                if (!RegExp(r'^[a-zA-ZšđčćžŠĐČĆŽ]+$')
+                                                if (!RegExp(
+                                                        r'^[a-zA-ZšđčćžŠĐČĆŽ]+$')
                                                     .hasMatch(value)) {
                                                   return 'Ime može sadržavati samo slova.';
                                                 }
@@ -731,7 +728,8 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
                                                 return 'Prezime mora početi velikim slovom.';
                                               }
 
-                                              if (!RegExp(r'^[a-zA-ZšđčćžŠĐČĆŽ]+$')
+                                              if (!RegExp(
+                                                      r'^[a-zA-ZšđčćžŠĐČĆŽ]+$')
                                                   .hasMatch(value)) {
                                                 return 'Prezime može sadržavati samo slova.';
                                               }

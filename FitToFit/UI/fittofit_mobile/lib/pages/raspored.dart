@@ -99,7 +99,8 @@ class _RasporedPageState extends State<RasporedPage> {
                           });
                         },
                         style: ButtonStyle(
-                          textStyle: WidgetStateProperty.resolveWith<TextStyle>(
+                          textStyle:
+                              MaterialStateProperty.resolveWith<TextStyle>(
                             (states) {
                               if (isSelected) {
                                 return const TextStyle(

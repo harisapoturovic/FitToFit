@@ -273,24 +273,24 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                             _dodajVjezbu(context);
                           },
                           style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all<Color>(
+                            backgroundColor: MaterialStateProperty.all<Color>(
                                 Colors.transparent),
-                            elevation: WidgetStateProperty.all<double>(0),
-                            overlayColor: WidgetStateProperty.all<Color>(
+                            elevation: MaterialStateProperty.all<double>(0),
+                            overlayColor: MaterialStateProperty.all<Color>(
                                 Colors.transparent),
-                            foregroundColor: WidgetStateProperty.all<Color>(
+                            foregroundColor: MaterialStateProperty.all<Color>(
                                 const Color.fromARGB(255, 96, 96, 96)),
-                            textStyle: WidgetStateProperty.all<TextStyle>(
+                            textStyle: MaterialStateProperty.all<TextStyle>(
                               const TextStyle(
                                 decoration: TextDecoration.underline,
                               ),
                             ),
                             padding:
-                                WidgetStateProperty.all<EdgeInsetsGeometry>(
+                                MaterialStateProperty.all<EdgeInsetsGeometry>(
                                     EdgeInsets.zero),
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             minimumSize:
-                                WidgetStateProperty.all<Size>(Size.zero),
+                                MaterialStateProperty.all<Size>(Size.zero),
                           ),
                           child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,

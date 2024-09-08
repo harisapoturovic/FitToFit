@@ -18,6 +18,7 @@ import 'package:fittofit_mobile/providers/treninzi_provider.dart';
 import 'package:fittofit_mobile/providers/vjezbe_provider.dart';
 import 'package:fittofit_mobile/providers/vjezbe_treninzi_provider.dart';
 import 'package:fittofit_mobile/providers/vrste_treninga_provider.dart';
+import 'package:fittofit_mobile/stripeKeys.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_stripe/flutter_stripe.dart' as sp;
@@ -27,8 +28,7 @@ void main() async {
 
   sp.Stripe.publishableKey = const String.fromEnvironment(
       'STRIPE_PUBLISHABLE_KEY',
-      defaultValue:
-          "pk_test_51PnjR5Rum3JuFfOBmRLxQ7Lje6AsBK8iBU5omkXhC55I3UgjC9ZD9AjnOyofza3KQaOMgMuHCOoG7iqdGKzrroFh008IjgEvie");
+      defaultValue: pubKey);
   runApp(
     MultiProvider(
       providers: [

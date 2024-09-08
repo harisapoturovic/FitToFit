@@ -196,24 +196,25 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                 _dodajTrening(context);
                               },
                               style: ButtonStyle(
-                                backgroundColor: WidgetStateProperty.all<Color>(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.transparent),
+                                elevation: MaterialStateProperty.all<double>(0),
+                                overlayColor: MaterialStateProperty.all<Color>(
                                     Colors.transparent),
-                                elevation: WidgetStateProperty.all<double>(0),
-                                overlayColor: WidgetStateProperty.all<Color>(
-                                    Colors.transparent),
-                                foregroundColor: WidgetStateProperty.all<Color>(
-                                    const Color.fromARGB(255, 96, 96, 96)),
-                                textStyle: WidgetStateProperty.all<TextStyle>(
+                                foregroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        const Color.fromARGB(255, 96, 96, 96)),
+                                textStyle: MaterialStateProperty.all<TextStyle>(
                                   const TextStyle(
                                     decoration: TextDecoration.underline,
                                   ),
                                 ),
-                                padding:
-                                    WidgetStateProperty.all<EdgeInsetsGeometry>(
-                                        EdgeInsets.zero),
+                                padding: MaterialStateProperty.all<
+                                    EdgeInsetsGeometry>(EdgeInsets.zero),
                                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                 minimumSize:
-                                    WidgetStateProperty.all<Size>(Size.zero),
+                                    MaterialStateProperty.all<Size>(Size.zero),
                               ),
                               child: const Row(
                                 children: [
@@ -231,24 +232,25 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                 _confirmArchiveAction(context);
                               },
                               style: ButtonStyle(
-                                backgroundColor: WidgetStateProperty.all<Color>(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.transparent),
+                                elevation: MaterialStateProperty.all<double>(0),
+                                overlayColor: MaterialStateProperty.all<Color>(
                                     Colors.transparent),
-                                elevation: WidgetStateProperty.all<double>(0),
-                                overlayColor: WidgetStateProperty.all<Color>(
-                                    Colors.transparent),
-                                foregroundColor: WidgetStateProperty.all<Color>(
-                                    const Color.fromARGB(255, 96, 96, 96)),
-                                textStyle: WidgetStateProperty.all<TextStyle>(
+                                foregroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        const Color.fromARGB(255, 96, 96, 96)),
+                                textStyle: MaterialStateProperty.all<TextStyle>(
                                   const TextStyle(
                                     decoration: TextDecoration.underline,
                                   ),
                                 ),
-                                padding:
-                                    WidgetStateProperty.all<EdgeInsetsGeometry>(
-                                        EdgeInsets.zero),
+                                padding: MaterialStateProperty.all<
+                                    EdgeInsetsGeometry>(EdgeInsets.zero),
                                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                 minimumSize:
-                                    WidgetStateProperty.all<Size>(Size.zero),
+                                    MaterialStateProperty.all<Size>(Size.zero),
                               ),
                               child: const Row(
                                 children: [
@@ -270,28 +272,29 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                   },
                                   style: ButtonStyle(
                                     backgroundColor:
-                                        WidgetStateProperty.all<Color>(
+                                        MaterialStateProperty.all<Color>(
                                             Colors.transparent),
                                     elevation:
-                                        WidgetStateProperty.all<double>(0),
+                                        MaterialStateProperty.all<double>(0),
                                     overlayColor:
-                                        WidgetStateProperty.all<Color>(
+                                        MaterialStateProperty.all<Color>(
                                             Colors.transparent),
-                                    foregroundColor: WidgetStateProperty.all<
+                                    foregroundColor: MaterialStateProperty.all<
                                             Color>(
                                         const Color.fromARGB(255, 96, 96, 96)),
                                     textStyle:
-                                        WidgetStateProperty.all<TextStyle>(
+                                        MaterialStateProperty.all<TextStyle>(
                                       const TextStyle(
                                         decoration: TextDecoration.underline,
                                       ),
                                     ),
-                                    padding: WidgetStateProperty.all<
+                                    padding: MaterialStateProperty.all<
                                         EdgeInsetsGeometry>(EdgeInsets.zero),
                                     tapTargetSize:
                                         MaterialTapTargetSize.shrinkWrap,
-                                    minimumSize: WidgetStateProperty.all<Size>(
-                                        Size.zero),
+                                    minimumSize:
+                                        MaterialStateProperty.all<Size>(
+                                            Size.zero),
                                   ),
                                   child: const Row(
                                     children: [
@@ -310,28 +313,29 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                   },
                                   style: ButtonStyle(
                                     backgroundColor:
-                                        WidgetStateProperty.all<Color>(
+                                        MaterialStateProperty.all<Color>(
                                             Colors.transparent),
                                     elevation:
-                                        WidgetStateProperty.all<double>(0),
+                                        MaterialStateProperty.all<double>(0),
                                     overlayColor:
-                                        WidgetStateProperty.all<Color>(
+                                        MaterialStateProperty.all<Color>(
                                             Colors.transparent),
-                                    foregroundColor: WidgetStateProperty.all<
+                                    foregroundColor: MaterialStateProperty.all<
                                             Color>(
                                         const Color.fromARGB(255, 96, 96, 96)),
                                     textStyle:
-                                        WidgetStateProperty.all<TextStyle>(
+                                        MaterialStateProperty.all<TextStyle>(
                                       const TextStyle(
                                         decoration: TextDecoration.underline,
                                       ),
                                     ),
-                                    padding: WidgetStateProperty.all<
+                                    padding: MaterialStateProperty.all<
                                         EdgeInsetsGeometry>(EdgeInsets.zero),
                                     tapTargetSize:
                                         MaterialTapTargetSize.shrinkWrap,
-                                    minimumSize: WidgetStateProperty.all<Size>(
-                                        Size.zero),
+                                    minimumSize:
+                                        MaterialStateProperty.all<Size>(
+                                            Size.zero),
                                   ),
                                   child: const Row(
                                     children: [

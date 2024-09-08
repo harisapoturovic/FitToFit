@@ -90,6 +90,8 @@ namespace FitToFit.Services
             set.Add(entity);
             await BeforeInsert(entity, insert);
 
+            var state = _baseState.CreateState("initial");
+            var result = await state.Insert(entity);
             await _context.SaveChangesAsync();
 
             //RabbitMQ: API - objekat - Auxiliary
@@ -106,9 +108,8 @@ namespace FitToFit.Services
                 };
                 _messageProducer.SendingObject(reservation);
             }
-            
-            var state = _baseState.CreateState("initial");
-            return await state.Insert(entity);
+
+            return result;
         }
 
         public override async Task<Model.Rezervacije> Update(int id, RezervacijeUpdateRequest update)

@@ -2,6 +2,7 @@ import 'package:fittofit_mobile/models/akcije.dart';
 import 'package:fittofit_mobile/models/recommender.dart';
 import 'package:fittofit_mobile/models/search_result.dart';
 import 'package:fittofit_mobile/models/treninzi.dart';
+import 'package:fittofit_mobile/models/vjezbe.dart';
 import 'package:fittofit_mobile/pages/treninzi_detalji.dart';
 import 'package:fittofit_mobile/providers/akcije_provider.dart';
 import 'package:fittofit_mobile/providers/recommender_provider.dart';
@@ -44,6 +45,34 @@ class _TreninziDetaljiPage2State extends State<TreninziDetaljiPage2> {
   Future<List<Akcije>> getAkcije(int treningId) async {
     final akcija = await _akcijeProvider.getAkcijeForTrening(treningId);
     return akcija;
+  }
+
+  void _showExerciseDetails(BuildContext context, Vjezbe vjezba) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(vjezba.naziv),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                if (vjezba.slika != null && vjezba.slika != '')
+                  Image(image: imageFromBase64String(vjezba.slika!).image),
+                Text(vjezba.opis ?? 'Nema dostupnog opisa za odabranu vježbu'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Nazad'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -91,7 +120,7 @@ class _TreninziDetaljiPage2State extends State<TreninziDetaljiPage2> {
             const SizedBox(height: 10),
             widget.trening.treninziVjezbes == null ||
                     widget.trening.treninziVjezbes!.isEmpty
-                ? const Text('No exercises available')
+                ? const Text('Nema dostupnih vježbi.')
                 : ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
@@ -102,77 +131,81 @@ class _TreninziDetaljiPage2State extends State<TreninziDetaljiPage2> {
                       var trajanje =
                           widget.trening.treninziVjezbes![index].trajanje;
 
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: SizedBox(
-                                  width: 100,
-                                  height: 100,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    child: vjezba.slika != null &&
-                                            vjezba.slika != ''
-                                        ? Container(
-                                            width: 300.0,
-                                            height: 250.0,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(15.0),
-                                              image: DecorationImage(
-                                                image: imageFromBase64String(
-                                                        vjezba.slika!)
-                                                    .image,
-                                                fit: BoxFit.cover,
-                                                alignment: Alignment.center,
+                      return GestureDetector(
+                        onTap: () => _showExerciseDetails(context, vjezba),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SizedBox(
+                                    width: 100,
+                                    height: 100,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      child: vjezba.slika != null &&
+                                              vjezba.slika != ''
+                                          ? Container(
+                                              width: 300.0,
+                                              height: 250.0,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(15.0),
+                                                image: DecorationImage(
+                                                  image: imageFromBase64String(
+                                                          vjezba.slika!)
+                                                      .image,
+                                                  fit: BoxFit.cover,
+                                                  alignment: Alignment.center,
+                                                ),
+                                              ),
+                                            )
+                                          : Container(
+                                              width: 300.0,
+                                              height: 250.0,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(15.0),
+                                              ),
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                                child: Image.asset(
+                                                  'assets/images/vjezba.jpg',
+                                                  fit: BoxFit.cover,
+                                                ),
                                               ),
                                             ),
-                                          )
-                                        : Container(
-                                            width: 300.0,
-                                            height: 250.0,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(15.0),
-                                            ),
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0),
-                                              child: Image.asset(
-                                                'assets/images/vjezba.jpg',
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const SizedBox(height: 30),
-                                    Text(
-                                      vjezba.naziv,
-                                      style: const TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      '$trajanje minuta',
-                                      style: const TextStyle(fontSize: 14.0),
-                                    ),
-                                  ],
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(height: 30),
+                                      Text(
+                                        vjezba.naziv,
+                                        style: const TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        '$trajanje minuta',
+                                        style: const TextStyle(fontSize: 14.0),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
-                          )
-                        ],
+                              ],
+                            )
+                          ],
+                        ),
                       );
                     },
                   ),

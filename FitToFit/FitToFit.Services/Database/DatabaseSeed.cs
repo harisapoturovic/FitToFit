@@ -303,7 +303,7 @@ namespace FitToFit.Services.Database
                {
                    RezervacijaStavkeId = 4,
                    RezervacijaId = 2,
-                   TerminId = 29
+                   TerminId = 4
                },
                 new RezervacijaStavke()
                 {
@@ -375,7 +375,7 @@ namespace FitToFit.Services.Database
                {
                    RezervacijaStavkeId = 16,
                    RezervacijaId = 10,
-                   TerminId = 28
+                   TerminId = 18
                },
                new RezervacijaStavke()
                {
@@ -429,20 +429,20 @@ namespace FitToFit.Services.Database
                {
                    RezervacijaStavkeId = 25,
                    RezervacijaId = 2,
-                   TerminId = 21
+                   TerminId = 1
                },
                new RezervacijaStavke()
                {
                    RezervacijaStavkeId = 26,
                    RezervacijaId = 2,
-                   TerminId = 38
+                   TerminId = 2
                },
-                new RezervacijaStavke()
-                {
-                    RezervacijaStavkeId = 27,
-                    RezervacijaId = 3,
-                    TerminId = 22
-                },
+               new RezervacijaStavke()
+               {
+                   RezervacijaStavkeId = 27,
+                   RezervacijaId = 3,
+                   TerminId = 22
+               },
                new RezervacijaStavke()
                {
                    RezervacijaStavkeId = 28,
@@ -521,8 +521,8 @@ namespace FitToFit.Services.Database
                 new Rezervacije()
                 {
                     RezervacijaId = 3,
-                    Datum = new DateTime(2023, 3, 21),
-                    DatumIsteka = new DateTime(2024, 4, 21),
+                    Datum = new DateTime(2024, 9, 10),
+                    DatumIsteka = new DateTime(2024, 10, 9),
                     KorisnikId = 3,
                     ClanarinaId = 1,
                     Iznos = 30,
@@ -587,8 +587,8 @@ namespace FitToFit.Services.Database
                 new Rezervacije()
                 {
                     RezervacijaId = 9,
-                    Datum = new DateTime(2024, 8, 4),
-                    DatumIsteka = new DateTime(2024, 9, 3),
+                    Datum = new DateTime(2024, 8, 24),
+                    DatumIsteka = new DateTime(2024, 9, 23),
                     KorisnikId = 5,
                     ClanarinaId = 1,
                     Iznos = 40,
@@ -598,8 +598,8 @@ namespace FitToFit.Services.Database
                 new Rezervacije()
                 {
                     RezervacijaId = 10,
-                    Datum = new DateTime(2024, 8, 7),
-                    DatumIsteka = new DateTime(2024, 9, 6),
+                    Datum = new DateTime(2024, 8, 17),
+                    DatumIsteka = new DateTime(2024, 9, 16),
                     KorisnikId = 1,
                     ClanarinaId = 1,
                     Iznos = 45,
@@ -609,8 +609,8 @@ namespace FitToFit.Services.Database
                 new Rezervacije()
                 {
                     RezervacijaId = 11,
-                    Datum = new DateTime(2024, 8, 12),
-                    DatumIsteka = new DateTime(2024, 8, 19),
+                    Datum = new DateTime(2024, 9, 12),
+                    DatumIsteka = new DateTime(2024, 9, 19),
                     KorisnikId = 2,
                     ClanarinaId = 2,
                     Iznos = 15,
@@ -620,8 +620,8 @@ namespace FitToFit.Services.Database
                 new Rezervacije()
                 {
                     RezervacijaId = 12,
-                    Datum = new DateTime(2024, 8, 12),
-                    DatumIsteka = new DateTime(2024, 8, 13),
+                    Datum = new DateTime(2024, 8, 23),
+                    DatumIsteka = new DateTime(2024, 9, 22),
                     KorisnikId = 3,
                     ClanarinaId = 1,
                     Iznos = 3,
@@ -631,8 +631,8 @@ namespace FitToFit.Services.Database
                 new Rezervacije()
                 {
                     RezervacijaId = 13,
-                    Datum = new DateTime(2024, 8, 12),
-                    DatumIsteka = new DateTime(2024, 8, 19),
+                    Datum = new DateTime(2024, 9, 1),
+                    DatumIsteka = new DateTime(2024, 9, 8),
                     KorisnikId = 4,
                     ClanarinaId = 2,
                     Iznos = 10,
@@ -760,8 +760,8 @@ namespace FitToFit.Services.Database
                 {
                     AkcijaId = 5,
                     Naziv = "Pilates Transformacija: Snaga i Fleksibilnost",
-                    DatumPocetka = new DateTime(2024, 8, 2),
-                    DatumZavrsetka = new DateTime(2024, 8, 15),
+                    DatumPocetka = new DateTime(2024, 9, 5),
+                    DatumZavrsetka = new DateTime(2024, 9, 20),
                     Iznos = 10,
                     StateMachine = "active"
                 },
@@ -769,8 +769,8 @@ namespace FitToFit.Services.Database
                 {
                     AkcijaId = 6,
                     Naziv = "Hatha Harmonija: Osvježite Um i Tijelo",
-                    DatumPocetka = new DateTime(2024, 8, 1),
-                    DatumZavrsetka = new DateTime(2024, 8, 22),
+                    DatumPocetka = new DateTime(2024, 9, 1),
+                    DatumZavrsetka = new DateTime(2024, 9, 30),
                     Iznos = 15,
                     StateMachine = "active"
                 },
@@ -778,8 +778,8 @@ namespace FitToFit.Services.Database
                 {
                     AkcijaId = 7,
                     Naziv = "Individualni Izazov: Postignite Svoje Ciljeve",
-                    DatumPocetka = new DateTime(2024, 8, 3),
-                    DatumZavrsetka = new DateTime(2024, 8, 16),
+                    DatumPocetka = new DateTime(2024, 9, 3),
+                    DatumZavrsetka = new DateTime(2024, 9, 16),
                     Iznos = 10,
                     StateMachine = "active"
                 },
@@ -787,8 +787,8 @@ namespace FitToFit.Services.Database
                 {
                     AkcijaId = 8,
                     Naziv = "Kružna Invazija: Osvoji Snagu!",
-                    DatumPocetka = new DateTime(2024, 8, 11),
-                    DatumZavrsetka = new DateTime(2024, 8, 30),
+                    DatumPocetka = new DateTime(2024, 9, 11),
+                    DatumZavrsetka = new DateTime(2024, 9, 30),
                     Iznos = 15,
                     StateMachine = "draft"
                 });
@@ -2253,14 +2253,14 @@ namespace FitToFit.Services.Database
                new Novosti()
                {
                    NovostId = 2,
-                   Naslov = "Pilates u 10h",
+                   Naslov = "Advanced u 10h",
                    Sadrzaj = "Izmjena termina.",
                    DatumObjave = new DateTime(2024, 8, 19),
                    IsLiked = false,
                    IsRead = false,
                    BrojLajkova = 0,
                    KorisnikId = 10,
-                   VrstaTreningaId = 1
+                   VrstaTreningaId = 3
                },
                new Novosti()
                {
@@ -2284,7 +2284,7 @@ namespace FitToFit.Services.Database
                    IsRead = false,
                    BrojLajkova = 0,
                    KorisnikId = 10,
-                   VrstaTreningaId = null
+                   VrstaTreningaId = 1
                },
                new Novosti()
                {
@@ -2296,14 +2296,14 @@ namespace FitToFit.Services.Database
                    IsRead = false,
                    BrojLajkova = 0,
                    KorisnikId = 10,
-                   VrstaTreningaId = 1
+                   VrstaTreningaId = null
                },
                new Novosti()
                {
                    NovostId = 6,
                    Naslov = "Šta jesti prije i posle treninga?",
                    Sadrzaj = "Ishrana je ključna za postizanje i održavanje fitness rezultata. Naš vodič za pravilnu ishranu prije i poslije treninga pomoći će vam da maksimalno iskoristite svoj napor u teretani. Preporučujemo kombinaciju proteina i složenih ugljenih hidrata prije treninga za energiju, dok poslije treninga naglasak stavljamo na brzu apsorpciju proteina kako bismo podržali oporavak mišića i obnovu energije.",
-                   DatumObjave = new DateTime(2024, 8, 8),
+                   DatumObjave = new DateTime(2024, 8, 31),
                    IsLiked = false,
                    IsRead = false,
                    BrojLajkova = 0,

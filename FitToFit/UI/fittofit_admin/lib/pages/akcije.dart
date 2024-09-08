@@ -66,6 +66,7 @@ class _AkcijePageState extends State<AkcijePage> {
         _arhiviraneAkcijeList = arhiviraneAkcije.result;
         _draftAkcijeList = draftAkcije.result;
         _selectedAkcije = _aktivneAkcijeList;
+        isActive = true;
       });
     }
   }
@@ -609,6 +610,14 @@ class _AkcijePageState extends State<AkcijePage> {
                 if (_zavrsetakAkcije == null) {
                   _showAlertDialog("Pažnja!",
                       "Datum završetka akcije je obavezan.", Colors.red);
+                  return;
+                }
+
+                if (_pocetakAkcije!.isAfter(_zavrsetakAkcije!)) {
+                  _showAlertDialog(
+                      "Pažnja!",
+                      "Datum početka akcije ne može biti poslije datuma završetka akcije.",
+                      Colors.red);
                   return;
                 }
                 String datumPocetka = _pocetakAkcije.toString();

@@ -270,7 +270,7 @@ namespace FitToFit.Services.Migrations
                     Datum = table.Column<DateTime>(type: "datetime", nullable: false),
                     KorisnikID = table.Column<int>(type: "int", nullable: false),
                     ClanarinaID = table.Column<int>(type: "int", nullable: false),
-                    StateMachine = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    StateMachine = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Iznos = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     DatumIsteka = table.Column<DateTime>(type: "datetime2", nullable: true),
                     BrojTransakcije = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -452,10 +452,10 @@ namespace FitToFit.Services.Migrations
                     { 2, new DateTime(2024, 3, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 3, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 10, "Martovska", "archived" },
                     { 3, new DateTime(2024, 4, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 4, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), 5, "Aprilska", "archived" },
                     { 4, new DateTime(2024, 7, 26, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 7, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), 10, "**Individualni**", "archived" },
-                    { 5, new DateTime(2024, 8, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 8, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), 10, "Pilates Transformacija: Snaga i Fleksibilnost", "active" },
-                    { 6, new DateTime(2024, 8, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 8, 22, 0, 0, 0, 0, DateTimeKind.Unspecified), 15, "Hatha Harmonija: Osvježite Um i Tijelo", "active" },
-                    { 7, new DateTime(2024, 8, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 8, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 10, "Individualni Izazov: Postignite Svoje Ciljeve", "active" },
-                    { 8, new DateTime(2024, 8, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 15, "Kružna Invazija: Osvoji Snagu!", "draft" }
+                    { 5, new DateTime(2024, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), 10, "Pilates Transformacija: Snaga i Fleksibilnost", "active" },
+                    { 6, new DateTime(2024, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 9, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 15, "Hatha Harmonija: Osvježite Um i Tijelo", "active" },
+                    { 7, new DateTime(2024, 9, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 10, "Individualni Izazov: Postignite Svoje Ciljeve", "active" },
+                    { 8, new DateTime(2024, 9, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 9, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 15, "Kružna Invazija: Osvoji Snagu!", "draft" }
                 });
 
             migrationBuilder.InsertData(
@@ -631,11 +631,11 @@ namespace FitToFit.Services.Migrations
                 values: new object[,]
                 {
                     { 1, 0, new DateTime(2024, 8, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 10, "Kruzni trening u 16h", "Zbog nepredviđenih okolnosti, današnji trening moramo pomjeriti u 16h. Svi koji na trening dolaze u 13h, ako su slobodni, mogu doći na ovaj novi termin. Hvala na razumijevanju!", 1 },
-                    { 2, 0, new DateTime(2024, 8, 19, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 10, "Pilates u 10h", "Izmjena termina.", 1 },
+                    { 2, 0, new DateTime(2024, 8, 19, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 10, "Advanced u 10h", "Izmjena termina.", 3 },
                     { 3, 0, new DateTime(2024, 8, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 10, "Kako održati motivaciju tokom ljeta?", "Ljeto je savršeno vrijeme za vježbanje na otvorenom i uživanje u aktivnostima na suncu. Međutim, visoke temperature mogu smanjiti vašu motivaciju. Savladajte izazove ljetnog vježbanja uz naše savjete kako održati motivaciju. Preporučujemo rane jutarnje ili kasne večernje treninge kako biste izbjegli najtoplije dijelove dana. Pridružite se našim grupnim vježbama na otvorenom ili isprobajte naše specijalne ljetne fitness izazove koji će vas inspirisati da ostanete aktivni i fit.", null },
-                    { 4, 0, new DateTime(2024, 8, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 10, "Novi Grupni Programi", "Predstavljamo naše nove grupne programe koji kombinuju snagu, fleksibilnost i zabavu. Naši stručni instruktori vode raznolike grupne treninge kao što su HIIT (visokointenzivni intervalni treninzi), pilates, body pump i još mnogo toga. Grupni treninzi su odličan način da se motivišete uz podršku drugih članova. Ovi programi su dizajnirani da izazovu vaše tijelo i omoguće vam da dostignete svoje fitness ciljeve u dinamičnoj i prijateljskoj atmosferi.", null },
-                    { 5, 0, new DateTime(2024, 8, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 10, "Najava nove zaposlenice", "Sa velikim zadovoljstvom vas obavještavamo da se našem timu pridružila nova zaposlenica, Medina Turkić. Medina će zauzeti poziciju trenerice i svojim bogatim iskustvom doprinijeti našem centru. Medina je diplomirala na DIF-u, gdje je stekla zvanje magistrice sporta i zdravlja. Uvereni smo da će Medina svojom posvećenošću, entuzijazmom i profesionalizmom značajno doprinijeti našem kolektivu i pomoći nam da postignemo još veće uspjehe. Molimo vas da pružite toplu dobrodošlicu Medini i pomognete joj da se što prije integriše u naš tim. Radujemo se zajedničkom radu i novim postignućima.", 1 },
-                    { 6, 0, new DateTime(2024, 8, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 10, "Šta jesti prije i posle treninga?", "Ishrana je ključna za postizanje i održavanje fitness rezultata. Naš vodič za pravilnu ishranu prije i poslije treninga pomoći će vam da maksimalno iskoristite svoj napor u teretani. Preporučujemo kombinaciju proteina i složenih ugljenih hidrata prije treninga za energiju, dok poslije treninga naglasak stavljamo na brzu apsorpciju proteina kako bismo podržali oporavak mišića i obnovu energije.", null },
+                    { 4, 0, new DateTime(2024, 8, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 10, "Novi Grupni Programi", "Predstavljamo naše nove grupne programe koji kombinuju snagu, fleksibilnost i zabavu. Naši stručni instruktori vode raznolike grupne treninge kao što su HIIT (visokointenzivni intervalni treninzi), pilates, body pump i još mnogo toga. Grupni treninzi su odličan način da se motivišete uz podršku drugih članova. Ovi programi su dizajnirani da izazovu vaše tijelo i omoguće vam da dostignete svoje fitness ciljeve u dinamičnoj i prijateljskoj atmosferi.", 1 },
+                    { 5, 0, new DateTime(2024, 8, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 10, "Najava nove zaposlenice", "Sa velikim zadovoljstvom vas obavještavamo da se našem timu pridružila nova zaposlenica, Medina Turkić. Medina će zauzeti poziciju trenerice i svojim bogatim iskustvom doprinijeti našem centru. Medina je diplomirala na DIF-u, gdje je stekla zvanje magistrice sporta i zdravlja. Uvereni smo da će Medina svojom posvećenošću, entuzijazmom i profesionalizmom značajno doprinijeti našem kolektivu i pomoći nam da postignemo još veće uspjehe. Molimo vas da pružite toplu dobrodošlicu Medini i pomognete joj da se što prije integriše u naš tim. Radujemo se zajedničkom radu i novim postignućima.", null },
+                    { 6, 0, new DateTime(2024, 8, 31, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 10, "Šta jesti prije i posle treninga?", "Ishrana je ključna za postizanje i održavanje fitness rezultata. Naš vodič za pravilnu ishranu prije i poslije treninga pomoći će vam da maksimalno iskoristite svoj napor u teretani. Preporučujemo kombinaciju proteina i složenih ugljenih hidrata prije treninga za energiju, dok poslije treninga naglasak stavljamo na brzu apsorpciju proteina kako bismo podržali oporavak mišića i obnovu energije.", null },
                     { 7, 0, new DateTime(2024, 7, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 11, "Savjeti za Sigurno Vježbanje u Centru", "Vaša sigurnost je naš prioritet. Nudimo vam savjete kako da vježbate sigurno i efikasno u našem fitness centru. Pravilno zagrijavanje i istezanje prije vježbanja smanjuje rizik od povreda. Takođe, pratite uputstva naših instruktora i koristite opremu prema preporukama kako biste maksimalno iskoristili svaki trening. Naš tim je uvijek tu da vam pruži podršku i odgovori na vaša pitanja.", null }
                 });
 
@@ -673,17 +673,17 @@ namespace FitToFit.Services.Migrations
                 {
                     { 1, null, 1, new DateTime(2024, 4, 21, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified), 25m, 2, "refused" },
                     { 2, null, 2, new DateTime(2023, 7, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 7, 27, 0, 0, 0, 0, DateTimeKind.Unspecified), 5m, 1, "canceled" },
-                    { 3, null, 1, new DateTime(2023, 3, 21, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 4, 21, 0, 0, 0, 0, DateTimeKind.Unspecified), 30m, 3, "active" },
+                    { 3, null, 1, new DateTime(2024, 9, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), 30m, 3, "active" },
                     { 4, null, 1, new DateTime(2023, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 10, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), 30m, 4, "archived" },
                     { 5, null, 1, new DateTime(2023, 9, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), 40m, 5, "archived" },
                     { 6, null, 1, new DateTime(2022, 7, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 8, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), 45m, 6, "archived" },
                     { 7, null, 1, new DateTime(2022, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 2, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), 50m, 7, "archived" },
                     { 8, null, 1, new DateTime(2022, 3, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 4, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), 35m, 8, "archived" },
-                    { 9, null, 1, new DateTime(2024, 8, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 9, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), 40m, 5, "active" },
-                    { 10, null, 1, new DateTime(2024, 8, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 9, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), 45m, 1, "active" },
-                    { 11, null, 2, new DateTime(2024, 8, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 8, 19, 0, 0, 0, 0, DateTimeKind.Unspecified), 15m, 2, "active" },
-                    { 12, null, 1, new DateTime(2024, 8, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 8, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), 3m, 3, "active" },
-                    { 13, null, 2, new DateTime(2024, 8, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 8, 19, 0, 0, 0, 0, DateTimeKind.Unspecified), 10m, 4, "draft" },
+                    { 9, null, 1, new DateTime(2024, 8, 24, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), 40m, 5, "active" },
+                    { 10, null, 1, new DateTime(2024, 8, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 45m, 1, "active" },
+                    { 11, null, 2, new DateTime(2024, 9, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 9, 19, 0, 0, 0, 0, DateTimeKind.Unspecified), 15m, 2, "active" },
+                    { 12, null, 1, new DateTime(2024, 8, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 9, 22, 0, 0, 0, 0, DateTimeKind.Unspecified), 3m, 3, "active" },
+                    { 13, null, 2, new DateTime(2024, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 9, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), 10m, 4, "draft" },
                     { 14, null, 1, new DateTime(2024, 8, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 9, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), 30m, 9, "draft" }
                 });
 
@@ -837,7 +837,7 @@ namespace FitToFit.Services.Migrations
                     { 1, 1, 1 },
                     { 2, 1, 20 },
                     { 3, 2, 6 },
-                    { 4, 2, 29 },
+                    { 4, 2, 4 },
                     { 5, 3, 4 },
                     { 6, 4, 7 },
                     { 7, 5, 5 },
@@ -849,7 +849,7 @@ namespace FitToFit.Services.Migrations
                     { 13, 9, 27 },
                     { 14, 9, 25 },
                     { 15, 10, 19 },
-                    { 16, 10, 28 },
+                    { 16, 10, 18 },
                     { 17, 11, 32 },
                     { 18, 11, 34 },
                     { 19, 12, 38 },
@@ -858,8 +858,8 @@ namespace FitToFit.Services.Migrations
                     { 22, 13, 13 },
                     { 23, 14, 28 },
                     { 24, 1, 30 },
-                    { 25, 2, 21 },
-                    { 26, 2, 38 },
+                    { 25, 2, 1 },
+                    { 26, 2, 2 },
                     { 27, 3, 22 },
                     { 28, 4, 26 },
                     { 29, 5, 15 },

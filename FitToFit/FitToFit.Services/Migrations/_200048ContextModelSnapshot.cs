@@ -94,8 +94,8 @@ namespace FitToFit.Services.Migrations
                         new
                         {
                             AkcijaId = 5,
-                            DatumPocetka = new DateTime(2024, 8, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DatumZavrsetka = new DateTime(2024, 8, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumPocetka = new DateTime(2024, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumZavrsetka = new DateTime(2024, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Iznos = 10,
                             Naziv = "Pilates Transformacija: Snaga i Fleksibilnost",
                             StateMachine = "active"
@@ -103,8 +103,8 @@ namespace FitToFit.Services.Migrations
                         new
                         {
                             AkcijaId = 6,
-                            DatumPocetka = new DateTime(2024, 8, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DatumZavrsetka = new DateTime(2024, 8, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumPocetka = new DateTime(2024, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumZavrsetka = new DateTime(2024, 9, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Iznos = 15,
                             Naziv = "Hatha Harmonija: Osvježite Um i Tijelo",
                             StateMachine = "active"
@@ -112,8 +112,8 @@ namespace FitToFit.Services.Migrations
                         new
                         {
                             AkcijaId = 7,
-                            DatumPocetka = new DateTime(2024, 8, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DatumZavrsetka = new DateTime(2024, 8, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumPocetka = new DateTime(2024, 9, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumZavrsetka = new DateTime(2024, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Iznos = 10,
                             Naziv = "Individualni Izazov: Postignite Svoje Ciljeve",
                             StateMachine = "active"
@@ -121,8 +121,8 @@ namespace FitToFit.Services.Migrations
                         new
                         {
                             AkcijaId = 8,
-                            DatumPocetka = new DateTime(2024, 8, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DatumZavrsetka = new DateTime(2024, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumPocetka = new DateTime(2024, 9, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumZavrsetka = new DateTime(2024, 9, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Iznos = 15,
                             Naziv = "Kružna Invazija: Osvoji Snagu!",
                             StateMachine = "draft"
@@ -887,9 +887,9 @@ namespace FitToFit.Services.Migrations
                             IsLiked = false,
                             IsRead = false,
                             KorisnikId = 10,
-                            Naslov = "Pilates u 10h",
+                            Naslov = "Advanced u 10h",
                             Sadrzaj = "Izmjena termina.",
-                            VrstaTreningaId = 1
+                            VrstaTreningaId = 3
                         },
                         new
                         {
@@ -911,7 +911,8 @@ namespace FitToFit.Services.Migrations
                             IsRead = false,
                             KorisnikId = 10,
                             Naslov = "Novi Grupni Programi",
-                            Sadrzaj = "Predstavljamo naše nove grupne programe koji kombinuju snagu, fleksibilnost i zabavu. Naši stručni instruktori vode raznolike grupne treninge kao što su HIIT (visokointenzivni intervalni treninzi), pilates, body pump i još mnogo toga. Grupni treninzi su odličan način da se motivišete uz podršku drugih članova. Ovi programi su dizajnirani da izazovu vaše tijelo i omoguće vam da dostignete svoje fitness ciljeve u dinamičnoj i prijateljskoj atmosferi."
+                            Sadrzaj = "Predstavljamo naše nove grupne programe koji kombinuju snagu, fleksibilnost i zabavu. Naši stručni instruktori vode raznolike grupne treninge kao što su HIIT (visokointenzivni intervalni treninzi), pilates, body pump i još mnogo toga. Grupni treninzi su odličan način da se motivišete uz podršku drugih članova. Ovi programi su dizajnirani da izazovu vaše tijelo i omoguće vam da dostignete svoje fitness ciljeve u dinamičnoj i prijateljskoj atmosferi.",
+                            VrstaTreningaId = 1
                         },
                         new
                         {
@@ -922,14 +923,13 @@ namespace FitToFit.Services.Migrations
                             IsRead = false,
                             KorisnikId = 10,
                             Naslov = "Najava nove zaposlenice",
-                            Sadrzaj = "Sa velikim zadovoljstvom vas obavještavamo da se našem timu pridružila nova zaposlenica, Medina Turkić. Medina će zauzeti poziciju trenerice i svojim bogatim iskustvom doprinijeti našem centru. Medina je diplomirala na DIF-u, gdje je stekla zvanje magistrice sporta i zdravlja. Uvereni smo da će Medina svojom posvećenošću, entuzijazmom i profesionalizmom značajno doprinijeti našem kolektivu i pomoći nam da postignemo još veće uspjehe. Molimo vas da pružite toplu dobrodošlicu Medini i pomognete joj da se što prije integriše u naš tim. Radujemo se zajedničkom radu i novim postignućima.",
-                            VrstaTreningaId = 1
+                            Sadrzaj = "Sa velikim zadovoljstvom vas obavještavamo da se našem timu pridružila nova zaposlenica, Medina Turkić. Medina će zauzeti poziciju trenerice i svojim bogatim iskustvom doprinijeti našem centru. Medina je diplomirala na DIF-u, gdje je stekla zvanje magistrice sporta i zdravlja. Uvereni smo da će Medina svojom posvećenošću, entuzijazmom i profesionalizmom značajno doprinijeti našem kolektivu i pomoći nam da postignemo još veće uspjehe. Molimo vas da pružite toplu dobrodošlicu Medini i pomognete joj da se što prije integriše u naš tim. Radujemo se zajedničkom radu i novim postignućima."
                         },
                         new
                         {
                             NovostId = 6,
                             BrojLajkova = 0,
-                            DatumObjave = new DateTime(2024, 8, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumObjave = new DateTime(2024, 8, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsLiked = false,
                             IsRead = false,
                             KorisnikId = 10,
@@ -1222,7 +1222,7 @@ namespace FitToFit.Services.Migrations
                         {
                             RezervacijaStavkeId = 4,
                             RezervacijaId = 2,
-                            TerminId = 29
+                            TerminId = 4
                         },
                         new
                         {
@@ -1294,7 +1294,7 @@ namespace FitToFit.Services.Migrations
                         {
                             RezervacijaStavkeId = 16,
                             RezervacijaId = 10,
-                            TerminId = 28
+                            TerminId = 18
                         },
                         new
                         {
@@ -1348,13 +1348,13 @@ namespace FitToFit.Services.Migrations
                         {
                             RezervacijaStavkeId = 25,
                             RezervacijaId = 2,
-                            TerminId = 21
+                            TerminId = 1
                         },
                         new
                         {
                             RezervacijaStavkeId = 26,
                             RezervacijaId = 2,
-                            TerminId = 38
+                            TerminId = 2
                         },
                         new
                         {
@@ -1442,6 +1442,7 @@ namespace FitToFit.Services.Migrations
                         .HasColumnName("KorisnikID");
 
                     b.Property<string>("StateMachine")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -1479,8 +1480,8 @@ namespace FitToFit.Services.Migrations
                         {
                             RezervacijaId = 3,
                             ClanarinaId = 1,
-                            Datum = new DateTime(2023, 3, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DatumIsteka = new DateTime(2024, 4, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Datum = new DateTime(2024, 9, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumIsteka = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Iznos = 30m,
                             KorisnikId = 3,
                             StateMachine = "active"
@@ -1539,8 +1540,8 @@ namespace FitToFit.Services.Migrations
                         {
                             RezervacijaId = 9,
                             ClanarinaId = 1,
-                            Datum = new DateTime(2024, 8, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DatumIsteka = new DateTime(2024, 9, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Datum = new DateTime(2024, 8, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumIsteka = new DateTime(2024, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Iznos = 40m,
                             KorisnikId = 5,
                             StateMachine = "active"
@@ -1549,8 +1550,8 @@ namespace FitToFit.Services.Migrations
                         {
                             RezervacijaId = 10,
                             ClanarinaId = 1,
-                            Datum = new DateTime(2024, 8, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DatumIsteka = new DateTime(2024, 9, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Datum = new DateTime(2024, 8, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumIsteka = new DateTime(2024, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Iznos = 45m,
                             KorisnikId = 1,
                             StateMachine = "active"
@@ -1559,8 +1560,8 @@ namespace FitToFit.Services.Migrations
                         {
                             RezervacijaId = 11,
                             ClanarinaId = 2,
-                            Datum = new DateTime(2024, 8, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DatumIsteka = new DateTime(2024, 8, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Datum = new DateTime(2024, 9, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumIsteka = new DateTime(2024, 9, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Iznos = 15m,
                             KorisnikId = 2,
                             StateMachine = "active"
@@ -1569,8 +1570,8 @@ namespace FitToFit.Services.Migrations
                         {
                             RezervacijaId = 12,
                             ClanarinaId = 1,
-                            Datum = new DateTime(2024, 8, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DatumIsteka = new DateTime(2024, 8, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Datum = new DateTime(2024, 8, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumIsteka = new DateTime(2024, 9, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Iznos = 3m,
                             KorisnikId = 3,
                             StateMachine = "active"
@@ -1579,8 +1580,8 @@ namespace FitToFit.Services.Migrations
                         {
                             RezervacijaId = 13,
                             ClanarinaId = 2,
-                            Datum = new DateTime(2024, 8, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DatumIsteka = new DateTime(2024, 8, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Datum = new DateTime(2024, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumIsteka = new DateTime(2024, 9, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Iznos = 10m,
                             KorisnikId = 4,
                             StateMachine = "draft"

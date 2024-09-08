@@ -23,7 +23,7 @@ namespace FitToFit.Services
         {
         }
 
-        public virtual async Task<List<Model.OdabraniTermini>> getTop3Termina(string? order=null)
+        public virtual async Task<List<Model.OdabraniTermini>> getTop3Termina(string? order = null)
         {
             var query = _context.Set<RezervacijaStavke>().AsQueryable();
             var list = await query.ToListAsync();
@@ -59,7 +59,7 @@ namespace FitToFit.Services
                 var trening = await _context.Set<Treninzi>().FindAsync(termin.TreningId);
                 if (trening != null)
                 {
-                    var opis = $"{termin.Dan} {termin.Sat} - {trening.Naziv}"; 
+                    var opis = $"{termin.Dan} {termin.Sat} - {trening.Naziv}";
                     odabraniTerminiList.Add(new OdabraniTermini { Opis = opis, Count = count });
                 }
             }
@@ -71,9 +71,9 @@ namespace FitToFit.Services
         {
             var query = _context.Set<Rezervacije>().AsQueryable();
             var list = await query.ToListAsync();
-            var godina1=list.Where(x=>x.Datum.Year.Equals(2022));
-            var godina2 = list.Where(x => x.Datum.Year.Equals(2023));
-            var godina3 = list.Where(x => x.Datum.Year.Equals(2024));           
+            var godina1 = list.Where(x => x.Datum.Year.Equals(2022) && x.StateMachine != null && (x.StateMachine.Equals("active") || x.StateMachine.Equals("archived")));
+            var godina2 = list.Where(x => x.Datum.Year.Equals(2023) && x.StateMachine != null && (x.StateMachine.Equals("active") || x.StateMachine.Equals("archived")));
+            var godina3 = list.Where(x => x.Datum.Year.Equals(2024) && x.StateMachine != null && (x.StateMachine.Equals("active") || x.StateMachine.Equals("archived")));
 
             var profit = new Profit();
             foreach (var god1 in godina1)

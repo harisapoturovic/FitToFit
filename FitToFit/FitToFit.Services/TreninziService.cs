@@ -14,6 +14,10 @@ using FitToFit.Services.Database;
 using Treninzi = FitToFit.Services.Database.Treninzi;
 using TreninziVjezbe = FitToFit.Services.Database.TreninziVjezbe;
 using _200048Context = FitToFit.Services.Database._200048Context;
+using Termini = FitToFit.Services.Database.Termini;
+using RezervacijaStavke = FitToFit.Services.Database.RezervacijaStavke;
+using AkcijeTreninzi = FitToFit.Services.Database.AkcijeTreninzi;
+using Recommender = FitToFit.Services.Database.Recommender;
 
 namespace FitToFit.Services
 {
@@ -98,9 +102,6 @@ namespace FitToFit.Services
 
             await _context.SaveChangesAsync();
 
-            //RabbitMQ: API - poruka - Auxiliary
-            //_messageProducer.SendingMessage("\n NOVI TRENING " + "\nID: " + entity.TreningId + "\nNaziv: " + entity.Naziv);
-
             return _mapper.Map<Model.Treninzi>(entity);
         }
 
@@ -108,6 +109,10 @@ namespace FitToFit.Services
         {
             var set = _context.Set<Treninzi>();
             var vjezebTreninziSet = _context.Set<TreninziVjezbe>();
+            var akcijeTreninziSet = _context.Set<AkcijeTreninzi>();
+            var recommenderSet = _context.Set<Recommender>();
+            var terminiSet = _context.Set<Termini>();
+            var rezervacijaStavkeSet = _context.Set<RezervacijaStavke>();
 
             var trening = await set.FirstOrDefaultAsync(n => n.TreningId == id);
 
@@ -120,7 +125,29 @@ namespace FitToFit.Services
                 .Where(kn => kn.TreningId == id)
                 .ToListAsync();
 
+            var akcijeTreninziList = await akcijeTreninziSet
+                .Where(kn => kn.TreningId == id)
+                .ToListAsync();
+
+            var recommenderList = await recommenderSet
+               .Where(kn => kn.TreningId == id)
+               .ToListAsync();
+
+            var terminiList = await terminiSet
+                .Where(kn => kn.TreningId == id)
+                .ToListAsync();
+
             vjezebTreninziSet.RemoveRange(vjezebTreninziList);
+            akcijeTreninziSet.RemoveRange(akcijeTreninziList);
+            recommenderSet.RemoveRange(recommenderList);
+            var terminiIds = terminiList.Select(r => r.TerminId).ToList();
+
+            var rezervacijaStavkeList = await rezervacijaStavkeSet
+                .Where(rs => terminiIds.Contains(rs.TerminId))
+                .ToListAsync();
+
+            rezervacijaStavkeSet.RemoveRange(rezervacijaStavkeList);
+            terminiSet.RemoveRange(terminiList);
 
             set.Remove(trening);
             await _context.SaveChangesAsync();

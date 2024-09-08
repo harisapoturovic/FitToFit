@@ -32,7 +32,13 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
   Korisnici? korisnik;
   late KorisniciProvider _korisniciProvider;
   DateTime? _selectedDate;
-  FocusNode _imeFocusNode = FocusNode();
+  final FocusNode _imeFocusNode = FocusNode();
+  final FocusNode _prezimeFocusNode = FocusNode();
+  final FocusNode _telefonFocusNode = FocusNode();
+  final FocusNode _emailFocusNode = FocusNode();
+  final FocusNode _adresaFocusNode = FocusNode();
+  final FocusNode _usernameFocusNode = FocusNode();
+  final FocusNode _lozinkaFocusNode = FocusNode();
   bool usernameTaken = false;
   final debouncer = Debouncer(delay: const Duration(milliseconds: 500));
 
@@ -41,12 +47,17 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
     super.initState();
     _korisniciProvider = context.read<KorisniciProvider>();
     initForm();
-    _imeFocusNode = FocusNode();
   }
 
   @override
   void dispose() {
     _imeFocusNode.dispose();
+    _prezimeFocusNode.dispose();
+    _telefonFocusNode.dispose();
+    _emailFocusNode.dispose();
+    _adresaFocusNode.dispose();
+    _usernameFocusNode.dispose();
+    _lozinkaFocusNode.dispose();
     super.dispose();
   }
 
@@ -121,6 +132,7 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       FocusScope.of(context).requestFocus(_imeFocusNode);
     });
+
     return FormBuilder(
       key: _formKey,
       autovalidateMode: AutovalidateMode.always,
@@ -148,6 +160,9 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
                         focusNode: _imeFocusNode,
                         controller: imeController,
                         decoration: const InputDecoration(labelText: "Ime"),
+                        textInputAction: TextInputAction.next,
+                        onEditingComplete: () => FocusScope.of(context)
+                            .requestFocus(_prezimeFocusNode),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Ovo polje je obavezno!';
@@ -166,8 +181,12 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
                       const SizedBox(height: 15),
                       FormBuilderTextField(
                         name: "prezime",
+                        focusNode: _prezimeFocusNode,
                         controller: prezimeController,
                         decoration: const InputDecoration(labelText: "Prezime"),
+                        textInputAction: TextInputAction.next,
+                        onEditingComplete: () => FocusScope.of(context)
+                            .requestFocus(_telefonFocusNode),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Ovo polje je obavezno!';
@@ -175,7 +194,6 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
                           if (!RegExp(r'^[A-Z-ŠĐČĆŽ]').hasMatch(value)) {
                             return 'Prezime mora početi velikim slovom.';
                           }
-
                           if (!RegExp(r'^[a-zA-ZšđčćžŠĐČĆŽ]+$')
                               .hasMatch(value)) {
                             return 'Prezime može sadržavati samo slova.';
@@ -198,9 +216,13 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
                       const SizedBox(height: 15),
                       FormBuilderTextField(
                           name: "telefon",
+                          focusNode: _telefonFocusNode,
                           controller: telefonController,
                           decoration:
                               const InputDecoration(labelText: "Telefon"),
+                          textInputAction: TextInputAction.next,
+                          onEditingComplete: () => FocusScope.of(context)
+                              .requestFocus(_emailFocusNode),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Ovo polje je obavezno!';
@@ -216,8 +238,12 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
                       const SizedBox(height: 15),
                       FormBuilderTextField(
                         name: "email",
+                        focusNode: _emailFocusNode,
                         controller: emailController,
                         decoration: const InputDecoration(labelText: "E-mail"),
+                        textInputAction: TextInputAction.next,
+                        onEditingComplete: () => FocusScope.of(context)
+                            .requestFocus(_adresaFocusNode),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Ovo polje je obavezno!';
@@ -231,7 +257,7 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
                           }
                           return null;
                         },
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -254,7 +280,11 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
                       const SizedBox(height: 15),
                       FormBuilderTextField(
                         name: 'adresa',
+                        focusNode: _adresaFocusNode,
                         decoration: const InputDecoration(labelText: 'Adresa'),
+                        textInputAction: TextInputAction.next,
+                        onEditingComplete: () => FocusScope.of(context)
+                            .requestFocus(_usernameFocusNode),
                         validator: (value) {
                           if (value != null &&
                               value.isNotEmpty &&
@@ -321,9 +351,13 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
                       const SizedBox(height: 15),
                       FormBuilderTextField(
                           name: "korisnickoIme",
+                          focusNode: _usernameFocusNode,
                           controller: korisnickoImeController,
                           decoration: const InputDecoration(
                               labelText: "Korisničko ime"),
+                          textInputAction: TextInputAction.next,
+                          onEditingComplete: () => FocusScope.of(context)
+                              .requestFocus(_lozinkaFocusNode),
                           onChanged: (val) async {
                             if (val != null && val != '') {
                               debouncedUsernameCheck(val);
@@ -338,8 +372,15 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
                       const SizedBox(height: 15),
                       FormBuilderTextField(
                         name: "password",
+                        focusNode: _lozinkaFocusNode,
                         controller: lozinkaController,
                         decoration: const InputDecoration(labelText: "Lozinka"),
+                        textInputAction: TextInputAction.done,
+                        onEditingComplete: () {
+                          _dodajAdmina(); // Ovo može biti pozvano kad se završi unos lozinke
+                          FocusScope.of(context)
+                              .unfocus(); // Ovo će sakriti tastaturu
+                        },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Ovo polje je obavezno!';

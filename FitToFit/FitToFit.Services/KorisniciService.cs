@@ -16,7 +16,7 @@ namespace FitToFit.Services
     public class KorisniciService : BaseCRUDService<Model.Korisnici, Korisnici, KorisniciSearchObject, KorisniciInsertRequest, KorisniciUpdateRequest>, IKorisniciService
     {
         public KorisniciService(_200048Context context, IMapper mapper)
-            :base(context, mapper)
+            : base(context, mapper)
         {
         }
 
@@ -80,9 +80,13 @@ namespace FitToFit.Services
             {
                 filteredQuery = filteredQuery.Where(x => x.KorisnickoIme.Equals(search.KorisnickoIme));
             }
-            if (search.IsAdmin==true)
+            if (search.IsAdmin == true)
             {
                 filteredQuery = filteredQuery.Where(x => x.UlogaId.Equals(2));
+            }
+            if (search.IsKorisnik == true)
+            {
+                filteredQuery = filteredQuery.Where(x => x.UlogaId.Equals(1));
             }
 
             return filteredQuery;
@@ -90,7 +94,7 @@ namespace FitToFit.Services
 
         public async Task<Model.Korisnici> Login(string username, string password)
         {
-            var entity = await _context.Korisnicis.Include(u=>u.Uloga).FirstOrDefaultAsync(x => x.KorisnickoIme == username);
+            var entity = await _context.Korisnicis.Include(u => u.Uloga).FirstOrDefaultAsync(x => x.KorisnickoIme == username);
 
             if (entity == null)
             {
@@ -132,7 +136,7 @@ namespace FitToFit.Services
                 throw new($"Korisnik sa ID-em {userChangeUsername.Id} nije pronađen.");
 
             if (user.KorisnickoIme != userChangeUsername.Username)
-                throw new ("Trenutno korisničko ime je pogrešno.");
+                throw new("Trenutno korisničko ime je pogrešno.");
 
             user.KorisnickoIme = userChangeUsername.NewUsername;
 
@@ -170,6 +174,8 @@ namespace FitToFit.Services
             var set = _context.Set<Korisnici>();
             var korisniciNovostiSet = _context.Set<KorisniciNovosti>();
             var ocjeneSet = _context.Set<Ocjene>();
+            var rezervacijeSet = _context.Set<Rezervacije>();
+            var rezervacijaStavkeSet = _context.Set<RezervacijaStavke>();
 
             var korisnik = await set.FirstOrDefaultAsync(n => n.KorisnikId == id);
 
@@ -186,8 +192,20 @@ namespace FitToFit.Services
                 .Where(kn => kn.KorisnikId == id)
                 .ToListAsync();
 
+            var rezervacijeList = await rezervacijeSet
+                .Where(kn => kn.KorisnikId == id)
+                .ToListAsync();
+
             korisniciNovostiSet.RemoveRange(korisniciNovostiList);
             ocjeneSet.RemoveRange(ocjeneList);
+            var rezervacijaIds = rezervacijeList.Select(r => r.RezervacijaId).ToList();
+
+            var rezervacijaStavkeList = await rezervacijaStavkeSet
+                .Where(rs => rezervacijaIds.Contains(rs.RezervacijaId))
+                .ToListAsync();
+
+            rezervacijaStavkeSet.RemoveRange(rezervacijaStavkeList);
+            rezervacijeSet.RemoveRange(rezervacijeList);
 
             set.Remove(korisnik);
             await _context.SaveChangesAsync();
