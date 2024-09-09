@@ -1,3 +1,5 @@
+// ignore_for_file: unused_catch_clause
+
 import 'package:fittofit_mobile/models/akcije.dart';
 import 'package:fittofit_mobile/models/recommender.dart';
 import 'package:fittofit_mobile/models/search_result.dart';
@@ -430,21 +432,33 @@ class _TreninziDetaljiPage2State extends State<TreninziDetaljiPage2> {
       List<int> recommendedTreninziIds = [];
 
       if (coTreningId1 != null) {
-        Recommender recTrening1 =
-            await _recommenderProvider.getById(coTreningId1);
-        recommendedTreninziIds.add(recTrening1.treningId!);
+        try {
+          Recommender recTrening1 =
+              await _recommenderProvider.getById(coTreningId1);
+          recommendedTreninziIds.add(recTrening1.treningId!);
+        } on Exception catch (e) {
+          // TODO
+        }
       }
 
       if (coTreningId2 != null) {
-        Recommender recTrening2 =
-            await _recommenderProvider.getById(coTreningId2);
-        recommendedTreninziIds.add(recTrening2.treningId!);
+        try {
+          Recommender recTrening2 =
+              await _recommenderProvider.getById(coTreningId2);
+          recommendedTreninziIds.add(recTrening2.treningId!);
+        } on Exception catch (e) {
+          // TODO
+        }
       }
 
       if (coTreningId3 != null) {
-        Recommender recTrening3 =
-            await _recommenderProvider.getById(coTreningId3);
-        recommendedTreninziIds.add(recTrening3.treningId!);
+        try {
+          Recommender recTrening3 =
+              await _recommenderProvider.getById(coTreningId3);
+          recommendedTreninziIds.add(recTrening3.treningId!);
+        } on Exception catch (e) {
+          // TODO
+        }
       }
 
       return recommendedTreninziIds;

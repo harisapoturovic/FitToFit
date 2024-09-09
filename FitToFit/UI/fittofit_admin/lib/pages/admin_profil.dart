@@ -77,6 +77,7 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
     if (mounted) {
       setState(() {
         odabraniKorisnik = data;
+        userImage = imageFromBase64String(data.slika);
       });
     }
   }
@@ -420,7 +421,8 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
                                                   return 'Ime mora početi velikim slovom.';
                                                 }
 
-                                                if (!RegExp(r'^[a-zA-ZšđčćžŠĐČĆŽ]+$')
+                                                if (!RegExp(
+                                                        r'^[a-zA-ZšđčćžŠĐČĆŽ]+$')
                                                     .hasMatch(value)) {
                                                   return 'Ime može sadržavati samo slova.';
                                                 }
@@ -445,7 +447,8 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
                                                 return 'Prezime mora početi velikim slovom.';
                                               }
 
-                                              if (!RegExp(r'^[a-zA-ZšđčćžŠĐČĆŽ]+$')
+                                              if (!RegExp(
+                                                      r'^[a-zA-ZšđčćžŠĐČĆŽ]+$')
                                                   .hasMatch(value)) {
                                                 return 'Prezime može sadržavati samo slova.';
                                               }

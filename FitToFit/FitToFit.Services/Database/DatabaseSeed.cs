@@ -291,7 +291,7 @@ namespace FitToFit.Services.Database
                {
                    RezervacijaStavkeId = 2,
                    RezervacijaId = 1,
-                   TerminId = 20
+                   TerminId = 18
                },
                 new RezervacijaStavke()
                 {
@@ -303,13 +303,13 @@ namespace FitToFit.Services.Database
                {
                    RezervacijaStavkeId = 4,
                    RezervacijaId = 2,
-                   TerminId = 4
+                   TerminId = 3
                },
                 new RezervacijaStavke()
                 {
                     RezervacijaStavkeId = 5,
                     RezervacijaId = 3,
-                    TerminId = 4
+                    TerminId = 23
                 },
                new RezervacijaStavke()
                {
@@ -387,7 +387,7 @@ namespace FitToFit.Services.Database
                 {
                     RezervacijaStavkeId = 18,
                     RezervacijaId = 11,
-                    TerminId = 34
+                    TerminId = 38
                 },
                new RezervacijaStavke()
                {
@@ -490,6 +490,12 @@ namespace FitToFit.Services.Database
                    RezervacijaStavkeId = 35,
                    RezervacijaId = 1,
                    TerminId = 33
+               },
+               new RezervacijaStavke()
+               {
+                   RezervacijaStavkeId = 36,
+                   RezervacijaId = 9,
+                   TerminId = 27
                });
         }
 
@@ -2301,7 +2307,7 @@ namespace FitToFit.Services.Database
                new Novosti()
                {
                    NovostId = 6,
-                   Naslov = "Šta jesti prije i posle treninga?",
+                   Naslov = "Šta jesti prije i poslije treninga?",
                    Sadrzaj = "Ishrana je ključna za postizanje i održavanje fitness rezultata. Naš vodič za pravilnu ishranu prije i poslije treninga pomoći će vam da maksimalno iskoristite svoj napor u teretani. Preporučujemo kombinaciju proteina i složenih ugljenih hidrata prije treninga za energiju, dok poslije treninga naglasak stavljamo na brzu apsorpciju proteina kako bismo podržali oporavak mišića i obnovu energije.",
                    DatumObjave = new DateTime(2024, 8, 31),
                    IsLiked = false,

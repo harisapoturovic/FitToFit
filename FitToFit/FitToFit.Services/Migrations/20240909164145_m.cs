@@ -635,7 +635,7 @@ namespace FitToFit.Services.Migrations
                     { 3, 0, new DateTime(2024, 8, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 10, "Kako održati motivaciju tokom ljeta?", "Ljeto je savršeno vrijeme za vježbanje na otvorenom i uživanje u aktivnostima na suncu. Međutim, visoke temperature mogu smanjiti vašu motivaciju. Savladajte izazove ljetnog vježbanja uz naše savjete kako održati motivaciju. Preporučujemo rane jutarnje ili kasne večernje treninge kako biste izbjegli najtoplije dijelove dana. Pridružite se našim grupnim vježbama na otvorenom ili isprobajte naše specijalne ljetne fitness izazove koji će vas inspirisati da ostanete aktivni i fit.", null },
                     { 4, 0, new DateTime(2024, 8, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 10, "Novi Grupni Programi", "Predstavljamo naše nove grupne programe koji kombinuju snagu, fleksibilnost i zabavu. Naši stručni instruktori vode raznolike grupne treninge kao što su HIIT (visokointenzivni intervalni treninzi), pilates, body pump i još mnogo toga. Grupni treninzi su odličan način da se motivišete uz podršku drugih članova. Ovi programi su dizajnirani da izazovu vaše tijelo i omoguće vam da dostignete svoje fitness ciljeve u dinamičnoj i prijateljskoj atmosferi.", 1 },
                     { 5, 0, new DateTime(2024, 8, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 10, "Najava nove zaposlenice", "Sa velikim zadovoljstvom vas obavještavamo da se našem timu pridružila nova zaposlenica, Medina Turkić. Medina će zauzeti poziciju trenerice i svojim bogatim iskustvom doprinijeti našem centru. Medina je diplomirala na DIF-u, gdje je stekla zvanje magistrice sporta i zdravlja. Uvereni smo da će Medina svojom posvećenošću, entuzijazmom i profesionalizmom značajno doprinijeti našem kolektivu i pomoći nam da postignemo još veće uspjehe. Molimo vas da pružite toplu dobrodošlicu Medini i pomognete joj da se što prije integriše u naš tim. Radujemo se zajedničkom radu i novim postignućima.", null },
-                    { 6, 0, new DateTime(2024, 8, 31, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 10, "Šta jesti prije i posle treninga?", "Ishrana je ključna za postizanje i održavanje fitness rezultata. Naš vodič za pravilnu ishranu prije i poslije treninga pomoći će vam da maksimalno iskoristite svoj napor u teretani. Preporučujemo kombinaciju proteina i složenih ugljenih hidrata prije treninga za energiju, dok poslije treninga naglasak stavljamo na brzu apsorpciju proteina kako bismo podržali oporavak mišića i obnovu energije.", null },
+                    { 6, 0, new DateTime(2024, 8, 31, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 10, "Šta jesti prije i poslije treninga?", "Ishrana je ključna za postizanje i održavanje fitness rezultata. Naš vodič za pravilnu ishranu prije i poslije treninga pomoći će vam da maksimalno iskoristite svoj napor u teretani. Preporučujemo kombinaciju proteina i složenih ugljenih hidrata prije treninga za energiju, dok poslije treninga naglasak stavljamo na brzu apsorpciju proteina kako bismo podržali oporavak mišića i obnovu energije.", null },
                     { 7, 0, new DateTime(2024, 7, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 11, "Savjeti za Sigurno Vježbanje u Centru", "Vaša sigurnost je naš prioritet. Nudimo vam savjete kako da vježbate sigurno i efikasno u našem fitness centru. Pravilno zagrijavanje i istezanje prije vježbanja smanjuje rizik od povreda. Takođe, pratite uputstva naših instruktora i koristite opremu prema preporukama kako biste maksimalno iskoristili svaki trening. Naš tim je uvijek tu da vam pruži podršku i odgovori na vaša pitanja.", null }
                 });
 
@@ -835,10 +835,10 @@ namespace FitToFit.Services.Migrations
                 values: new object[,]
                 {
                     { 1, 1, 1 },
-                    { 2, 1, 20 },
+                    { 2, 1, 18 },
                     { 3, 2, 6 },
-                    { 4, 2, 4 },
-                    { 5, 3, 4 },
+                    { 4, 2, 3 },
+                    { 5, 3, 23 },
                     { 6, 4, 7 },
                     { 7, 5, 5 },
                     { 8, 6, 9 },
@@ -851,7 +851,7 @@ namespace FitToFit.Services.Migrations
                     { 15, 10, 19 },
                     { 16, 10, 18 },
                     { 17, 11, 32 },
-                    { 18, 11, 34 },
+                    { 18, 11, 38 },
                     { 19, 12, 38 },
                     { 20, 12, 21 },
                     { 21, 13, 21 },
@@ -868,7 +868,8 @@ namespace FitToFit.Services.Migrations
                     { 32, 7, 38 },
                     { 33, 14, 35 },
                     { 34, 14, 4 },
-                    { 35, 1, 33 }
+                    { 35, 1, 33 },
+                    { 36, 9, 27 }
                 });
 
             migrationBuilder.CreateIndex(
