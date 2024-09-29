@@ -1,4 +1,5 @@
 import 'package:fittofit_admin/models/akcije.dart';
+import 'package:fittofit_admin/models/akcijeTreninzi.dart';
 import 'package:fittofit_admin/models/treninzi.dart';
 import 'package:fittofit_admin/providers/akcije_provider.dart';
 import 'package:fittofit_admin/providers/akcije_treninzi_provider.dart';
@@ -24,6 +25,8 @@ class _AkcijeCardState extends State<AkcijeCard> {
   DateTime? _pocetakAkcije;
   DateTime? _zavrsetakAkcije;
   final _formKey = GlobalKey<FormBuilderState>();
+  String? _dateErrorMessage1;
+  String? _dateErrorMessage2;
 
   @override
   void initState() {
@@ -32,6 +35,8 @@ class _AkcijeCardState extends State<AkcijeCard> {
     _treninziProvider = context.read<TreninziProvider>();
     _akcijeTreninziProvider = context.read<AkcijeTreninziProvider>();
     _akcijeProvider = context.read<AkcijeProvider>();
+    _pocetakAkcije = widget.akcija.datumPocetka;
+    _zavrsetakAkcije = widget.akcija.datumZavrsetka;
     _loadData();
   }
 
@@ -152,7 +157,7 @@ class _AkcijeCardState extends State<AkcijeCard> {
                   const Divider(),
                   widget.akcija.akcijeTreninzis?.length != 0
                       ? ListView.builder(
-                          itemCount: widget.akcija.akcijeTreninzis?.length ?? 0,
+                          itemCount: widget.akcija.akcijeTreninzis?.length,
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
@@ -492,24 +497,30 @@ class _AkcijeCardState extends State<AkcijeCard> {
     );
   }
 
+  void _reloadAkcijeTreninzis() async {
+    try {
+      var updatedAkcijeTreninzis = await _fetchUpdatedAkcijeTreninzis();
+      setState(() {
+        widget.akcija.akcijeTreninzis = updatedAkcijeTreninzis;
+      });
+    } catch (e) {
+      _showAlertDialog("Greška", e.toString(), Colors.red);
+    }
+  }
+
+  Future<List<AkcijeTreninzi>> _fetchUpdatedAkcijeTreninzis() async {
+    var result = await _akcijeTreninziProvider.get(filter: {
+      'akcijaId': widget.akcija.akcijaId,
+    });
+    for (var akcijaTrening in result.result) {
+      akcijaTrening.trening =
+          await _treninziProvider.getById(akcijaTrening.treningId);
+    }
+    return result.result;
+  }
+
   void _dodajTreningNaAkciju() async {
     _formKey.currentState?.saveAndValidate();
-    final currentFormState = _formKey.currentState;
-    if (!_areAllFieldsFilled(currentFormState)) {
-      _showAlertDialog(
-          "Upozorenje", "Popunite sva obavezna polja.", Colors.orange);
-      return;
-    }
-    if (currentFormState != null) {
-      if (!currentFormState.validate()) {
-        _showAlertDialog(
-            "Upozorenje",
-            "Molimo vas da ispravno popunite sva obavezna polja.",
-            Colors.orange);
-        return;
-      }
-    }
-
     var request = Map.from(_formKey.currentState!.value);
     request['akcijaId'] = widget.akcija.akcijaId;
 
@@ -528,26 +539,10 @@ class _AkcijeCardState extends State<AkcijeCard> {
           "Uspješan unos",
           "Trening uspješno dodat na akciju ${widget.akcija.naziv}.",
           Colors.green);
+      _reloadAkcijeTreninzis();
     } on Exception catch (e) {
       _showAlertDialog("Greška", e.toString(), Colors.red);
     }
-  }
-
-  bool _areAllFieldsFilled(FormBuilderState? formState) {
-    if (formState == null) {
-      return false;
-    }
-
-    List<String> requiredFields = ['treningId'];
-
-    for (String fieldName in requiredFields) {
-      if (formState.fields[fieldName]?.value == null ||
-          formState.fields[fieldName]!.value.toString().isEmpty) {
-        return false;
-      }
-    }
-
-    return true;
   }
 
   void _showAlertDialog(String naslov, String poruka, Color boja) {
@@ -570,7 +565,11 @@ class _AkcijeCardState extends State<AkcijeCard> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
             style: TextButton.styleFrom(
               backgroundColor: Colors.blue,
               foregroundColor: Colors.white,
@@ -618,7 +617,6 @@ class _AkcijeCardState extends State<AkcijeCard> {
             TextButton(
               onPressed: () {
                 _ukloniTrening(akcijaTreningId);
-                Navigator.pop(context);
               },
               child: const Text(
                 'Ukoni',
@@ -666,7 +664,6 @@ class _AkcijeCardState extends State<AkcijeCard> {
             TextButton(
               onPressed: () {
                 _obrisiAkciju();
-                Navigator.pop(context);
               },
               child: const Text(
                 'Izbriši',
@@ -713,7 +710,6 @@ class _AkcijeCardState extends State<AkcijeCard> {
             TextButton(
               onPressed: () {
                 _arhivirajAkciju();
-                Navigator.pop(context);
               },
               child: const Text(
                 'Arhiviraj',
@@ -760,7 +756,6 @@ class _AkcijeCardState extends State<AkcijeCard> {
             TextButton(
               onPressed: () {
                 _aktivirajAkciju();
-                Navigator.pop(context);
               },
               child: const Text(
                 'Aktiviraj',
@@ -784,6 +779,7 @@ class _AkcijeCardState extends State<AkcijeCard> {
         await _akcijeTreninziProvider.delete(akcijaTreningId);
         _showAlertDialog("Uspješno brisanje",
             "Trening uspješno uklonjen sa akcije.", Colors.green);
+        _reloadAkcijeTreninzis();
       }
     } catch (e) {
       _showAlertDialog("Greška", e.toString(), Colors.red);
@@ -795,6 +791,7 @@ class _AkcijeCardState extends State<AkcijeCard> {
       await _akcijeProvider.archive(widget.akcija.akcijaId);
       _showAlertDialog(
           "Uspješno arhiviranje", "Akcija uspješno arhvirana.", Colors.green);
+      _loadData();
     } catch (e) {
       _showAlertDialog("Greška", e.toString(), Colors.red);
     }
@@ -805,6 +802,7 @@ class _AkcijeCardState extends State<AkcijeCard> {
       await _akcijeProvider.activate(widget.akcija.akcijaId);
       _showAlertDialog(
           "Uspješno aktiviranje", "Akcija uspješno aktivirana.", Colors.green);
+      _loadData();
     } catch (e) {
       _showAlertDialog("Greška", e.toString(), Colors.red);
     }
@@ -866,12 +864,15 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                               if (value == null ||
                                                   value.isEmpty) {
                                                 return 'Ovo polje je obavezno!';
-                                              }
-                                              if (!RegExp(r'^[A-Z]')
+                                              } else if (!RegExp(
+                                                      r'^[A-Z-ŠĐČĆŽ]')
                                                   .hasMatch(value)) {
                                                 return 'Naziv mora početi velikim slovom.';
+                                              } else if (value.length < 5) {
+                                                return 'Morate unijeti najmanje 5 karaktera.';
+                                              } else if (value.length > 50) {
+                                                return 'Premašili ste maksimalan broj karaktera (50).';
                                               }
-
                                               return null;
                                             },
                                           ),
@@ -887,10 +888,15 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                               if (value == null ||
                                                   value.isEmpty) {
                                                 return 'Ovo polje je obavezno!';
-                                              }
-                                              if (!RegExp(r'^[0-9]+$')
+                                              } else if (!RegExp(r'^[0-9]+$')
                                                   .hasMatch(value)) {
                                                 return 'Ovo polje može sadržavati samo brojeve.';
+                                              } else {
+                                                final broj =
+                                                    int.tryParse(value) ?? 0;
+                                                if (broj < 1 || broj > 99) {
+                                                  return 'Dozvoljen je unos brojeva između 1 i 99.';
+                                                }
                                               }
 
                                               return null;
@@ -920,13 +926,15 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                                     DateTime.utc(2024, 12, 31),
                                               );
                                               if (date == null) {
-                                                _showAlertDialog(
-                                                    "Pažnja!",
-                                                    "Datum početka akcije je obavezan.",
-                                                    Colors.red);
+                                                setState(() {
+                                                  _pocetakAkcije = null;
+                                                  _dateErrorMessage1 =
+                                                      "Datum početka akcije je obavezan.";
+                                                });
                                               } else {
                                                 setState(() {
                                                   _pocetakAkcije = date;
+                                                  _dateErrorMessage1 = null;
                                                 });
                                               }
                                             },
@@ -952,13 +960,27 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                               ],
                                             ),
                                           ),
-                                          Text(
-                                            "Izabrani datum početka: ${_pocetakAkcije ?? odabranaAkcija.datumPocetka}",
-                                            style: const TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.black87,
-                                                fontWeight: FontWeight.bold),
-                                          ),
+                                          if (_dateErrorMessage1 != null)
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 8.0),
+                                              child: Text(
+                                                _dateErrorMessage1!,
+                                                style: const TextStyle(
+                                                    color: Colors.red,
+                                                    fontSize: 14),
+                                              ),
+                                            ),
+                                          _pocetakAkcije != null
+                                              ? Text(
+                                                  "Izabrani datum početka: ${_pocetakAkcije?.day}.${_pocetakAkcije?.month}.${_pocetakAkcije?.year}.",
+                                                  style: const TextStyle(
+                                                      fontSize: 16,
+                                                      color: Colors.black87,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                )
+                                              : Container(),
                                           const SizedBox(height: 10.0),
                                           ElevatedButton(
                                             style: ElevatedButton.styleFrom(
@@ -983,13 +1005,15 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                                     DateTime.utc(2024, 12, 31),
                                               );
                                               if (date == null) {
-                                                _showAlertDialog(
-                                                    "Pažnja!",
-                                                    "Datum završetka akcije je obavezan.",
-                                                    Colors.red);
+                                                setState(() {
+                                                  _zavrsetakAkcije = null;
+                                                  _dateErrorMessage2 =
+                                                      "Datum završetka akcije je obavezan.";
+                                                });
                                               } else {
                                                 setState(() {
                                                   _zavrsetakAkcije = date;
+                                                  _dateErrorMessage2 = null;
                                                 });
                                               }
                                             },
@@ -1015,16 +1039,55 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                               ],
                                             ),
                                           ),
-                                          Text(
-                                            "Izabrani datum završetka: ${_zavrsetakAkcije ?? odabranaAkcija.datumZavrsetka}",
-                                            style: const TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.black87,
-                                                fontWeight: FontWeight.bold),
-                                          ),
+                                          if (_dateErrorMessage2 != null)
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 8.0),
+                                              child: Text(
+                                                _dateErrorMessage2!,
+                                                style: const TextStyle(
+                                                    color: Colors.red,
+                                                    fontSize: 14),
+                                              ),
+                                            ),
+                                          _zavrsetakAkcije != null
+                                              ? Text(
+                                                  "Izabrani datum završetka: ${_zavrsetakAkcije?.day}.${_zavrsetakAkcije?.month}.${_zavrsetakAkcije?.year}.",
+                                                  style: const TextStyle(
+                                                      fontSize: 16,
+                                                      color: Colors.black87,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                )
+                                              : Container(),
                                           const SizedBox(height: 32),
                                           ElevatedButton(
                                             onPressed: () async {
+                                              if (_pocetakAkcije == null) {
+                                                setState(() {
+                                                  _dateErrorMessage1 =
+                                                      "Datum početka akcije je obavezan.";
+                                                });
+                                                return;
+                                              }
+                                              if (_zavrsetakAkcije == null) {
+                                                setState(() {
+                                                  _dateErrorMessage2 =
+                                                      "Datum završetka akcije je obavezan.";
+                                                });
+                                                return;
+                                              }
+
+                                              if (_pocetakAkcije!
+                                                  .isAfter(_zavrsetakAkcije!)) {
+                                                setState(() {
+                                                  _dateErrorMessage1 =
+                                                      "Datum početka akcije ne može biti poslije datuma završetka akcije.";
+                                                  _dateErrorMessage2 =
+                                                      "Datum početka akcije ne može biti poslije datuma završetka akcije.";
+                                                });
+                                                return;
+                                              }
                                               if (formKey.currentState!
                                                   .validate()) {
                                                 Akcije akcija = Akcije(
@@ -1047,8 +1110,12 @@ class _AkcijeCardState extends State<AkcijeCard> {
                                                 _akcijeProvider.update(
                                                     odabranaAkcija.akcijaId,
                                                     akcija);
-                                                _pocetakAkcije = null;
-                                                _zavrsetakAkcije = null;
+                                                setState(() {
+                                                  _formKey.currentState
+                                                      ?.reset();
+                                                  _dateErrorMessage1 = null;
+                                                  _dateErrorMessage2 = null;
+                                                });
                                                 _showAlertDialog(
                                                     "Uspješan edit",
                                                     "Podaci o akciji uspješno ažurirani.",

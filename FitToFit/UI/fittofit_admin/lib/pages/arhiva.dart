@@ -141,7 +141,7 @@ class _ArhivaPageState extends State<ArhivaPage> {
       'page': page,
       'pageSize': pageSize
     });
-    var korisnici = await _korisniciProvider.get(filter: {'isAdmin': false});
+    var korisnici = await _korisniciProvider.get(filter: {'isKorisnik': true});
     var treninzi = await _treninziProvider.get(filter: {});
     var clanarine = await _clanarineProvider.get(filter: {});
     if (mounted) {
@@ -488,7 +488,7 @@ class _ArhivaPageState extends State<ArhivaPage> {
                           )
                         : null,
                   ),
-                  format: DateFormat("yyyy-MM-dd"),
+                  format: DateFormat("d.M.yyyy."),
                   initialValue: _selectedDate,
                   onChanged: (value) {
                     if (mounted) {

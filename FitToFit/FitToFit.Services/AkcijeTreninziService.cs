@@ -15,7 +15,7 @@ using _200048Context = FitToFit.Services.Database._200048Context;
 
 namespace FitToFit.Services
 {
-    public class AkcijeTreninziService : BaseService<Model.AkcijeTreninzi, AkcijeTreninzi, BaseSearchObject>, IAkcijeTreninziService
+    public class AkcijeTreninziService : BaseService<Model.AkcijeTreninzi, AkcijeTreninzi, AkcijeTreninziSearchObject>, IAkcijeTreninziService
     {
         public AkcijeTreninziService(_200048Context context, IMapper mapper) : base(context, mapper)
         {
@@ -43,6 +43,17 @@ namespace FitToFit.Services
 
             await _context.SaveChangesAsync();
             return _mapper.Map<Model.AkcijeTreninzi>(entity);
+        }
+
+        public override IQueryable<AkcijeTreninzi> AddFilter(IQueryable<AkcijeTreninzi> query, AkcijeTreninziSearchObject? search = null)
+        {
+            
+            if (search?.AkcijaId != null)
+            {
+                query = query.Where(a => a.AkcijaId==search.AkcijaId);
+            }
+
+            return base.AddFilter(query, search);
         }
     }
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fittofit_admin/models/korisnici.dart';
 import 'package:fittofit_admin/providers/korisnici_provider.dart';
 import 'package:fittofit_admin/utils/util.dart';
@@ -21,11 +23,14 @@ class _ChangeUsernameScreenState extends State<ChangeUsernameScreen> {
   late KorisniciProvider _korisniciProvider;
 
   final TextEditingController _newUsernameController = TextEditingController();
-  final TextEditingController _currentUsernameController = TextEditingController();
+  final TextEditingController _currentUsernameController =
+      TextEditingController();
   FocusNode _trenutnoFocusNode = FocusNode();
+  FocusNode _newUsernameFocusNode = FocusNode();
+  Timer? _debounce;
   bool usernameTaken = false;
-  final debouncer = Debouncer(delay: const Duration(milliseconds: 500));
-
+  String? _currentUsernameErrorMessage;
+  String? _newUsernameErrorMessage;
   Future<Korisnici?> getUserFromUserId(int userId) async {
     final user = await _korisniciProvider.getById(userId);
     return user;
@@ -36,12 +41,33 @@ class _ChangeUsernameScreenState extends State<ChangeUsernameScreen> {
     super.initState();
     _korisniciProvider = context.read<KorisniciProvider>();
     _trenutnoFocusNode = FocusNode();
+    _newUsernameFocusNode = FocusNode();
+    _newUsernameFocusNode.addListener(() {
+      if (!_newUsernameFocusNode.hasFocus) {
+        _checkNewUsername();
+      }
+    });
   }
 
   @override
   void dispose() {
     _trenutnoFocusNode.dispose();
+    _newUsernameFocusNode.dispose();
     super.dispose();
+  }
+
+  void _checkNewUsername() {
+    if (_newUsernameController.text.isNotEmpty) {
+      provjeriUsername(_newUsernameController.text);
+    }
+  }
+
+  void _onUsernameChanged(String? value) {
+    if (value == null || value.isEmpty) return;
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      provjeriUsername(value);
+    });
   }
 
   Future<void> provjeriUsername(String username) async {
@@ -51,21 +77,14 @@ class _ChangeUsernameScreenState extends State<ChangeUsernameScreen> {
       if (mounted) {
         setState(() {
           usernameTaken = temp.count > 0;
-          if (usernameTaken) {
-            _showAlertDialog(
-                "Greška", "Admin sa ovim username-om već postoji", Colors.red);
-          }
+          _newUsernameErrorMessage = usernameTaken
+              ? "Admin sa ovim korisničkim imenom već postoji."
+              : null;
         });
       }
     } catch (e) {
       print('Greška pri provjeri username-a: $e');
     }
-  }
-
-  Future<void> debouncedUsernameCheck(String username) async {
-    debouncer.run(() async {
-      await provjeriUsername(username);
-    });
   }
 
   @override
@@ -113,6 +132,20 @@ class _ChangeUsernameScreenState extends State<ChangeUsernameScreen> {
                       name: 'currentPassword',
                       controller: _currentUsernameController,
                       focusNode: _trenutnoFocusNode,
+                      decoration: InputDecoration(
+                          errorText: _currentUsernameErrorMessage),
+                      onChanged: (val) async {
+                        Korisnici? korisnik =
+                            await getUserFromUserId(widget.userId);
+                        setState(() {
+                          if (val != korisnik?.korisnickoIme) {
+                            _currentUsernameErrorMessage =
+                                "Trenutni username nije validan za prijavljenog korisnika.";
+                          } else {
+                            _currentUsernameErrorMessage = null;
+                          }
+                        });
+                      },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
@@ -131,16 +164,17 @@ class _ChangeUsernameScreenState extends State<ChangeUsernameScreen> {
                     FormBuilderTextField(
                       name: 'newUsername',
                       controller: _newUsernameController,
-                      onChanged: (val) async {
-                        if (val != null && val != '') {
-                          debouncedUsernameCheck(val);
-                        }
-                      },
+                      focusNode: _newUsernameFocusNode,
+                      decoration:
+                          InputDecoration(errorText: _newUsernameErrorMessage),
+                      onChanged: _onUsernameChanged,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
-                        } else if (value[0] != value[0].toUpperCase()) {
-                          return 'Korisničko ime mora početi velikim slovom.';
+                        } else if (value.length < 5) {
+                          return 'Morate unijeti najmanje 5 karaktera.';
+                        } else if (value.length > 50) {
+                          return 'Premašili ste maksimalan broj karaktera (50).';
                         }
 
                         return null;
@@ -172,94 +206,46 @@ class _ChangeUsernameScreenState extends State<ChangeUsernameScreen> {
   }
 
   void _updateUserData() async {
-    if (usernameTaken == true) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Korisničko ime je već uzeto, unesite neko novo.'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-    _formKey.currentState?.save();
-    Korisnici? korisnik = await getUserFromUserId(widget.userId);
-
-    try {
-      final currentFormState = _formKey.currentState;
-
-      if (!_areAllFieldsFilled(currentFormState)) {
-        _showAlertDialog(
-            "Greška", "Molimo unesite i trenutni i novi username!", Colors.red);
-        return;
-      }
-
-      if (currentFormState != null) {
-        if (!currentFormState.validate()) {
-          _showAlertDialog("Greška",
-              "Molimo unesite i trenutni i novi username!", Colors.red);
-          return;
-        }
-      }
-
-      if (korisnik?.korisnickoIme != _currentUsernameController.text) {
-        _showAlertDialog(
-            "Greška",
-            "Trenutni username nije validan za prijavljenog korisnika!",
-            Colors.red);
-        return;
-      }
-
-      if (usernameTaken) {
-        _showAlertDialog("Greška",
-            "Korisničko ime koje ste unijeli je već zauzeto.", Colors.red);
-        return;
-      }
-
+    _formKey.currentState?.saveAndValidate();
+    if (_formKey.currentState!.validate()) {
       try {
-        await _korisniciProvider.changeUsername(
-          widget.userId,
-          _newUsernameController.text,
-          _currentUsernameController.text,
-        );
+        try {
+          await _korisniciProvider.changeUsername(
+            widget.userId,
+            _newUsernameController.text,
+            _currentUsernameController.text,
+          );
 
-        Authorization.username = _newUsernameController.text;
-        Provider.of<KorisniciProvider>(context, listen: false)
-            .setCurrentUserId(widget.userId);
-        _showAlertDialog("Korisničko ime promijenjeno",
-            "Uspješno promijenjeno korisničko ime.", Colors.green);
-      } on Exception catch (e) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            title: const Text("Error"),
-            content: Text(e.toString()),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text("OK"),
-              )
-            ],
+          Authorization.username = _newUsernameController.text;
+          Provider.of<KorisniciProvider>(context, listen: false)
+              .setCurrentUserId(widget.userId);
+          _showAlertDialog("Korisničko ime promijenjeno",
+              "Uspješno promijenjeno korisničko ime.", Colors.green);
+        } on Exception catch (e) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              title: const Text("Error"),
+              content: Text(e.toString()),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text("OK"),
+                )
+              ],
+            ),
+          );
+        }
+      } catch (error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Došlo je do greške prilikom promjene korisničkog imena. Molimo pokušajte ponovo.',
+            ),
           ),
         );
       }
-    } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'An error occurred while updating credentials. Check the console for more information.',
-          ),
-        ),
-      );
     }
-  }
-
-  bool _areAllFieldsFilled(FormBuilderState? formState) {
-    if (formState == null) return false;
-
-    final currentUsername = _currentUsernameController.text;
-    final newUsername = _newUsernameController.text;
-
-    return currentUsername.isNotEmpty && newUsername.isNotEmpty;
   }
 
   void _showAlertDialog(String naslov, String poruka, Color boja) {
@@ -282,14 +268,20 @@ class _ChangeUsernameScreenState extends State<ChangeUsernameScreen> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+             onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
             style: TextButton.styleFrom(
               backgroundColor: Colors.blue,
               textStyle: const TextStyle(
                 fontSize: 16.0,
               ),
             ),
-            child: const Text("OK"),
+            child: const Text(
+              "OK",
+              style: TextStyle(color: Colors.white),
+            ),
           ),
         ],
         shape: RoundedRectangleBorder(

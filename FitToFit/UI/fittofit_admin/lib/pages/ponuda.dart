@@ -40,6 +40,12 @@ class _PonudaPageState extends State<PonudaPage> {
   List<Clanarine> _clanarineList = [];
   List<Sale> _saleList = [];
   List<dynamic> _selectedList = [];
+  int? _trener;
+  int? _trening;
+  String? _dan;
+  int? _sala;
+  int? _vrstaTr;
+  int? _clanarina;
   int? _selectedTrener;
   int? _selectedTrening;
   int? _selectedClanarina;
@@ -52,20 +58,14 @@ class _PonudaPageState extends State<PonudaPage> {
   final _formKey = GlobalKey<FormBuilderState>();
   final _formKey2 = GlobalKey<FormBuilderState>();
   final TextEditingController _cijenaController = TextEditingController();
+  FocusNode _satFocusNode = FocusNode();
   FocusNode _ucestalostFocusNode = FocusNode();
 
   var page = 1;
   var totalcount = 0;
   var pageSize = 5;
 
-  final List<String> radniDani = [
-    'Ponedjeljak',
-    'Utorak',
-    'Srijeda',
-    'Četvrtak',
-    'Petak'
-  ];
-
+  List<String> radniDani = [];
   final List<String> ucestalost = ['1x', '2x', '3x', '4x', '5x'];
 
   @override
@@ -85,6 +85,7 @@ class _PonudaPageState extends State<PonudaPage> {
     _treninziClanarineProvider.addListener(() {
       _reloadTCList();
     });
+    _satFocusNode = FocusNode();
     _ucestalostFocusNode = FocusNode();
   }
 
@@ -114,6 +115,7 @@ class _PonudaPageState extends State<PonudaPage> {
 
   @override
   void dispose() {
+    _satFocusNode.dispose();
     _ucestalostFocusNode.dispose();
     super.dispose();
   }
@@ -142,6 +144,7 @@ class _PonudaPageState extends State<PonudaPage> {
 
       _selectedList = isRaspored ? _terminiList : _treninziClanarineList;
       totalcount = isRaspored ? termini.count : treninziClanarine.count;
+      radniDani = ['Ponedjeljak', 'Utorak', 'Srijeda', 'Četvrtak', 'Petak'];
     });
   }
 
@@ -303,7 +306,7 @@ class _PonudaPageState extends State<PonudaPage> {
                               ? Row(
                                   children: [
                                     Text(
-                                      e.dan + ' u ' + e.sat,
+                                      e.dan + ' u ' + e.sat + 'h',
                                       style: const TextStyle(
                                         fontSize: 15.0,
                                         color: Color.fromRGBO(0, 154, 231, 1),
@@ -1030,10 +1033,54 @@ class _PonudaPageState extends State<PonudaPage> {
     );
   }
 
+  void _showAlertDialogEdit(String naslov, String poruka, Color boja) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        backgroundColor: const Color.fromARGB(255, 238, 247, 255),
+        title: Text(
+          naslov,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: boja,
+          ),
+        ),
+        content: Text(
+          poruka,
+          style: const TextStyle(
+            fontSize: 16.0,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
+            style: TextButton.styleFrom(
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
+              textStyle: const TextStyle(
+                fontSize: 16.0,
+              ),
+            ),
+            child: const Text("OK"),
+          ),
+        ],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+      ),
+    );
+  }
+
   void _showAddTerminDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          FocusScope.of(context).requestFocus(_satFocusNode);
+        });
         return AlertDialog(
           title: const Text('Dodaj termin'),
           content: Container(
@@ -1051,13 +1098,25 @@ class _PonudaPageState extends State<PonudaPage> {
                       name: 'dan',
                       decoration:
                           const InputDecoration(labelText: 'Radni dani'),
-                      initialValue: radniDani[0],
+                      focusNode: _satFocusNode,
+                      initialValue: _dan,
                       items: radniDani.map((dan) {
                         return DropdownMenuItem(
                           value: dan,
                           child: Text(dan),
                         );
                       }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _dan = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Ovo polje je obavezno!';
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 10.0),
                     FormBuilderTextField(
@@ -1066,9 +1125,13 @@ class _PonudaPageState extends State<PonudaPage> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
-                        }
-                        if (value.length < 5) {
-                          return 'Ovo polje može imati minimalno 4 karaktera.';
+                        } else {
+                          final RegExp timeRegExp =
+                              RegExp(r'^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])$');
+
+                          if (!timeRegExp.hasMatch(value)) {
+                            return 'Unesite vrijeme u formatu HH:MM.';
+                          }
                         }
                         return null;
                       },
@@ -1079,9 +1142,17 @@ class _PonudaPageState extends State<PonudaPage> {
                       decoration:
                           const InputDecoration(labelText: 'Broj članova'),
                       validator: (value) {
-                        if (value != null && value.length > 2) {
-                          return 'Ovo polje može sadržavati jednu ili dvije cifre.';
+                        if (value == null || value.isEmpty) {
+                          return 'Ovo polje je obavezno!';
+                        } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                          return 'Ovo polje može sadržavati samo brojeve.';
+                        } else {
+                          final broj = int.tryParse(value) ?? 0;
+                          if (broj > 20) {
+                            return 'Dozvoljen je unos brojeva između 0 i 20.';
+                          }
                         }
+
                         return null;
                       },
                     ),
@@ -1089,37 +1160,70 @@ class _PonudaPageState extends State<PonudaPage> {
                     FormBuilderDropdown(
                       name: 'treningId',
                       decoration: const InputDecoration(labelText: 'Trening'),
-                      initialValue: _treninziList[0].treningId,
+                      initialValue: _trening,
                       items: _treninziList.map((trening) {
                         return DropdownMenuItem(
                           value: trening.treningId,
                           child: Text(trening.naziv),
                         );
                       }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _trening = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Ovo polje je obavezno!';
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 10.0),
                     FormBuilderDropdown(
                       name: 'trenerId',
                       decoration: const InputDecoration(labelText: 'Trener'),
-                      initialValue: _treneriList[0].trenerId,
+                      initialValue: _trener,
                       items: _treneriList.map((trener) {
                         return DropdownMenuItem(
                           value: trener.trenerId,
                           child: Text('${trener.ime} ${trener.prezime}'),
                         );
                       }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _trener = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Ovo polje je obavezno!';
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 10.0),
                     FormBuilderDropdown(
                       name: 'salaId',
                       decoration: const InputDecoration(labelText: 'Sala'),
-                      initialValue: _saleList[0].salaId,
+                      initialValue: _sala,
                       items: _saleList.map((sala) {
                         return DropdownMenuItem(
                           value: sala.salaId,
                           child: Text(sala.naziv),
                         );
                       }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _sala = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Ovo polje je obavezno!';
+                        }
+                        return null;
+                      },
                     ),
                   ],
                 ),
@@ -1162,45 +1266,30 @@ class _PonudaPageState extends State<PonudaPage> {
 
   void _dodajTermin() {
     _formKey.currentState?.saveAndValidate();
-    final currentFormState = _formKey.currentState;
-    if (!_areAllFieldsFilled(currentFormState)) {
-      _showAlertDialog(
-          "Upozorenje", "Popunite sva obavezna polja.", Colors.orange);
-      return;
-    }
-    if (currentFormState != null) {
-      if (!currentFormState.validate()) {
+    if (_formKey.currentState!.validate()) {
+      var request = Map.from(_formKey.currentState!.value);
+      try {
+        _terminiProvider.insert(request);
+        if (mounted) {
+          setState(() {
+            _formKey.currentState?.reset();
+            _dan = null;
+            _trening = null;
+            _trener = null;
+            _sala = null;
+            radniDani = [];
+            _treninziList = [];
+            _treneriList = [];
+            _saleList = [];
+            _loadData();
+          });
+        }
         _showAlertDialog(
-            "Upozorenje",
-            "Molimo vas da ispravno popunite sva obavezna polja.",
-            Colors.orange);
-        return;
+            "Uspješan unos", "Termin uspješno dodan.", Colors.green);
+      } on Exception catch (e) {
+        _showAlertDialog("Greška", e.toString(), Colors.red);
       }
     }
-    var request = Map.from(_formKey.currentState!.value);
-    try {
-      _terminiProvider.insert(request);
-      _showAlertDialog("Uspješan unos", "Termin uspješno dodan.", Colors.green);
-    } on Exception catch (e) {
-      _showAlertDialog("Greška", e.toString(), Colors.red);
-    }
-  }
-
-  bool _areAllFieldsFilled(FormBuilderState? formState) {
-    if (formState == null) {
-      return false;
-    }
-
-    List<String> requiredFields = ['dan', 'treningId', 'trenerId', 'salaId'];
-
-    for (String fieldName in requiredFields) {
-      if (formState.fields[fieldName]?.value == null ||
-          formState.fields[fieldName]!.value.toString().isEmpty) {
-        return false;
-      }
-    }
-
-    return true;
   }
 
   void _showAddStavkuDialog() {
@@ -1227,37 +1316,58 @@ class _PonudaPageState extends State<PonudaPage> {
                       name: 'vrstaTreningaId',
                       decoration:
                           const InputDecoration(labelText: 'Vrsta treninga'),
-                      initialValue: _vrsteTreningaList[0].vrstaTreningaId,
+                      initialValue: _vrstaTr,
+                      focusNode: _ucestalostFocusNode,
                       items: _vrsteTreningaList.map((trening) {
                         return DropdownMenuItem(
                           value: trening.vrstaTreningaId,
                           child: Text(trening.naziv!),
                         );
                       }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _vrstaTr = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Ovo polje je obavezno!';
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 10.0),
                     FormBuilderDropdown(
                       name: 'clanarinaId',
                       decoration: const InputDecoration(labelText: 'Članarina'),
-                      initialValue: _clanarineList[0].clanarinaId,
+                      initialValue: _clanarina,
                       items: _clanarineList.map((clanarina) {
                         return DropdownMenuItem(
                           value: clanarina.clanarinaId,
                           child: Text(clanarina.naziv),
                         );
                       }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _clanarina = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Ovo polje je obavezno!';
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 10.0),
                     FormBuilderTextField(
                       name: 'ucestalost',
-                      focusNode: _ucestalostFocusNode,
-                      decoration:
-                          const InputDecoration(labelText: 'Učestalost'),
+                      decoration: const InputDecoration(
+                          labelText: 'Učestalost (x puta sedmično)'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
-                        }
-                        if (!RegExp(r'^[1-5]$').hasMatch(value)) {
+                        } else if (!RegExp(r'^[1-5]$').hasMatch(value)) {
                           return 'Ovo polje može sadržavati samo brojeve od 1 do 5.';
                         }
                         return null;
@@ -1266,13 +1376,18 @@ class _PonudaPageState extends State<PonudaPage> {
                     const SizedBox(height: 10.0),
                     FormBuilderTextField(
                       name: 'cijena',
-                      decoration: const InputDecoration(labelText: 'Cijena'),
+                      decoration:
+                          const InputDecoration(labelText: 'Cijena (KM)'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
-                        }
-                        if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                        } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
                           return 'Ovo polje može sadržavati samo brojeve.';
+                        } else {
+                          final broj = int.tryParse(value) ?? 0;
+                          if (broj < 1 || broj > 100) {
+                            return 'Dozvoljen je unos brojeva između 1 i 100.';
+                          }
                         }
                         return null;
                       },
@@ -1318,51 +1433,26 @@ class _PonudaPageState extends State<PonudaPage> {
 
   void _dodajStavku() {
     _formKey2.currentState?.saveAndValidate();
-    final currentFormState = _formKey2.currentState;
-    if (!_areAllFieldsFilled2(currentFormState)) {
-      _showAlertDialog(
-          "Upozorenje", "Popunite sva obavezna polja.", Colors.orange);
-      return;
-    }
-    if (currentFormState != null) {
-      if (!currentFormState.validate()) {
-        _showAlertDialog(
-            "Upozorenje",
-            "Molimo vas da ispravno popunite sva obavezna polja.",
-            Colors.orange);
-        return;
+    if (_formKey2.currentState!.validate()) {
+      var request = Map.from(_formKey2.currentState!.value);
+      try {
+        _treninziClanarineProvider.insert(request);
+        if (mounted) {
+          setState(() {
+            _formKey2.currentState?.reset();
+            _vrstaTr = null;
+            _clanarina = null;
+            _vrsteTreningaList = [];
+            _clanarineList = [];
+            _loadData();
+          });
+        }
+        _showAlertDialog("Uspješan unos",
+            "Stavka uspješno dodana na cjenovnik.", Colors.green);
+      } on Exception catch (e) {
+        _showAlertDialog("Greška", e.toString(), Colors.red);
       }
     }
-    var request = Map.from(_formKey2.currentState!.value);
-    try {
-      _treninziClanarineProvider.insert(request);
-      _showAlertDialog("Uspješan unos", "Stavka uspješno dodana na cjenovnik.",
-          Colors.green);
-    } on Exception catch (e) {
-      _showAlertDialog("Greška", e.toString(), Colors.red);
-    }
-  }
-
-  bool _areAllFieldsFilled2(FormBuilderState? formState) {
-    if (formState == null) {
-      return false;
-    }
-
-    List<String> requiredFields = [
-      'cijena',
-      'clanarinaId',
-      'vrstaTreningaId',
-      'ucestalost'
-    ];
-
-    for (String fieldName in requiredFields) {
-      if (formState.fields[fieldName]?.value == null ||
-          formState.fields[fieldName]!.value.toString().isEmpty) {
-        return false;
-      }
-    }
-
-    return true;
   }
 
   showEditTermin(Termini termin) async {
@@ -1421,7 +1511,7 @@ class _PonudaPageState extends State<PonudaPage> {
                                             }).toList(),
                                             onChanged: (value) {
                                               setState(() {
-                                                _selectedDan = value;
+                                                _dan = value;
                                               });
                                             },
                                           ),
@@ -1435,9 +1525,14 @@ class _PonudaPageState extends State<PonudaPage> {
                                               if (value == null ||
                                                   value.isEmpty) {
                                                 return 'Ovo polje je obavezno!';
-                                              }
-                                              if (value.length < 5) {
-                                                return 'Ovo polje može imati minimalno 4 karaktera.';
+                                              } else {
+                                                final RegExp timeRegExp = RegExp(
+                                                    r'^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])$');
+
+                                                if (!timeRegExp
+                                                    .hasMatch(value)) {
+                                                  return 'Unesite vrijeme u formatu HH:MM.';
+                                                }
                                               }
                                               return null;
                                             },
@@ -1451,10 +1546,20 @@ class _PonudaPageState extends State<PonudaPage> {
                                               border: OutlineInputBorder(),
                                             ),
                                             validator: (value) {
-                                              if (value != null &&
-                                                  value.length > 2) {
-                                                return 'Ovo polje može sadržavati jednu ili dvije cifre.';
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return 'Ovo polje je obavezno!';
+                                              } else if (!RegExp(r'^[0-9]+$')
+                                                  .hasMatch(value)) {
+                                                return 'Ovo polje može sadržavati samo brojeve.';
+                                              } else {
+                                                final broj =
+                                                    int.tryParse(value) ?? 0;
+                                                if (broj > 20) {
+                                                  return 'Dozvoljen je unos brojeva između 0 i 20.';
+                                                }
                                               }
+
                                               return null;
                                             },
                                           ),
@@ -1472,7 +1577,7 @@ class _PonudaPageState extends State<PonudaPage> {
                                             }).toList(),
                                             onChanged: (value) {
                                               setState(() {
-                                                _selectedTrening = value;
+                                                _trening = value;
                                               });
                                             },
                                           ),
@@ -1491,7 +1596,7 @@ class _PonudaPageState extends State<PonudaPage> {
                                             }).toList(),
                                             onChanged: (value) {
                                               setState(() {
-                                                _selectedTrener = value;
+                                                _trener = value;
                                               });
                                             },
                                           ),
@@ -1509,7 +1614,7 @@ class _PonudaPageState extends State<PonudaPage> {
                                             }).toList(),
                                             onChanged: (value) {
                                               setState(() {
-                                                _selectedSala = value;
+                                                _sala = value;
                                               });
                                             },
                                           ),
@@ -1520,24 +1625,32 @@ class _PonudaPageState extends State<PonudaPage> {
                                                   .validate()) {
                                                 Termini t = Termini(
                                                     terminId: termin.terminId,
-                                                    dan: _selectedDan ??
-                                                        termin.dan,
+                                                    dan: _dan ?? termin.dan,
                                                     sat: satController.text,
                                                     brojClanova: int.tryParse(
                                                             brojClanovaController
                                                                 .text) ??
                                                         0,
-                                                    treningId:
-                                                        _selectedTrening ??
-                                                            termin.treningId,
-                                                    trenerId: _selectedTrener ??
+                                                    treningId: _trening ??
+                                                        termin.treningId,
+                                                    trenerId: _trener ??
                                                         termin.trenerId,
-                                                    salaId: _selectedSala ??
-                                                        termin.salaId);
+                                                    salaId:
+                                                        _sala ?? termin.salaId);
 
                                                 _terminiProvider.update(
                                                     termin.terminId, t);
-                                                _showAlertDialog(
+                                                if (mounted) {
+                                                  setState(() {
+                                                    formKey.currentState
+                                                        ?.reset();
+                                                    _dan = null;
+                                                    _trening = null;
+                                                    _trener = null;
+                                                    _sala = null;
+                                                  });
+                                                }
+                                                _showAlertDialogEdit(
                                                     "Uspješan edit",
                                                     "Podaci o terminu uspješno ažurirani.",
                                                     Colors.green);
@@ -1629,7 +1742,7 @@ class _PonudaPageState extends State<PonudaPage> {
                                             }).toList(),
                                             onChanged: (value) {
                                               setState(() {
-                                                _selectedVrstaTr = value;
+                                                _vrstaTr = value;
                                               });
                                             },
                                           ),
@@ -1648,7 +1761,7 @@ class _PonudaPageState extends State<PonudaPage> {
                                             }).toList(),
                                             onChanged: (value) {
                                               setState(() {
-                                                _selectedClanarina = value;
+                                                _clanarina = value;
                                               });
                                             },
                                           ),
@@ -1662,8 +1775,7 @@ class _PonudaPageState extends State<PonudaPage> {
                                               if (value == null ||
                                                   value.isEmpty) {
                                                 return 'Ovo polje je obavezno!';
-                                              }
-                                              if (!RegExp(r'^[1-5]$')
+                                              } else if (!RegExp(r'^[1-5]$')
                                                   .hasMatch(value)) {
                                                 return 'Ovo polje može sadržavati samo brojeve od 1 do 5.';
                                               }
@@ -1682,10 +1794,15 @@ class _PonudaPageState extends State<PonudaPage> {
                                               if (value == null ||
                                                   value.isEmpty) {
                                                 return 'Ovo polje je obavezno!';
-                                              }
-                                              if (!RegExp(r'^[0-9]+$')
+                                              } else if (!RegExp(r'^[0-9]+$')
                                                   .hasMatch(value)) {
                                                 return 'Ovo polje može sadržavati samo brojeve.';
+                                              } else {
+                                                final broj =
+                                                    int.tryParse(value) ?? 0;
+                                                if (broj < 1 || broj > 100) {
+                                                  return 'Dozvoljen je unos brojeva između 1 i 100.';
+                                                }
                                               }
                                               return null;
                                             },
@@ -1698,13 +1815,10 @@ class _PonudaPageState extends State<PonudaPage> {
                                                 TreninziClanarine tc = TreninziClanarine(
                                                     treningClanarinaId: stavka
                                                         .treningClanarinaId,
-                                                    vrstaTreningaId:
-                                                        _selectedVrstaTr ??
-                                                            stavka
-                                                                .vrstaTreningaId,
-                                                    clanarinaId:
-                                                        _selectedClanarina ??
-                                                            stavka.clanarinaId,
+                                                    vrstaTreningaId: _vrstaTr ??
+                                                        stavka.vrstaTreningaId,
+                                                    clanarinaId: _clanarina ??
+                                                        stavka.clanarinaId,
                                                     ucestalost: int.tryParse(
                                                             ucestalostController
                                                                 .text) ??
@@ -1719,7 +1833,15 @@ class _PonudaPageState extends State<PonudaPage> {
                                                         stavka
                                                             .treningClanarinaId,
                                                         tc);
-                                                _showAlertDialog(
+                                                if (mounted) {
+                                                  setState(() {
+                                                    formKey.currentState
+                                                        ?.reset();
+                                                    _vrstaTr = null;
+                                                    _clanarina = null;
+                                                  });
+                                                }
+                                                _showAlertDialogEdit(
                                                     "Uspješan edit",
                                                     "Podaci o stavci uspješno ažurirani.",
                                                     Colors.green);

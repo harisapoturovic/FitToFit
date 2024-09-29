@@ -227,15 +227,16 @@ class _VjezbePageState extends State<VjezbePage> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
-                        }
-                        if (!RegExp(r'^[A-Z]').hasMatch(value)) {
+                        } else if (!RegExp(r'^[A-ZŠĐČĆŽ]').hasMatch(value)) {
                           return 'Naziv mora početi velikim slovom.';
+                        } else if (!RegExp(r'^[a-zA-ZšđčćžŠĐČĆŽ\s]+$')
+                            .hasMatch(value)) {
+                          return 'Naziv može sadržavati samo slova.';
+                        } else if (value.length < 3) {
+                          return 'Morate unijeti najmanje 3 karaktera.';
+                        } else if (value.length > 50) {
+                          return 'Premašili ste maksimalan broj karaktera (50).';
                         }
-
-                        if (value.length > 50) {
-                          return 'Možete unijeti maksimalno 50 karaktera.';
-                        }
-
                         return null;
                       },
                     ),
@@ -246,9 +247,12 @@ class _VjezbePageState extends State<VjezbePage> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
-                        }
-                        if (value.length < 5) {
+                        } else if (!RegExp(r'^[A-ZŠĐČĆŽ]').hasMatch(value)) {
+                          return 'Opis mora početi velikim slovom.';
+                        } else if (value.length < 5) {
                           return 'Morate unijeti najmanje 5 karaktera.';
+                        } else if (value.length > 600) {
+                          return 'Premašili ste maksimalan broj karaktera (600).';
                         }
                         return null;
                       },
@@ -264,7 +268,7 @@ class _VjezbePageState extends State<VjezbePage> {
                           ),
                           child: ListTile(
                             leading: const Icon(Icons.photo),
-                            title: const Text("Select image"),
+                            title: const Text("Odaberite sliku"),
                             trailing: const Icon(Icons.file_upload),
                             onTap: getImage,
                           ),
@@ -311,23 +315,6 @@ class _VjezbePageState extends State<VjezbePage> {
     );
   }
 
-  bool _areAllFieldsFilled(FormBuilderState? formState) {
-    if (formState == null) {
-      return false;
-    }
-
-    List<String> requiredFields = ['naziv', 'opis'];
-
-    for (String fieldName in requiredFields) {
-      if (formState.fields[fieldName]?.value == null ||
-          formState.fields[fieldName]!.value.toString().isEmpty) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
   void _showAlertDialog(String naslov, String poruka, Color boja) {
     showDialog(
       context: context,
@@ -368,29 +355,21 @@ class _VjezbePageState extends State<VjezbePage> {
 
   void _dodajVjezbu() {
     _formKey.currentState?.saveAndValidate();
-    final currentFormState = _formKey.currentState;
-    if (!_areAllFieldsFilled(currentFormState)) {
-      _showAlertDialog(
-          "Upozorenje", "Popunite sva obavezna polja.", Colors.orange);
-      return;
-    }
-    if (currentFormState != null) {
-      if (!currentFormState.validate()) {
+    if (_formKey.currentState!.validate()) {
+      var request = Map.from(_formKey.currentState!.value);
+      request['slika'] = _base64Image;
+      try {
+        _vjezbeProvider.insert(request);
+        if (mounted) {
+          setState(() {
+            _formKey.currentState?.reset();
+          });
+        }
         _showAlertDialog(
-            "Upozorenje",
-            "Molimo vas da ispravno popunite sva obavezna polja.",
-            Colors.orange);
-        return;
+            "Uspješan unos", "Vježba uspješno dodana.", Colors.green);
+      } on Exception catch (e) {
+        _showAlertDialog("Greška", e.toString(), Colors.red);
       }
-    }
-    var request = Map.from(_formKey.currentState!.value);
-    request['slika'] = _base64Image;
-    try {
-      _vjezbeProvider.insert(request);
-      _showAlertDialog(
-          "Uspješan unos", "Vježba uspješno dodana.", Colors.green);
-    } on Exception catch (e) {
-      _showAlertDialog("Greška", e.toString(), Colors.red);
     }
   }
 }

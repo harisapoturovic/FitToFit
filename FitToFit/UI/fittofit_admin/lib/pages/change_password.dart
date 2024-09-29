@@ -23,8 +23,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   late KorisniciProvider _korisniciProvider;
 
   final TextEditingController _newPasswordController = TextEditingController();
-  final TextEditingController _currentPasswordController = TextEditingController();
+  final TextEditingController _currentPasswordController =
+      TextEditingController();
   FocusNode _trenutnaFocusNode = FocusNode();
+  String? _currentPasswordErrorMessage;
 
   Future<Korisnici?> getUserFromUserId(int userId) async {
     final user = await _korisniciProvider.getById(userId);
@@ -42,6 +44,19 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   void dispose() {
     _trenutnaFocusNode.dispose();
     super.dispose();
+  }
+
+  void _validateCurrentPassword(String value) async {
+    if (value != Authorization.password) {
+      setState(() {
+        _currentPasswordErrorMessage =
+            'Lozinka koju ste unijeli ne odgovara prijavljenom korisniku.';
+      });
+    } else {
+      setState(() {
+        _currentPasswordErrorMessage = null;
+      });
+    }
   }
 
   @override
@@ -90,6 +105,17 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         name: 'currentPassword',
                         controller: _currentPasswordController,
                         focusNode: _trenutnaFocusNode,
+                        decoration: InputDecoration(
+                            errorText: _currentPasswordErrorMessage),
+                        onChanged: (value) {
+                          if (value != null && value.isNotEmpty) {
+                            _validateCurrentPassword(value);
+                          } else {
+                            setState(() {
+                              _currentPasswordErrorMessage = null;
+                            });
+                          }
+                        },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Ovo polje je obavezno!';
@@ -148,43 +174,21 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   }
 
   void _updatePassword() async {
-    _formKey.currentState?.save();
-
-    try {
-      if (_formKey.currentState!.validate()) {
-        String newPassword = _newPasswordController.text;
-        String currentPassword = _currentPasswordController.text;
-
-        final currentFormState = _formKey.currentState;
-        if (!_areAllFieldsFilled(currentFormState)) {
-          _showAlertDialog("Greška",
-              "Molimo unesite i trenutnu i novu lozinku!", Colors.red);
-          return;
-        }
-
-        if (currentFormState != null) {
-          if (!currentFormState.validate()) {
-            _showAlertDialog("Greška",
-                "Molimo unesite i trenutnu i novu lozinku!", Colors.red);
-            return;
-          }
-        }
-
+    _formKey.currentState?.saveAndValidate();
+    if (_formKey.currentState!.validate()) {
+      try {
         try {
           await _korisniciProvider.changePassword(
             widget.userId,
-            newPassword,
-            currentPassword,
+            _newPasswordController.text,
+            _currentPasswordController.text,
           );
 
-          Authorization.password = newPassword;
-
+          Authorization.password = _newPasswordController.text;
           Provider.of<KorisniciProvider>(context, listen: false)
               .setCurrentUserId(widget.userId);
           _showAlertDialog("Lozinka promijenjena",
               "Uspješno promijenjena lozinka.", Colors.green);
-        } on FormatException catch (_) {
-          _showAlertDialog("Greška", "Netačna lozinka!", Colors.red);
         } on Exception catch (e) {
           showDialog(
             context: context,
@@ -200,25 +204,16 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             ),
           );
         }
-      }
-    } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'An error occurred while updating credentials. Check the console for more information.',
+      } catch (error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Došlo je do greške prilikom promjene lozinke. Molimo pokušajte ponovo.',
+            ),
           ),
-        ),
-      );
+        );
+      }
     }
-  }
-
-  bool _areAllFieldsFilled(FormBuilderState? formState) {
-    if (formState == null) return false;
-
-    final currentPassword = _currentPasswordController.text;
-    final newPassword = _newPasswordController.text;
-
-    return currentPassword.isNotEmpty && newPassword.isNotEmpty;
   }
 
   void _showAlertDialog(String naslov, String poruka, Color boja) {
@@ -241,14 +236,20 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
             style: TextButton.styleFrom(
               backgroundColor: Colors.blue,
               textStyle: const TextStyle(
                 fontSize: 16.0,
               ),
             ),
-            child: const Text("OK"),
+            child: const Text(
+              "OK",
+              style: TextStyle(color: Colors.white),
+            ),
           ),
         ],
         shape: RoundedRectangleBorder(

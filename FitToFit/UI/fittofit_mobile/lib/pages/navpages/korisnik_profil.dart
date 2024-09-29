@@ -18,7 +18,6 @@ import 'package:fittofit_mobile/providers/treneri_provider.dart';
 import 'package:fittofit_mobile/providers/treninzi_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:fittofit_mobile/models/korisnici.dart';
@@ -81,7 +80,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
     if (mounted) {
       setState(() {
-        korisnik = user.result[0];
+        // ignore: unnecessary_null_comparison
+        if (user != null) {
+          korisnik = user.result[0];
+        }
         isLoading = false;
       });
     }
@@ -222,9 +224,11 @@ class _ProfilePageState extends State<ProfilePage> {
                           const SizedBox(width: 20),
                           _buildInfoCard('${korisnik.tezina} kg', 'Težina'),
                           const SizedBox(width: 20),
-                          _buildInfoCard(
-                              "${calculateAge(korisnik.datumRodjenja!)}",
-                              'Godine'),
+                          korisnik.datumRodjenja != null
+                              ? _buildInfoCard(
+                                  "${calculateAge(korisnik.datumRodjenja!)}",
+                                  'Godine')
+                              : _buildInfoCard("/", 'Godine')
                         ],
                       ),
                       const SizedBox(height: 20),
@@ -437,21 +441,28 @@ class _ProfilePageState extends State<ProfilePage> {
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     FormBuilderTextField(
-                      name: 'ime',
-                      controller: imeController,
-                      decoration: const InputDecoration(
-                        labelText: 'Ime',
-                        border: OutlineInputBorder(),
-                      ),
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(
-                            errorText: 'Ovo polje je obavezno!'),
-                        FormBuilderValidators.match(r'^[A-Z-ŠĐČĆŽ]',
-                            errorText: 'Ime mora početi velikim slovom.'),
-                        FormBuilderValidators.match(r'^[a-zA-ZšđčćžŠĐČĆŽ]+$',
-                            errorText: 'Ime može sadržavati samo slova.'),
-                      ]),
-                    ),
+                        name: 'ime',
+                        controller: imeController,
+                        decoration: const InputDecoration(
+                          labelText: 'Ime',
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Ovo polje je obavezno!';
+                          } else if (!RegExp(r'^[A-Z-ŠĐČĆŽ]').hasMatch(value)) {
+                            return 'Ime mora početi velikim slovom.';
+                          } else if (!RegExp(r'^[a-zA-ZšđčćžŠĐČĆŽ\s]+$')
+                              .hasMatch(value)) {
+                            return 'Ime može sadržavati samo slova.';
+                          } else if (value.length < 3) {
+                            return 'Morate unijeti najmanje 3 karaktera.';
+                          } else if (value.length > 50) {
+                            return 'Premašili ste maksimalan broj karaktera (50).';
+                          }
+
+                          return null;
+                        }),
                     FormBuilderTextField(
                       name: 'prezime',
                       controller: prezimeController,
@@ -459,14 +470,22 @@ class _ProfilePageState extends State<ProfilePage> {
                         labelText: 'Prezime',
                         border: OutlineInputBorder(),
                       ),
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(
-                            errorText: 'Ovo polje je obavezno!'),
-                        FormBuilderValidators.match(r'^[A-Z-ŠĐČĆŽ]',
-                            errorText: 'Prezime mora početi velikim slovom.'),
-                        FormBuilderValidators.match(r'^[a-zA-ZšđčćžŠĐČĆŽ]+$',
-                            errorText: 'Prezime može sadržavati samo slova.'),
-                      ]),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Ovo polje je obavezno!';
+                        } else if (!RegExp(r'^[A-Z-ŠĐČĆŽ]').hasMatch(value)) {
+                          return 'Prezime mora početi velikim slovom.';
+                        } else if (!RegExp(r'^[a-zA-ZšđčćžŠĐČĆŽ\s]+$')
+                            .hasMatch(value)) {
+                          return 'Prezime može sadržavati samo slova.';
+                        } else if (value.length < 3) {
+                          return 'Morate unijeti najmanje 3 karaktera.';
+                        } else if (value.length > 50) {
+                          return 'Premašili ste maksimalan broj karaktera (50).';
+                        }
+
+                        return null;
+                      },
                     ),
                     FormBuilderTextField(
                       name: 'telefon',
@@ -475,14 +494,18 @@ class _ProfilePageState extends State<ProfilePage> {
                         labelText: 'Telefon',
                         border: OutlineInputBorder(),
                       ),
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.numeric(
-                            errorText:
-                                'Ovo polje može sadržavati samo brojeve.'),
-                        FormBuilderValidators.maxLength(10,
-                            errorText:
-                                'Broj telefona može imati maksimalno 10 cifara.'),
-                      ]),
+                      validator: (value) {
+                        if (value != null && value.isNotEmpty) {
+                          if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                            return 'Ovo polje može sadržavati samo brojeve.';
+                          } else if (value.length < 9) {
+                            return 'Broj telefona može imati minimalno 9 cifara.';
+                          } else if (value.length > 10) {
+                            return 'Broj telefona može imati maksimalno 10 cifara.';
+                          }
+                        }
+                        return null;
+                      },
                     ),
                     FormBuilderTextField(
                       name: 'email',
@@ -491,10 +514,18 @@ class _ProfilePageState extends State<ProfilePage> {
                         labelText: 'E-mail',
                         border: OutlineInputBorder(),
                       ),
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.email(
-                            errorText: 'Unesite validnu e-mail adresu.'),
-                      ]),
+                      validator: (value) {
+                        if (value != null && value.isNotEmpty) {
+                          if (!RegExp(
+                                  r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                              .hasMatch(value)) {
+                            return 'Unesite validnu e-mail adresu.';
+                          } else if (value.length > 50) {
+                            return 'Premašili ste maksimalan broj karaktera (50).';
+                          }
+                        }
+                        return null;
+                      },
                     ),
                     FormBuilderTextField(
                       name: 'adresa',
@@ -503,10 +534,19 @@ class _ProfilePageState extends State<ProfilePage> {
                         labelText: 'Adresa',
                         border: OutlineInputBorder(),
                       ),
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.match(r'^[A-Z]',
-                            errorText: 'Adresa mora početi velikim slovom.'),
-                      ]),
+                      validator: (value) {
+                        if (value != null && value.isNotEmpty) {
+                          if (value.isNotEmpty &&
+                              !RegExp(r'^[A-Z-ŠĐČĆŽ]').hasMatch(value)) {
+                            return 'Adresa mora početi velikim slovom.';
+                          } else if (value.length < 3) {
+                            return 'Morate unijeti najmanje 3 karaktera.';
+                          } else if (value.length > 50) {
+                            return 'Premašili ste maksimalan broj karaktera (50).';
+                          }
+                        }
+                        return null;
+                      },
                     ),
                     FormBuilderTextField(
                       name: 'visina',
@@ -516,12 +556,16 @@ class _ProfilePageState extends State<ProfilePage> {
                         border: OutlineInputBorder(),
                       ),
                       keyboardType: TextInputType.number,
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(
-                            errorText: 'Ovo polje je obavezno!'),
-                        FormBuilderValidators.numeric(
-                            errorText: 'Visina mora biti broj.'),
-                      ]),
+                      validator: (value) {
+                        if (value != null && value.isNotEmpty) {
+                          if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                            return 'Ovo polje može sadržavati samo brojeve.';
+                          } else if (value.length != 3) {
+                            return 'Možete unijeti samo 3 cifre.';
+                          }
+                        }
+                        return null;
+                      },
                     ),
                     FormBuilderTextField(
                       name: 'tezina',
@@ -531,12 +575,16 @@ class _ProfilePageState extends State<ProfilePage> {
                         border: OutlineInputBorder(),
                       ),
                       keyboardType: TextInputType.number,
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(
-                            errorText: 'Ovo polje je obavezno!'),
-                        FormBuilderValidators.numeric(
-                            errorText: 'Težina mora biti broj.'),
-                      ]),
+                      validator: (value) {
+                        if (value != null && value.isNotEmpty) {
+                          if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                            return 'Ovo polje može sadržavati samo brojeve.';
+                          } else if (value.length < 2 || value.length > 3) {
+                            return 'Možete unijeti 2 ili 3 cifre.';
+                          }
+                        }
+                        return null;
+                      },
                     ),
                     ElevatedButton(
                       onPressed: () async {
@@ -594,24 +642,17 @@ class _ProfilePageState extends State<ProfilePage> {
                     Center(
                       child: ElevatedButton(
                         onPressed: () {
-                          if (formKey.currentState!.saveAndValidate()) {
-                            korisnik.ime = formKey.currentState!.value['ime'];
-                            korisnik.prezime =
-                                formKey.currentState!.value['prezime'];
-                            korisnik.email =
-                                formKey.currentState!.value['email'];
-                            korisnik.telefon =
-                                formKey.currentState!.value['telefon'];
-                            korisnik.adresa =
-                                formKey.currentState!.value['adresa'];
-                            korisnik.visina =
-                                formKey.currentState!.value['visina'];
-                            korisnik.tezina =
-                                formKey.currentState!.value['tezina'];
-
+                          if (formKey.currentState!.validate()) {
+                            korisnik.ime = imeController.text;
+                            korisnik.prezime = prezimeController.text;
+                            korisnik.email = emailController.text;
+                            korisnik.telefon = telefonController.text;
+                            korisnik.adresa = adresaController.text;
+                            korisnik.visina = visinaController.text;
+                            korisnik.tezina = tezinaController.text;
                             _korisniciProvider.update(
                                 korisnik.korisnikId, korisnik);
-                            _showAlertDialog(
+                            _showAlertDialogEdit(
                                 "Uspješan edit",
                                 "Podaci o korisniku uspješno ažurirani.",
                                 Colors.green);
@@ -708,13 +749,17 @@ class _ProfilePageState extends State<ProfilePage> {
                       leading: const Icon(Icons.width_full),
                     ),
                     ListTile(
-                      title: Text(
-                          'Datum rođenja: ${DateFormat('dd.MM.yyyy').format(korisnik.datumRodjenja!)}'),
+                      title: korisnik.datumRodjenja != null
+                          ? Text(
+                              'Datum rođenja: ${DateFormat('dd.MM.yyyy').format(korisnik.datumRodjenja!)}')
+                          : const Text("/"),
                       leading: const Icon(Icons.cake),
                     ),
                     ListTile(
-                      title: Text(
-                          'Datum početka treniranja: ${DateFormat('dd.MM.yyyy').format(korisnik.datumPocetkaTreniranja!)}'),
+                      title: korisnik.datumPocetkaTreniranja != null
+                          ? Text(
+                              'Datum početka treniranja: ${DateFormat('dd.MM.yyyy').format(korisnik.datumPocetkaTreniranja!)}')
+                          : const Text("/"),
                       leading: const Icon(Icons.accessibility),
                     ),
                     ListTile(
@@ -1186,7 +1231,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ocjena: ratingValue,
                         trenerId: trainer.trenerId);
                     await _ocjeneProvider.insert(ocjena);
-                    _showAlertDialog("Ocjena spremljena",
+                    _showAlertDialogOcjene("Ocjena spremljena",
                         "Uspješno ocijenjen trener.", Colors.green);
                     _loadData();
                     _fetchAvailableTrainers();
@@ -1388,6 +1433,89 @@ class _ProfilePageState extends State<ProfilePage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
+            style: TextButton.styleFrom(
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
+              textStyle: const TextStyle(
+                fontSize: 16.0,
+              ),
+            ),
+            child: const Text("OK"),
+          ),
+        ],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+      ),
+    );
+  }
+
+  void _showAlertDialogEdit(String naslov, String poruka, Color boja) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        backgroundColor: const Color.fromARGB(255, 238, 247, 255),
+        title: Text(
+          naslov,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: boja,
+          ),
+        ),
+        content: Text(
+          poruka,
+          style: const TextStyle(
+            fontSize: 16.0,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
+            style: TextButton.styleFrom(
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
+              textStyle: const TextStyle(
+                fontSize: 16.0,
+              ),
+            ),
+            child: const Text("OK"),
+          ),
+        ],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+      ),
+    );
+  }
+
+  void _showAlertDialogOcjene(String naslov, String poruka, Color boja) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        backgroundColor: const Color.fromARGB(255, 238, 247, 255),
+        title: Text(
+          naslov,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: boja,
+          ),
+        ),
+        content: Text(
+          poruka,
+          style: const TextStyle(
+            fontSize: 16.0,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
             style: TextButton.styleFrom(
               backgroundColor: Colors.blue,
               foregroundColor: Colors.white,

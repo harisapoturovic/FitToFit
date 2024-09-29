@@ -45,14 +45,11 @@ namespace FitToFit.Services
                 query = query.Where(x => x.Naslov.StartsWith(search.Naslov));
             }
 
-            if (!string.IsNullOrWhiteSpace(search?.FTS))
-            {
-                query = query.Where(x => x.Naslov.Contains(search.FTS));
-            }
             if (search.VrstaTreningaId != null)
             {
                 query = query.Where(x => x.VrstaTreningaId.Equals(search.VrstaTreningaId));
             }
+
             if (search.KorisnikId != null)
             {
                 var korisnikId = search.KorisnikId.Value;
@@ -68,6 +65,7 @@ namespace FitToFit.Services
                     query = query.Where(x => activeVrstaTreningaIds.Contains(x.VrstaTreningaId ?? 0) || x.VrstaTreningaId == null);
                 }
             }
+
             query = query.OrderByDescending(x => x.DatumObjave);
             return base.AddFilter(query, search);
         }

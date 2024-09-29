@@ -38,6 +38,8 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
   bool usernameTaken = false;
   final debouncer = Debouncer(delay: const Duration(milliseconds: 500));
   FocusNode _imeFocusNode = FocusNode();
+  String? _selectedSpol;
+  List<String> spolovi = [];
 
   @override
   void initState() {
@@ -45,6 +47,7 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
     _korisniciProvider = context.read<KorisniciProvider>();
     initForm();
     _imeFocusNode = FocusNode();
+    spolovi = ['Muški', 'Ženski'];
   }
 
   @override
@@ -83,14 +86,10 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
   Future<void> provjeriUsername(String username) async {
     try {
       var temp = await _korisniciProvider
-          .get(filter: {"korisnickoIme": username, "isAdmin": false});
+          .get(filter: {"korisnickoIme": username, "isKorisnik": true});
       if (mounted) {
         setState(() {
           usernameTaken = temp.count > 0;
-          if (usernameTaken) {
-            _showAlertDialog("Greška",
-                "Korisnik sa ovim username-om već postoji", Colors.red);
-          }
         });
       }
     } catch (e) {
@@ -145,13 +144,15 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Ovo polje je obavezno!';
-                }
-                if (!RegExp(r'^[A-Z-ŠĐČĆŽ]').hasMatch(value)) {
+                } else if (!RegExp(r'^[A-Z-ŠĐČĆŽ]').hasMatch(value)) {
                   return 'Ime mora početi velikim slovom.';
-                }
-
-                if (!RegExp(r'^[a-zA-ZšđčćžŠĐČĆŽ]+$').hasMatch(value)) {
+                } else if (!RegExp(r'^[a-zA-ZšđčćžŠĐČĆŽ\s]+$')
+                    .hasMatch(value)) {
                   return 'Ime može sadržavati samo slova.';
+                } else if (value.length < 3) {
+                  return 'Morate unijeti najmanje 3 karaktera.';
+                } else if (value.length > 50) {
+                  return 'Premašili ste maksimalan broj karaktera (50).';
                 }
 
                 return null;
@@ -165,13 +166,15 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Ovo polje je obavezno!';
-                }
-                if (!RegExp(r'^[A-Z-ŠĐČĆŽ]').hasMatch(value)) {
+                } else if (!RegExp(r'^[A-Z-ŠĐČĆŽ]').hasMatch(value)) {
                   return 'Prezime mora početi velikim slovom.';
-                }
-
-                if (!RegExp(r'^[a-zA-ZšđčćžŠĐČĆŽ]+$').hasMatch(value)) {
+                } else if (!RegExp(r'^[a-zA-ZšđčćžŠĐČĆŽ\s]+$')
+                    .hasMatch(value)) {
                   return 'Prezime može sadržavati samo slova.';
+                } else if (value.length < 3) {
+                  return 'Morate unijeti najmanje 3 karaktera.';
+                } else if (value.length > 50) {
+                  return 'Premašili ste maksimalan broj karaktera (50).';
                 }
                 return null;
               },
@@ -180,13 +183,24 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
             FormBuilderDropdown(
               name: 'spol',
               decoration: const InputDecoration(labelText: 'Spol'),
-              initialValue: 'Muški',
-              items: ['Muški', 'Ženski'].map((spol) {
+              initialValue: _selectedSpol,
+              items: spolovi.map((spol) {
                 return DropdownMenuItem(
                   value: spol,
                   child: Text(spol),
                 );
               }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  _selectedSpol = value;
+                });
+              },
+              validator: (value) {
+                if (value == null) {
+                  return 'Ovo polje je obavezno!';
+                }
+                return null;
+              },
             ),
             const SizedBox(height: 15),
             FormBuilderTextField(
@@ -194,14 +208,14 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
                 controller: telefonController,
                 decoration: const InputDecoration(labelText: "Telefon"),
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Ovo polje je obavezno!';
-                  }
-                  if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
-                    return 'Ovo polje može sadržavati samo brojeve.';
-                  }
-                  if (value.length > 10) {
-                    return 'Broj telefona može imati maksimalno 10 cifara.';
+                  if (value != null && value.isNotEmpty) {
+                    if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                      return 'Ovo polje može sadržavati samo brojeve.';
+                    } else if (value.length < 9) {
+                      return 'Broj telefona može imati minimalno 9 cifara.';
+                    } else if (value.length > 10) {
+                      return 'Broj telefona može imati maksimalno 10 cifara.';
+                    }
                   }
                   return null;
                 }),
@@ -211,14 +225,13 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
                 controller: emailController,
                 decoration: const InputDecoration(labelText: "E-mail"),
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Ovo polje je obavezno!';
-                  }
-                  if (value.isNotEmpty) {
+                  if (value != null && value.isNotEmpty) {
                     if (!RegExp(
-                            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                         .hasMatch(value)) {
                       return 'Unesite validnu e-mail adresu.';
+                    } else if (value.length > 50) {
+                      return 'Premašili ste maksimalan broj karaktera (50).';
                     }
                   }
                   return null;
@@ -229,11 +242,17 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
               controller: adresaController,
               decoration: const InputDecoration(labelText: 'Adresa'),
               validator: (value) {
-                if (value != null &&
-                    value.isNotEmpty &&
-                    !RegExp(r'^[A-Z]').hasMatch(value)) {
-                  return 'Adresa mora početi velikim slovom.';
+                if (value != null && value.isNotEmpty) {
+                  if (value.isNotEmpty &&
+                      !RegExp(r'^[A-Z-ŠĐČĆŽ]').hasMatch(value)) {
+                    return 'Adresa mora početi velikim slovom.';
+                  } else if (value.length < 3) {
+                    return 'Morate unijeti najmanje 3 karaktera.';
+                  } else if (value.length > 50) {
+                    return 'Premašili ste maksimalan broj karaktera (50).';
+                  }
                 }
+
                 return null;
               },
             ),
@@ -252,14 +271,9 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
                   firstDate: DateTime.utc(1943, 12, 31),
                   lastDate: DateTime.now(),
                 );
-                if (date == null) {
-                  _showAlertDialog(
-                      "Pažnja!", "Datum rođenja je obavezan.", Colors.red);
-                } else {
-                  setState(() {
-                    _selectedDate1 = date;
-                  });
-                }
+                setState(() {
+                  _selectedDate1 = date;
+                });
               },
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -307,14 +321,9 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
                   firstDate: DateTime.now().subtract(const Duration(days: 10)),
                   lastDate: DateTime.now().add(const Duration(days: 10)),
                 );
-                if (date == null) {
-                  _showAlertDialog("Pažnja!",
-                      "Datum početka treniranja je obavezan.", Colors.red);
-                } else {
-                  setState(() {
-                    _selectedDate2 = date;
-                  });
-                }
+                setState(() {
+                  _selectedDate2 = date;
+                });
               },
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -353,14 +362,12 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
                 controller: visinaController,
                 decoration: const InputDecoration(labelText: "Visina (cm)"),
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Ovo polje je obavezno!';
-                  }
-                  if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
-                    return 'Ovo polje može sadržavati samo brojeve.';
-                  }
-                  if (value.length != 3) {
-                    return 'Možete unijeti samo 3 cifre.';
+                  if (value != null && value.isNotEmpty) {
+                    if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                      return 'Ovo polje može sadržavati samo brojeve.';
+                    } else if (value.length != 3) {
+                      return 'Možete unijeti samo 3 cifre.';
+                    }
                   }
                   return null;
                 }),
@@ -370,14 +377,12 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
                 controller: tezinaController,
                 decoration: const InputDecoration(labelText: "Težina (kg)"),
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Ovo polje je obavezno!';
-                  }
-                  if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
-                    return 'Ovo polje može sadržavati samo brojeve.';
-                  }
-                  if (value.length < 2 || value.length > 3) {
-                    return 'Možete unijeti 2 il 3 cifre.';
+                  if (value != null && value.isNotEmpty) {
+                    if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                      return 'Ovo polje može sadržavati samo brojeve.';
+                    } else if (value.length < 2 || value.length > 3) {
+                      return 'Možete unijeti 2 ili 3 cifre.';
+                    }
                   }
                   return null;
                 }),
@@ -385,17 +390,24 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
             FormBuilderTextField(
                 name: "korisnickoIme",
                 controller: korisnickoImeController,
-                decoration: const InputDecoration(labelText: "Korisničko ime"),
+                decoration: InputDecoration(
+                  labelText: "Korisničko ime",
+                  errorText: usernameTaken
+                      ? "Korisnik sa ovim korisničkim imenom već postoji."
+                      : null,
+                ),
                 onChanged: (val) async {
-                  if (val != null && val != '') {
+                  if (val != null && val.isNotEmpty) {
                     debouncedUsernameCheck(val);
                   }
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Ovo polje je obavezno!';
-                  } else if (value[0] != value[0].toUpperCase()) {
-                    return 'Korisničko ime mora početi velikim slovom.';
+                  } else if (value.length < 5) {
+                    return 'Morate unijeti najmanje 5 karaktera.';
+                  } else if (value.length > 50) {
+                    return 'Premašili ste maksimalan broj karaktera (50).';
                   }
                   return null;
                 }),
@@ -448,89 +460,59 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
     );
   }
 
-  bool _areAllFieldsFilled(FormBuilderState? formState) {
-    if (formState == null) {
-      return false;
-    }
-
-    List<String> requiredFields = [
-      'ime',
-      'prezime',
-      'korisnickoIme',
-      'email',
-      'password',
-      'telefon',
-      'spol',
-      'visina',
-      'tezina'
-    ];
-
-    for (String fieldName in requiredFields) {
-      if (formState.fields[fieldName]?.value == null ||
-          formState.fields[fieldName]!.value.toString().isEmpty) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
   void _dodajKorisnika() async {
-    if (_selectedDate1 == null) {
-      _showAlertDialog("Pažnja!", "Datum rođenja je obavezan.", Colors.red);
-      return;
+    String? datumVrijeme1;
+    if (_selectedDate1 != null) {
+      String datum_ = _selectedDate1.toString();
+      datumVrijeme1 =
+          DateTime.parse(datum_.replaceAll(' ', 'T')).toIso8601String();
     }
-    if (_selectedDate2 == null) {
-      _showAlertDialog(
-          "Pažnja!", "Datum početka treniranja je obavezan.", Colors.red);
-      return;
+    String? datumVrijeme2;
+    if (_selectedDate2 != null) {
+      String datum_ = _selectedDate2.toString();
+      datumVrijeme2 =
+          DateTime.parse(datum_.replaceAll(' ', 'T')).toIso8601String();
     }
-    String datum1 = _selectedDate1.toString();
-    String datumVrijeme1 =
-        DateTime.parse(datum1.replaceAll(' ', 'T')).toIso8601String();
-    String datum2 = _selectedDate2.toString();
-    String datumVrijeme2 =
-        DateTime.parse(datum2.replaceAll(' ', 'T')).toIso8601String();
     _formKey.currentState?.saveAndValidate();
-    final currentFormState = _formKey.currentState;
-    if (!_areAllFieldsFilled(currentFormState)) {
-      _showAlertDialog(
-          "Upozorenje", "Popunite sva obavezna polja.", Colors.orange);
-      return;
-    }
-    if (currentFormState != null) {
-      if (!currentFormState.validate()) {
-        _showAlertDialog(
-            "Upozorenje",
-            "Molimo vas da ispravno popunite sva obavezna polja.",
-            Colors.orange);
-        return;
-      }
-    }
-    if (usernameTaken) {
-      _showAlertDialog("Greška",
-          "Korisničko ime koje ste unijeli je već zauzeto.", Colors.red);
-      return;
-    }
-    var request = Map.from(_formKey.currentState!.value);
-    request.addAll({
-      'datumRodjenja': datumVrijeme1,
-    });
-    request.addAll({
-      'datumPocetkaTreniranja': datumVrijeme2,
-    });
-    request['slika'] = _base64Image;
-    request['passwordPotvrda'] = request['password'];
-    request['ulogaId'] = 1;
+    if (_formKey.currentState!.validate()) {
+      var request = Map.from(_formKey.currentState!.value);
+      request.addAll({
+        'datumRodjenja': datumVrijeme1,
+      });
+      request.addAll({
+        'datumPocetkaTreniranja': datumVrijeme2,
+      });
+      request['slika'] = _base64Image;
+      request['passwordPotvrda'] = request['password'];
+      request['ulogaId'] = 1;
 
-    try {
-      await _korisniciProvider.insert(request);
-      _selectedDate1 = null;
-      _selectedDate2 = null;
-      _showAlertDialog(
-          "Uspješan unos", "Korisnik uspješno registrovan.", Colors.green);
-    } on Exception catch (e) {
-      _showAlertDialog("Greška", e.toString(), Colors.red);
+      try {
+        await _korisniciProvider.insert(request);
+        if (mounted) {
+          setState(() {
+            _formKey.currentState?.reset();
+            _selectedDate1 = null;
+            _selectedDate2 = null;
+            _selectedSpol = null;
+            spolovi = [];
+            imeController.clear();
+            prezimeController.clear();
+            spolController.clear();
+            telefonController.clear();
+            emailController.clear();
+            adresaController.clear();
+            visinaController.clear();
+            tezinaController.clear();
+            korisnickoImeController.clear();
+            lozinkaController.clear();
+            spolovi = ['Muški', 'Ženski'];
+          });
+        }
+        _showAlertDialog(
+            "Uspješan unos", "Korisnik uspješno registrovan.", Colors.green);
+      } on Exception catch (e) {
+        _showAlertDialog("Greška", e.toString(), Colors.red);
+      }
     }
   }
 
@@ -554,7 +536,10 @@ class _RegistracijaPageState extends State<RegistracijaPage> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
             style: TextButton.styleFrom(
               backgroundColor: Colors.blue,
               foregroundColor: Colors.white,

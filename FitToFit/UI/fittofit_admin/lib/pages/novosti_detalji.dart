@@ -36,7 +36,7 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
 
   @override
   void initState() {
-    DateFormat dateFormat = DateFormat('yyyy-MM-dd');
+    DateFormat dateFormat = DateFormat('d.M.yyyy.');
     super.initState();
     _initialValue = {
       "id": widget.novost.novostId,
@@ -322,7 +322,12 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                                       );
                                     } else {
                                       return const Text(
-                                          "Namjenjeno za: Nepoznato");
+                                        "Namjenjeno za: Nepoznato",
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          color: Colors.black,
+                                        ),
+                                      );
                                     }
                                   } else {
                                     return const Text(
@@ -423,7 +428,6 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
             TextButton(
               onPressed: () {
                 _deleteNews();
-                Navigator.pop(context);
               },
               child: const Text(
                 'Izbriši',
@@ -473,7 +477,11 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
             style: TextButton.styleFrom(
               backgroundColor: Colors.blue,
               foregroundColor: Colors.white,
@@ -497,7 +505,7 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
     final TextEditingController sadrzajController =
         TextEditingController(text: novost.sadrzaj);
 
-    final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
+    final formKey = GlobalKey<FormBuilderState>();
     await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -545,6 +553,13 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                                               if (value == null ||
                                                   value.isEmpty) {
                                                 return 'Ovo polje je obavezno!';
+                                              } else if (!RegExp(r'^[A-ZŠĐČĆŽ]')
+                                                  .hasMatch(value)) {
+                                                return 'Naslov mora počinjati velikim slovom.';
+                                              } else if (value.length < 5) {
+                                                return 'Morate unijeti najmanje 5 karaktera.';
+                                              } else if (value.length > 100) {
+                                                return 'Premašili ste maksimalan broj karaktera (100).';
                                               }
 
                                               return null;
@@ -560,8 +575,15 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                                             ),
                                             validator: (value) {
                                               if (value != null &&
-                                                  value.length < 5) {
-                                                return 'Morate unijeti najmanje 5 karaktera.';
+                                                  value.isNotEmpty) {
+                                                if (!RegExp(r'^[A-ZŠĐČĆŽ]')
+                                                    .hasMatch(value)) {
+                                                  return 'Sadržaj mora počinjati velikim slovom.';
+                                                } else if (value.length < 5) {
+                                                  return 'Morate unijeti najmanje 5 karaktera.';
+                                                } else if (value.length > 600) {
+                                                  return 'Premašili ste maksimalan broj karaktera (600).';
+                                                }
                                               }
 
                                               return null;
@@ -614,13 +636,21 @@ class _NovostiDetaljiPageState extends State<NovostiDetaljiPage> {
                                                               odabranaNovost!
                                                                   .vrstaTreningaId);
 
-                                                  _novostiProvider.update(
-                                                      odabranaNovost!.novostId,
-                                                      novost);
-                                                  _showAlertDialog(
-                                                      "Uspješan edit",
-                                                      "Podaci o objavi uspješno ažurirani.",
-                                                      Colors.green);
+                                                  try {
+                                                    _novostiProvider.update(
+                                                        odabranaNovost!
+                                                            .novostId,
+                                                        novost);
+                                                    _showAlertDialog(
+                                                        "Uspješan edit",
+                                                        "Podaci o objavi uspješno ažurirani.",
+                                                        Colors.green);
+                                                  } catch (e) {
+                                                    _showAlertDialog(
+                                                        "Greška",
+                                                        "Dogodila se greška prilikom ažuriranja: ${e.toString()}",
+                                                        Colors.red);
+                                                  }
                                                 }
                                               }
                                             },

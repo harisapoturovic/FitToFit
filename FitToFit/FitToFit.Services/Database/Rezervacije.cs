@@ -13,7 +13,7 @@ public partial class Rezervacije
 
     public int ClanarinaId { get; set; }
 
-    public string? StateMachine { get; set; }
+    public string StateMachine { get; set; } = null!;
 
     public decimal? Iznos { get; set; }
 

@@ -8,10 +8,10 @@ namespace FitToFit.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AkcijeTreninziController : BaseController<Model.AkcijeTreninzi, BaseSearchObject>
+    public class AkcijeTreninziController : BaseController<Model.AkcijeTreninzi, AkcijeTreninziSearchObject>
     {
         IAkcijeTreninziService _service;
-        public AkcijeTreninziController(ILogger<BaseController<AkcijeTreninzi, BaseSearchObject>> logger, IAkcijeTreninziService service)
+        public AkcijeTreninziController(ILogger<BaseController<AkcijeTreninzi, AkcijeTreninziSearchObject>> logger, IAkcijeTreninziService service)
             :base(logger, service)
         {
           _service = service;

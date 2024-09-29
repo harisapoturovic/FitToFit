@@ -37,6 +37,7 @@ class _HomePageState extends State<HomePage> {
   List<VrsteTreninga> _vrsteTreningaList = [];
   List<Novosti> _novostiList = [];
   int? _selectedVrstaTreninga;
+  int? selectedVrstaTreninga;
   int brojKorisnika = 0;
   int brojTrenera = 0;
   int brojRezervacija = 0;
@@ -427,7 +428,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _showAddNewsDialog() {
-    int? selectedVrstaTreninga;
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -454,6 +454,12 @@ class _HomePageState extends State<HomePage> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
+                        } else if (!RegExp(r'^[A-ZŠĐČĆŽ]').hasMatch(value)) {
+                          return 'Naslov mora počinjati velikim slovom.';
+                        } else if (value.length < 5) {
+                          return 'Morate unijeti najmanje 5 karaktera.';
+                        } else if (value.length > 100) {
+                          return 'Premašili ste maksimalan broj karaktera (100).';
                         }
 
                         return null;
@@ -464,12 +470,14 @@ class _HomePageState extends State<HomePage> {
                       name: 'sadrzaj',
                       decoration: const InputDecoration(labelText: 'Sadrzaj'),
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Ovo polje je obavezno.';
-                        } else if (value.length < 5) {
-                          return 'Morate unijeti najmanje 5 karaktera.';
-                        } else if (value.length > 600) {
-                          return 'Premašili ste maksimalan broj karaktera.';
+                        if (value != null && value.isNotEmpty) {
+                          if (!RegExp(r'^[A-ZŠĐČĆŽ]').hasMatch(value)) {
+                            return 'Sadržaj mora počinjati velikim slovom.';
+                          } else if (value.length < 5) {
+                            return 'Morate unijeti najmanje 5 karaktera.';
+                          } else if (value.length > 600) {
+                            return 'Premašili ste maksimalan broj karaktera (600).';
+                          }
                         }
 
                         return null;
@@ -538,51 +546,29 @@ class _HomePageState extends State<HomePage> {
     String datumVrijeme =
         DateTime.parse(datum.replaceAll(' ', 'T')).toIso8601String();
     _formKey.currentState?.saveAndValidate();
-    final currentFormState = _formKey.currentState;
-    if (!_areAllFieldsFilled(currentFormState)) {
-      _showAlertDialog(
-          "Upozorenje", "Popunite sva obavezna polja.", Colors.orange);
-      return;
-    }
-    if (currentFormState != null) {
-      if (!currentFormState.validate()) {
+    if (_formKey.currentState!.validate()) {
+      var request = Map.from(_formKey.currentState!.value);
+      request['brojLajkova'] = 0;
+      request['korisnikId'] = logiraniKorisnik.korisnikId;
+      request.addAll({
+        'datumObjave': datumVrijeme,
+      });
+      try {
+        _novostiProvider.insert(request);
+        if (mounted) {
+          setState(() {
+            _formKey.currentState?.reset();
+            selectedVrstaTreninga = null;
+            _vrsteTreningaList = [];
+            _loadData();
+          });
+        }
         _showAlertDialog(
-            "Upozorenje",
-            "Molimo vas da ispravno popunite sva obavezna polja.",
-            Colors.orange);
-        return;
+            "Uspješan unos", "Novost uspješno dodana.", Colors.green);
+      } on Exception catch (e) {
+        _showAlertDialog("Greška", e.toString(), Colors.red);
       }
     }
-    var request = Map.from(_formKey.currentState!.value);
-    request['brojLajkova'] = 0;
-    request['korisnikId'] = logiraniKorisnik.korisnikId;
-    request.addAll({
-      'datumObjave': datumVrijeme,
-    });
-    try {
-      _novostiProvider.insert(request);
-      _showAlertDialog(
-          "Uspješan unos", "Novost uspješno dodana.", Colors.green);
-    } on Exception catch (e) {
-      _showAlertDialog("Greška", e.toString(), Colors.red);
-    }
-  }
-
-  bool _areAllFieldsFilled(FormBuilderState? formState) {
-    if (formState == null) {
-      return false;
-    }
-
-    List<String> requiredFields = ['naslov', 'sadrzaj'];
-
-    for (String fieldName in requiredFields) {
-      if (formState.fields[fieldName]?.value == null ||
-          formState.fields[fieldName]!.value.toString().isEmpty) {
-        return false;
-      }
-    }
-
-    return true;
   }
 
   void _showAlertDialog(String naslov, String poruka, Color boja) {

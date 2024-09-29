@@ -39,7 +39,10 @@ class _KorisniciPageState extends State<KorisniciPage> {
       TextEditingController();
   final _formKey = GlobalKey<FormBuilderState>();
   DateTime? datum;
+  String? _dateErrorMessage;
   FocusNode _imeFocusNode = FocusNode();
+  String? _selectedSpol;
+  List<String> spolovi = [];
 
   @override
   void initState() {
@@ -55,6 +58,7 @@ class _KorisniciPageState extends State<KorisniciPage> {
       _reloadKorisniciList();
     });
     _imeFocusNode = FocusNode();
+    _dateErrorMessage = "Datum zaposlenja je obavezan.";
   }
 
   void _reloadTreneriList() async {
@@ -85,7 +89,7 @@ class _KorisniciPageState extends State<KorisniciPage> {
     if (!mounted) return;
     var data1 = await _treneriProvider.get(filter: {});
     var data2 = await _korisniciProvider.get(filter: {'isKorisnik': true});
-
+    spolovi = ['Muški', 'Ženski'];
     setState(() {
       treneriResult = data1;
       korisniciResult = data2;
@@ -355,7 +359,7 @@ class _KorisniciPageState extends State<KorisniciPage> {
     var data = await _korisniciProvider.get(filter: {
       'ime': _imeKorisnikaController.text,
       'prezime': _prezimeKorisnikaController.text,
-      'IsAdmin': false
+      'isKorisnik': true
     });
 
     setState(() {
@@ -401,13 +405,15 @@ class _KorisniciPageState extends State<KorisniciPage> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
-                        }
-                        if (!RegExp(r'^[A-Z-ŠĐČĆŽ]').hasMatch(value)) {
+                        } else if (!RegExp(r'^[A-Z-ŠĐČĆŽ]').hasMatch(value)) {
                           return 'Ime mora početi velikim slovom.';
-                        }
-
-                        if (!RegExp(r'^[a-zA-ZšđčćžŠĐČĆŽ]+$').hasMatch(value)) {
+                        } else if (!RegExp(r'^[a-zA-ZšđčćžŠĐČĆŽ\s]+$')
+                            .hasMatch(value)) {
                           return 'Ime može sadržavati samo slova.';
+                        } else if (value.length < 3) {
+                          return 'Morate unijeti najmanje 3 karaktera.';
+                        } else if (value.length > 50) {
+                          return 'Premašili ste maksimalan broj karaktera (50).';
                         }
 
                         return null;
@@ -420,13 +426,15 @@ class _KorisniciPageState extends State<KorisniciPage> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
-                        }
-                        if (!RegExp(r'^[A-Z-ŠĐČĆŽ]').hasMatch(value)) {
+                        } else if (!RegExp(r'^[A-Z-ŠĐČĆŽ]').hasMatch(value)) {
                           return 'Prezime mora početi velikim slovom.';
-                        }
-
-                        if (!RegExp(r'^[a-zA-ZšđčćžŠĐČĆŽ]+$').hasMatch(value)) {
+                        } else if (!RegExp(r'^[a-zA-ZšđčćžŠĐČĆŽ\s]+$')
+                            .hasMatch(value)) {
                           return 'Prezime može sadržavati samo slova.';
+                        } else if (value.length < 3) {
+                          return 'Morate unijeti najmanje 3 karaktera.';
+                        } else if (value.length > 50) {
+                          return 'Premašili ste maksimalan broj karaktera (50).';
                         }
 
                         return null;
@@ -436,25 +444,38 @@ class _KorisniciPageState extends State<KorisniciPage> {
                     FormBuilderDropdown(
                       name: 'spol',
                       decoration: const InputDecoration(labelText: 'Spol'),
-                      initialValue: 'Muški',
-                      items: ['Muški', 'Ženski'].map((spol) {
+                      initialValue: _selectedSpol,
+                      items: spolovi.map((spol) {
                         return DropdownMenuItem(
                           value: spol,
                           child: Text(spol),
                         );
                       }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedSpol = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Ovo polje je obavezno!';
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 10.0),
                     FormBuilderTextField(
                       name: 'telefon',
                       decoration: const InputDecoration(labelText: 'Telefon'),
                       validator: (value) {
-                        if (value != null &&
-                            !RegExp(r'^[0-9]+$').hasMatch(value)) {
-                          return 'Ovo polje može sadržavati samo brojeve.';
-                        }
-                        if (value != null && value.length > 10) {
-                          return 'Broj telefona može imati maksimalno 10 cifara.';
+                        if (value != null && value.isNotEmpty) {
+                          if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                            return 'Ovo polje može sadržavati samo brojeve.';
+                          } else if (value.length < 9) {
+                            return 'Broj telefona može imati minimalno 9 cifara.';
+                          } else if (value.length > 10) {
+                            return 'Broj telefona može imati maksimalno 10 cifara.';
+                          }
                         }
                         return null;
                       },
@@ -469,6 +490,8 @@ class _KorisniciPageState extends State<KorisniciPage> {
                                   r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                               .hasMatch(value)) {
                             return 'Unesite validnu e-mail adresu.';
+                          } else if (value.length > 50) {
+                            return 'Premašili ste maksimalan broj karaktera (50).';
                           }
                         }
                         return null;
@@ -479,10 +502,15 @@ class _KorisniciPageState extends State<KorisniciPage> {
                       name: 'adresa',
                       decoration: const InputDecoration(labelText: 'Adresa'),
                       validator: (value) {
-                        if (value != null &&
-                            value.isNotEmpty &&
-                            !RegExp(r'^[A-Z]').hasMatch(value)) {
-                          return 'Adresa mora početi velikim slovom.';
+                        if (value != null && value.isNotEmpty) {
+                          if (value.isNotEmpty &&
+                              !RegExp(r'^[A-Z-ŠĐČĆŽ]').hasMatch(value)) {
+                            return 'Adresa mora početi velikim slovom.';
+                          } else if (value.length < 3) {
+                            return 'Morate unijeti najmanje 3 karaktera.';
+                          } else if (value.length > 50) {
+                            return 'Premašili ste maksimalan broj karaktera (50).';
+                          }
                         }
                         return null;
                       },
@@ -499,47 +527,58 @@ class _KorisniciPageState extends State<KorisniciPage> {
                       ),
                       onPressed: () async {
                         final DateTime? date = await showDatePicker(
-                            context: context,
-                            firstDate: DateTime.now()
-                                .subtract(const Duration(days: 10)),
-                            lastDate:
-                                DateTime.now().add(const Duration(days: 30)));
+                          context: context,
+                          firstDate:
+                              DateTime.now().subtract(const Duration(days: 10)),
+                          lastDate:
+                              DateTime.now().add(const Duration(days: 30)),
+                        );
+
                         if (date == null) {
-                          _showAlertDialog("Pažnja!",
-                              "Datum zaposlenja je obavezan.", Colors.red);
+                          setState(() {
+                            datum = null;
+                            _dateErrorMessage = "Datum zaposlenja je obavezan.";
+                          });
                         } else {
                           setState(() {
                             datum = date;
+                            _dateErrorMessage = null;
                           });
                         }
                       },
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(
-                            Icons.calendar_month,
-                            color: Colors.white,
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
+                          Icon(Icons.calendar_month, color: Colors.white),
+                          SizedBox(width: 5),
                           Text(
                             "Izaberite datum zaposlenja",
                             style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ],
                       ),
                     ),
+                    if (_dateErrorMessage != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          _dateErrorMessage!,
+                          style:
+                              const TextStyle(color: Colors.red, fontSize: 14),
+                        ),
+                      ),
                     datum != null
                         ? Text(
-                            "Izabrani datum: $datum",
+                            "Izabrani datum zaposlenja: ${datum?.day}.${datum?.month}.${datum?.year}.",
                             style: const TextStyle(
-                                fontSize: 16,
-                                color: Colors.black87,
-                                fontWeight: FontWeight.bold),
+                              fontSize: 16,
+                              color: Colors.black87,
+                              fontWeight: FontWeight.bold,
+                            ),
                           )
                         : Container(),
                     const SizedBox(height: 10.0),
@@ -547,10 +586,15 @@ class _KorisniciPageState extends State<KorisniciPage> {
                       name: 'zvanje',
                       decoration: const InputDecoration(labelText: 'Zvanje'),
                       validator: (value) {
-                        if (value != null &&
-                            value.isNotEmpty &&
-                            !RegExp(r'^[A-Z]').hasMatch(value)) {
-                          return 'Zvanje mora početi velikim slovom.';
+                        if (value != null && value.isNotEmpty) {
+                          if (value.isNotEmpty &&
+                              !RegExp(r'^[A-Z-ŠĐČĆŽ]').hasMatch(value)) {
+                            return 'Zvanje mora početi velikim slovom.';
+                          } else if (value.length < 3) {
+                            return 'Morate unijeti najmanje 3 karaktera.';
+                          } else if (value.length > 100) {
+                            return 'Premašili ste maksimalan broj karaktera (100).';
+                          }
                         }
                         return null;
                       },
@@ -612,63 +656,50 @@ class _KorisniciPageState extends State<KorisniciPage> {
     );
   }
 
-  String formatDateForJson(DateTime dateTime) {
-    return dateTime.toIso8601String();
-  }
-
   void _dodajTrenera() {
+    late String datumVrijeme;
     if (datum == null) {
-      _showAlertDialog("Pažnja!", "Datum zaposlenja je obavezan.", Colors.red);
+      setState(() {
+        _dateErrorMessage = "Datum zaposlenja je obavezan.";
+      });
       return;
     }
-    String datum_ = datum.toString();
-    String datumVrijeme =
-        DateTime.parse(datum_.replaceAll(' ', 'T')).toIso8601String();
+
     _formKey.currentState?.saveAndValidate();
-    final currentFormState = _formKey.currentState;
-    if (!_areAllFieldsFilled(currentFormState)) {
-      _showAlertDialog(
-          "Upozorenje", "Popunite sva obavezna polja.", Colors.orange);
-      return;
-    }
-    if (currentFormState != null) {
-      if (!currentFormState.validate()) {
+    if (_formKey.currentState!.validate()) {
+      String datum_ = datum.toString();
+      datumVrijeme =
+          DateTime.parse(datum_.replaceAll(' ', 'T')).toIso8601String();
+      var request = Map.from(_formKey.currentState!.value);
+      request['slika'] = _base64Image;
+      request.addAll({
+        'datumZaposlenja': datumVrijeme,
+      });
+
+      try {
+        _treneriProvider.insert(request);
+        if (mounted) {
+          setState(() {
+            _formKey.currentState?.reset();
+            _selectedSpol = null;
+            datum = null;
+            spolovi = [];
+            _dateErrorMessage = "Datum zaposlenja je obavezan.";
+            spolovi = ['Muški', 'Ženski'];
+          });
+        }
         _showAlertDialog(
-            "Upozorenje",
-            "Molimo vas da ispravno popunite sva obavezna polja.",
-            Colors.orange);
-        return;
+            "Uspješan unos", "Trener uspješno dodat.", Colors.green);
+      } on Exception catch (e) {
+        _showAlertDialog("Greška", e.toString(), Colors.red);
       }
+    } else {
+      setState(() {
+        if (datum == null) {
+          _dateErrorMessage = "Datum zaposlenja je obavezan.";
+        }
+      });
     }
-    var request = Map.from(_formKey.currentState!.value);
-    request['slika'] = _base64Image;
-    request.addAll({
-      'datumZaposlenja': datumVrijeme,
-    });
-    try {
-      _treneriProvider.insert(request);
-      datum = null;
-      _showAlertDialog("Uspješan unos", "Trener uspješno dodat.", Colors.green);
-    } on Exception catch (e) {
-      _showAlertDialog("Greška", e.toString(), Colors.red);
-    }
-  }
-
-  bool _areAllFieldsFilled(FormBuilderState? formState) {
-    if (formState == null) {
-      return false;
-    }
-
-    List<String> requiredFields = ['ime', 'prezime', 'spol'];
-
-    for (String fieldName in requiredFields) {
-      if (formState.fields[fieldName]?.value == null ||
-          formState.fields[fieldName]!.value.toString().isEmpty) {
-        return false;
-      }
-    }
-
-    return true;
   }
 
   void _showAlertDialog(String naslov, String poruka, Color boja) {

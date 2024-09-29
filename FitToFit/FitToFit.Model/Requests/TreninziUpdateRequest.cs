@@ -12,11 +12,11 @@ namespace FitToFit.Model.Requests
 
         public int MaxBrojClanova { get; set; }
 
-        public decimal CijenaPoTerminu { get; set; }
+        public int CijenaPoTerminu { get; set; }
 
         public string Trajanje { get; set; } = null!;
 
-        public decimal ProsjecnaPotrosnjaKalorija { get; set; }
+        public int ProsjecnaPotrosnjaKalorija { get; set; }
 
         public int VrstaId { get; set; }
 

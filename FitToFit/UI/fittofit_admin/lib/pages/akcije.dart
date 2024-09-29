@@ -38,6 +38,8 @@ class _AkcijePageState extends State<AkcijePage> {
   bool isActive = true;
   final _formKey = GlobalKey<FormBuilderState>();
   FocusNode _nazivFocusNode = FocusNode();
+  String? _dateErrorMessage1;
+  String? _dateErrorMessage2;
 
   @override
   void initState() {
@@ -49,6 +51,8 @@ class _AkcijePageState extends State<AkcijePage> {
       _reloadAkcijeList();
     });
     _nazivFocusNode = FocusNode();
+    _dateErrorMessage1 = "Datum početka akcije je obavezan.";
+    _dateErrorMessage2 = "Datum završetka akcije je obavezan.";
   }
 
   void _reloadAkcijeList() async {
@@ -185,7 +189,7 @@ class _AkcijePageState extends State<AkcijePage> {
                               )
                             : null,
                       ),
-                      format: DateFormat("yyyy-MM-dd"),
+                      format: DateFormat("d.M.yyyy."),
                       initialValue: _selectedDate,
                       onChanged: (value) {
                         setState(() {
@@ -413,9 +417,12 @@ class _AkcijePageState extends State<AkcijePage> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
-                        }
-                        if (!RegExp(r'^[A-Z]').hasMatch(value)) {
+                        } else if (!RegExp(r'^[A-Z-ŠĐČĆŽ]').hasMatch(value)) {
                           return 'Naziv mora početi velikim slovom.';
+                        } else if (value.length < 5) {
+                          return 'Morate unijeti najmanje 5 karaktera.';
+                        } else if (value.length > 50) {
+                          return 'Premašili ste maksimalan broj karaktera (50).';
                         }
 
                         return null;
@@ -435,16 +442,18 @@ class _AkcijePageState extends State<AkcijePage> {
                               print('Error parsing integer: $e');
                             }
                           });
-                        } else {
-                          print('Input value is empty or null');
                         }
                       },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
-                        }
-                        if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                        } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
                           return 'Ovo polje može sadržavati samo brojeve.';
+                        } else {
+                          final broj = int.tryParse(value) ?? 0;
+                          if (broj < 1 || broj > 99) {
+                            return 'Dozvoljen je unos brojeva između 1 i 99.';
+                          }
                         }
 
                         return null;
@@ -467,11 +476,15 @@ class _AkcijePageState extends State<AkcijePage> {
                           lastDate: DateTime.utc(2024, 12, 31),
                         );
                         if (date == null) {
-                          _showAlertDialog("Pažnja!",
-                              "Datum početka akcije je obavezan.", Colors.red);
+                          setState(() {
+                            _pocetakAkcije = null;
+                            _dateErrorMessage1 =
+                                "Datum početka akcije je obavezan.";
+                          });
                         } else {
                           setState(() {
                             _pocetakAkcije = date;
+                            _dateErrorMessage1 = null;
                           });
                         }
                       },
@@ -495,9 +508,18 @@ class _AkcijePageState extends State<AkcijePage> {
                         ],
                       ),
                     ),
+                    if (_dateErrorMessage1 != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          _dateErrorMessage1!,
+                          style:
+                              const TextStyle(color: Colors.red, fontSize: 14),
+                        ),
+                      ),
                     _pocetakAkcije != null
                         ? Text(
-                            "Izabrani datum početka: $_pocetakAkcije",
+                            "Izabrani datum početka: ${_pocetakAkcije?.day}.${_pocetakAkcije?.month}.${_pocetakAkcije?.year}.",
                             style: const TextStyle(
                                 fontSize: 16,
                                 color: Colors.black87,
@@ -521,13 +543,15 @@ class _AkcijePageState extends State<AkcijePage> {
                           lastDate: DateTime.utc(2024, 12, 31),
                         );
                         if (date == null) {
-                          _showAlertDialog(
-                              "Pažnja!",
-                              "Datum završetka akcije je obavezan.",
-                              Colors.red);
+                          setState(() {
+                            _zavrsetakAkcije = null;
+                            _dateErrorMessage2 =
+                                "Datum završetka akcije je obavezan.";
+                          });
                         } else {
                           setState(() {
                             _zavrsetakAkcije = date;
+                            _dateErrorMessage2 = null;
                           });
                         }
                       },
@@ -551,9 +575,18 @@ class _AkcijePageState extends State<AkcijePage> {
                         ],
                       ),
                     ),
+                    if (_dateErrorMessage2 != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          _dateErrorMessage2!,
+                          style:
+                              const TextStyle(color: Colors.red, fontSize: 14),
+                        ),
+                      ),
                     _zavrsetakAkcije != null
                         ? Text(
-                            "Izabrani datum završetka: $_zavrsetakAkcije",
+                            "Izabrani datum završetka: ${_zavrsetakAkcije?.day}.${_zavrsetakAkcije?.month}.${_zavrsetakAkcije?.year}.",
                             style: const TextStyle(
                                 fontSize: 16,
                                 color: Colors.black87,
@@ -581,6 +614,12 @@ class _AkcijePageState extends State<AkcijePage> {
                               .addToAc(_selectedTraining as Treninzi);
                         }
                       },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Ovo polje je obavezno!';
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 10.0)
                   ],
@@ -602,75 +641,76 @@ class _AkcijePageState extends State<AkcijePage> {
             ),
             ElevatedButton(
               onPressed: () async {
+                late String datumVrijemeP;
+                late String datumVrijemeZ;
+
                 if (_pocetakAkcije == null) {
-                  _showAlertDialog("Pažnja!",
-                      "Datum početka akcije je obavezan.", Colors.red);
+                  setState(() {
+                    _dateErrorMessage1 = "Datum početka akcije je obavezan.";
+                  });
                   return;
                 }
                 if (_zavrsetakAkcije == null) {
-                  _showAlertDialog("Pažnja!",
-                      "Datum završetka akcije je obavezan.", Colors.red);
+                  setState(() {
+                    _dateErrorMessage2 = "Datum završetka akcije je obavezan.";
+                  });
                   return;
                 }
 
                 if (_pocetakAkcije!.isAfter(_zavrsetakAkcije!)) {
-                  _showAlertDialog(
-                      "Pažnja!",
-                      "Datum početka akcije ne može biti poslije datuma završetka akcije.",
-                      Colors.red);
+                  setState(() {
+                    _dateErrorMessage1 =
+                        "Datum početka akcije ne može biti poslije datuma završetka akcije.";
+                    _dateErrorMessage2 =
+                        "Datum početka akcije ne može biti poslije datuma završetka akcije.";
+                  });
                   return;
                 }
-                String datumPocetka = _pocetakAkcije.toString();
-                String datumVrijemeP =
-                    DateTime.parse(datumPocetka.replaceAll(' ', 'T'))
-                        .toIso8601String();
-                String datumZavrsetka = _zavrsetakAkcije.toString();
-                String datumVrijemeZ =
-                    DateTime.parse(datumZavrsetka.replaceAll(' ', 'T'))
-                        .toIso8601String();
-                List<Map<String, dynamic>> items = [];
-
-                for (var item in _acTreningProvider.acTrening.items) {
-                  items.add(
-                    {"treningId": item.trening.treningId},
-                  );
-                }
-
-                Map<String, dynamic> action = {
-                  "items": items,
-                  'naziv': acTrening.naziv,
-                  'datumPocetka': datumVrijemeP,
-                  'datumZavrsetka': datumVrijemeZ,
-                  'iznos': acTrening.iznos
-                };
 
                 _formKey.currentState?.saveAndValidate();
-                final currentFormState = _formKey.currentState;
-                if (!_areAllFieldsFilled(currentFormState)) {
-                  _showAlertDialog("Upozorenje", "Popunite sva obavezna polja.",
-                      Colors.orange);
-                  return;
-                }
-                if (currentFormState != null) {
-                  if (!currentFormState.validate()) {
-                    _showAlertDialog(
-                        "Upozorenje",
-                        "Molimo vas da ispravno popunite sva obavezna polja.",
-                        Colors.orange);
-                    return;
-                  }
-                }
+                if (_formKey.currentState!.validate()) {
+                  String datumPocetka = _pocetakAkcije.toString();
+                  datumVrijemeP =
+                      DateTime.parse(datumPocetka.replaceAll(' ', 'T'))
+                          .toIso8601String();
+                  String datumZavrsetka = _zavrsetakAkcije.toString();
+                  datumVrijemeZ =
+                      DateTime.parse(datumZavrsetka.replaceAll(' ', 'T'))
+                          .toIso8601String();
+                  List<Map<String, dynamic>> items = [];
 
-                try {
-                  await _akcijeProvider.insert(action);
-                  _pocetakAkcije = null;
-                  _zavrsetakAkcije = null;
-                  _selectedTraining = null;
-                  setState(() {});
-                  _showAlertDialog(
-                      "Uspješan unos", "Akcija uspješno dodana.", Colors.green);
-                } on Exception catch (e) {
-                  _showAlertDialog("Greška", e.toString(), Colors.red);
+                  for (var item in _acTreningProvider.acTrening.items) {
+                    items.add(
+                      {"treningId": item.trening.treningId},
+                    );
+                  }
+
+                  Map<String, dynamic> action = {
+                    "items": items,
+                    'naziv': acTrening.naziv,
+                    'datumPocetka': datumVrijemeP,
+                    'datumZavrsetka': datumVrijemeZ,
+                    'iznos': acTrening.iznos
+                  };
+
+                  try {
+                    await _akcijeProvider.insert(action);
+                    setState(() {
+                      _formKey.currentState?.reset();
+                      _pocetakAkcije = null;
+                      _zavrsetakAkcije = null;
+                      _selectedTraining = null;
+                      _dateErrorMessage1 = "Datum početka akcije je obavezan.";
+                      _dateErrorMessage2 =
+                          "Datum završetka akcije je obavezan.";
+                      _treninziList = [];
+                      _loadData();
+                    });
+                    _showAlertDialog("Uspješan unos", "Akcija uspješno dodana.",
+                        Colors.green);
+                  } on Exception catch (e) {
+                    _showAlertDialog("Greška", e.toString(), Colors.red);
+                  }
                 }
               },
               style: ElevatedButton.styleFrom(
@@ -689,23 +729,6 @@ class _AkcijePageState extends State<AkcijePage> {
         );
       },
     );
-  }
-
-  bool _areAllFieldsFilled(FormBuilderState? formState) {
-    if (formState == null) {
-      return false;
-    }
-
-    List<String> requiredFields = ['naziv', 'iznos'];
-
-    for (String fieldName in requiredFields) {
-      if (formState.fields[fieldName]?.value == null ||
-          formState.fields[fieldName]!.value.toString().isEmpty) {
-        return false;
-      }
-    }
-
-    return true;
   }
 
   void _showAlertDialog(String naslov, String poruka, Color boja) {

@@ -33,11 +33,11 @@ namespace FitToFit.Services
 
             if (!string.IsNullOrWhiteSpace(search.Ime))
             {
-                filteredQuery = filteredQuery.Where(x => x.Ime.Contains(search.Ime));
+                filteredQuery = filteredQuery.Where(x => x.Ime.StartsWith(search.Ime));
             }
             if (!string.IsNullOrWhiteSpace(search.Prezime))
             {
-                filteredQuery = filteredQuery.Where(x => x.Prezime.Contains(search.Prezime));
+                filteredQuery = filteredQuery.Where(x => x.Prezime.StartsWith(search.Prezime));
             }
 
             return filteredQuery;

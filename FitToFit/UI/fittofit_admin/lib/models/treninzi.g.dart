@@ -11,10 +11,10 @@ Treninzi _$TreninziFromJson(Map<String, dynamic> json) => Treninzi(
       naziv: json['naziv'] as String,
       opis: json['opis'] as String,
       maxBrojClanova: (json['maxBrojClanova'] as num).toInt(),
-      cijenaPoTerminu: (json['cijenaPoTerminu'] as num).toDouble(),
+      cijenaPoTerminu: (json['cijenaPoTerminu'] as num).toInt(),
       trajanje: json['trajanje'] as String,
       prosjecnaPotrosnjaKalorija:
-          (json['prosjecnaPotrosnjaKalorija'] as num).toDouble(),
+          (json['prosjecnaPotrosnjaKalorija'] as num).toInt(),
       vrstaId: (json['vrstaId'] as num).toInt(),
       namjena: json['namjena'] as String,
       slika: json['slika'] as String?,

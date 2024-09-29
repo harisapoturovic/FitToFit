@@ -34,7 +34,7 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
 
   @override
   void initState() {
-    DateFormat dateFormat = DateFormat('yyyy-MM-dd');
+    DateFormat dateFormat = DateFormat('d.M.yyyy.');
     super.initState();
     if ((widget.korisnik.slika != null && widget.korisnik.slika!.isNotEmpty)) {
       userImage = imageFromBase64String(widget.korisnik.slika!);
@@ -43,7 +43,9 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
         'ime': widget.korisnik.ime,
         'prezime': widget.korisnik.prezime,
         'korisnickoIme': widget.korisnik.korisnickoIme,
-        'datumRodjenja': dateFormat.format(widget.korisnik.datumRodjenja!),
+        'datumRodjenja': widget.korisnik.datumRodjenja != null
+            ? dateFormat.format(widget.korisnik.datumRodjenja!)
+            : 'Datum nije definisan',
         "spol": widget.korisnik.spol,
         "adresa": widget.korisnik.adresa,
         "telefon": widget.korisnik.telefon,
@@ -57,7 +59,9 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
         'ime': widget.korisnik.ime,
         'prezime': widget.korisnik.prezime,
         'korisnickoIme': widget.korisnik.korisnickoIme,
-        'datumRodjenja': dateFormat.format(widget.korisnik.datumRodjenja!),
+        'datumRodjenja': widget.korisnik.datumRodjenja != null
+            ? dateFormat.format(widget.korisnik.datumRodjenja!)
+            : 'Datum nije definisan',
         "spol": widget.korisnik.spol,
         "telefon": widget.korisnik.telefon,
         "email": widget.korisnik.email,
@@ -125,7 +129,7 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
   }
 
   FormBuilder _buildForm() {
-    DateFormat dateFormat = DateFormat('yyyy-MM-dd');
+    DateFormat dateFormat = DateFormat('d.M.yyyy.');
     return FormBuilder(
       key: _formKey,
       initialValue: _initialValue,
@@ -328,7 +332,7 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
                                   ],
                                 ),
                                 child: Text(
-                                  "~ Detalji o adminu ~ \n\n Broj telefona:  ${odabraniKorisnik?.telefon ?? ''} \n Spol: ${odabraniKorisnik?.spol ?? ''} \n Adresa: ${odabraniKorisnik?.adresa ?? ''} \n Datum rođenja: ${odabraniKorisnik?.datumRodjenja != null ? dateFormat.format(odabraniKorisnik!.datumRodjenja!) : ''} \n Korisničko ime: ${odabraniKorisnik?.korisnickoIme ?? ''}",
+                                  "~ Detalji o adminu ~ \n\n Broj telefona:  ${odabraniKorisnik?.telefon ?? '/'} \n Spol: ${odabraniKorisnik?.spol ?? '/'} \n Adresa: ${odabraniKorisnik?.adresa ?? '/'} \n Datum rođenja: ${odabraniKorisnik?.datumRodjenja != null ? dateFormat.format(odabraniKorisnik!.datumRodjenja!) : '/'} \n Korisničko ime: ${odabraniKorisnik?.korisnickoIme ?? '/'}",
                                   style: const TextStyle(
                                     fontSize: 16,
                                     color: Colors.white,
@@ -364,8 +368,6 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
         TextEditingController(text: korisnik.email);
     final TextEditingController adresaController =
         TextEditingController(text: korisnik.adresa);
-    final TextEditingController korisnickoImeController =
-        TextEditingController(text: korisnik.korisnickoIme);
 
     final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
     await showDialog(
@@ -415,18 +417,19 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
                                                 if (value == null ||
                                                     value.isEmpty) {
                                                   return 'Ovo polje je obavezno!';
-                                                }
-                                                if (!RegExp(r'^[A-Z-ŠĐČĆŽ]')
+                                                } else if (!RegExp(
+                                                        r'^[A-Z-ŠĐČĆŽ]')
                                                     .hasMatch(value)) {
                                                   return 'Ime mora početi velikim slovom.';
-                                                }
-
-                                                if (!RegExp(
-                                                        r'^[a-zA-ZšđčćžŠĐČĆŽ]+$')
+                                                } else if (!RegExp(
+                                                        r'^[a-zA-ZšđčćžŠĐČĆŽ\s]+$')
                                                     .hasMatch(value)) {
                                                   return 'Ime može sadržavati samo slova.';
+                                                } else if (value.length < 3) {
+                                                  return 'Morate unijeti najmanje 3 karaktera.';
+                                                } else if (value.length > 50) {
+                                                  return 'Premašili ste maksimalan broj karaktera (50).';
                                                 }
-
                                                 return null;
                                               }),
                                           const SizedBox(height: 16),
@@ -441,16 +444,18 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
                                               if (value == null ||
                                                   value.isEmpty) {
                                                 return 'Ovo polje je obavezno!';
-                                              }
-                                              if (!RegExp(r'^[A-Z-ŠĐČĆŽ]')
+                                              } else if (!RegExp(
+                                                      r'^[A-Z-ŠĐČĆŽ]')
                                                   .hasMatch(value)) {
                                                 return 'Prezime mora početi velikim slovom.';
-                                              }
-
-                                              if (!RegExp(
-                                                      r'^[a-zA-ZšđčćžŠĐČĆŽ]+$')
+                                              } else if (!RegExp(
+                                                      r'^[a-zA-ZšđčćžŠĐČĆŽ\s]+$')
                                                   .hasMatch(value)) {
                                                 return 'Prezime može sadržavati samo slova.';
+                                              } else if (value.length < 3) {
+                                                return 'Morate unijeti najmanje 3 karaktera.';
+                                              } else if (value.length > 50) {
+                                                return 'Premašili ste maksimalan broj karaktera (50).';
                                               }
 
                                               return null;
@@ -465,13 +470,15 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
                                             ),
                                             validator: (value) {
                                               if (value != null &&
-                                                  !RegExp(r'^[0-9]+$')
-                                                      .hasMatch(value)) {
-                                                return 'Ovo polje može sadržavati samo brojeve.';
-                                              }
-                                              if (value != null &&
-                                                  value.length > 10) {
-                                                return 'Broj telefona može imati maksimalno 10 cifara.';
+                                                  value.isNotEmpty) {
+                                                if (!RegExp(r'^[0-9]+$')
+                                                    .hasMatch(value)) {
+                                                  return 'Ovo polje može sadržavati samo brojeve.';
+                                                } else if (value.length < 9) {
+                                                  return 'Broj telefona može imati minimalno 9 cifara.';
+                                                } else if (value.length > 10) {
+                                                  return 'Broj telefona može imati maksimalno 10 cifara.';
+                                                }
                                               }
                                               return null;
                                             },
@@ -491,6 +498,8 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
                                                         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                                                     .hasMatch(value)) {
                                                   return 'Unesite validnu e-mail adresu.';
+                                                } else if (value.length > 50) {
+                                                  return 'Premašili ste maksimalan broj karaktera (50).';
                                                 }
                                               }
                                               return null;
@@ -506,29 +515,16 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
                                             ),
                                             validator: (value) {
                                               if (value != null &&
-                                                  value.isNotEmpty &&
-                                                  !RegExp(r'^[A-Z]')
-                                                      .hasMatch(value)) {
-                                                return 'Adresa mora početi velikim slovom.';
-                                              }
-                                              return null;
-                                            },
-                                          ),
-                                          const SizedBox(
-                                            height: 16,
-                                          ),
-                                          const SizedBox(height: 16),
-                                          FormBuilderTextField(
-                                            name: 'korisnickoIme',
-                                            controller: korisnickoImeController,
-                                            decoration: const InputDecoration(
-                                              labelText: 'Korisničko ime',
-                                              border: OutlineInputBorder(),
-                                            ),
-                                            validator: (value) {
-                                              if (value == null ||
-                                                  value.isEmpty) {
-                                                return 'Ovo polje je obavezno';
+                                                  value.isNotEmpty) {
+                                                if (value.isNotEmpty &&
+                                                    !RegExp(r'^[A-Z-ŠĐČĆŽ]')
+                                                        .hasMatch(value)) {
+                                                  return 'Adresa mora početi velikim slovom.';
+                                                } else if (value.length < 3) {
+                                                  return 'Morate unijeti najmanje 3 karaktera.';
+                                                } else if (value.length > 50) {
+                                                  return 'Premašili ste maksimalan broj karaktera (50).';
+                                                }
                                               }
                                               return null;
                                             },
@@ -635,8 +631,8 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
                                                       tezina: odabraniKorisnik!
                                                           .tezina,
                                                       korisnickoIme:
-                                                          korisnickoImeController
-                                                              .text);
+                                                          odabraniKorisnik!
+                                                              .korisnickoIme);
 
                                                   _korisniciProvider.update(
                                                       odabraniKorisnik!
@@ -697,7 +693,10 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
             style: TextButton.styleFrom(
               backgroundColor: Colors.blue,
               foregroundColor: Colors.white,
@@ -705,7 +704,10 @@ class _AdminProfilPageState extends State<AdminProfilPage> {
                 fontSize: 16.0,
               ),
             ),
-            child: const Text("OK"),
+            child: const Text(
+              "OK",
+              style: TextStyle(color: Colors.white),
+            ),
           ),
         ],
         shape: RoundedRectangleBorder(

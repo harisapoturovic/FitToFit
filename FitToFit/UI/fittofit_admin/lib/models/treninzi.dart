@@ -10,13 +10,13 @@ class Treninzi {
   String naziv;
   String opis;
   int maxBrojClanova;
-  double cijenaPoTerminu;
+  int cijenaPoTerminu;
   String trajanje;
-  double prosjecnaPotrosnjaKalorija;
+  int prosjecnaPotrosnjaKalorija;
   int vrstaId;
   String namjena;
   String? slika;
-  List<Termini> terminis=[];
+  List<Termini> terminis = [];
   List<VjezbeTreninzi>? treninziVjezbes = [];
 
   Treninzi(

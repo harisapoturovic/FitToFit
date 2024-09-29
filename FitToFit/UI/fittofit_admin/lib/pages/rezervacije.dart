@@ -58,12 +58,12 @@ class _RezervacijePageState extends State<RezervacijePage> {
   }
 
   void setTotalItems() async {
-    var novostiResult = await _rezervacijeProvider
+    var rezervacijeResult = await _rezervacijeProvider
         .get(filter: {'page': page, 'pageSize': pageSize});
 
     if (mounted) {
       setState(() {
-        totalcount = novostiResult.count;
+        totalcount = rezervacijeResult.count;
       });
 
       int totalPages = (totalcount / pageSize).ceil();
@@ -119,7 +119,7 @@ class _RezervacijePageState extends State<RezervacijePage> {
       'page': page,
       'pageSize': pageSize
     });
-    var korisnici = await _korisniciProvider.get(filter: {'isAdmin': false});
+    var korisnici = await _korisniciProvider.get(filter: {'isKorisnik': true});
     var treninzi = await _treninziProvider.get(filter: {});
     var clanarine = await _clanarineProvider.get(filter: {});
 
@@ -518,7 +518,7 @@ class _RezervacijePageState extends State<RezervacijePage> {
                           )
                         : null,
                   ),
-                  format: DateFormat("yyyy-MM-dd"),
+                  format: DateFormat("d.M.yyyy."),
                   initialValue: _selectedDate,
                   onChanged: (value) {
                     setState(() {

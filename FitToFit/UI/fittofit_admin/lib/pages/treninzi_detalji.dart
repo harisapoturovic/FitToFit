@@ -40,6 +40,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
   bool isLoading = true;
   Image? trainingImage;
   int? _selectedVrstaTreninga;
+  String? _selectedNamjena;
   List<VrsteTreninga> _vrsteTreningaList = [];
   List<Termini> _terminiResult = [];
   List<Vjezbe> _vjezbeList = [];
@@ -48,6 +49,14 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
   final _formKey2 = GlobalKey<FormBuilderState>();
   Map<String, dynamic> _initialValue = {};
   final TextEditingController _trajanjeController = TextEditingController();
+
+  List<String> namjena = [
+    'Mršavljenje',
+    'Izgradnja mišića',
+    'Kondicija',
+    'Fleksibilnost i mobilnost',
+    'Rehabilitacija i oporavak'
+  ];
 
   @override
   void initState() {
@@ -228,7 +237,9 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                           ),
                         ),
                         const Divider(),
-                        _treninziList.isNotEmpty
+                        _treninziList.isNotEmpty &&
+                                (_treninziList[0].treninziVjezbes?.isNotEmpty ??
+                                    false)
                             ? ListView.builder(
                                 itemCount:
                                     _treninziList[0].treninziVjezbes?.length ??
@@ -259,15 +270,15 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                   );
                                 },
                               )
-                            : const Text("Nema vježbi na treningu!",
+                            : const Text(
+                                "Nema vježbi na treningu!",
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                   color: Color.fromARGB(255, 86, 86, 86),
-                                )),
-                        const SizedBox(
-                          height: 20,
-                        ),
+                                ),
+                              ),
+                        const SizedBox(height: 20),
                         ElevatedButton(
                           onPressed: () {
                             _dodajVjezbu(context);
@@ -297,15 +308,15 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                             children: [
                               Text('Dodaj vježbu na trening'),
                               SizedBox(width: 5),
-                              Icon(Icons.add)
+                              Icon(Icons.add),
                             ],
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
                 ),
-              ),
+              )
             ],
           ),
           const SizedBox(
@@ -682,7 +693,6 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
             TextButton(
               onPressed: () {
                 _deleteTraining();
-                Navigator.pop(context);
               },
               child: const Text(
                 'Izbriši',
@@ -732,7 +742,11 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
             style: TextButton.styleFrom(
               backgroundColor: Colors.blue,
               foregroundColor: Colors.white,
@@ -763,8 +777,6 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
     final TextEditingController prosjecnaPotrosnjaKalorijaClanovaController =
         TextEditingController(
             text: trening.prosjecnaPotrosnjaKalorija.toString());
-    final TextEditingController namjenaController =
-        TextEditingController(text: trening.namjena);
 
     final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
     await showDialog(
@@ -814,10 +826,14 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                               if (value == null ||
                                                   value.isEmpty) {
                                                 return 'Ovo polje je obavezno!';
-                                              }
-                                              if (!RegExp(r'^[A-Z]')
+                                              } else if (!RegExp(
+                                                      r'^[A-Z-ŠĐČĆŽ]')
                                                   .hasMatch(value)) {
                                                 return 'Opis mora početi velikim slovom.';
+                                              } else if (value.length < 5) {
+                                                return 'Morate unijeti najmanje 5 karaktera.';
+                                              } else if (value.length > 600) {
+                                                return 'Premašili ste maksimalan broj karaktera.';
                                               }
 
                                               return null;
@@ -839,10 +855,15 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                               if (value == null ||
                                                   value.isEmpty) {
                                                 return 'Ovo polje je obavezno!';
-                                              }
-                                              if (!RegExp(r'^[0-9]+$')
+                                              } else if (!RegExp(r'^[0-9]+$')
                                                   .hasMatch(value)) {
                                                 return 'Ovo polje može sadržavati samo brojeve.';
+                                              } else {
+                                                final broj =
+                                                    int.tryParse(value) ?? 0;
+                                                if (broj < 1 || broj > 20) {
+                                                  return 'Dozvoljen je unos brojeva između 1 i 20.';
+                                                }
                                               }
 
                                               return null;
@@ -862,11 +883,15 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                               if (value == null ||
                                                   value.isEmpty) {
                                                 return 'Ovo polje je obavezno!';
-                                              }
-                                              if (!RegExp(
-                                                      r'^[0-9]+(?:[.,][0-9]+)*$')
+                                              } else if (!RegExp(r'^[0-9]+$')
                                                   .hasMatch(value)) {
-                                                return 'Ovo polje ne može sadržavati slova.';
+                                                return 'Ovo polje može sadržavati samo brojeve.';
+                                              } else {
+                                                final broj =
+                                                    int.tryParse(value) ?? 0;
+                                                if (broj < 1 || broj > 10) {
+                                                  return 'Dozvoljen je unos brojeva između 1 i 10.';
+                                                }
                                               }
 
                                               return null;
@@ -886,6 +911,15 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                               if (value == null ||
                                                   value.isEmpty) {
                                                 return 'Ovo polje je obavezno!';
+                                              } else if (!RegExp(r'^[0-9]+$')
+                                                  .hasMatch(value)) {
+                                                return 'Ovo polje može sadržavati samo brojeve.';
+                                              } else {
+                                                final broj =
+                                                    int.tryParse(value) ?? 0;
+                                                if (broj < 20 || broj > 90) {
+                                                  return 'Dozvoljen je unos brojeva između 20 i 90.';
+                                                }
                                               }
 
                                               return null;
@@ -905,11 +939,15 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                               if (value == null ||
                                                   value.isEmpty) {
                                                 return 'Ovo polje je obavezno!';
-                                              }
-                                              if (!RegExp(
-                                                      r'^[0-9]+(?:[.,][0-9]+)*$')
+                                              } else if (!RegExp(r'^[0-9]+$')
                                                   .hasMatch(value)) {
-                                                return 'Ovo polje ne može sadržavati slova.';
+                                                return 'Ovo polje može sadržavati samo brojeve.';
+                                              } else {
+                                                final broj =
+                                                    int.tryParse(value) ?? 0;
+                                                if (broj < 100 || broj > 1500) {
+                                                  return 'Dozvoljen je unos brojeva između 100 i 1500.';
+                                                }
                                               }
 
                                               return null;
@@ -918,44 +956,43 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                           const SizedBox(
                                             height: 16,
                                           ),
-                                          FormBuilderTextField(
-                                            name: 'namjena',
-                                            controller: namjenaController,
-                                            decoration: const InputDecoration(
-                                              labelText: 'Namjena',
-                                              border: OutlineInputBorder(),
-                                            ),
-                                            validator: (value) {
-                                              if (value == null ||
-                                                  value.isEmpty) {
-                                                return 'Ovo polje je obavezno!';
-                                              }
-                                              if (!RegExp(r'^[A-Z]')
-                                                  .hasMatch(value)) {
-                                                return 'Namjena mora početi velikim slovom.';
-                                              }
-
-                                              return null;
-                                            },
-                                          ),
+                                          FormBuilderDropdown(
+                                              name: 'namjena',
+                                              decoration: const InputDecoration(
+                                                  labelText: 'Namjena'),
+                                              initialValue: namjena.contains(
+                                                      odabraniTrening!.namjena)
+                                                  ? odabraniTrening!.namjena
+                                                  : null,
+                                              items: namjena.map((n) {
+                                                return DropdownMenuItem(
+                                                  value: n,
+                                                  child: Text(n),
+                                                );
+                                              }).toList(),
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  _selectedNamjena = value;
+                                                });
+                                              }),
                                           const SizedBox(height: 16),
                                           DropdownButtonFormField(
-                                            decoration: const InputDecoration(
-                                                labelText: "Vrsta treninga"),
-                                            value: odabraniTrening!.vrstaId,
-                                            items: _vrsteTreningaList
-                                                .map((VrsteTreninga vrsta) {
-                                              return DropdownMenuItem(
-                                                value: vrsta.vrstaTreningaId,
-                                                child: Text(vrsta.naziv!),
-                                              );
-                                            }).toList(),
-                                            onChanged: (value) {
-                                              setState(() {
-                                                _selectedVrstaTreninga = value;
-                                              });
-                                            },
-                                          ),
+                                              decoration: const InputDecoration(
+                                                  labelText: "Vrsta treninga"),
+                                              value: odabraniTrening!.vrstaId,
+                                              items: _vrsteTreningaList
+                                                  .map((VrsteTreninga vrsta) {
+                                                return DropdownMenuItem(
+                                                  value: vrsta.vrstaTreningaId,
+                                                  child: Text(vrsta.naziv!),
+                                                );
+                                              }).toList(),
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  _selectedVrstaTreninga =
+                                                      value;
+                                                });
+                                              }),
                                           const SizedBox(
                                             height: 16,
                                           ),
@@ -1037,32 +1074,41 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                                               maxBrojClanovaController
                                                                   .text) ??
                                                           0,
-                                                      cijenaPoTerminu:
-                                                          double.tryParse(
-                                                                  cijenaPoTerminuController
-                                                                      .text) ??
-                                                              0.0,
+                                                      cijenaPoTerminu: int.tryParse(
+                                                              cijenaPoTerminuController
+                                                                  .text) ??
+                                                          0,
                                                       trajanje: trajanjeController
                                                           .text,
                                                       prosjecnaPotrosnjaKalorija:
-                                                          double.tryParse(
-                                                                  prosjecnaPotrosnjaKalorijaClanovaController
-                                                                      .text) ??
-                                                              0.0,
-                                                      namjena: namjenaController
-                                                          .text,
-                                                      vrstaId: _selectedVrstaTreninga ??
-                                                          odabraniTrening!.vrstaId,
+                                                          int.tryParse(prosjecnaPotrosnjaKalorijaClanovaController.text) ??
+                                                              0,
+                                                      namjena:
+                                                          _selectedNamjena ??
+                                                              odabraniTrening!
+                                                                  .namjena,
+                                                      vrstaId:
+                                                          _selectedVrstaTreninga ??
+                                                              odabraniTrening!
+                                                                  .vrstaId,
                                                       slika: trainingImage);
 
-                                                  _treninziProvider.update(
-                                                      odabraniTrening!
-                                                          .treningId,
-                                                      trening);
-                                                  _showAlertDialog(
-                                                      "Uspješan edit",
-                                                      "Podaci o treningu uspješno ažurirani.",
-                                                      Colors.green);
+                                                  try {
+                                                    _treninziProvider.update(
+                                                        odabraniTrening!
+                                                            .treningId,
+                                                        trening);
+
+                                                    _showAlertDialog(
+                                                        "Uspješan edit",
+                                                        "Podaci o treningu uspješno ažurirani.",
+                                                        Colors.green);
+                                                  } catch (e) {
+                                                    _showAlertDialog(
+                                                        "Greška",
+                                                        "Dogodila se greška prilikom ažuriranja: ${e.toString()}",
+                                                        Colors.red);
+                                                  }
                                                 }
                                               }
                                             },
@@ -1123,10 +1169,13 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
-                        }
-                        if (!RegExp(r'^[0-9]+(?:[.,][0-9]+)*$')
-                            .hasMatch(value)) {
-                          return 'Ovo polje ne može sadržavati slova.';
+                        } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                          return 'Ovo polje može sadržavati samo brojeve.';
+                        } else {
+                          final broj = int.tryParse(value) ?? 0;
+                          if (broj < 1 || broj > 10) {
+                            return 'Dozvoljen je unos brojeva između 1 i 10.';
+                          }
                         }
 
                         return null;
@@ -1189,13 +1238,13 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
     _formKey2.currentState?.saveAndValidate();
     final currentFormState = _formKey2.currentState;
     if (!_areAllFieldsFilled(currentFormState)) {
-      _showAlertDialog(
+      _showAlertDialogVjezbe(
           "Upozorenje", "Popunite sva obavezna polja.", Colors.orange);
       return;
     }
     if (currentFormState != null) {
       if (!currentFormState.validate()) {
-        _showAlertDialog(
+        _showAlertDialogVjezbe(
             "Upozorenje",
             "Molimo vas da ispravno popunite sva obavezna polja.",
             Colors.orange);
@@ -1296,11 +1345,52 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
     try {
       if (vjezbaTreningId != null) {
         await _vjezbeTreninziProvider.delete(vjezbaTreningId);
-        _showAlertDialog("Uspješno brisanje",
+        _showAlertDialogVjezbe("Uspješno brisanje",
             "Vježba uspješno uklonjena sa treninga.", Colors.green);
       }
     } catch (e) {
-      _showAlertDialog("Greška", e.toString(), Colors.red);
+      _showAlertDialogVjezbe("Greška", e.toString(), Colors.red);
     }
+  }
+
+   void _showAlertDialogVjezbe(String naslov, String poruka, Color boja) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        backgroundColor: const Color.fromARGB(255, 238, 247, 255),
+        title: Text(
+          naslov,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: boja,
+          ),
+        ),
+        content: Text(
+          poruka,
+          style: const TextStyle(
+            fontSize: 16.0,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
+            style: TextButton.styleFrom(
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
+              textStyle: const TextStyle(
+                fontSize: 16.0,
+              ),
+            ),
+            child: const Text("OK"),
+          ),
+        ],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+      ),
+    );
   }
 }

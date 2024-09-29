@@ -30,14 +30,10 @@ class _TreninziPageState extends State<TreninziPage> {
   File? _image;
   String? _base64Image;
   FocusNode _nazivFocusNode = FocusNode();
+  int? selectedVrstaTreninga;
+  String? selectedNamjena;
 
-  List<String> namjena = [
-    'Mršavljenje',
-    'Izgradnja mišića',
-    'Kondicija',
-    'Fleksibilnost i mobilnost',
-    'Rehabilitacija i oporavak'
-  ];
+  List<String> namjena = [];
 
   @override
   void initState() {
@@ -71,6 +67,13 @@ class _TreninziPageState extends State<TreninziPage> {
     var vrsteTreninga =
         await _vrsteTreningaProvider.get(filter: {'IsTerminiIncluded': true});
     var treninzi = await _treninziProvider.get(filter: {});
+    namjena = [
+      'Mršavljenje',
+      'Izgradnja mišića',
+      'Kondicija',
+      'Fleksibilnost i mobilnost',
+      'Rehabilitacija i oporavak'
+    ];
     setState(() {
       _vrsteTreningaList = vrsteTreninga.result;
       _treninziList = treninzi.result;
@@ -270,9 +273,15 @@ class _TreninziPageState extends State<TreninziPage> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
-                        }
-                        if (!RegExp(r'^[A-Z]').hasMatch(value)) {
+                        } else if (!RegExp(r'^[A-Z-ŠĐČĆŽ]').hasMatch(value)) {
                           return 'Naziv mora početi velikim slovom.';
+                        } else if (!RegExp(r'^[a-zA-ZšđčćžŠĐČĆŽ\s]+$')
+                            .hasMatch(value)) {
+                          return 'Naziv može sadržavati samo slova.';
+                        } else if (value.length < 3) {
+                          return 'Morate unijeti najmanje 3 karaktera.';
+                        } else if (value.length > 50) {
+                          return 'Premašili ste maksimalan broj karaktera (50).';
                         }
 
                         return null;
@@ -285,7 +294,7 @@ class _TreninziPageState extends State<TreninziPage> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
-                        } else if (!RegExp(r'^[A-Z]').hasMatch(value)) {
+                        } else if (!RegExp(r'^[A-Z-ŠĐČĆŽ]').hasMatch(value)) {
                           return 'Opis mora početi velikim slovom.';
                         } else if (value.length < 5) {
                           return 'Morate unijeti najmanje 5 karaktera.';
@@ -304,9 +313,13 @@ class _TreninziPageState extends State<TreninziPage> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
-                        }
-                        if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                        } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
                           return 'Ovo polje može sadržavati samo brojeve.';
+                        } else {
+                          final broj = int.tryParse(value) ?? 0;
+                          if (broj < 1 || broj > 20) {
+                            return 'Dozvoljen je unos brojeva između 1 i 20.';
+                          }
                         }
 
                         return null;
@@ -320,10 +333,13 @@ class _TreninziPageState extends State<TreninziPage> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
-                        }
-                        if (!RegExp(r'^[0-9]+(?:[.,][0-9]+)*$')
-                            .hasMatch(value)) {
-                          return 'Ovo polje ne može sadržavati slova.';
+                        } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                          return 'Ovo polje može sadržavati samo brojeve.';
+                        } else {
+                          final broj = int.tryParse(value) ?? 0;
+                          if (broj < 1 || broj > 10) {
+                            return 'Dozvoljen je unos brojeva između 1 i 10.';
+                          }
                         }
 
                         return null;
@@ -333,10 +349,17 @@ class _TreninziPageState extends State<TreninziPage> {
                     FormBuilderTextField(
                       name: 'trajanje',
                       decoration:
-                          const InputDecoration(labelText: 'Trajanje (min/h)'),
+                          const InputDecoration(labelText: 'Trajanje (min)'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
+                        } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                          return 'Ovo polje može sadržavati samo brojeve.';
+                        } else {
+                          final broj = int.tryParse(value) ?? 0;
+                          if (broj < 20 || broj > 90) {
+                            return 'Dozvoljen je unos brojeva između 20 i 90.';
+                          }
                         }
 
                         return null;
@@ -350,10 +373,13 @@ class _TreninziPageState extends State<TreninziPage> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
-                        }
-                        if (!RegExp(r'^[0-9]+(?:[.,][0-9]+)*$')
-                            .hasMatch(value)) {
-                          return 'Ovo polje ne može sadržavati slova.';
+                        } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                          return 'Ovo polje može sadržavati samo brojeve.';
+                        } else {
+                          final broj = int.tryParse(value) ?? 0;
+                          if (broj < 100 || broj > 1500) {
+                            return 'Dozvoljen je unos brojeva između 100 i 1500.';
+                          }
                         }
 
                         return null;
@@ -362,28 +388,49 @@ class _TreninziPageState extends State<TreninziPage> {
                     const SizedBox(height: 10.0),
                     FormBuilderDropdown(
                       name: 'namjena',
-                      decoration:
-                          const InputDecoration(labelText: 'Namjena'),
-                      initialValue: namjena[0],
+                      decoration: const InputDecoration(labelText: 'Namjena'),
+                      initialValue: selectedNamjena,
                       items: namjena.map((n) {
                         return DropdownMenuItem(
                           value: n,
                           child: Text(n),
                         );
                       }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedNamjena = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Ovo polje je obavezno!';
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 10.0),
                     FormBuilderDropdown(
                       name: 'vrstaId',
                       decoration:
                           const InputDecoration(labelText: 'Vrsta treninga'),
-                      initialValue: _vrsteTreningaList[0].vrstaTreningaId,
+                      initialValue: selectedVrstaTreninga,
                       items: _vrsteTreningaList.map((vrstaTreninga) {
                         return DropdownMenuItem(
                           value: vrstaTreninga.vrstaTreningaId,
                           child: Text(vrstaTreninga.naziv!),
                         );
                       }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedVrstaTreninga = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Ovo polje je obavezno!';
+                        }
+                        return null;
+                      },
                     ),
                     FormBuilderField(
                       name: 'slika',
@@ -395,7 +442,7 @@ class _TreninziPageState extends State<TreninziPage> {
                           ),
                           child: ListTile(
                             leading: const Icon(Icons.photo),
-                            title: const Text("Select image"),
+                            title: const Text("Odaberite sliku"),
                             trailing: const Icon(Icons.file_upload),
                             onTap: getImage,
                           ),
@@ -443,56 +490,27 @@ class _TreninziPageState extends State<TreninziPage> {
 
   void _dodajTrening() {
     _formKey.currentState?.saveAndValidate();
-    final currentFormState = _formKey.currentState;
-    if (!_areAllFieldsFilled(currentFormState)) {
-      _showAlertDialog(
-          "Upozorenje", "Popunite sva obavezna polja.", Colors.orange);
-      return;
-    }
-    if (currentFormState != null) {
-      if (!currentFormState.validate()) {
+    if (_formKey.currentState!.validate()) {
+      var request = Map.from(_formKey.currentState!.value);
+      request['slika'] = _base64Image;
+      try {
+        _treninziProvider.insert(request);
+        if (mounted) {
+          setState(() {
+            _formKey.currentState?.reset();
+            selectedVrstaTreninga = null;
+            selectedNamjena = null;
+            namjena = [];
+            _vrsteTreningaList = [];
+            _loadData();
+          });
+        }
         _showAlertDialog(
-            "Upozorenje",
-            "Molimo vas da ispravno popunite sva obavezna polja.",
-            Colors.orange);
-        return;
+            "Uspješan unos", "Trening uspješno dodat.", Colors.green);
+      } on Exception catch (e) {
+        _showAlertDialog("Greška", e.toString(), Colors.red);
       }
     }
-    var request = Map.from(_formKey.currentState!.value);
-    request['slika'] = _base64Image;
-    try {
-      _treninziProvider.insert(request);
-      _showAlertDialog(
-          "Uspješan unos", "Trening uspješno dodat.", Colors.green);
-    } on Exception catch (e) {
-      _showAlertDialog("Greška", e.toString(), Colors.red);
-    }
-  }
-
-  bool _areAllFieldsFilled(FormBuilderState? formState) {
-    if (formState == null) {
-      return false;
-    }
-
-    List<String> requiredFields = [
-      'naziv',
-      'opis',
-      'maxBrojClanova',
-      'cijenaPoTerminu',
-      'trajanje',
-      'prosjecnaPotrosnjaKalorija',
-      'vrstaId',
-      'namjena'
-    ];
-
-    for (String fieldName in requiredFields) {
-      if (formState.fields[fieldName]?.value == null ||
-          formState.fields[fieldName]!.value.toString().isEmpty) {
-        return false;
-      }
-    }
-
-    return true;
   }
 
   void _showAlertDialog(String naslov, String poruka, Color boja) {
@@ -515,7 +533,9 @@ class _TreninziPageState extends State<TreninziPage> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
             style: TextButton.styleFrom(
               backgroundColor: Colors.blue,
               foregroundColor: Colors.white,

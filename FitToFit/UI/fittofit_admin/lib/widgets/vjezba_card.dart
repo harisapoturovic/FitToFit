@@ -26,7 +26,11 @@ class _VjezbaCardState extends State<VjezbaCard> {
   void initState() {
     super.initState();
     _vjezbeProvider = context.read<VjezbeProvider>();
-    slika = imageFromBase64String(widget.vjezba.slika!);
+    if (mounted) {
+      setState(() {
+        slika = imageFromBase64String(widget.vjezba.slika!);
+      });
+    }
   }
 
   @override
@@ -132,7 +136,7 @@ class _VjezbaCardState extends State<VjezbaCard> {
   }
 
   showEditVjezbe(BuildContext context) async {
-    String? slika = widget.vjezba.slika;
+    String? _slika = widget.vjezba.slika;
     final TextEditingController opisController =
         TextEditingController(text: widget.vjezba.opis);
     final TextEditingController nazivController =
@@ -186,14 +190,17 @@ class _VjezbaCardState extends State<VjezbaCard> {
                                               if (value == null ||
                                                   value.isEmpty) {
                                                 return 'Ovo polje je obavezno!';
-                                              }
-                                              if (!RegExp(r'^[A-Z]')
+                                              } else if (!RegExp(r'^[A-ZŠĐČĆŽ]')
                                                   .hasMatch(value)) {
                                                 return 'Naziv mora početi velikim slovom.';
-                                              }
-
-                                              if (value.length > 50) {
-                                                return 'Možete unijeti maksimalno 50 karaktera.';
+                                              } else if (!RegExp(
+                                                      r'^[a-zA-ZšđčćžŠĐČĆŽ\s]+$')
+                                                  .hasMatch(value)) {
+                                                return 'Naziv može sadržavati samo slova.';
+                                              } else if (value.length < 3) {
+                                                return 'Morate unijeti najmanje 3 karaktera.';
+                                              } else if (value.length > 50) {
+                                                return 'Premašili ste maksimalan broj karaktera (50).';
                                               }
 
                                               return null;
@@ -213,11 +220,14 @@ class _VjezbaCardState extends State<VjezbaCard> {
                                               if (value == null ||
                                                   value.isEmpty) {
                                                 return 'Ovo polje je obavezno!';
-                                              }
-                                              if (value.length < 5) {
+                                              } else if (!RegExp(r'^[A-ZŠĐČĆŽ]')
+                                                  .hasMatch(value)) {
+                                                return 'Opis mora početi velikim slovom.';
+                                              } else if (value.length < 5) {
                                                 return 'Morate unijeti najmanje 5 karaktera.';
+                                              } else if (value.length > 600) {
+                                                return 'Premašili ste maksimalan broj karaktera (600).';
                                               }
-
                                               return null;
                                             },
                                           ),
@@ -255,7 +265,7 @@ class _VjezbaCardState extends State<VjezbaCard> {
                                                     base64Encode(
                                                         smallerImageBytes);
                                                 setState(() {
-                                                  slika = base64Image;
+                                                  _slika = base64Image;
                                                 });
                                               }
                                             },
@@ -300,11 +310,18 @@ class _VjezbaCardState extends State<VjezbaCard> {
                                                         widget.vjezba.vjezbaId,
                                                     naziv: nazivController.text,
                                                     opis: opisController.text,
-                                                    slika: slika);
+                                                    slika: _slika);
 
                                                 _vjezbeProvider.update(
                                                     widget.vjezba.vjezbaId, v);
-                                                _showAlertDialog(
+                                                if (mounted) {
+                                                  setState(() {
+                                                    slika =
+                                                        imageFromBase64String(
+                                                            _slika!);
+                                                  });
+                                                }
+                                                _showAlertDialogEdit(
                                                     "Uspješan edit",
                                                     "Podaci o vježbi uspješno ažurirani.",
                                                     Colors.green);
@@ -359,6 +376,47 @@ class _VjezbaCardState extends State<VjezbaCard> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
+            style: TextButton.styleFrom(
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
+              textStyle: const TextStyle(
+                fontSize: 16.0,
+              ),
+            ),
+            child: const Text("OK"),
+          ),
+        ],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+      ),
+    );
+  }
+
+  void _showAlertDialogEdit(String naslov, String poruka, Color boja) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        backgroundColor: const Color.fromARGB(255, 238, 247, 255),
+        title: Text(
+          naslov,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: boja,
+          ),
+        ),
+        content: Text(
+          poruka,
+          style: const TextStyle(
+            fontSize: 16.0,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
             style: TextButton.styleFrom(
               backgroundColor: Colors.blue,
               foregroundColor: Colors.white,

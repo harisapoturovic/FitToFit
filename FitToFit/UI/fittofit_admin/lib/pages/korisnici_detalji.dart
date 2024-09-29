@@ -32,7 +32,7 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
 
   @override
   void initState() {
-    DateFormat dateFormat = DateFormat('yyyy-MM-dd');
+    DateFormat dateFormat = DateFormat('d.M.yyyy.');
     super.initState();
     if ((widget.korisnik.slika != null && widget.korisnik.slika!.isNotEmpty)) {
       userImage = imageFromBase64String(widget.korisnik.slika!);
@@ -560,7 +560,6 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
             TextButton(
               onPressed: () {
                 _deleteUser();
-                Navigator.pop(context);
               },
               child: const Text(
                 'Izbriši',
@@ -610,7 +609,11 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
             style: TextButton.styleFrom(
               backgroundColor: Colors.blue,
               foregroundColor: Colors.white,
@@ -696,16 +699,18 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
                                                 if (value == null ||
                                                     value.isEmpty) {
                                                   return 'Ovo polje je obavezno!';
-                                                }
-                                                if (!RegExp(r'^[A-Z-ŠĐČĆŽ]')
+                                                } else if (!RegExp(
+                                                        r'^[A-Z-ŠĐČĆŽ]')
                                                     .hasMatch(value)) {
                                                   return 'Ime mora početi velikim slovom.';
-                                                }
-
-                                                if (!RegExp(
-                                                        r'^[a-zA-ZšđčćžŠĐČĆŽ]+$')
+                                                } else if (!RegExp(
+                                                        r'^[a-zA-ZšđčćžŠĐČĆŽ\s]+$')
                                                     .hasMatch(value)) {
                                                   return 'Ime može sadržavati samo slova.';
+                                                } else if (value.length < 3) {
+                                                  return 'Morate unijeti najmanje 3 karaktera.';
+                                                } else if (value.length > 50) {
+                                                  return 'Premašili ste maksimalan broj karaktera (50).';
                                                 }
 
                                                 return null;
@@ -722,16 +727,18 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
                                               if (value == null ||
                                                   value.isEmpty) {
                                                 return 'Ovo polje je obavezno!';
-                                              }
-                                              if (!RegExp(r'^[A-Z-ŠĐČĆŽ]')
+                                              } else if (!RegExp(
+                                                      r'^[A-Z-ŠĐČĆŽ]')
                                                   .hasMatch(value)) {
                                                 return 'Prezime mora početi velikim slovom.';
-                                              }
-
-                                              if (!RegExp(
-                                                      r'^[a-zA-ZšđčćžŠĐČĆŽ]+$')
+                                              } else if (!RegExp(
+                                                      r'^[a-zA-ZšđčćžŠĐČĆŽ\s]+$')
                                                   .hasMatch(value)) {
                                                 return 'Prezime može sadržavati samo slova.';
+                                              } else if (value.length < 3) {
+                                                return 'Morate unijeti najmanje 3 karaktera.';
+                                              } else if (value.length > 50) {
+                                                return 'Premašili ste maksimalan broj karaktera (50).';
                                               }
 
                                               return null;
@@ -746,13 +753,15 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
                                             ),
                                             validator: (value) {
                                               if (value != null &&
-                                                  !RegExp(r'^[0-9]+$')
-                                                      .hasMatch(value)) {
-                                                return 'Ovo polje može sadržavati samo brojeve.';
-                                              }
-                                              if (value != null &&
-                                                  value.length > 10) {
-                                                return 'Broj telefona može imati maksimalno 10 cifara.';
+                                                  value.isNotEmpty) {
+                                                if (!RegExp(r'^[0-9]+$')
+                                                    .hasMatch(value)) {
+                                                  return 'Ovo polje može sadržavati samo brojeve.';
+                                                } else if (value.length < 9) {
+                                                  return 'Broj telefona može imati minimalno 9 cifara.';
+                                                } else if (value.length > 10) {
+                                                  return 'Broj telefona može imati maksimalno 10 cifara.';
+                                                }
                                               }
                                               return null;
                                             },
@@ -772,6 +781,8 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
                                                         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                                                     .hasMatch(value)) {
                                                   return 'Unesite validnu e-mail adresu.';
+                                                } else if (value.length > 50) {
+                                                  return 'Premašili ste maksimalan broj karaktera (50).';
                                                 }
                                               }
                                               return null;
@@ -787,10 +798,16 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
                                             ),
                                             validator: (value) {
                                               if (value != null &&
-                                                  value.isNotEmpty &&
-                                                  !RegExp(r'^[A-Z]')
-                                                      .hasMatch(value)) {
-                                                return 'Adresa mora početi velikim slovom.';
+                                                  value.isNotEmpty) {
+                                                if (value.isNotEmpty &&
+                                                    !RegExp(r'^[A-Z-ŠĐČĆŽ]')
+                                                        .hasMatch(value)) {
+                                                  return 'Adresa mora početi velikim slovom.';
+                                                } else if (value.length < 3) {
+                                                  return 'Morate unijeti najmanje 3 karaktera.';
+                                                } else if (value.length > 50) {
+                                                  return 'Premašili ste maksimalan broj karaktera (50).';
+                                                }
                                               }
                                               return null;
                                             },
@@ -804,22 +821,17 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
                                               border: OutlineInputBorder(),
                                             ),
                                             validator: (value) {
-                                              if (value == null ||
-                                                  value.isEmpty) {
-                                                return 'Ovo polje je obavezno';
-                                              }
-                                              if (!RegExp(r'^[0-9]+$')
-                                                  .hasMatch(value)) {
-                                                return 'Ovo polje može sadržavati samo brojeve.';
-                                              }
-                                              if (value.length != 3) {
-                                                return 'Možete unijeti samo 3 cifre.';
+                                              if (value != null &&
+                                                  value.isNotEmpty) {
+                                                if (!RegExp(r'^[0-9]+$')
+                                                    .hasMatch(value)) {
+                                                  return 'Ovo polje može sadržavati samo brojeve.';
+                                                } else if (value.length != 3) {
+                                                  return 'Možete unijeti samo 3 cifre.';
+                                                }
                                               }
                                               return null;
                                             },
-                                          ),
-                                          const SizedBox(
-                                            height: 16,
                                           ),
                                           const SizedBox(height: 16),
                                           FormBuilderTextField(
@@ -830,36 +842,15 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
                                               border: OutlineInputBorder(),
                                             ),
                                             validator: (value) {
-                                              if (value == null ||
-                                                  value.isEmpty) {
-                                                return 'Ovo polje je obavezno';
-                                              }
-                                              if (!RegExp(r'^[0-9]+$')
-                                                  .hasMatch(value)) {
-                                                return 'Ovo polje može sadržavati samo brojeve.';
-                                              }
-                                              if (value.length < 2 ||
-                                                  value.length > 3) {
-                                                return 'Možete unijeti 2 ili 3 cifre.';
-                                              }
-                                              return null;
-                                            },
-                                          ),
-                                          const SizedBox(
-                                            height: 16,
-                                          ),
-                                          const SizedBox(height: 16),
-                                          FormBuilderTextField(
-                                            name: 'korisnickoIme',
-                                            controller: korisnickoImeController,
-                                            decoration: const InputDecoration(
-                                              labelText: 'Korisničko ime',
-                                              border: OutlineInputBorder(),
-                                            ),
-                                            validator: (value) {
-                                              if (value == null ||
-                                                  value.isEmpty) {
-                                                return 'Ovo polje je obavezno';
+                                              if (value != null &&
+                                                  value.isNotEmpty) {
+                                                if (!RegExp(r'^[0-9]+$')
+                                                    .hasMatch(value)) {
+                                                  return 'Ovo polje može sadržavati samo brojeve.';
+                                                } else if (value.length < 2 ||
+                                                    value.length > 3) {
+                                                  return 'Možete unijeti 2 ili 3 cifre.';
+                                                }
                                               }
                                               return null;
                                             },
@@ -968,15 +959,22 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
                                                       korisnickoIme:
                                                           korisnickoImeController
                                                               .text);
+                                                  try {
+                                                    _korisniciProvider.update(
+                                                        odabraniKorisnik!
+                                                            .korisnikId,
+                                                        korisnik);
 
-                                                  _korisniciProvider.update(
-                                                      odabraniKorisnik!
-                                                          .korisnikId,
-                                                      korisnik);
-                                                  _showAlertDialog(
-                                                      "Uspješan edit",
-                                                      "Podaci korisnika uspješno ažurirani.",
-                                                      Colors.green);
+                                                    _showAlertDialog(
+                                                        "Uspješan edit",
+                                                        "Podaci korisnika uspješno ažurirani.",
+                                                        Colors.green);
+                                                  } catch (e) {
+                                                    _showAlertDialog(
+                                                        "Greška",
+                                                        "Dogodila se greška prilikom ažuriranja: ${e.toString()}",
+                                                        Colors.red);
+                                                  }
                                                 }
                                               }
                                             },
