@@ -363,6 +363,8 @@ class _VjezbePageState extends State<VjezbePage> {
         if (mounted) {
           setState(() {
             _formKey.currentState?.reset();
+            _image = null;
+            _base64Image = null;
           });
         }
         _showAlertDialog(

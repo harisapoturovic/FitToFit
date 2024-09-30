@@ -333,10 +333,10 @@ class _TreninziPageState extends State<TreninziPage> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
-                        } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
-                          return 'Ovo polje može sadržavati samo brojeve.';
+                        } else if (!RegExp(r'^\d+(\.\d+)?$').hasMatch(value)) {
+                          return 'Ovo polje može sadržavati cijele i decimalne brojeve.';
                         } else {
-                          final broj = int.tryParse(value) ?? 0;
+                          final broj = double.tryParse(value) ?? 0;
                           if (broj < 1 || broj > 10) {
                             return 'Dozvoljen je unos brojeva između 1 i 10.';
                           }
@@ -373,10 +373,10 @@ class _TreninziPageState extends State<TreninziPage> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
-                        } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
-                          return 'Ovo polje može sadržavati samo brojeve.';
+                        } else if (!RegExp(r'^\d+(\.\d+)?$').hasMatch(value)) {
+                          return 'Ovo polje može sadržavati cijele i decimalne brojeve.';
                         } else {
-                          final broj = int.tryParse(value) ?? 0;
+                          final broj = double.tryParse(value) ?? 0;
                           if (broj < 100 || broj > 1500) {
                             return 'Dozvoljen je unos brojeva između 100 i 1500.';
                           }
@@ -502,6 +502,8 @@ class _TreninziPageState extends State<TreninziPage> {
             selectedNamjena = null;
             namjena = [];
             _vrsteTreningaList = [];
+            _image = null;
+            _base64Image = null;
             _loadData();
           });
         }

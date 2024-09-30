@@ -41,15 +41,22 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
         'ime': widget.korisnik.ime,
         'prezime': widget.korisnik.prezime,
         'korisnickoIme': widget.korisnik.korisnickoIme,
-        'datumRodjenja': dateFormat.format(widget.korisnik.datumRodjenja!),
-        'datumPocetkaTreniranja':
-            dateFormat.format(widget.korisnik.datumPocetkaTreniranja!),
+        'datumRodjenja': widget.korisnik.datumRodjenja != null
+            ? dateFormat.format(widget.korisnik.datumRodjenja!)
+            : '',
+        'datumPocetkaTreniranja': widget.korisnik.datumPocetkaTreniranja != null
+            ? dateFormat.format(widget.korisnik.datumPocetkaTreniranja!)
+            : '',
         "spol": widget.korisnik.spol,
         "adresa": widget.korisnik.adresa,
         "telefon": widget.korisnik.telefon,
         "email": widget.korisnik.email,
-        "tezina": widget.korisnik.tezina.toString(),
-        "visina": widget.korisnik.visina.toString(),
+        "tezina": widget.korisnik.tezina != null
+            ? widget.korisnik.tezina.toString()
+            : '',
+        "visina": widget.korisnik.visina != null
+            ? widget.korisnik.visina.toString()
+            : '',
         "slika": widget.korisnik.slika
       };
     } else {
@@ -59,14 +66,21 @@ class _KorisniciDetaljiPageState extends State<KorisniciDetaljiPage> {
         'ime': widget.korisnik.ime,
         'prezime': widget.korisnik.prezime,
         'korisnickoIme': widget.korisnik.korisnickoIme,
-        'datumRodjenja': dateFormat.format(widget.korisnik.datumRodjenja!),
-        'datumPocetkaTreniranja':
-            dateFormat.format(widget.korisnik.datumPocetkaTreniranja!),
+        'datumRodjenja': widget.korisnik.datumRodjenja != null
+            ? dateFormat.format(widget.korisnik.datumRodjenja!)
+            : '',
+        'datumPocetkaTreniranja': widget.korisnik.datumPocetkaTreniranja != null
+            ? dateFormat.format(widget.korisnik.datumPocetkaTreniranja!)
+            : '',
         "spol": widget.korisnik.spol,
         "adresa": widget.korisnik.adresa,
         "telefon": widget.korisnik.telefon,
-        "tezina": widget.korisnik.tezina.toString(),
-        "visina": widget.korisnik.visina.toString(),
+        "tezina": widget.korisnik.tezina != null
+            ? widget.korisnik.tezina.toString()
+            : '',
+        "visina": widget.korisnik.visina != null
+            ? widget.korisnik.visina.toString()
+            : '',
         "email": widget.korisnik.email,
         "slika": widget.korisnik.slika
       };

@@ -144,7 +144,7 @@ class _ChangeUsernameScreenState extends State<ChangeUsernameScreen> {
                         setState(() {
                           if (val != korisnik?.korisnickoIme) {
                             _currentUsernameErrorMessage =
-                                "Trenutni username nije validan za prijavljenog korisnika.";
+                                "Trenutni username nije validan \nza prijavljenog korisnika.";
                           } else {
                             _currentUsernameErrorMessage = null;
                           }

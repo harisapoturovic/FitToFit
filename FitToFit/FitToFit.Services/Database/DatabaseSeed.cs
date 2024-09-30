@@ -527,8 +527,8 @@ namespace FitToFit.Services.Database
                 new Rezervacije()
                 {
                     RezervacijaId = 3,
-                    Datum = new DateTime(2024, 9, 10),
-                    DatumIsteka = new DateTime(2024, 10, 9),
+                    Datum = new DateTime(2024, 9, 20),
+                    DatumIsteka = new DateTime(2024, 10, 19),
                     KorisnikId = 3,
                     ClanarinaId = 1,
                     Iznos = 30,
@@ -593,8 +593,8 @@ namespace FitToFit.Services.Database
                 new Rezervacije()
                 {
                     RezervacijaId = 9,
-                    Datum = new DateTime(2024, 8, 24),
-                    DatumIsteka = new DateTime(2024, 9, 23),
+                    Datum = new DateTime(2024, 9, 24),
+                    DatumIsteka = new DateTime(2024, 10, 23),
                     KorisnikId = 5,
                     ClanarinaId = 1,
                     Iznos = 40,
@@ -604,8 +604,8 @@ namespace FitToFit.Services.Database
                 new Rezervacije()
                 {
                     RezervacijaId = 10,
-                    Datum = new DateTime(2024, 8, 17),
-                    DatumIsteka = new DateTime(2024, 9, 16),
+                    Datum = new DateTime(2024, 9, 17),
+                    DatumIsteka = new DateTime(2024, 10, 16),
                     KorisnikId = 1,
                     ClanarinaId = 1,
                     Iznos = 45,
@@ -615,8 +615,8 @@ namespace FitToFit.Services.Database
                 new Rezervacije()
                 {
                     RezervacijaId = 11,
-                    Datum = new DateTime(2024, 9, 12),
-                    DatumIsteka = new DateTime(2024, 9, 19),
+                    Datum = new DateTime(2024, 10, 1),
+                    DatumIsteka = new DateTime(2024, 10, 8),
                     KorisnikId = 2,
                     ClanarinaId = 2,
                     Iznos = 15,
@@ -626,8 +626,8 @@ namespace FitToFit.Services.Database
                 new Rezervacije()
                 {
                     RezervacijaId = 12,
-                    Datum = new DateTime(2024, 8, 23),
-                    DatumIsteka = new DateTime(2024, 9, 22),
+                    Datum = new DateTime(2024, 9, 23),
+                    DatumIsteka = new DateTime(2024, 10, 22),
                     KorisnikId = 3,
                     ClanarinaId = 1,
                     Iznos = 3,
@@ -637,8 +637,8 @@ namespace FitToFit.Services.Database
                 new Rezervacije()
                 {
                     RezervacijaId = 13,
-                    Datum = new DateTime(2024, 9, 1),
-                    DatumIsteka = new DateTime(2024, 9, 8),
+                    Datum = new DateTime(2024, 10, 1),
+                    DatumIsteka = new DateTime(2024, 10, 8),
                     KorisnikId = 4,
                     ClanarinaId = 2,
                     Iznos = 10,
@@ -648,8 +648,8 @@ namespace FitToFit.Services.Database
                 new Rezervacije()
                 {
                     RezervacijaId = 14,
-                    Datum = new DateTime(2024, 8, 12),
-                    DatumIsteka = new DateTime(2024, 9, 11),
+                    Datum = new DateTime(2024, 9, 12),
+                    DatumIsteka = new DateTime(2024, 10, 11),
                     KorisnikId = 9,
                     ClanarinaId = 1,
                     Iznos = 30,
@@ -766,8 +766,8 @@ namespace FitToFit.Services.Database
                 {
                     AkcijaId = 5,
                     Naziv = "Pilates Transformacija: Snaga i Fleksibilnost",
-                    DatumPocetka = new DateTime(2024, 9, 5),
-                    DatumZavrsetka = new DateTime(2024, 9, 20),
+                    DatumPocetka = new DateTime(2024, 9, 25),
+                    DatumZavrsetka = new DateTime(2024, 10, 15),
                     Iznos = 10,
                     StateMachine = "active"
                 },
@@ -775,8 +775,8 @@ namespace FitToFit.Services.Database
                 {
                     AkcijaId = 6,
                     Naziv = "Hatha Harmonija: Osvježite Um i Tijelo",
-                    DatumPocetka = new DateTime(2024, 9, 1),
-                    DatumZavrsetka = new DateTime(2024, 9, 30),
+                    DatumPocetka = new DateTime(2024, 10, 1),
+                    DatumZavrsetka = new DateTime(2024, 10, 20),
                     Iznos = 15,
                     StateMachine = "active"
                 },
@@ -784,8 +784,8 @@ namespace FitToFit.Services.Database
                 {
                     AkcijaId = 7,
                     Naziv = "Individualni Izazov: Postignite Svoje Ciljeve",
-                    DatumPocetka = new DateTime(2024, 9, 3),
-                    DatumZavrsetka = new DateTime(2024, 9, 16),
+                    DatumPocetka = new DateTime(2024, 9, 23),
+                    DatumZavrsetka = new DateTime(2024, 10, 16),
                     Iznos = 10,
                     StateMachine = "active"
                 },
@@ -794,7 +794,7 @@ namespace FitToFit.Services.Database
                     AkcijaId = 8,
                     Naziv = "Kružna Invazija: Osvoji Snagu!",
                     DatumPocetka = new DateTime(2024, 9, 11),
-                    DatumZavrsetka = new DateTime(2024, 9, 30),
+                    DatumZavrsetka = new DateTime(2024, 10, 30),
                     Iznos = 15,
                     StateMachine = "draft"
                 });
@@ -807,7 +807,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 1,
                    Dan = "Ponedjeljak",
-                   Sat = "08:00h",
+                   Sat = "08:00",
                    BrojClanova = 5,
                    TreningId = 1,
                    TrenerId = 1,
@@ -817,7 +817,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 2,
                    Dan = "Ponedjeljak",
-                   Sat = "10:00h",
+                   Sat = "10:00",
                    BrojClanova = 0,
                    TreningId = 1,
                    TrenerId = 1,
@@ -827,7 +827,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 3,
                    Dan = "Srijeda",
-                   Sat = "08:00h",
+                   Sat = "08:00",
                    BrojClanova = 5,
                    TreningId = 1,
                    TrenerId = 2,
@@ -837,7 +837,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 4,
                    Dan = "Srijeda",
-                   Sat = "10:00h",
+                   Sat = "10:00",
                    BrojClanova = 5,
                    TreningId = 1,
                    TrenerId = 2,
@@ -847,7 +847,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 5,
                    Dan = "Petak",
-                   Sat = "08:00h",
+                   Sat = "08:00",
                    BrojClanova = 0,
                    TreningId = 1,
                    TrenerId = 1,
@@ -857,7 +857,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 6,
                    Dan = "Petak",
-                   Sat = "10:00h",
+                   Sat = "10:00",
                    BrojClanova = 0,
                    TreningId = 1,
                    TrenerId = 1,
@@ -867,7 +867,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 7,
                    Dan = "Ponedjeljak",
-                   Sat = "17:00h",
+                   Sat = "17:00",
                    BrojClanova = 3,
                    TreningId = 1,
                    TrenerId = 2,
@@ -877,7 +877,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 8,
                    Dan = "Srijeda",
-                   Sat = "17:00h",
+                   Sat = "17:00",
                    BrojClanova = 5,
                    TreningId = 1,
                    TrenerId = 2,
@@ -887,7 +887,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 9,
                    Dan = "Petak",
-                   Sat = "17:00h",
+                   Sat = "17:00",
                    BrojClanova = 4,
                    TreningId = 1,
                    TrenerId = 2,
@@ -897,7 +897,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 10,
                    Dan = "Utorak",
-                   Sat = "20:00h",
+                   Sat = "20:00",
                    BrojClanova = 0,
                    TreningId = 1,
                    TrenerId = 1,
@@ -907,7 +907,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 11,
                    Dan = "Četvrtak",
-                   Sat = "20:00h",
+                   Sat = "20:00",
                    BrojClanova = 7,
                    TreningId = 1,
                    TrenerId = 1,
@@ -917,7 +917,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 12,
                    Dan = "Ponedjeljak",
-                   Sat = "16:00h",
+                   Sat = "16:00",
                    BrojClanova = 5,
                    TreningId = 7,
                    TrenerId = 3,
@@ -927,7 +927,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 13,
                    Dan = "Srijeda",
-                   Sat = "17:00h",
+                   Sat = "17:00",
                    BrojClanova = 4,
                    TreningId = 7,
                    TrenerId = 3,
@@ -937,7 +937,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 14,
                    Dan = "Ponedjeljak",
-                   Sat = "17:00h",
+                   Sat = "17:00",
                    BrojClanova = 3,
                    TreningId = 2,
                    TrenerId = 4,
@@ -947,7 +947,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 15,
                    Dan = "Utorak",
-                   Sat = "17:00h",
+                   Sat = "17:00",
                    BrojClanova = 4,
                    TreningId = 2,
                    TrenerId = 4,
@@ -957,7 +957,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 16,
                    Dan = "Četvrtak",
-                   Sat = "17:00h",
+                   Sat = "17:00",
                    BrojClanova = 3,
                    TreningId = 2,
                    TrenerId = 4,
@@ -967,7 +967,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 17,
                    Dan = "Petak",
-                   Sat = "17:00h",
+                   Sat = "17:00",
                    BrojClanova = 4,
                    TreningId = 2,
                    TrenerId = 4,
@@ -977,7 +977,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 18,
                    Dan = "Ponedjeljak",
-                   Sat = "19:00h",
+                   Sat = "19:00",
                    BrojClanova = 10,
                    TreningId = 3,
                    TrenerId = 5,
@@ -987,7 +987,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 19,
                    Dan = "Srijeda",
-                   Sat = "19:00h",
+                   Sat = "19:00",
                    BrojClanova = 8,
                    TreningId = 3,
                    TrenerId = 5,
@@ -997,7 +997,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 20,
                    Dan = "Četvrtak",
-                   Sat = "18:00h",
+                   Sat = "18:00",
                    BrojClanova = 8,
                    TreningId = 3,
                    TrenerId = 5,
@@ -1007,7 +1007,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 21,
                    Dan = "Srijeda",
-                   Sat = "16:00h",
+                   Sat = "16:00",
                    BrojClanova = 8,
                    TreningId = 5,
                    TrenerId = 2,
@@ -1017,7 +1017,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 22,
                    Dan = "Utorak",
-                   Sat = "16:00h",
+                   Sat = "16:00",
                    BrojClanova = 6,
                    TreningId = 4,
                    TrenerId = 6,
@@ -1027,7 +1027,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 23,
                    Dan = "Srijeda",
-                   Sat = "16:00h",
+                   Sat = "16:00",
                    BrojClanova = 5,
                    TreningId = 4,
                    TrenerId = 6,
@@ -1037,7 +1037,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 24,
                    Dan = "Četvrtak",
-                   Sat = "16:00h",
+                   Sat = "16:00",
                    BrojClanova = 7,
                    TreningId = 4,
                    TrenerId = 6,
@@ -1047,7 +1047,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 25,
                    Dan = "Utorak",
-                   Sat = "18:00h",
+                   Sat = "18:00",
                    BrojClanova = 12,
                    TreningId = 6,
                    TrenerId = 1,
@@ -1057,7 +1057,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 26,
                    Dan = "Četvrtak",
-                   Sat = "18:00h",
+                   Sat = "18:00",
                    BrojClanova = 10,
                    TreningId = 6,
                    TrenerId = 1,
@@ -1067,7 +1067,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 27,
                    Dan = "Petak",
-                   Sat = "18:00h",
+                   Sat = "18:00",
                    BrojClanova = 6,
                    TreningId = 6,
                    TrenerId = 1,
@@ -1077,7 +1077,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 28,
                    Dan = "Ponedjeljak",
-                   Sat = "19:00h",
+                   Sat = "19:00",
                    BrojClanova = 5,
                    TreningId = 8,
                    TrenerId = 6,
@@ -1087,7 +1087,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 29,
                    Dan = "Petak",
-                   Sat = "19:00h",
+                   Sat = "19:00",
                    BrojClanova = 5,
                    TreningId = 8,
                    TrenerId = 6,
@@ -1097,7 +1097,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 30,
                    Dan = "Ponedjeljak",
-                   Sat = "20:00h",
+                   Sat = "20:00",
                    BrojClanova = 6,
                    TreningId = 9,
                    TrenerId = 7,
@@ -1107,7 +1107,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 31,
                    Dan = "Srijeda",
-                   Sat = "20:00h",
+                   Sat = "20:00",
                    BrojClanova = 5,
                    TreningId = 9,
                    TrenerId = 7,
@@ -1117,7 +1117,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 32,
                    Dan = "Ponedjeljak",
-                   Sat = "18:00h",
+                   Sat = "18:00",
                    BrojClanova = 5,
                    TreningId = 10,
                    TrenerId = 6,
@@ -1127,7 +1127,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 33,
                    Dan = "Srijeda",
-                   Sat = "18:00h",
+                   Sat = "18:00",
                    BrojClanova = 3,
                    TreningId = 10,
                    TrenerId = 6,
@@ -1137,7 +1137,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 34,
                    Dan = "Ponedjeljak",
-                   Sat = "09:00h",
+                   Sat = "09:00",
                    BrojClanova = 1,
                    TreningId = 11,
                    TrenerId = 6,
@@ -1147,7 +1147,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 35,
                    Dan = "Utorak",
-                   Sat = "09:00h",
+                   Sat = "09:00",
                    BrojClanova = 0,
                    TreningId = 11,
                    TrenerId = 6,
@@ -1157,7 +1157,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 36,
                    Dan = "Petak",
-                   Sat = "09:00h",
+                   Sat = "09:00",
                    BrojClanova = 0,
                    TreningId = 11,
                    TrenerId = 5,
@@ -1167,7 +1167,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 37,
                    Dan = "Srijeda",
-                   Sat = "18:00h",
+                   Sat = "18:00",
                    BrojClanova = 0,
                    TreningId = 11,
                    TrenerId = 5,
@@ -1177,7 +1177,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 38,
                    Dan = "Petak",
-                   Sat = "18:00h",
+                   Sat = "18:00",
                    BrojClanova = 1,
                    TreningId = 11,
                    TrenerId = 4,
@@ -1187,7 +1187,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 39,
                    Dan = "Utorak",
-                   Sat = "20:00h",
+                   Sat = "20:00",
                    BrojClanova = 0,
                    TreningId = 11,
                    TrenerId = 4,
@@ -1197,7 +1197,7 @@ namespace FitToFit.Services.Database
                {
                    TerminId = 40,
                    Dan = "Srijeda",
-                   Sat = "20:00h",
+                   Sat = "20:00",
                    BrojClanova = 0,
                    TreningId = 11,
                    TrenerId = 4,
@@ -1798,7 +1798,7 @@ namespace FitToFit.Services.Database
                    Opis = "Kružni trening je učinkovit način vježbanja koji uključuje seriju vježbi izvedenih u kratkim intervalima s minimalnim odmorom između njih. Cilj je raditi različite vježbe koje pokrivaju sve glavne mišićne skupine, čime se poboljšava snaga, izdržljivost i kondicija. Svaka vježba traje od 30 do 60 sekundi, a zatim slijedi prijelaz na sljedeću. Kružni trening može uključivati vježbe s vlastitom tjelesnom težinom, utezima ili opremom. Ova metoda je odlična za poboljšanje ukupne tjelesne forme u kratkom vremenu.",
                    MaxBrojClanova = 10,
                    CijenaPoTerminu = 3,
-                   Trajanje = "60 min",
+                   Trajanje = "60",
                    ProsjecnaPotrosnjaKalorija = 600,
                    VrstaId = 1,
                    Namjena = "Mršavljenje"
@@ -1810,7 +1810,7 @@ namespace FitToFit.Services.Database
                    Opis = "Pilates ubrajamo među treninge snage, ali on ne funkcionira kao druge vježbe snage koje možda prakticirate. Pilates se više usredotočuje na poboljšanje tonusa mišića nego na njihovu izgradnju, ali rezultat je sličan: veća stabilnost i izdržljivost mišića. On vam stoga neće izgraditi veliku mišićnu masu, no pomoći će pri oblikovanju vitkijeg izgleda i fit figure. Ipak, i pored toga, pilates može postaviti dobar fizički temelj za aktivnosti koje će vam izgraditi mišiće, pa čak i smanjiti vjerojatnost za nastanak ozljeda.",
                    MaxBrojClanova = 8,
                    CijenaPoTerminu = 3,
-                   Trajanje = "40 min",
+                   Trajanje = "40",
                    ProsjecnaPotrosnjaKalorija = 250,
                    VrstaId = 1,
                    Namjena = "Fleksibilnost i mobilnost"
@@ -1822,7 +1822,7 @@ namespace FitToFit.Services.Database
                    Opis = "Barbell lift trening fokusira se na vježbe snage s upotrebom šipke (barbell) koja omogućava povećanje težine i progresivno opterećenje. Ovaj trening obuhvaća osnovne vježbe poput čučnjeva, mrtvog dizanja i bench pressa. Pomaže u izgradnji mišićne mase, poboljšanju snage i stabilnosti, te jačanju cijelog tijela. Barbell lift trening je učinkovit za povećanje snage i mišićne izdržljivosti, te je ključan za napredak u mnogim fitness ciljevima. Preporučuje se pravilna tehnika i postupno povećanje težine.",
                    MaxBrojClanova = 10,
                    CijenaPoTerminu = 3,
-                   Trajanje = "45 min",
+                   Trajanje = "45",
                    ProsjecnaPotrosnjaKalorija = 500,
                    VrstaId = 1,
                    Namjena = "Izgradnja mišića"
@@ -1834,7 +1834,7 @@ namespace FitToFit.Services.Database
                    Opis = "Yoga trening poboljšava fleksibilnost, snagu i ravnotežu kroz niz kontroliranih položaja i tehnika disanja. Redovita praksa može smanjiti stres, poboljšati mentalnu jasnoću i povećati opću tjelesnu izdržljivost. Yoga nudi različite stilove, od nježnijih poput Hatha yoge, do dinamičnijih kao što je Vinyasa. Ovaj trening je prilagodljiv svim razinama fitnessa i pomaže u postizanju ravnoteže tijela i uma, čime doprinosi cjelokupnom zdravlju i blagostanju.",
                    MaxBrojClanova = 7,
                    CijenaPoTerminu = 3,
-                   Trajanje = "45 min",
+                   Trajanje = "45",
                    ProsjecnaPotrosnjaKalorija = 150,
                    VrstaId = 1,
                    Namjena = "Fleksibilnost i mobilnost"
@@ -1846,7 +1846,7 @@ namespace FitToFit.Services.Database
                    Opis = "Abs&core trening usmjeren je na jačanje mišića trbuha, leđa i zdjelice. Ovaj trening uključuje vježbe poput trbušnjaka, plankova i ruske rotacije koje pomažu u poboljšanju stabilnosti i ravnoteže. Snažan core poboljšava posture, smanjuje rizik od ozljeda i doprinosi boljoj izvedbi u drugim vježbama. Redovitim vježbanjem, možete postići čvrstiju i čvrstiju sredinu tijela, što doprinosi cjelokupnoj tjelesnoj izdržljivosti i funkcionalnoj snazi.",
                    MaxBrojClanova = 10,
                    CijenaPoTerminu = 3,
-                   Trajanje = "45 min",
+                   Trajanje = "45",
                    ProsjecnaPotrosnjaKalorija = 200,
                    VrstaId = 1,
                    Namjena = "Izgradnja mišića"
@@ -1858,7 +1858,7 @@ namespace FitToFit.Services.Database
                    Opis = "Zumba je energičan fitness trening koji kombinira ples i aerobne vježbe uz ritmičku glazbu. Svojim dinamičnim i zabavnim pristupom, Zumba pomaže u poboljšanju kardiovaskularne kondicije, koordinacije i fleksibilnosti. Kroz razne plesne stilove poput salse, merenguea i reggaetona, treninzi su motivirajući i omogućuju sagorijevanje velikog broja kalorija. Idealna je za sve razine fitnessa, pruža odličan način za oslobađanje stresa i podizanje raspoloženja.",
                    MaxBrojClanova = 12,
                    CijenaPoTerminu = 3,
-                   Trajanje = "60 min",
+                   Trajanje = "60",
                    ProsjecnaPotrosnjaKalorija = 550,
                    VrstaId = 1,
                    Namjena = "Kondicija"
@@ -1870,7 +1870,7 @@ namespace FitToFit.Services.Database
                    Opis = "Back health trening usmjeren je na jačanje i stabilizaciju mišića leđa, čime se poboljšava postura i smanjuje rizik od bolova i ozljeda. Ovaj trening uključuje vježbe poput ekstenzija leđa, vuče i planka, koje poboljšavaju fleksibilnost, snagu i ravnotežu mišića leđa. Redovito vježbanje pomaže u održavanju pravilnog držanja tijela, smanjuje napetost i podržava cjelokupno zdravlje kralježnice. Važno je usredotočiti se na pravilnu tehniku kako bi se postigli najbolji rezultati i izbjegle ozljede.",
                    MaxBrojClanova = 6,
                    CijenaPoTerminu = 5,
-                   Trajanje = "40 min",
+                   Trajanje = "40",
                    ProsjecnaPotrosnjaKalorija = 150,
                    VrstaId = 3,
                    Namjena = "Rehabilitacija i oporavak"
@@ -1882,7 +1882,7 @@ namespace FitToFit.Services.Database
                    Opis = "Advanced trening je namijenjen iskusnim vježbačima koji traže izazov i želje da unaprijede svoju snagu, izdržljivost i tehniku. Ovaj trening uključuje složene vježbe poput olimpijskih dizanja, visokointenzivnih intervalnih treninga (HIIT) i naprednih varijacija osnovnih vježbi. Fokus je na maksimalnom opterećenju, visokim intenzitetima i specifičnim ciljevima. Pravilna forma i pažljivo planiranje su ključni kako bi se postigli optimalni rezultati i smanjio rizik od ozljeda.",
                    MaxBrojClanova = 7,
                    CijenaPoTerminu = 5,
-                   Trajanje = "50 min",
+                   Trajanje = "50",
                    ProsjecnaPotrosnjaKalorija = 800,
                    VrstaId = 3,
                    Namjena = "Kondicija"
@@ -1894,7 +1894,7 @@ namespace FitToFit.Services.Database
                    Opis = "Step Zumba kombinira elemente Zumba plesnog treninga i step aerobike. Ovaj energičan trening koristi steper za dodavanje visine i intenziteta plesnim rutinama uz ritmičku glazbu. Step Zumba poboljšava kardiovaskularnu kondiciju, koordinaciju i snagu nogu, dok sagorijeva značajan broj kalorija. Dinamične koreografije i varijacije u visini stepera čine trening zabavnim i izazovnim. Idealna je za sve razine fitnessa, pružajući učinkovitu i veselu vježbu koja doprinosi cjelokupnom zdravlju i kondiciji.",
                    MaxBrojClanova = 7,
                    CijenaPoTerminu = 5,
-                   Trajanje = "50 min",
+                   Trajanje = "50",
                    ProsjecnaPotrosnjaKalorija = 600,
                    VrstaId = 3,
                    Namjena = "Mršavljenje"
@@ -1906,7 +1906,7 @@ namespace FitToFit.Services.Database
                    Opis = "Hatha yoga je klasičan oblik joge koji se fokusira na osnovne asane (položaje) i tehnike disanja. Ovaj trening pomaže u poboljšanju fleksibilnosti, snage i ravnoteže, te smanjuje stres i napetost. Hatha yoga pruža stabilan temelj za napredovanje u drugim stilovima joge, s naglaskom na usklađivanje disanja i pokreta. Idealna je za sve razine fitnessa, uključujući početnike, i pomaže u uspostavljanju tjelesne i mentalne ravnoteže.",
                    MaxBrojClanova = 5,
                    CijenaPoTerminu = 3,
-                   Trajanje = "45 min",
+                   Trajanje = "45",
                    ProsjecnaPotrosnjaKalorija = 200,
                    VrstaId = 3,
                    Namjena = "Fleksibilnost i mobilnost"
@@ -1918,7 +1918,7 @@ namespace FitToFit.Services.Database
                    Opis = "Personalizirani individualni trening nudi prilagođeni pristup vježbanju koji se usklađuje s vašim specifičnim ciljevima, potrebama i kondicijskom razinom. Trener kreira jedinstveni plan koji uključuje vježbe, intenzitet i raspored koji odgovara vašim osobnim preferencijama i zdravlju. Ovaj pristup omogućava brže postizanje rezultata, poboljšanje tehnike i maksimalno iskorištavanje vremena provedenog u teretani. Uz stalnu prilagodbu i podršku, personalizirani trening pomaže u ostvarivanju dugoročnih fitness ciljeva na najučinkovitiji način.",
                    MaxBrojClanova = 1,
                    CijenaPoTerminu = 7,
-                   Trajanje = "60 min",
+                   Trajanje = "60",
                    ProsjecnaPotrosnjaKalorija = 400,
                    VrstaId = 2,
                    Namjena = "Rehabilitacija i oporavak"
@@ -2249,7 +2249,7 @@ namespace FitToFit.Services.Database
                    NovostId = 1,
                    Naslov = "Kruzni trening u 16h",
                    Sadrzaj = "Zbog nepredviđenih okolnosti, današnji trening moramo pomjeriti u 16h. Svi koji na trening dolaze u 13h, ako su slobodni, mogu doći na ovaj novi termin. Hvala na razumijevanju!",
-                   DatumObjave = new DateTime(2024, 8, 20),
+                   DatumObjave = new DateTime(2024, 9, 20),
                    IsLiked = false,
                    IsRead = false,
                    BrojLajkova = 0,
@@ -2261,7 +2261,7 @@ namespace FitToFit.Services.Database
                    NovostId = 2,
                    Naslov = "Advanced u 10h",
                    Sadrzaj = "Izmjena termina.",
-                   DatumObjave = new DateTime(2024, 8, 19),
+                   DatumObjave = new DateTime(2024, 9, 19),
                    IsLiked = false,
                    IsRead = false,
                    BrojLajkova = 0,
@@ -2273,7 +2273,7 @@ namespace FitToFit.Services.Database
                    NovostId = 3,
                    Naslov = "Kako održati motivaciju tokom ljeta?",
                    Sadrzaj = "Ljeto je savršeno vrijeme za vježbanje na otvorenom i uživanje u aktivnostima na suncu. Međutim, visoke temperature mogu smanjiti vašu motivaciju. Savladajte izazove ljetnog vježbanja uz naše savjete kako održati motivaciju. Preporučujemo rane jutarnje ili kasne večernje treninge kako biste izbjegli najtoplije dijelove dana. Pridružite se našim grupnim vježbama na otvorenom ili isprobajte naše specijalne ljetne fitness izazove koji će vas inspirisati da ostanete aktivni i fit.",
-                   DatumObjave = new DateTime(2024, 8, 18),
+                   DatumObjave = new DateTime(2024, 9, 18),
                    IsLiked = false,
                    IsRead = false,
                    BrojLajkova = 0,
@@ -2285,7 +2285,7 @@ namespace FitToFit.Services.Database
                    NovostId = 4,
                    Naslov = "Novi Grupni Programi",
                    Sadrzaj = "Predstavljamo naše nove grupne programe koji kombinuju snagu, fleksibilnost i zabavu. Naši stručni instruktori vode raznolike grupne treninge kao što su HIIT (visokointenzivni intervalni treninzi), pilates, body pump i još mnogo toga. Grupni treninzi su odličan način da se motivišete uz podršku drugih članova. Ovi programi su dizajnirani da izazovu vaše tijelo i omoguće vam da dostignete svoje fitness ciljeve u dinamičnoj i prijateljskoj atmosferi.",
-                   DatumObjave = new DateTime(2024, 8, 15),
+                   DatumObjave = new DateTime(2024, 9, 25),
                    IsLiked = false,
                    IsRead = false,
                    BrojLajkova = 0,
@@ -2297,7 +2297,7 @@ namespace FitToFit.Services.Database
                    NovostId = 5,
                    Naslov = "Najava nove zaposlenice",
                    Sadrzaj = "Sa velikim zadovoljstvom vas obavještavamo da se našem timu pridružila nova zaposlenica, Medina Turkić. Medina će zauzeti poziciju trenerice i svojim bogatim iskustvom doprinijeti našem centru. Medina je diplomirala na DIF-u, gdje je stekla zvanje magistrice sporta i zdravlja. Uvereni smo da će Medina svojom posvećenošću, entuzijazmom i profesionalizmom značajno doprinijeti našem kolektivu i pomoći nam da postignemo još veće uspjehe. Molimo vas da pružite toplu dobrodošlicu Medini i pomognete joj da se što prije integriše u naš tim. Radujemo se zajedničkom radu i novim postignućima.",
-                   DatumObjave = new DateTime(2024, 8, 17),
+                   DatumObjave = new DateTime(2024, 9, 17),
                    IsLiked = false,
                    IsRead = false,
                    BrojLajkova = 0,
@@ -2309,7 +2309,7 @@ namespace FitToFit.Services.Database
                    NovostId = 6,
                    Naslov = "Šta jesti prije i poslije treninga?",
                    Sadrzaj = "Ishrana je ključna za postizanje i održavanje fitness rezultata. Naš vodič za pravilnu ishranu prije i poslije treninga pomoći će vam da maksimalno iskoristite svoj napor u teretani. Preporučujemo kombinaciju proteina i složenih ugljenih hidrata prije treninga za energiju, dok poslije treninga naglasak stavljamo na brzu apsorpciju proteina kako bismo podržali oporavak mišića i obnovu energije.",
-                   DatumObjave = new DateTime(2024, 8, 31),
+                   DatumObjave = new DateTime(2024, 9, 30),
                    IsLiked = false,
                    IsRead = false,
                    BrojLajkova = 0,
@@ -2321,7 +2321,7 @@ namespace FitToFit.Services.Database
                    NovostId = 7,
                    Naslov = "Savjeti za Sigurno Vježbanje u Centru",
                    Sadrzaj = "Vaša sigurnost je naš prioritet. Nudimo vam savjete kako da vježbate sigurno i efikasno u našem fitness centru. Pravilno zagrijavanje i istezanje prije vježbanja smanjuje rizik od povreda. Takođe, pratite uputstva naših instruktora i koristite opremu prema preporukama kako biste maksimalno iskoristili svaki trening. Naš tim je uvijek tu da vam pruži podršku i odgovori na vaša pitanja.",
-                   DatumObjave = new DateTime(2024, 7, 10),
+                   DatumObjave = new DateTime(2024, 9, 10),
                    IsLiked = false,
                    IsRead = false,
                    BrojLajkova = 0,

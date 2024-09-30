@@ -53,12 +53,9 @@ public partial class _200048Context : DbContext
 
     public virtual DbSet<VrsteTreninga> VrsteTreningas { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=200048; user=sa; Password=QWEasd123!; TrustServerCertificate=True;");
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        SeedData(modelBuilder);
         modelBuilder.Entity<Akcije>(entity =>
         {
             entity.HasKey(e => e.AkcijaId).HasName("PK__Akcija__3499D633EFF61050");
@@ -357,8 +354,10 @@ public partial class _200048Context : DbContext
             entity.HasIndex(e => e.VrstaId, "IX_Treninzi_VrstaID");
 
             entity.Property(e => e.TreningId).HasColumnName("TreningID");
+            entity.Property(e => e.CijenaPoTerminu).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Namjena).HasMaxLength(50);
             entity.Property(e => e.Naziv).HasMaxLength(50);
+            entity.Property(e => e.ProsjecnaPotrosnjaKalorija).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Trajanje).HasMaxLength(50);
             entity.Property(e => e.VrstaId).HasColumnName("VrstaID");
 

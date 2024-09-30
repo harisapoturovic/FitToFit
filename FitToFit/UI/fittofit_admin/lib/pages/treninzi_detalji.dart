@@ -883,12 +883,13 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                               if (value == null ||
                                                   value.isEmpty) {
                                                 return 'Ovo polje je obavezno!';
-                                              } else if (!RegExp(r'^[0-9]+$')
+                                              } else if (!RegExp(
+                                                      r'^\d+(\.\d+)?$')
                                                   .hasMatch(value)) {
-                                                return 'Ovo polje može sadržavati samo brojeve.';
+                                                return 'Ovo polje može sadržavati cijele i decimalne brojeve.';
                                               } else {
                                                 final broj =
-                                                    int.tryParse(value) ?? 0;
+                                                    double.tryParse(value) ?? 0;
                                                 if (broj < 1 || broj > 10) {
                                                   return 'Dozvoljen je unos brojeva između 1 i 10.';
                                                 }
@@ -939,12 +940,13 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                               if (value == null ||
                                                   value.isEmpty) {
                                                 return 'Ovo polje je obavezno!';
-                                              } else if (!RegExp(r'^[0-9]+$')
+                                              } else if (!RegExp(
+                                                      r'^\d+(\.\d+)?$')
                                                   .hasMatch(value)) {
-                                                return 'Ovo polje može sadržavati samo brojeve.';
+                                                return 'Ovo polje može sadržavati cijele i decimalne brojeve.';
                                               } else {
                                                 final broj =
-                                                    int.tryParse(value) ?? 0;
+                                                    double.tryParse(value) ?? 0;
                                                 if (broj < 100 || broj > 1500) {
                                                   return 'Dozvoljen je unos brojeva između 100 i 1500.';
                                                 }
@@ -1074,19 +1076,18 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                                               maxBrojClanovaController
                                                                   .text) ??
                                                           0,
-                                                      cijenaPoTerminu: int.tryParse(
+                                                      cijenaPoTerminu: double.tryParse(
                                                               cijenaPoTerminuController
                                                                   .text) ??
-                                                          0,
+                                                          0.0,
                                                       trajanje: trajanjeController
                                                           .text,
                                                       prosjecnaPotrosnjaKalorija:
-                                                          int.tryParse(prosjecnaPotrosnjaKalorijaClanovaController.text) ??
-                                                              0,
-                                                      namjena:
-                                                          _selectedNamjena ??
-                                                              odabraniTrening!
-                                                                  .namjena,
+                                                          double.tryParse(prosjecnaPotrosnjaKalorijaClanovaController.text) ??
+                                                              0.0,
+                                                      namjena: _selectedNamjena ??
+                                                          odabraniTrening!
+                                                              .namjena,
                                                       vrstaId:
                                                           _selectedVrstaTreninga ??
                                                               odabraniTrening!
@@ -1353,7 +1354,7 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
     }
   }
 
-   void _showAlertDialogVjezbe(String naslov, String poruka, Color boja) {
+  void _showAlertDialogVjezbe(String naslov, String poruka, Color boja) {
     showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(

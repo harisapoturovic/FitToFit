@@ -49,7 +49,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     if (value != Authorization.password) {
       setState(() {
         _currentPasswordErrorMessage =
-            'Lozinka koju ste unijeli ne odgovara prijavljenom korisniku.';
+            'Lozinka koju ste unijeli ne odgovara \nprijavljenom korisniku.';
       });
     } else {
       setState(() {

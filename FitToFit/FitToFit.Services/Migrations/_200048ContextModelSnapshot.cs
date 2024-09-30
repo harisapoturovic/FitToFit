@@ -94,8 +94,8 @@ namespace FitToFit.Services.Migrations
                         new
                         {
                             AkcijaId = 5,
-                            DatumPocetka = new DateTime(2024, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DatumZavrsetka = new DateTime(2024, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumPocetka = new DateTime(2024, 9, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumZavrsetka = new DateTime(2024, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Iznos = 10,
                             Naziv = "Pilates Transformacija: Snaga i Fleksibilnost",
                             StateMachine = "active"
@@ -103,8 +103,8 @@ namespace FitToFit.Services.Migrations
                         new
                         {
                             AkcijaId = 6,
-                            DatumPocetka = new DateTime(2024, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DatumZavrsetka = new DateTime(2024, 9, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumPocetka = new DateTime(2024, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumZavrsetka = new DateTime(2024, 10, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Iznos = 15,
                             Naziv = "Hatha Harmonija: Osvježite Um i Tijelo",
                             StateMachine = "active"
@@ -112,8 +112,8 @@ namespace FitToFit.Services.Migrations
                         new
                         {
                             AkcijaId = 7,
-                            DatumPocetka = new DateTime(2024, 9, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DatumZavrsetka = new DateTime(2024, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumPocetka = new DateTime(2024, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumZavrsetka = new DateTime(2024, 10, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Iznos = 10,
                             Naziv = "Individualni Izazov: Postignite Svoje Ciljeve",
                             StateMachine = "active"
@@ -122,7 +122,7 @@ namespace FitToFit.Services.Migrations
                         {
                             AkcijaId = 8,
                             DatumPocetka = new DateTime(2024, 9, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DatumZavrsetka = new DateTime(2024, 9, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumZavrsetka = new DateTime(2024, 10, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Iznos = 15,
                             Naziv = "Kružna Invazija: Osvoji Snagu!",
                             StateMachine = "draft"
@@ -871,7 +871,7 @@ namespace FitToFit.Services.Migrations
                         {
                             NovostId = 1,
                             BrojLajkova = 0,
-                            DatumObjave = new DateTime(2024, 8, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumObjave = new DateTime(2024, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsLiked = false,
                             IsRead = false,
                             KorisnikId = 10,
@@ -883,7 +883,7 @@ namespace FitToFit.Services.Migrations
                         {
                             NovostId = 2,
                             BrojLajkova = 0,
-                            DatumObjave = new DateTime(2024, 8, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumObjave = new DateTime(2024, 9, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsLiked = false,
                             IsRead = false,
                             KorisnikId = 10,
@@ -895,7 +895,7 @@ namespace FitToFit.Services.Migrations
                         {
                             NovostId = 3,
                             BrojLajkova = 0,
-                            DatumObjave = new DateTime(2024, 8, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumObjave = new DateTime(2024, 9, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsLiked = false,
                             IsRead = false,
                             KorisnikId = 10,
@@ -906,7 +906,7 @@ namespace FitToFit.Services.Migrations
                         {
                             NovostId = 4,
                             BrojLajkova = 0,
-                            DatumObjave = new DateTime(2024, 8, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumObjave = new DateTime(2024, 9, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsLiked = false,
                             IsRead = false,
                             KorisnikId = 10,
@@ -918,7 +918,7 @@ namespace FitToFit.Services.Migrations
                         {
                             NovostId = 5,
                             BrojLajkova = 0,
-                            DatumObjave = new DateTime(2024, 8, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumObjave = new DateTime(2024, 9, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsLiked = false,
                             IsRead = false,
                             KorisnikId = 10,
@@ -929,7 +929,7 @@ namespace FitToFit.Services.Migrations
                         {
                             NovostId = 6,
                             BrojLajkova = 0,
-                            DatumObjave = new DateTime(2024, 8, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumObjave = new DateTime(2024, 9, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsLiked = false,
                             IsRead = false,
                             KorisnikId = 10,
@@ -940,7 +940,7 @@ namespace FitToFit.Services.Migrations
                         {
                             NovostId = 7,
                             BrojLajkova = 0,
-                            DatumObjave = new DateTime(2024, 7, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumObjave = new DateTime(2024, 9, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsLiked = false,
                             IsRead = false,
                             KorisnikId = 11,
@@ -1168,7 +1168,7 @@ namespace FitToFit.Services.Migrations
                     b.HasKey("Id")
                         .HasName("PK__Recommen__3214EC075B82CBF2");
 
-                    b.HasIndex("TreningId");
+                    b.HasIndex(new[] { "TreningId" }, "IX_Recommender_TreningID");
 
                     b.ToTable("Recommender", (string)null);
                 });
@@ -1486,8 +1486,8 @@ namespace FitToFit.Services.Migrations
                         {
                             RezervacijaId = 3,
                             ClanarinaId = 1,
-                            Datum = new DateTime(2024, 9, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DatumIsteka = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Datum = new DateTime(2024, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumIsteka = new DateTime(2024, 10, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Iznos = 30m,
                             KorisnikId = 3,
                             StateMachine = "active"
@@ -1546,8 +1546,8 @@ namespace FitToFit.Services.Migrations
                         {
                             RezervacijaId = 9,
                             ClanarinaId = 1,
-                            Datum = new DateTime(2024, 8, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DatumIsteka = new DateTime(2024, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Datum = new DateTime(2024, 9, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumIsteka = new DateTime(2024, 10, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Iznos = 40m,
                             KorisnikId = 5,
                             StateMachine = "active"
@@ -1556,8 +1556,8 @@ namespace FitToFit.Services.Migrations
                         {
                             RezervacijaId = 10,
                             ClanarinaId = 1,
-                            Datum = new DateTime(2024, 8, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DatumIsteka = new DateTime(2024, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Datum = new DateTime(2024, 9, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumIsteka = new DateTime(2024, 10, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Iznos = 45m,
                             KorisnikId = 1,
                             StateMachine = "active"
@@ -1566,8 +1566,8 @@ namespace FitToFit.Services.Migrations
                         {
                             RezervacijaId = 11,
                             ClanarinaId = 2,
-                            Datum = new DateTime(2024, 9, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DatumIsteka = new DateTime(2024, 9, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Datum = new DateTime(2024, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumIsteka = new DateTime(2024, 10, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Iznos = 15m,
                             KorisnikId = 2,
                             StateMachine = "active"
@@ -1576,8 +1576,8 @@ namespace FitToFit.Services.Migrations
                         {
                             RezervacijaId = 12,
                             ClanarinaId = 1,
-                            Datum = new DateTime(2024, 8, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DatumIsteka = new DateTime(2024, 9, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Datum = new DateTime(2024, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumIsteka = new DateTime(2024, 10, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Iznos = 3m,
                             KorisnikId = 3,
                             StateMachine = "active"
@@ -1586,8 +1586,8 @@ namespace FitToFit.Services.Migrations
                         {
                             RezervacijaId = 13,
                             ClanarinaId = 2,
-                            Datum = new DateTime(2024, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DatumIsteka = new DateTime(2024, 9, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Datum = new DateTime(2024, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumIsteka = new DateTime(2024, 10, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Iznos = 10m,
                             KorisnikId = 4,
                             StateMachine = "draft"
@@ -1596,8 +1596,8 @@ namespace FitToFit.Services.Migrations
                         {
                             RezervacijaId = 14,
                             ClanarinaId = 1,
-                            Datum = new DateTime(2024, 8, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DatumIsteka = new DateTime(2024, 9, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Datum = new DateTime(2024, 9, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DatumIsteka = new DateTime(2024, 10, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Iznos = 30m,
                             KorisnikId = 9,
                             StateMachine = "draft"
@@ -1698,7 +1698,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 5,
                             Dan = "Ponedjeljak",
                             SalaId = 2,
-                            Sat = "08:00h",
+                            Sat = "08:00",
                             TrenerId = 1,
                             TreningId = 1
                         },
@@ -1708,7 +1708,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 0,
                             Dan = "Ponedjeljak",
                             SalaId = 2,
-                            Sat = "10:00h",
+                            Sat = "10:00",
                             TrenerId = 1,
                             TreningId = 1
                         },
@@ -1718,7 +1718,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 5,
                             Dan = "Srijeda",
                             SalaId = 2,
-                            Sat = "08:00h",
+                            Sat = "08:00",
                             TrenerId = 2,
                             TreningId = 1
                         },
@@ -1728,7 +1728,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 5,
                             Dan = "Srijeda",
                             SalaId = 2,
-                            Sat = "10:00h",
+                            Sat = "10:00",
                             TrenerId = 2,
                             TreningId = 1
                         },
@@ -1738,7 +1738,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 0,
                             Dan = "Petak",
                             SalaId = 2,
-                            Sat = "08:00h",
+                            Sat = "08:00",
                             TrenerId = 1,
                             TreningId = 1
                         },
@@ -1748,7 +1748,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 0,
                             Dan = "Petak",
                             SalaId = 2,
-                            Sat = "10:00h",
+                            Sat = "10:00",
                             TrenerId = 1,
                             TreningId = 1
                         },
@@ -1758,7 +1758,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 3,
                             Dan = "Ponedjeljak",
                             SalaId = 2,
-                            Sat = "17:00h",
+                            Sat = "17:00",
                             TrenerId = 2,
                             TreningId = 1
                         },
@@ -1768,7 +1768,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 5,
                             Dan = "Srijeda",
                             SalaId = 2,
-                            Sat = "17:00h",
+                            Sat = "17:00",
                             TrenerId = 2,
                             TreningId = 1
                         },
@@ -1778,7 +1778,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 4,
                             Dan = "Petak",
                             SalaId = 2,
-                            Sat = "17:00h",
+                            Sat = "17:00",
                             TrenerId = 2,
                             TreningId = 1
                         },
@@ -1788,7 +1788,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 0,
                             Dan = "Utorak",
                             SalaId = 2,
-                            Sat = "20:00h",
+                            Sat = "20:00",
                             TrenerId = 1,
                             TreningId = 1
                         },
@@ -1798,7 +1798,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 7,
                             Dan = "Četvrtak",
                             SalaId = 2,
-                            Sat = "20:00h",
+                            Sat = "20:00",
                             TrenerId = 1,
                             TreningId = 1
                         },
@@ -1808,7 +1808,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 5,
                             Dan = "Ponedjeljak",
                             SalaId = 1,
-                            Sat = "16:00h",
+                            Sat = "16:00",
                             TrenerId = 3,
                             TreningId = 7
                         },
@@ -1818,7 +1818,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 4,
                             Dan = "Srijeda",
                             SalaId = 1,
-                            Sat = "17:00h",
+                            Sat = "17:00",
                             TrenerId = 3,
                             TreningId = 7
                         },
@@ -1828,7 +1828,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 3,
                             Dan = "Ponedjeljak",
                             SalaId = 1,
-                            Sat = "17:00h",
+                            Sat = "17:00",
                             TrenerId = 4,
                             TreningId = 2
                         },
@@ -1838,7 +1838,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 4,
                             Dan = "Utorak",
                             SalaId = 1,
-                            Sat = "17:00h",
+                            Sat = "17:00",
                             TrenerId = 4,
                             TreningId = 2
                         },
@@ -1848,7 +1848,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 3,
                             Dan = "Četvrtak",
                             SalaId = 1,
-                            Sat = "17:00h",
+                            Sat = "17:00",
                             TrenerId = 4,
                             TreningId = 2
                         },
@@ -1858,7 +1858,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 4,
                             Dan = "Petak",
                             SalaId = 1,
-                            Sat = "17:00h",
+                            Sat = "17:00",
                             TrenerId = 4,
                             TreningId = 2
                         },
@@ -1868,7 +1868,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 10,
                             Dan = "Ponedjeljak",
                             SalaId = 1,
-                            Sat = "19:00h",
+                            Sat = "19:00",
                             TrenerId = 5,
                             TreningId = 3
                         },
@@ -1878,7 +1878,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 8,
                             Dan = "Srijeda",
                             SalaId = 1,
-                            Sat = "19:00h",
+                            Sat = "19:00",
                             TrenerId = 5,
                             TreningId = 3
                         },
@@ -1888,7 +1888,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 8,
                             Dan = "Četvrtak",
                             SalaId = 1,
-                            Sat = "18:00h",
+                            Sat = "18:00",
                             TrenerId = 5,
                             TreningId = 3
                         },
@@ -1898,7 +1898,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 8,
                             Dan = "Srijeda",
                             SalaId = 1,
-                            Sat = "16:00h",
+                            Sat = "16:00",
                             TrenerId = 2,
                             TreningId = 5
                         },
@@ -1908,7 +1908,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 6,
                             Dan = "Utorak",
                             SalaId = 2,
-                            Sat = "16:00h",
+                            Sat = "16:00",
                             TrenerId = 6,
                             TreningId = 4
                         },
@@ -1918,7 +1918,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 5,
                             Dan = "Srijeda",
                             SalaId = 2,
-                            Sat = "16:00h",
+                            Sat = "16:00",
                             TrenerId = 6,
                             TreningId = 4
                         },
@@ -1928,7 +1928,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 7,
                             Dan = "Četvrtak",
                             SalaId = 2,
-                            Sat = "16:00h",
+                            Sat = "16:00",
                             TrenerId = 6,
                             TreningId = 4
                         },
@@ -1938,7 +1938,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 12,
                             Dan = "Utorak",
                             SalaId = 1,
-                            Sat = "18:00h",
+                            Sat = "18:00",
                             TrenerId = 1,
                             TreningId = 6
                         },
@@ -1948,7 +1948,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 10,
                             Dan = "Četvrtak",
                             SalaId = 1,
-                            Sat = "18:00h",
+                            Sat = "18:00",
                             TrenerId = 1,
                             TreningId = 6
                         },
@@ -1958,7 +1958,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 6,
                             Dan = "Petak",
                             SalaId = 1,
-                            Sat = "18:00h",
+                            Sat = "18:00",
                             TrenerId = 1,
                             TreningId = 6
                         },
@@ -1968,7 +1968,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 5,
                             Dan = "Ponedjeljak",
                             SalaId = 2,
-                            Sat = "19:00h",
+                            Sat = "19:00",
                             TrenerId = 6,
                             TreningId = 8
                         },
@@ -1978,7 +1978,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 5,
                             Dan = "Petak",
                             SalaId = 2,
-                            Sat = "19:00h",
+                            Sat = "19:00",
                             TrenerId = 6,
                             TreningId = 8
                         },
@@ -1988,7 +1988,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 6,
                             Dan = "Ponedjeljak",
                             SalaId = 1,
-                            Sat = "20:00h",
+                            Sat = "20:00",
                             TrenerId = 7,
                             TreningId = 9
                         },
@@ -1998,7 +1998,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 5,
                             Dan = "Srijeda",
                             SalaId = 1,
-                            Sat = "20:00h",
+                            Sat = "20:00",
                             TrenerId = 7,
                             TreningId = 9
                         },
@@ -2008,7 +2008,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 5,
                             Dan = "Ponedjeljak",
                             SalaId = 1,
-                            Sat = "18:00h",
+                            Sat = "18:00",
                             TrenerId = 6,
                             TreningId = 10
                         },
@@ -2018,7 +2018,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 3,
                             Dan = "Srijeda",
                             SalaId = 1,
-                            Sat = "18:00h",
+                            Sat = "18:00",
                             TrenerId = 6,
                             TreningId = 10
                         },
@@ -2028,7 +2028,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 1,
                             Dan = "Ponedjeljak",
                             SalaId = 2,
-                            Sat = "09:00h",
+                            Sat = "09:00",
                             TrenerId = 6,
                             TreningId = 11
                         },
@@ -2038,7 +2038,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 0,
                             Dan = "Utorak",
                             SalaId = 2,
-                            Sat = "09:00h",
+                            Sat = "09:00",
                             TrenerId = 6,
                             TreningId = 11
                         },
@@ -2048,7 +2048,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 0,
                             Dan = "Petak",
                             SalaId = 2,
-                            Sat = "09:00h",
+                            Sat = "09:00",
                             TrenerId = 5,
                             TreningId = 11
                         },
@@ -2058,7 +2058,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 0,
                             Dan = "Srijeda",
                             SalaId = 2,
-                            Sat = "18:00h",
+                            Sat = "18:00",
                             TrenerId = 5,
                             TreningId = 11
                         },
@@ -2068,7 +2068,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 1,
                             Dan = "Petak",
                             SalaId = 2,
-                            Sat = "18:00h",
+                            Sat = "18:00",
                             TrenerId = 4,
                             TreningId = 11
                         },
@@ -2078,7 +2078,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 0,
                             Dan = "Utorak",
                             SalaId = 1,
-                            Sat = "20:00h",
+                            Sat = "20:00",
                             TrenerId = 4,
                             TreningId = 11
                         },
@@ -2088,7 +2088,7 @@ namespace FitToFit.Services.Migrations
                             BrojClanova = 0,
                             Dan = "Srijeda",
                             SalaId = 1,
-                            Sat = "20:00h",
+                            Sat = "20:00",
                             TrenerId = 4,
                             TreningId = 11
                         });
@@ -2298,7 +2298,7 @@ namespace FitToFit.Services.Migrations
                             Naziv = "Kružni",
                             Opis = "Kružni trening je učinkovit način vježbanja koji uključuje seriju vježbi izvedenih u kratkim intervalima s minimalnim odmorom između njih. Cilj je raditi različite vježbe koje pokrivaju sve glavne mišićne skupine, čime se poboljšava snaga, izdržljivost i kondicija. Svaka vježba traje od 30 do 60 sekundi, a zatim slijedi prijelaz na sljedeću. Kružni trening može uključivati vježbe s vlastitom tjelesnom težinom, utezima ili opremom. Ova metoda je odlična za poboljšanje ukupne tjelesne forme u kratkom vremenu.",
                             ProsjecnaPotrosnjaKalorija = 600m,
-                            Trajanje = "60 min",
+                            Trajanje = "60",
                             VrstaId = 1
                         },
                         new
@@ -2310,7 +2310,7 @@ namespace FitToFit.Services.Migrations
                             Naziv = "Pilates",
                             Opis = "Pilates ubrajamo među treninge snage, ali on ne funkcionira kao druge vježbe snage koje možda prakticirate. Pilates se više usredotočuje na poboljšanje tonusa mišića nego na njihovu izgradnju, ali rezultat je sličan: veća stabilnost i izdržljivost mišića. On vam stoga neće izgraditi veliku mišićnu masu, no pomoći će pri oblikovanju vitkijeg izgleda i fit figure. Ipak, i pored toga, pilates može postaviti dobar fizički temelj za aktivnosti koje će vam izgraditi mišiće, pa čak i smanjiti vjerojatnost za nastanak ozljeda.",
                             ProsjecnaPotrosnjaKalorija = 250m,
-                            Trajanje = "40 min",
+                            Trajanje = "40",
                             VrstaId = 1
                         },
                         new
@@ -2322,7 +2322,7 @@ namespace FitToFit.Services.Migrations
                             Naziv = "Barbell lift",
                             Opis = "Barbell lift trening fokusira se na vježbe snage s upotrebom šipke (barbell) koja omogućava povećanje težine i progresivno opterećenje. Ovaj trening obuhvaća osnovne vježbe poput čučnjeva, mrtvog dizanja i bench pressa. Pomaže u izgradnji mišićne mase, poboljšanju snage i stabilnosti, te jačanju cijelog tijela. Barbell lift trening je učinkovit za povećanje snage i mišićne izdržljivosti, te je ključan za napredak u mnogim fitness ciljevima. Preporučuje se pravilna tehnika i postupno povećanje težine.",
                             ProsjecnaPotrosnjaKalorija = 500m,
-                            Trajanje = "45 min",
+                            Trajanje = "45",
                             VrstaId = 1
                         },
                         new
@@ -2334,7 +2334,7 @@ namespace FitToFit.Services.Migrations
                             Naziv = "Yoga",
                             Opis = "Yoga trening poboljšava fleksibilnost, snagu i ravnotežu kroz niz kontroliranih položaja i tehnika disanja. Redovita praksa može smanjiti stres, poboljšati mentalnu jasnoću i povećati opću tjelesnu izdržljivost. Yoga nudi različite stilove, od nježnijih poput Hatha yoge, do dinamičnijih kao što je Vinyasa. Ovaj trening je prilagodljiv svim razinama fitnessa i pomaže u postizanju ravnoteže tijela i uma, čime doprinosi cjelokupnom zdravlju i blagostanju.",
                             ProsjecnaPotrosnjaKalorija = 150m,
-                            Trajanje = "45 min",
+                            Trajanje = "45",
                             VrstaId = 1
                         },
                         new
@@ -2346,7 +2346,7 @@ namespace FitToFit.Services.Migrations
                             Naziv = "Abs&core",
                             Opis = "Abs&core trening usmjeren je na jačanje mišića trbuha, leđa i zdjelice. Ovaj trening uključuje vježbe poput trbušnjaka, plankova i ruske rotacije koje pomažu u poboljšanju stabilnosti i ravnoteže. Snažan core poboljšava posture, smanjuje rizik od ozljeda i doprinosi boljoj izvedbi u drugim vježbama. Redovitim vježbanjem, možete postići čvrstiju i čvrstiju sredinu tijela, što doprinosi cjelokupnoj tjelesnoj izdržljivosti i funkcionalnoj snazi.",
                             ProsjecnaPotrosnjaKalorija = 200m,
-                            Trajanje = "45 min",
+                            Trajanje = "45",
                             VrstaId = 1
                         },
                         new
@@ -2358,7 +2358,7 @@ namespace FitToFit.Services.Migrations
                             Naziv = "Zumba",
                             Opis = "Zumba je energičan fitness trening koji kombinira ples i aerobne vježbe uz ritmičku glazbu. Svojim dinamičnim i zabavnim pristupom, Zumba pomaže u poboljšanju kardiovaskularne kondicije, koordinacije i fleksibilnosti. Kroz razne plesne stilove poput salse, merenguea i reggaetona, treninzi su motivirajući i omogućuju sagorijevanje velikog broja kalorija. Idealna je za sve razine fitnessa, pruža odličan način za oslobađanje stresa i podizanje raspoloženja.",
                             ProsjecnaPotrosnjaKalorija = 550m,
-                            Trajanje = "60 min",
+                            Trajanje = "60",
                             VrstaId = 1
                         },
                         new
@@ -2370,7 +2370,7 @@ namespace FitToFit.Services.Migrations
                             Naziv = "Back health",
                             Opis = "Back health trening usmjeren je na jačanje i stabilizaciju mišića leđa, čime se poboljšava postura i smanjuje rizik od bolova i ozljeda. Ovaj trening uključuje vježbe poput ekstenzija leđa, vuče i planka, koje poboljšavaju fleksibilnost, snagu i ravnotežu mišića leđa. Redovito vježbanje pomaže u održavanju pravilnog držanja tijela, smanjuje napetost i podržava cjelokupno zdravlje kralježnice. Važno je usredotočiti se na pravilnu tehniku kako bi se postigli najbolji rezultati i izbjegle ozljede.",
                             ProsjecnaPotrosnjaKalorija = 150m,
-                            Trajanje = "40 min",
+                            Trajanje = "40",
                             VrstaId = 3
                         },
                         new
@@ -2382,7 +2382,7 @@ namespace FitToFit.Services.Migrations
                             Naziv = "Advanced",
                             Opis = "Advanced trening je namijenjen iskusnim vježbačima koji traže izazov i želje da unaprijede svoju snagu, izdržljivost i tehniku. Ovaj trening uključuje složene vježbe poput olimpijskih dizanja, visokointenzivnih intervalnih treninga (HIIT) i naprednih varijacija osnovnih vježbi. Fokus je na maksimalnom opterećenju, visokim intenzitetima i specifičnim ciljevima. Pravilna forma i pažljivo planiranje su ključni kako bi se postigli optimalni rezultati i smanjio rizik od ozljeda.",
                             ProsjecnaPotrosnjaKalorija = 800m,
-                            Trajanje = "50 min",
+                            Trajanje = "50",
                             VrstaId = 3
                         },
                         new
@@ -2394,7 +2394,7 @@ namespace FitToFit.Services.Migrations
                             Naziv = "Step zumba",
                             Opis = "Step Zumba kombinira elemente Zumba plesnog treninga i step aerobike. Ovaj energičan trening koristi steper za dodavanje visine i intenziteta plesnim rutinama uz ritmičku glazbu. Step Zumba poboljšava kardiovaskularnu kondiciju, koordinaciju i snagu nogu, dok sagorijeva značajan broj kalorija. Dinamične koreografije i varijacije u visini stepera čine trening zabavnim i izazovnim. Idealna je za sve razine fitnessa, pružajući učinkovitu i veselu vježbu koja doprinosi cjelokupnom zdravlju i kondiciji.",
                             ProsjecnaPotrosnjaKalorija = 600m,
-                            Trajanje = "50 min",
+                            Trajanje = "50",
                             VrstaId = 3
                         },
                         new
@@ -2406,7 +2406,7 @@ namespace FitToFit.Services.Migrations
                             Naziv = "Hatha yoga",
                             Opis = "Hatha yoga je klasičan oblik joge koji se fokusira na osnovne asane (položaje) i tehnike disanja. Ovaj trening pomaže u poboljšanju fleksibilnosti, snage i ravnoteže, te smanjuje stres i napetost. Hatha yoga pruža stabilan temelj za napredovanje u drugim stilovima joge, s naglaskom na usklađivanje disanja i pokreta. Idealna je za sve razine fitnessa, uključujući početnike, i pomaže u uspostavljanju tjelesne i mentalne ravnoteže.",
                             ProsjecnaPotrosnjaKalorija = 200m,
-                            Trajanje = "45 min",
+                            Trajanje = "45",
                             VrstaId = 3
                         },
                         new
@@ -2418,7 +2418,7 @@ namespace FitToFit.Services.Migrations
                             Naziv = "Personalni Fit Program",
                             Opis = "Personalizirani individualni trening nudi prilagođeni pristup vježbanju koji se usklađuje s vašim specifičnim ciljevima, potrebama i kondicijskom razinom. Trener kreira jedinstveni plan koji uključuje vježbe, intenzitet i raspored koji odgovara vašim osobnim preferencijama i zdravlju. Ovaj pristup omogućava brže postizanje rezultata, poboljšanje tehnike i maksimalno iskorištavanje vremena provedenog u teretani. Uz stalnu prilagodbu i podršku, personalizirani trening pomaže u ostvarivanju dugoročnih fitness ciljeva na najučinkovitiji način.",
                             ProsjecnaPotrosnjaKalorija = 400m,
-                            Trajanje = "60 min",
+                            Trajanje = "60",
                             VrstaId = 2
                         });
                 });

@@ -452,10 +452,10 @@ namespace FitToFit.Services.Migrations
                     { 2, new DateTime(2024, 3, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 3, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 10, "Martovska", "archived" },
                     { 3, new DateTime(2024, 4, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 4, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), 5, "Aprilska", "archived" },
                     { 4, new DateTime(2024, 7, 26, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 7, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), 10, "**Individualni**", "archived" },
-                    { 5, new DateTime(2024, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), 10, "Pilates Transformacija: Snaga i Fleksibilnost", "active" },
-                    { 6, new DateTime(2024, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 9, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 15, "Hatha Harmonija: Osvježite Um i Tijelo", "active" },
-                    { 7, new DateTime(2024, 9, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 10, "Individualni Izazov: Postignite Svoje Ciljeve", "active" },
-                    { 8, new DateTime(2024, 9, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 9, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 15, "Kružna Invazija: Osvoji Snagu!", "draft" }
+                    { 5, new DateTime(2024, 9, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), 10, "Pilates Transformacija: Snaga i Fleksibilnost", "active" },
+                    { 6, new DateTime(2024, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 10, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), 15, "Hatha Harmonija: Osvježite Um i Tijelo", "active" },
+                    { 7, new DateTime(2024, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 10, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 10, "Individualni Izazov: Postignite Svoje Ciljeve", "active" },
+                    { 8, new DateTime(2024, 9, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 10, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 15, "Kružna Invazija: Osvoji Snagu!", "draft" }
                 });
 
             migrationBuilder.InsertData(
@@ -561,17 +561,17 @@ namespace FitToFit.Services.Migrations
                 columns: new[] { "TreningID", "CijenaPoTerminu", "MaxBrojClanova", "Namjena", "Naziv", "Opis", "ProsjecnaPotrosnjaKalorija", "Slika", "Trajanje", "VrstaID" },
                 values: new object[,]
                 {
-                    { 1, 3m, 10, "Mršavljenje", "Kružni", "Kružni trening je učinkovit način vježbanja koji uključuje seriju vježbi izvedenih u kratkim intervalima s minimalnim odmorom između njih. Cilj je raditi različite vježbe koje pokrivaju sve glavne mišićne skupine, čime se poboljšava snaga, izdržljivost i kondicija. Svaka vježba traje od 30 do 60 sekundi, a zatim slijedi prijelaz na sljedeću. Kružni trening može uključivati vježbe s vlastitom tjelesnom težinom, utezima ili opremom. Ova metoda je odlična za poboljšanje ukupne tjelesne forme u kratkom vremenu.", 600m, null, "60 min", 1 },
-                    { 2, 3m, 8, "Fleksibilnost i mobilnost", "Pilates", "Pilates ubrajamo među treninge snage, ali on ne funkcionira kao druge vježbe snage koje možda prakticirate. Pilates se više usredotočuje na poboljšanje tonusa mišića nego na njihovu izgradnju, ali rezultat je sličan: veća stabilnost i izdržljivost mišića. On vam stoga neće izgraditi veliku mišićnu masu, no pomoći će pri oblikovanju vitkijeg izgleda i fit figure. Ipak, i pored toga, pilates može postaviti dobar fizički temelj za aktivnosti koje će vam izgraditi mišiće, pa čak i smanjiti vjerojatnost za nastanak ozljeda.", 250m, null, "40 min", 1 },
-                    { 3, 3m, 10, "Izgradnja mišića", "Barbell lift", "Barbell lift trening fokusira se na vježbe snage s upotrebom šipke (barbell) koja omogućava povećanje težine i progresivno opterećenje. Ovaj trening obuhvaća osnovne vježbe poput čučnjeva, mrtvog dizanja i bench pressa. Pomaže u izgradnji mišićne mase, poboljšanju snage i stabilnosti, te jačanju cijelog tijela. Barbell lift trening je učinkovit za povećanje snage i mišićne izdržljivosti, te je ključan za napredak u mnogim fitness ciljevima. Preporučuje se pravilna tehnika i postupno povećanje težine.", 500m, null, "45 min", 1 },
-                    { 4, 3m, 7, "Fleksibilnost i mobilnost", "Yoga", "Yoga trening poboljšava fleksibilnost, snagu i ravnotežu kroz niz kontroliranih položaja i tehnika disanja. Redovita praksa može smanjiti stres, poboljšati mentalnu jasnoću i povećati opću tjelesnu izdržljivost. Yoga nudi različite stilove, od nježnijih poput Hatha yoge, do dinamičnijih kao što je Vinyasa. Ovaj trening je prilagodljiv svim razinama fitnessa i pomaže u postizanju ravnoteže tijela i uma, čime doprinosi cjelokupnom zdravlju i blagostanju.", 150m, null, "45 min", 1 },
-                    { 5, 3m, 10, "Izgradnja mišića", "Abs&core", "Abs&core trening usmjeren je na jačanje mišića trbuha, leđa i zdjelice. Ovaj trening uključuje vježbe poput trbušnjaka, plankova i ruske rotacije koje pomažu u poboljšanju stabilnosti i ravnoteže. Snažan core poboljšava posture, smanjuje rizik od ozljeda i doprinosi boljoj izvedbi u drugim vježbama. Redovitim vježbanjem, možete postići čvrstiju i čvrstiju sredinu tijela, što doprinosi cjelokupnoj tjelesnoj izdržljivosti i funkcionalnoj snazi.", 200m, null, "45 min", 1 },
-                    { 6, 3m, 12, "Kondicija", "Zumba", "Zumba je energičan fitness trening koji kombinira ples i aerobne vježbe uz ritmičku glazbu. Svojim dinamičnim i zabavnim pristupom, Zumba pomaže u poboljšanju kardiovaskularne kondicije, koordinacije i fleksibilnosti. Kroz razne plesne stilove poput salse, merenguea i reggaetona, treninzi su motivirajući i omogućuju sagorijevanje velikog broja kalorija. Idealna je za sve razine fitnessa, pruža odličan način za oslobađanje stresa i podizanje raspoloženja.", 550m, null, "60 min", 1 },
-                    { 7, 5m, 6, "Rehabilitacija i oporavak", "Back health", "Back health trening usmjeren je na jačanje i stabilizaciju mišića leđa, čime se poboljšava postura i smanjuje rizik od bolova i ozljeda. Ovaj trening uključuje vježbe poput ekstenzija leđa, vuče i planka, koje poboljšavaju fleksibilnost, snagu i ravnotežu mišića leđa. Redovito vježbanje pomaže u održavanju pravilnog držanja tijela, smanjuje napetost i podržava cjelokupno zdravlje kralježnice. Važno je usredotočiti se na pravilnu tehniku kako bi se postigli najbolji rezultati i izbjegle ozljede.", 150m, null, "40 min", 3 },
-                    { 8, 5m, 7, "Kondicija", "Advanced", "Advanced trening je namijenjen iskusnim vježbačima koji traže izazov i želje da unaprijede svoju snagu, izdržljivost i tehniku. Ovaj trening uključuje složene vježbe poput olimpijskih dizanja, visokointenzivnih intervalnih treninga (HIIT) i naprednih varijacija osnovnih vježbi. Fokus je na maksimalnom opterećenju, visokim intenzitetima i specifičnim ciljevima. Pravilna forma i pažljivo planiranje su ključni kako bi se postigli optimalni rezultati i smanjio rizik od ozljeda.", 800m, null, "50 min", 3 },
-                    { 9, 5m, 7, "Mršavljenje", "Step zumba", "Step Zumba kombinira elemente Zumba plesnog treninga i step aerobike. Ovaj energičan trening koristi steper za dodavanje visine i intenziteta plesnim rutinama uz ritmičku glazbu. Step Zumba poboljšava kardiovaskularnu kondiciju, koordinaciju i snagu nogu, dok sagorijeva značajan broj kalorija. Dinamične koreografije i varijacije u visini stepera čine trening zabavnim i izazovnim. Idealna je za sve razine fitnessa, pružajući učinkovitu i veselu vježbu koja doprinosi cjelokupnom zdravlju i kondiciji.", 600m, null, "50 min", 3 },
-                    { 10, 3m, 5, "Fleksibilnost i mobilnost", "Hatha yoga", "Hatha yoga je klasičan oblik joge koji se fokusira na osnovne asane (položaje) i tehnike disanja. Ovaj trening pomaže u poboljšanju fleksibilnosti, snage i ravnoteže, te smanjuje stres i napetost. Hatha yoga pruža stabilan temelj za napredovanje u drugim stilovima joge, s naglaskom na usklađivanje disanja i pokreta. Idealna je za sve razine fitnessa, uključujući početnike, i pomaže u uspostavljanju tjelesne i mentalne ravnoteže.", 200m, null, "45 min", 3 },
-                    { 11, 7m, 1, "Rehabilitacija i oporavak", "Personalni Fit Program", "Personalizirani individualni trening nudi prilagođeni pristup vježbanju koji se usklađuje s vašim specifičnim ciljevima, potrebama i kondicijskom razinom. Trener kreira jedinstveni plan koji uključuje vježbe, intenzitet i raspored koji odgovara vašim osobnim preferencijama i zdravlju. Ovaj pristup omogućava brže postizanje rezultata, poboljšanje tehnike i maksimalno iskorištavanje vremena provedenog u teretani. Uz stalnu prilagodbu i podršku, personalizirani trening pomaže u ostvarivanju dugoročnih fitness ciljeva na najučinkovitiji način.", 400m, null, "60 min", 2 }
+                    { 1, 3m, 10, "Mršavljenje", "Kružni", "Kružni trening je učinkovit način vježbanja koji uključuje seriju vježbi izvedenih u kratkim intervalima s minimalnim odmorom između njih. Cilj je raditi različite vježbe koje pokrivaju sve glavne mišićne skupine, čime se poboljšava snaga, izdržljivost i kondicija. Svaka vježba traje od 30 do 60 sekundi, a zatim slijedi prijelaz na sljedeću. Kružni trening može uključivati vježbe s vlastitom tjelesnom težinom, utezima ili opremom. Ova metoda je odlična za poboljšanje ukupne tjelesne forme u kratkom vremenu.", 600m, null, "60", 1 },
+                    { 2, 3m, 8, "Fleksibilnost i mobilnost", "Pilates", "Pilates ubrajamo među treninge snage, ali on ne funkcionira kao druge vježbe snage koje možda prakticirate. Pilates se više usredotočuje na poboljšanje tonusa mišića nego na njihovu izgradnju, ali rezultat je sličan: veća stabilnost i izdržljivost mišića. On vam stoga neće izgraditi veliku mišićnu masu, no pomoći će pri oblikovanju vitkijeg izgleda i fit figure. Ipak, i pored toga, pilates može postaviti dobar fizički temelj za aktivnosti koje će vam izgraditi mišiće, pa čak i smanjiti vjerojatnost za nastanak ozljeda.", 250m, null, "40", 1 },
+                    { 3, 3m, 10, "Izgradnja mišića", "Barbell lift", "Barbell lift trening fokusira se na vježbe snage s upotrebom šipke (barbell) koja omogućava povećanje težine i progresivno opterećenje. Ovaj trening obuhvaća osnovne vježbe poput čučnjeva, mrtvog dizanja i bench pressa. Pomaže u izgradnji mišićne mase, poboljšanju snage i stabilnosti, te jačanju cijelog tijela. Barbell lift trening je učinkovit za povećanje snage i mišićne izdržljivosti, te je ključan za napredak u mnogim fitness ciljevima. Preporučuje se pravilna tehnika i postupno povećanje težine.", 500m, null, "45", 1 },
+                    { 4, 3m, 7, "Fleksibilnost i mobilnost", "Yoga", "Yoga trening poboljšava fleksibilnost, snagu i ravnotežu kroz niz kontroliranih položaja i tehnika disanja. Redovita praksa može smanjiti stres, poboljšati mentalnu jasnoću i povećati opću tjelesnu izdržljivost. Yoga nudi različite stilove, od nježnijih poput Hatha yoge, do dinamičnijih kao što je Vinyasa. Ovaj trening je prilagodljiv svim razinama fitnessa i pomaže u postizanju ravnoteže tijela i uma, čime doprinosi cjelokupnom zdravlju i blagostanju.", 150m, null, "45", 1 },
+                    { 5, 3m, 10, "Izgradnja mišića", "Abs&core", "Abs&core trening usmjeren je na jačanje mišića trbuha, leđa i zdjelice. Ovaj trening uključuje vježbe poput trbušnjaka, plankova i ruske rotacije koje pomažu u poboljšanju stabilnosti i ravnoteže. Snažan core poboljšava posture, smanjuje rizik od ozljeda i doprinosi boljoj izvedbi u drugim vježbama. Redovitim vježbanjem, možete postići čvrstiju i čvrstiju sredinu tijela, što doprinosi cjelokupnoj tjelesnoj izdržljivosti i funkcionalnoj snazi.", 200m, null, "45", 1 },
+                    { 6, 3m, 12, "Kondicija", "Zumba", "Zumba je energičan fitness trening koji kombinira ples i aerobne vježbe uz ritmičku glazbu. Svojim dinamičnim i zabavnim pristupom, Zumba pomaže u poboljšanju kardiovaskularne kondicije, koordinacije i fleksibilnosti. Kroz razne plesne stilove poput salse, merenguea i reggaetona, treninzi su motivirajući i omogućuju sagorijevanje velikog broja kalorija. Idealna je za sve razine fitnessa, pruža odličan način za oslobađanje stresa i podizanje raspoloženja.", 550m, null, "60", 1 },
+                    { 7, 5m, 6, "Rehabilitacija i oporavak", "Back health", "Back health trening usmjeren je na jačanje i stabilizaciju mišića leđa, čime se poboljšava postura i smanjuje rizik od bolova i ozljeda. Ovaj trening uključuje vježbe poput ekstenzija leđa, vuče i planka, koje poboljšavaju fleksibilnost, snagu i ravnotežu mišića leđa. Redovito vježbanje pomaže u održavanju pravilnog držanja tijela, smanjuje napetost i podržava cjelokupno zdravlje kralježnice. Važno je usredotočiti se na pravilnu tehniku kako bi se postigli najbolji rezultati i izbjegle ozljede.", 150m, null, "40", 3 },
+                    { 8, 5m, 7, "Kondicija", "Advanced", "Advanced trening je namijenjen iskusnim vježbačima koji traže izazov i želje da unaprijede svoju snagu, izdržljivost i tehniku. Ovaj trening uključuje složene vježbe poput olimpijskih dizanja, visokointenzivnih intervalnih treninga (HIIT) i naprednih varijacija osnovnih vježbi. Fokus je na maksimalnom opterećenju, visokim intenzitetima i specifičnim ciljevima. Pravilna forma i pažljivo planiranje su ključni kako bi se postigli optimalni rezultati i smanjio rizik od ozljeda.", 800m, null, "50", 3 },
+                    { 9, 5m, 7, "Mršavljenje", "Step zumba", "Step Zumba kombinira elemente Zumba plesnog treninga i step aerobike. Ovaj energičan trening koristi steper za dodavanje visine i intenziteta plesnim rutinama uz ritmičku glazbu. Step Zumba poboljšava kardiovaskularnu kondiciju, koordinaciju i snagu nogu, dok sagorijeva značajan broj kalorija. Dinamične koreografije i varijacije u visini stepera čine trening zabavnim i izazovnim. Idealna je za sve razine fitnessa, pružajući učinkovitu i veselu vježbu koja doprinosi cjelokupnom zdravlju i kondiciji.", 600m, null, "50", 3 },
+                    { 10, 3m, 5, "Fleksibilnost i mobilnost", "Hatha yoga", "Hatha yoga je klasičan oblik joge koji se fokusira na osnovne asane (položaje) i tehnike disanja. Ovaj trening pomaže u poboljšanju fleksibilnosti, snage i ravnoteže, te smanjuje stres i napetost. Hatha yoga pruža stabilan temelj za napredovanje u drugim stilovima joge, s naglaskom na usklađivanje disanja i pokreta. Idealna je za sve razine fitnessa, uključujući početnike, i pomaže u uspostavljanju tjelesne i mentalne ravnoteže.", 200m, null, "45", 3 },
+                    { 11, 7m, 1, "Rehabilitacija i oporavak", "Personalni Fit Program", "Personalizirani individualni trening nudi prilagođeni pristup vježbanju koji se usklađuje s vašim specifičnim ciljevima, potrebama i kondicijskom razinom. Trener kreira jedinstveni plan koji uključuje vježbe, intenzitet i raspored koji odgovara vašim osobnim preferencijama i zdravlju. Ovaj pristup omogućava brže postizanje rezultata, poboljšanje tehnike i maksimalno iskorištavanje vremena provedenog u teretani. Uz stalnu prilagodbu i podršku, personalizirani trening pomaže u ostvarivanju dugoročnih fitness ciljeva na najučinkovitiji način.", 400m, null, "60", 2 }
                 });
 
             migrationBuilder.InsertData(
@@ -630,13 +630,13 @@ namespace FitToFit.Services.Migrations
                 columns: new[] { "NovostID", "BrojLajkova", "DatumObjave", "IsLiked", "IsRead", "KorisnikID", "Naslov", "Sadrzaj", "VrstaTreningaID" },
                 values: new object[,]
                 {
-                    { 1, 0, new DateTime(2024, 8, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 10, "Kruzni trening u 16h", "Zbog nepredviđenih okolnosti, današnji trening moramo pomjeriti u 16h. Svi koji na trening dolaze u 13h, ako su slobodni, mogu doći na ovaj novi termin. Hvala na razumijevanju!", 1 },
-                    { 2, 0, new DateTime(2024, 8, 19, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 10, "Advanced u 10h", "Izmjena termina.", 3 },
-                    { 3, 0, new DateTime(2024, 8, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 10, "Kako održati motivaciju tokom ljeta?", "Ljeto je savršeno vrijeme za vježbanje na otvorenom i uživanje u aktivnostima na suncu. Međutim, visoke temperature mogu smanjiti vašu motivaciju. Savladajte izazove ljetnog vježbanja uz naše savjete kako održati motivaciju. Preporučujemo rane jutarnje ili kasne večernje treninge kako biste izbjegli najtoplije dijelove dana. Pridružite se našim grupnim vježbama na otvorenom ili isprobajte naše specijalne ljetne fitness izazove koji će vas inspirisati da ostanete aktivni i fit.", null },
-                    { 4, 0, new DateTime(2024, 8, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 10, "Novi Grupni Programi", "Predstavljamo naše nove grupne programe koji kombinuju snagu, fleksibilnost i zabavu. Naši stručni instruktori vode raznolike grupne treninge kao što su HIIT (visokointenzivni intervalni treninzi), pilates, body pump i još mnogo toga. Grupni treninzi su odličan način da se motivišete uz podršku drugih članova. Ovi programi su dizajnirani da izazovu vaše tijelo i omoguće vam da dostignete svoje fitness ciljeve u dinamičnoj i prijateljskoj atmosferi.", 1 },
-                    { 5, 0, new DateTime(2024, 8, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 10, "Najava nove zaposlenice", "Sa velikim zadovoljstvom vas obavještavamo da se našem timu pridružila nova zaposlenica, Medina Turkić. Medina će zauzeti poziciju trenerice i svojim bogatim iskustvom doprinijeti našem centru. Medina je diplomirala na DIF-u, gdje je stekla zvanje magistrice sporta i zdravlja. Uvereni smo da će Medina svojom posvećenošću, entuzijazmom i profesionalizmom značajno doprinijeti našem kolektivu i pomoći nam da postignemo još veće uspjehe. Molimo vas da pružite toplu dobrodošlicu Medini i pomognete joj da se što prije integriše u naš tim. Radujemo se zajedničkom radu i novim postignućima.", null },
-                    { 6, 0, new DateTime(2024, 8, 31, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 10, "Šta jesti prije i poslije treninga?", "Ishrana je ključna za postizanje i održavanje fitness rezultata. Naš vodič za pravilnu ishranu prije i poslije treninga pomoći će vam da maksimalno iskoristite svoj napor u teretani. Preporučujemo kombinaciju proteina i složenih ugljenih hidrata prije treninga za energiju, dok poslije treninga naglasak stavljamo na brzu apsorpciju proteina kako bismo podržali oporavak mišića i obnovu energije.", null },
-                    { 7, 0, new DateTime(2024, 7, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 11, "Savjeti za Sigurno Vježbanje u Centru", "Vaša sigurnost je naš prioritet. Nudimo vam savjete kako da vježbate sigurno i efikasno u našem fitness centru. Pravilno zagrijavanje i istezanje prije vježbanja smanjuje rizik od povreda. Takođe, pratite uputstva naših instruktora i koristite opremu prema preporukama kako biste maksimalno iskoristili svaki trening. Naš tim je uvijek tu da vam pruži podršku i odgovori na vaša pitanja.", null }
+                    { 1, 0, new DateTime(2024, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 10, "Kruzni trening u 16h", "Zbog nepredviđenih okolnosti, današnji trening moramo pomjeriti u 16h. Svi koji na trening dolaze u 13h, ako su slobodni, mogu doći na ovaj novi termin. Hvala na razumijevanju!", 1 },
+                    { 2, 0, new DateTime(2024, 9, 19, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 10, "Advanced u 10h", "Izmjena termina.", 3 },
+                    { 3, 0, new DateTime(2024, 9, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 10, "Kako održati motivaciju tokom ljeta?", "Ljeto je savršeno vrijeme za vježbanje na otvorenom i uživanje u aktivnostima na suncu. Međutim, visoke temperature mogu smanjiti vašu motivaciju. Savladajte izazove ljetnog vježbanja uz naše savjete kako održati motivaciju. Preporučujemo rane jutarnje ili kasne večernje treninge kako biste izbjegli najtoplije dijelove dana. Pridružite se našim grupnim vježbama na otvorenom ili isprobajte naše specijalne ljetne fitness izazove koji će vas inspirisati da ostanete aktivni i fit.", null },
+                    { 4, 0, new DateTime(2024, 9, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 10, "Novi Grupni Programi", "Predstavljamo naše nove grupne programe koji kombinuju snagu, fleksibilnost i zabavu. Naši stručni instruktori vode raznolike grupne treninge kao što su HIIT (visokointenzivni intervalni treninzi), pilates, body pump i još mnogo toga. Grupni treninzi su odličan način da se motivišete uz podršku drugih članova. Ovi programi su dizajnirani da izazovu vaše tijelo i omoguće vam da dostignete svoje fitness ciljeve u dinamičnoj i prijateljskoj atmosferi.", 1 },
+                    { 5, 0, new DateTime(2024, 9, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 10, "Najava nove zaposlenice", "Sa velikim zadovoljstvom vas obavještavamo da se našem timu pridružila nova zaposlenica, Medina Turkić. Medina će zauzeti poziciju trenerice i svojim bogatim iskustvom doprinijeti našem centru. Medina je diplomirala na DIF-u, gdje je stekla zvanje magistrice sporta i zdravlja. Uvereni smo da će Medina svojom posvećenošću, entuzijazmom i profesionalizmom značajno doprinijeti našem kolektivu i pomoći nam da postignemo još veće uspjehe. Molimo vas da pružite toplu dobrodošlicu Medini i pomognete joj da se što prije integriše u naš tim. Radujemo se zajedničkom radu i novim postignućima.", null },
+                    { 6, 0, new DateTime(2024, 9, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 10, "Šta jesti prije i poslije treninga?", "Ishrana je ključna za postizanje i održavanje fitness rezultata. Naš vodič za pravilnu ishranu prije i poslije treninga pomoći će vam da maksimalno iskoristite svoj napor u teretani. Preporučujemo kombinaciju proteina i složenih ugljenih hidrata prije treninga za energiju, dok poslije treninga naglasak stavljamo na brzu apsorpciju proteina kako bismo podržali oporavak mišića i obnovu energije.", null },
+                    { 7, 0, new DateTime(2024, 9, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 11, "Savjeti za Sigurno Vježbanje u Centru", "Vaša sigurnost je naš prioritet. Nudimo vam savjete kako da vježbate sigurno i efikasno u našem fitness centru. Pravilno zagrijavanje i istezanje prije vježbanja smanjuje rizik od povreda. Takođe, pratite uputstva naših instruktora i koristite opremu prema preporukama kako biste maksimalno iskoristili svaki trening. Naš tim je uvijek tu da vam pruži podršku i odgovori na vaša pitanja.", null }
                 });
 
             migrationBuilder.InsertData(
@@ -673,18 +673,18 @@ namespace FitToFit.Services.Migrations
                 {
                     { 1, null, 1, new DateTime(2024, 4, 21, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified), 25m, 2, "refused" },
                     { 2, null, 2, new DateTime(2023, 7, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 7, 27, 0, 0, 0, 0, DateTimeKind.Unspecified), 5m, 1, "canceled" },
-                    { 3, null, 1, new DateTime(2024, 9, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), 30m, 3, "active" },
+                    { 3, null, 1, new DateTime(2024, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 10, 19, 0, 0, 0, 0, DateTimeKind.Unspecified), 30m, 3, "active" },
                     { 4, null, 1, new DateTime(2023, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 10, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), 30m, 4, "archived" },
                     { 5, null, 1, new DateTime(2023, 9, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), 40m, 5, "archived" },
                     { 6, null, 1, new DateTime(2022, 7, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 8, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), 45m, 6, "archived" },
                     { 7, null, 1, new DateTime(2022, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 2, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), 50m, 7, "archived" },
                     { 8, null, 1, new DateTime(2022, 3, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 4, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), 35m, 8, "archived" },
-                    { 9, null, 1, new DateTime(2024, 8, 24, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), 40m, 5, "active" },
-                    { 10, null, 1, new DateTime(2024, 8, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 45m, 1, "active" },
-                    { 11, null, 2, new DateTime(2024, 9, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 9, 19, 0, 0, 0, 0, DateTimeKind.Unspecified), 15m, 2, "active" },
-                    { 12, null, 1, new DateTime(2024, 8, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 9, 22, 0, 0, 0, 0, DateTimeKind.Unspecified), 3m, 3, "active" },
-                    { 13, null, 2, new DateTime(2024, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 9, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), 10m, 4, "draft" },
-                    { 14, null, 1, new DateTime(2024, 8, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 9, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), 30m, 9, "draft" }
+                    { 9, null, 1, new DateTime(2024, 9, 24, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 10, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), 40m, 5, "active" },
+                    { 10, null, 1, new DateTime(2024, 9, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 10, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 45m, 1, "active" },
+                    { 11, null, 2, new DateTime(2024, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 10, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), 15m, 2, "active" },
+                    { 12, null, 1, new DateTime(2024, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 10, 22, 0, 0, 0, 0, DateTimeKind.Unspecified), 3m, 3, "active" },
+                    { 13, null, 2, new DateTime(2024, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 10, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), 10m, 4, "draft" },
+                    { 14, null, 1, new DateTime(2024, 9, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 10, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), 30m, 9, "draft" }
                 });
 
             migrationBuilder.InsertData(
@@ -692,46 +692,46 @@ namespace FitToFit.Services.Migrations
                 columns: new[] { "TerminID", "BrojClanova", "Dan", "SalaID", "Sat", "TrenerID", "TreningID" },
                 values: new object[,]
                 {
-                    { 1, 5, "Ponedjeljak", 2, "08:00h", 1, 1 },
-                    { 2, 0, "Ponedjeljak", 2, "10:00h", 1, 1 },
-                    { 3, 5, "Srijeda", 2, "08:00h", 2, 1 },
-                    { 4, 5, "Srijeda", 2, "10:00h", 2, 1 },
-                    { 5, 0, "Petak", 2, "08:00h", 1, 1 },
-                    { 6, 0, "Petak", 2, "10:00h", 1, 1 },
-                    { 7, 3, "Ponedjeljak", 2, "17:00h", 2, 1 },
-                    { 8, 5, "Srijeda", 2, "17:00h", 2, 1 },
-                    { 9, 4, "Petak", 2, "17:00h", 2, 1 },
-                    { 10, 0, "Utorak", 2, "20:00h", 1, 1 },
-                    { 11, 7, "Četvrtak", 2, "20:00h", 1, 1 },
-                    { 12, 5, "Ponedjeljak", 1, "16:00h", 3, 7 },
-                    { 13, 4, "Srijeda", 1, "17:00h", 3, 7 },
-                    { 14, 3, "Ponedjeljak", 1, "17:00h", 4, 2 },
-                    { 15, 4, "Utorak", 1, "17:00h", 4, 2 },
-                    { 16, 3, "Četvrtak", 1, "17:00h", 4, 2 },
-                    { 17, 4, "Petak", 1, "17:00h", 4, 2 },
-                    { 18, 10, "Ponedjeljak", 1, "19:00h", 5, 3 },
-                    { 19, 8, "Srijeda", 1, "19:00h", 5, 3 },
-                    { 20, 8, "Četvrtak", 1, "18:00h", 5, 3 },
-                    { 21, 8, "Srijeda", 1, "16:00h", 2, 5 },
-                    { 22, 6, "Utorak", 2, "16:00h", 6, 4 },
-                    { 23, 5, "Srijeda", 2, "16:00h", 6, 4 },
-                    { 24, 7, "Četvrtak", 2, "16:00h", 6, 4 },
-                    { 25, 12, "Utorak", 1, "18:00h", 1, 6 },
-                    { 26, 10, "Četvrtak", 1, "18:00h", 1, 6 },
-                    { 27, 6, "Petak", 1, "18:00h", 1, 6 },
-                    { 28, 5, "Ponedjeljak", 2, "19:00h", 6, 8 },
-                    { 29, 5, "Petak", 2, "19:00h", 6, 8 },
-                    { 30, 6, "Ponedjeljak", 1, "20:00h", 7, 9 },
-                    { 31, 5, "Srijeda", 1, "20:00h", 7, 9 },
-                    { 32, 5, "Ponedjeljak", 1, "18:00h", 6, 10 },
-                    { 33, 3, "Srijeda", 1, "18:00h", 6, 10 },
-                    { 34, 1, "Ponedjeljak", 2, "09:00h", 6, 11 },
-                    { 35, 0, "Utorak", 2, "09:00h", 6, 11 },
-                    { 36, 0, "Petak", 2, "09:00h", 5, 11 },
-                    { 37, 0, "Srijeda", 2, "18:00h", 5, 11 },
-                    { 38, 1, "Petak", 2, "18:00h", 4, 11 },
-                    { 39, 0, "Utorak", 1, "20:00h", 4, 11 },
-                    { 40, 0, "Srijeda", 1, "20:00h", 4, 11 }
+                    { 1, 5, "Ponedjeljak", 2, "08:00", 1, 1 },
+                    { 2, 0, "Ponedjeljak", 2, "10:00", 1, 1 },
+                    { 3, 5, "Srijeda", 2, "08:00", 2, 1 },
+                    { 4, 5, "Srijeda", 2, "10:00", 2, 1 },
+                    { 5, 0, "Petak", 2, "08:00", 1, 1 },
+                    { 6, 0, "Petak", 2, "10:00", 1, 1 },
+                    { 7, 3, "Ponedjeljak", 2, "17:00", 2, 1 },
+                    { 8, 5, "Srijeda", 2, "17:00", 2, 1 },
+                    { 9, 4, "Petak", 2, "17:00", 2, 1 },
+                    { 10, 0, "Utorak", 2, "20:00", 1, 1 },
+                    { 11, 7, "Četvrtak", 2, "20:00", 1, 1 },
+                    { 12, 5, "Ponedjeljak", 1, "16:00", 3, 7 },
+                    { 13, 4, "Srijeda", 1, "17:00", 3, 7 },
+                    { 14, 3, "Ponedjeljak", 1, "17:00", 4, 2 },
+                    { 15, 4, "Utorak", 1, "17:00", 4, 2 },
+                    { 16, 3, "Četvrtak", 1, "17:00", 4, 2 },
+                    { 17, 4, "Petak", 1, "17:00", 4, 2 },
+                    { 18, 10, "Ponedjeljak", 1, "19:00", 5, 3 },
+                    { 19, 8, "Srijeda", 1, "19:00", 5, 3 },
+                    { 20, 8, "Četvrtak", 1, "18:00", 5, 3 },
+                    { 21, 8, "Srijeda", 1, "16:00", 2, 5 },
+                    { 22, 6, "Utorak", 2, "16:00", 6, 4 },
+                    { 23, 5, "Srijeda", 2, "16:00", 6, 4 },
+                    { 24, 7, "Četvrtak", 2, "16:00", 6, 4 },
+                    { 25, 12, "Utorak", 1, "18:00", 1, 6 },
+                    { 26, 10, "Četvrtak", 1, "18:00", 1, 6 },
+                    { 27, 6, "Petak", 1, "18:00", 1, 6 },
+                    { 28, 5, "Ponedjeljak", 2, "19:00", 6, 8 },
+                    { 29, 5, "Petak", 2, "19:00", 6, 8 },
+                    { 30, 6, "Ponedjeljak", 1, "20:00", 7, 9 },
+                    { 31, 5, "Srijeda", 1, "20:00", 7, 9 },
+                    { 32, 5, "Ponedjeljak", 1, "18:00", 6, 10 },
+                    { 33, 3, "Srijeda", 1, "18:00", 6, 10 },
+                    { 34, 1, "Ponedjeljak", 2, "09:00", 6, 11 },
+                    { 35, 0, "Utorak", 2, "09:00", 6, 11 },
+                    { 36, 0, "Petak", 2, "09:00", 5, 11 },
+                    { 37, 0, "Srijeda", 2, "18:00", 5, 11 },
+                    { 38, 1, "Petak", 2, "18:00", 4, 11 },
+                    { 39, 0, "Utorak", 1, "20:00", 4, 11 },
+                    { 40, 0, "Srijeda", 1, "20:00", 4, 11 }
                 });
 
             migrationBuilder.InsertData(

@@ -1,9 +1,9 @@
 class TreninziUpdateRequest {
   String opis;
   int maxBrojClanova;
-  int cijenaPoTerminu;
+  double cijenaPoTerminu;
   String trajanje;
-  int prosjecnaPotrosnjaKalorija;
+  double prosjecnaPotrosnjaKalorija;
   int vrstaId;
   String namjena;
   String? slika;

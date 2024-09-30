@@ -38,7 +38,7 @@ namespace FitToFit.Services
         {
             if (!string.IsNullOrWhiteSpace(search?.Naziv))
             {
-                query = query.Where(x => x.Naziv.Contains(search.Naziv));
+                query = query.Where(x => x.Naziv.StartsWith(search.Naziv));
             }
 
             if (search?.DatumPocetka != null)

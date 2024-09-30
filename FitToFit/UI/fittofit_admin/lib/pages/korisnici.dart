@@ -610,7 +610,7 @@ class _KorisniciPageState extends State<KorisniciPage> {
                           ),
                           child: ListTile(
                             leading: const Icon(Icons.photo),
-                            title: const Text("Select image"),
+                            title: const Text("Odaberite sliku"),
                             trailing: const Icon(Icons.file_upload),
                             onTap: getImage,
                           ),
@@ -684,6 +684,8 @@ class _KorisniciPageState extends State<KorisniciPage> {
             _selectedSpol = null;
             datum = null;
             spolovi = [];
+            _image = null;
+            _base64Image = null;
             _dateErrorMessage = "Datum zaposlenja je obavezan.";
             spolovi = ['Muški', 'Ženski'];
           });
