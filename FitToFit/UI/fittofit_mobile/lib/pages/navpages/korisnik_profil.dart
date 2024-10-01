@@ -821,7 +821,7 @@ class _ProfilePageState extends State<ProfilePage> {
     void cancelReservation(Rezervacije reservation) async {
       try {
         await _rezervacijeProvider.cancel(reservation.rezervacijaId);
-        _showAlertDialog("Uspješano otkazivanje",
+        _showAlertDialogEdit("Uspješano otkazivanje",
             "Rezervacija uspješno otkazana.", Colors.green);
       } catch (e) {
         _showAlertDialog("Greška", e.toString(), Colors.red);

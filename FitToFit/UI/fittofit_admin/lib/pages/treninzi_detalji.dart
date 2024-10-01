@@ -884,12 +884,14 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                                   value.isEmpty) {
                                                 return 'Ovo polje je obavezno!';
                                               } else if (!RegExp(
-                                                      r'^\d+(\.\d+)?$')
+                                                      r'^\d+([.,]\d+)?$')
                                                   .hasMatch(value)) {
-                                                return 'Ovo polje može sadržavati cijele i decimalne brojeve.';
+                                                return 'Ovo polje može sadržavati cijele i decimalne brojeve s tačkom ili zarezom.';
                                               } else {
-                                                final broj =
-                                                    double.tryParse(value) ?? 0;
+                                                final broj = double.tryParse(
+                                                        value.replaceAll(
+                                                            ',', '.')) ??
+                                                    0;
                                                 if (broj < 1 || broj > 10) {
                                                   return 'Dozvoljen je unos brojeva između 1 i 10.';
                                                 }
@@ -941,12 +943,14 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                                   value.isEmpty) {
                                                 return 'Ovo polje je obavezno!';
                                               } else if (!RegExp(
-                                                      r'^\d+(\.\d+)?$')
+                                                      r'^\d+([.,]\d+)?$')
                                                   .hasMatch(value)) {
-                                                return 'Ovo polje može sadržavati cijele i decimalne brojeve.';
+                                                return 'Ovo polje može sadržavati cijele i decimalne brojeve s tačkom ili zarezom.';
                                               } else {
-                                                final broj =
-                                                    double.tryParse(value) ?? 0;
+                                                final broj = double.tryParse(
+                                                        value.replaceAll(
+                                                            ',', '.')) ??
+                                                    0;
                                                 if (broj < 100 || broj > 1500) {
                                                   return 'Dozvoljen je unos brojeva između 100 i 1500.';
                                                 }
@@ -1072,26 +1076,26 @@ class _TreninziDetaljiPageState extends State<TreninziDetaljiPage> {
                                                 if (odabraniTrening != null) {
                                                   TreninziUpdateRequest trening = TreninziUpdateRequest(
                                                       opis: opisController.text,
-                                                      maxBrojClanova: int.tryParse(
-                                                              maxBrojClanovaController
-                                                                  .text) ??
-                                                          0,
+                                                      maxBrojClanova:
+                                                          int.tryParse(maxBrojClanovaController.text) ??
+                                                              0,
                                                       cijenaPoTerminu: double.tryParse(
                                                               cijenaPoTerminuController
-                                                                  .text) ??
+                                                                  .text
+                                                                  .replaceAll(
+                                                                      ',', '.')) ??
                                                           0.0,
                                                       trajanje: trajanjeController
                                                           .text,
                                                       prosjecnaPotrosnjaKalorija:
-                                                          double.tryParse(prosjecnaPotrosnjaKalorijaClanovaController.text) ??
+                                                          double.tryParse(prosjecnaPotrosnjaKalorijaClanovaController.text.replaceAll(',', '.')) ??
                                                               0.0,
                                                       namjena: _selectedNamjena ??
                                                           odabraniTrening!
                                                               .namjena,
                                                       vrstaId:
                                                           _selectedVrstaTreninga ??
-                                                              odabraniTrening!
-                                                                  .vrstaId,
+                                                              odabraniTrening!.vrstaId,
                                                       slika: trainingImage);
 
                                                   try {

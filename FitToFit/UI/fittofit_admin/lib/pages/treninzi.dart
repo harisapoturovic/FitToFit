@@ -333,10 +333,12 @@ class _TreninziPageState extends State<TreninziPage> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
-                        } else if (!RegExp(r'^\d+(\.\d+)?$').hasMatch(value)) {
-                          return 'Ovo polje može sadržavati cijele i decimalne brojeve.';
+                        } else if (!RegExp(r'^\d+([.,]\d+)?$')
+                            .hasMatch(value)) {
+                          return 'Ovo polje može sadržavati cijele i decimalne brojeve s tačkom ili zarezom.';
                         } else {
-                          final broj = double.tryParse(value) ?? 0;
+                          final broj =
+                              double.tryParse(value.replaceAll(',', '.')) ?? 0;
                           if (broj < 1 || broj > 10) {
                             return 'Dozvoljen je unos brojeva između 1 i 10.';
                           }
@@ -373,10 +375,12 @@ class _TreninziPageState extends State<TreninziPage> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ovo polje je obavezno!';
-                        } else if (!RegExp(r'^\d+(\.\d+)?$').hasMatch(value)) {
-                          return 'Ovo polje može sadržavati cijele i decimalne brojeve.';
+                        } else if (!RegExp(r'^\d+([.,]\d+)?$')
+                            .hasMatch(value)) {
+                          return 'Ovo polje može sadržavati cijele i decimalne brojeve s tačkom ili zarezom.';
                         } else {
-                          final broj = double.tryParse(value) ?? 0;
+                          final broj =
+                              double.tryParse(value.replaceAll(',', '.')) ?? 0;
                           if (broj < 100 || broj > 1500) {
                             return 'Dozvoljen je unos brojeva između 100 i 1500.';
                           }
@@ -492,6 +496,11 @@ class _TreninziPageState extends State<TreninziPage> {
     _formKey.currentState?.saveAndValidate();
     if (_formKey.currentState!.validate()) {
       var request = Map.from(_formKey.currentState!.value);
+      request['cijenaPoTerminu'] =
+          request['cijenaPoTerminu'].replaceAll(',', '.');
+      request['prosjecnaPotrosnjaKalorija'] =
+          request['prosjecnaPotrosnjaKalorija'].replaceAll(',', '.');
+
       request['slika'] = _base64Image;
       try {
         _treninziProvider.insert(request);

@@ -35,7 +35,7 @@ class LoginPage extends StatelessWidget {
               alignment: Alignment.center,
               child: Container(
                 constraints:
-                    const BoxConstraints(maxHeight: 500, maxWidth: 350),
+                    const BoxConstraints(maxHeight: 470, maxWidth: 350),
                 child: Card(
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
@@ -46,7 +46,7 @@ class LoginPage extends StatelessWidget {
                           height: 100,
                           width: 100,
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 10),
                         TextField(
                           decoration: const InputDecoration(
                             labelText: "Korisničko ime",
@@ -150,16 +150,16 @@ class LoginPage extends StatelessWidget {
                             elevation: 3,
                           ),
                           child: const Padding(
-                            padding: EdgeInsets.all(12.0),
+                            padding: EdgeInsets.all(10.0),
                             child: Text(
                               "Prijava",
                               style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 16,
                               ),
                             ),
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 15),
                         const Text("Nemate korisnički račun?",
                             style: TextStyle(
                                 color: Color.fromARGB(255, 105, 105, 105))),
@@ -183,11 +183,11 @@ class LoginPage extends StatelessWidget {
                             elevation: 3,
                           ),
                           child: const Padding(
-                            padding: EdgeInsets.all(12.0),
+                            padding: EdgeInsets.all(10.0),
                             child: Text(
                               "Registracija",
                               style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 16,
                               ),
                             ),
                           ),
